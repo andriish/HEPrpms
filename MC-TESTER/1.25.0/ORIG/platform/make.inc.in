@@ -1,0 +1,43 @@
+LIB_EXT = @LIB_EXT@
+
+PREFIX         = @prefix@
+HEPMCLOCATION  = @with_HepMC@
+
+USE_ROOT = yes
+
+F77      = @F77@
+F77FLAGS = @FFLAGS@ -fPIC -fno-automatic -fno-backslash -ffixed-line-length-132
+FFLAGS   = $(F77FLAGS)
+
+LD       = @LD@
+LDFLAGS  = @LDFLAGS@
+SOFLAGS  = @SOFLAGS@
+
+RANLIB   = @RANLIB@
+AR       = ar
+DIFF    = diff -ib
+
+CPP     = @DIRECT_CPP@
+CPPFLAGS= -C -P -traditional-cpp
+
+CXX     = @CXX@
+CXXFLAGS= @CXXFLAGS@ -fPIC -Wall -fno-exceptions
+
+ROOTCFLAGS  = @ROOTCFLAGS@
+ROOTGLIBS   = @ROOTGLIBS@
+XLIB        = -L/usr/X11R6/lib -lXpm -lX11  -lm -ldl -rdynamic
+
+ROOTLIB     = $(ROOTGLIBS) $(XLIB)
+ROOTBIN     = @ROOTBIN@
+ROOTLIBPATH = @ROOTLIBPATH@
+
+override EXT_LIBS += $(ROOTLIB)
+override CXXFLAGS += $(ROOTCFLAGS)
+
+ifeq ($(USE_ROOT),yes)
+override CXXFLAGS += -D_USE_ROOT_
+endif
+
+# Uncomment if you want to use MC_FinalizeAtExit
+# Note that this is unsafe option and not supported by all platforms
+#override CXXFLAGS += -DUSE_MC_FINALIZE_AT_EXIT

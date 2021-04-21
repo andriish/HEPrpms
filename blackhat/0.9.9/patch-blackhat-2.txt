@@ -1,0 +1,293 @@
+--- Makefile.am.orig	2021-03-06 20:11:25.884626966 +0100
++++ Makefile.am	2021-03-06 20:11:25.884626966 +0100
+@@ -3,10 +3,10 @@
+ SUBDIRS =   \
+ 	src/rational_eval \
+ 	src/ratext src/cut src/cut_eval src/Interface \
+-	src/trees_eval datafiles  \
+-	datafiles/parents datafiles/cut datafiles/rat datafiles/assembly datafiles/trees \
+-	src my_programs examples
+-#	src/shared_trees
++	src/trees_eval \
++	src  examples  \
++	 datafiles  datafiles/parents datafiles/cut datafiles/rat datafiles/assembly datafiles/trees 
++#	src/shared_trees my_programs
+ 
+ if ! PUBLIC
+ SUBDIRS += FeynDiagram
+@@ -22,9 +22,9 @@
+ 
+ # needs to be build last
+ SUBDIRS += utils
+-if PUBLIC
+-SUBDIRS += test
+-endif
++#if PUBLIC
++#SUBDIRS += test
++#endif
+ 
+ bin_SCRIPTS=blackhat-config dataInstall
+ 
+@@ -44,29 +44,33 @@
+ # created from a svn working copy).  
+ 
+ install-data-local:
+-	mkdir -p $(pkgdatadir)
+-if HAS_SVNVERSION	
+-	if ! test `svnversion  $(srcdir)` = "exported" ; then\
+-		svnversion $(srcdir) > $(pkgdatadir)/svnversion ;\
+-		svn info $(srcdir) | grep URL | grep -o "privatesvn/.*" | cut -d / -f2- > $(pkgdatadir)/svnurl ;\
+-	fi
+-endif
+-	if test -f $(srcdir)/share/svnversion_dist ; then cp $(srcdir)/share/svnversion_dist $(pkgdatadir)/svnversion_dist; fi
+-	if test -f $(srcdir)/share/svnurl_dist ; then cp $(srcdir)/share/svnurl_dist $(pkgdatadir)/svnurl_dist ; fi
++	mkdir -p $(DESTDIR)/$(pkgdatadir)
++#if HAS_SVNVERSION	
++#	if ! test `svnversion  $(srcdir)` = "exported" ; then\
++#		svnversion $(srcdir) > $(pkgdatadir)/svnversion ;\
++#		svn info $(srcdir) | grep URL | grep -o "privatesvn/.*" | cut -d / -f2- > $(pkgdatadir)/svnurl ;\
++#	fi
++#endif
++#	if test -f $(srcdir)/share/svnversion_dist ; then cp $(srcdir)/share/svnversion_dist $(pkgdatadir)/svnversion_dist; fi
++#	if test -f $(srcdir)/share/svnurl_dist ; then cp $(srcdir)/share/svnurl_dist $(pkgdatadir)/svnurl_dist ; fi
+ 	
+ dist-hook:
+-	mkdir -p $(distdir)/share
+-	svnversion $(srcdir) > $(distdir)/share/svnversion_dist
+-	svn info $(srcdir) | grep URL | grep -o "privatesvn/.*" | cut -d / -f2- > $(distdir)/share/svnurl_dist
+-	for d in Z2 Wm3 3j Wm1 log Y3 Z1 Wm2 Y2 Wm data Y1 Z Z3 2j ; do rm -rf $(distdir)/test/PStest/$$d/.svn ; done 
+-	rm -rf $(distdir)/test/PStest/.svn
++	mkdir -p $(DESTDIR)/$(distdir)/share
++#	svnversion $(srcdir) > $(distdir)/share/svnversion_dist
++#	svn info $(srcdir) | grep URL | grep -o "privatesvn/.*" | cut -d / -f2- > $(distdir)/share/svnurl_dist
++#	for d in Z2 Wm3 3j Wm1 log Y3 Z1 Wm2 Y2 Wm data Y1 Z Z3 2j ; do rm -rf $(distdir)/test/PStest/$$d/.svn ; done 
++#	rm -rf $(distdir)/test/PStest/.svn
+ 
+ 	
+ if ! PUBLIC
+ install-data-hook:
+ else
+ install-data-hook:
+-	sh dataInstall $(abs_srcdir)/BHdata.tar.gz
++	sh dataInstall $(abs_srcdir)/BHdata.tar.gz $(DESTDIR)
++	touch $(DESTDIR)/$(prefix)/share/blackhat/svnversion_dist
++	touch $(DESTDIR)/$(prefix)/share/blackhat/svnurl_dist
++	touch $(DESTDIR)/$(prefix)/share/blackhat/svnversion
++	touch $(DESTDIR)/$(prefix)/share/blackhat/svnurl
+ 
+ uninstall-hook:
+ 	rm -rf $(prefix)/share/blackhat/datafiles
+--- utils_ORIG/Makefile.am	2021-03-06 20:11:25.884626966 +0100
++++ utils/Makefile.am	2021-03-06 20:11:25.884626966 +0100
+@@ -14,6 +14,7 @@
+ endif
+ 
+ LH_reader_SOURCES = LH_reader.cpp
++LH_reader_CXXFLAGS = -fPIC
+ 
+ BH_LIBS = 
+ 
+@@ -71,7 +72,7 @@
+ endif
+ endif
+ 
+-LH_reader_LDADD = $(BH_LIBS) -ldl
++LH_reader_LDADD = $(BH_LIBS) -ldl -lcrypto
+ 
+ 
+ if BH_USE_GMP
+--- src_ORIG/eval_param.h	2021-03-06 20:11:25.884626966 +0100
++++ src/eval_param.h	2021-03-06 20:11:25.884626966 +0100
+@@ -12,6 +12,7 @@
+ #include "mom_conf.h"
+ #include "process.h"
+ #include "index_vector.h"
++using std::vector;
+ namespace BH {
+ 
+ // A class for storing information about the masses of particles
+@@ -297,7 +298,7 @@
+ #endif
+ public:
+ 	eval_param(int n);
+-	eval_param(const vector<Cmom<T> >& vec) ;
++	eval_param(const std::vector<Cmom<T> >& vec) ;
+ 	eval_param(momentum_configuration<T>& mc, std::vector<int>& ind);
+ 	eval_param(momentum_configuration<T>& mc, const std::vector<int>& ind);
+ 	~eval_param() {delete[] _em; delete _epstate;};
+--- src_ORIG/ME2_from_file.h	2021-03-06 20:11:25.884626966 +0100
++++ src/ME2_from_file.h	2021-03-06 20:11:25.884626966 +0100
+@@ -15,7 +15,8 @@
+ #include "assembly.h"
+ #include "cached_OLHA.h"
+ //#include "ME2.h"
+-
++using std::vector;
++using std::pair;
+ namespace BH {
+ 
+ class process;
+@@ -24,8 +25,8 @@
+ class particle_ID;
+ struct cross_term_entry;
+ 
+-std::string ME2_file_name(const std::vector<pair<int,int> >& particle_labels);
+-std::string PA_file_name(const std::vector<pair<int,int> >& particle_labels,bool verbose=true);
++std::string ME2_file_name(const std::vector<std::pair<int,int> >& particle_labels);
++std::string PA_file_name(const std::vector<std::pair<int,int> >& particle_labels,bool verbose=true);
+ std::string GetAssemblyDataDirectory();
+ std::map<std::string,color_structure> init_cs_string_map();
+ 
+@@ -46,18 +47,18 @@
+ void process_coupling_from_string(const std::string& process_str, 
+ 		const std::string& coupling_str,
+ 		std::vector<plabel>& process,
+-		std::vector<std::vector<pair<int,int> > >& coupling);
++		std::vector<std::vector<std::pair<int,int> > >& coupling);
+ 
+ void partial_process_coupling_from_string(const std::string& process_str, 
+ 		const std::string& coupling_str,
+ 		std::vector<plabel>& process,
+-		std::vector<std::vector<pair<int,int> > >& coupling,
++		std::vector<std::vector<std::pair<int,int> > >& coupling,
+ 		std::vector<std::string > & color_info);
+ 		//vector<size_t> & color_info);
+ 
+-bool sorted_permutation(const vector<int> perm, const vector<int> trace_begin, const vector<int> trace_end);
+-int free_orbit_size(const vector<int> trace_begin, const vector<int> trace_end);
+-void permutation_orbit(const vector< plabel>& plabels,const vector<int>& perm,vector<vector<int> >& perm_orbit, vector<std::string >& color_info);
++bool sorted_permutation(const std::vector<int> perm, const std::vector<int> trace_begin, const std::vector<int> trace_end);
++int free_orbit_size(const std::vector<int> trace_begin, const std::vector<int> trace_end);
++void permutation_orbit(const std::vector< plabel>& plabels,const std::vector<int>& perm,std::vector<std::vector<int> >& perm_orbit, std::vector<std::string >& color_info);
+ 
+ 
+ bool compr(const cross_term_entry* cte1, const cross_term_entry* cte2);
+@@ -67,7 +68,7 @@
+ 		const std::string& filename,
+ 		const process & pro,
+ 		const std::vector<int>& ind,
+-		const std::vector<std::vector<pair<int,int> > >& coupling,
++		const std::vector<std::vector<std::pair<int,int> > >& coupling,
+ 		const std::vector<std::string >& color_info);
+ 
+ 
+@@ -77,7 +78,7 @@
+ 	    Squared_ME* ME,
+ 		const std::string& filename,
+ 		std::string part_type,
+-		const vector<plabel> & pro,
++		const std::vector<plabel> & pro,
+ 		const std::vector<std::vector<pair<int,int> > >& coupling,
+ 		const std::vector<std::string >& color_info,
+ 		std::vector<kinematic_function*> prop_hel_fn);
+@@ -86,7 +87,7 @@
+ 
+ struct coupling_process{
+     friend  bool operator<(const coupling_process&,const coupling_process&); 
+-	std::vector<std::vector<pair<int,int> > > m_coupling;
++	std::vector<std::vector<std::pair<int,int> > > m_coupling;
+ 	std::vector<std::vector<plabel> > m_plabels;
+     coupling_process(std::vector<std::vector<pair<int,int> > >&, const std::vector<plabel>& );
+ };
+@@ -149,12 +150,12 @@
+             	double & sign);
+ 	int new_loop_cross_term_entry(const std::vector<plabel>& labels,
+ 		const std::vector<int>& perm,
+-		const std::vector<std::vector<pair<int,int> > >& coupling,
++		const std::vector<std::vector<std::pair<int,int> > >& coupling,
+ 		const std::vector<std::string >& color_info
+ //		const std::vector<size_t>& color_info
+ 		);
+ 	void add_gluon_permutations();
+-	construction_cache(Squared_ME* ME, const std::vector<pair<int,int> >& pa_labels): m_ME(ME),m_PA_filename(PA_file_name(pa_labels)){};
++	construction_cache(Squared_ME* ME, const std::vector<std::pair<int,int> >& pa_labels): m_ME(ME),m_PA_filename(PA_file_name(pa_labels)){};
+ 	~construction_cache();
+ };
+ 
+--- src_ORIG/assembly.h	2021-03-06 20:11:25.884626966 +0100
++++ src/assembly.h	2021-03-06 20:11:25.884626966 +0100
+@@ -17,7 +17,8 @@
+ #include "cached_OLHA.h"
+ #include <map>
+ #include <algorithm>
+-
++using std::vector;
++using std::pair;
+ namespace BH {
+ 
+ enum approx{born=1,virt};
+@@ -288,7 +289,7 @@
+     std::vector<int> m_perm, m_hels;
+     double* real;
+     double* imag;
+-    Ampl_Info(const process& pro, const vector<int>& ind,double * real, double * imag);
++    Ampl_Info(const process& pro, const std::vector<int>& ind,double * real, double * imag);
+ };
+ 
+ class Squared_ME 
+@@ -392,7 +393,7 @@
+     //vector< pair< pos-m_kin_fn_vals, pos-m_tree_vals > >
+     std::vector<std::pair<std::vector<int>,int> > m_trees; 
+     //std::map<std::pair< kn_fn, kn_fn >, std::map<tree-left  ,std::map<tree-right,pre-factor> > > m_cross_terms;
+-    std::map<std::pair<vector<int>,vector<int> >, std::map<int,std::map<int,double> > > m_cross_terms;
++    std::map<std::pair<std::vector<int>,std::vector<int> >, std::map<int,std::map<int,double> > > m_cross_terms;
+     //iterators
+     std::map<std::pair<vector<int>,vector<int> >, std::map<int,std::map<int,double> > >::const_iterator it_ct;
+     std::map<int,std::map<int,double> >::const_iterator it_lt;
+--- src_ORIG/from_file.h	2021-03-06 20:11:25.884626966 +0100
++++ src/from_file.h	2021-03-06 20:11:25.884626966 +0100
+@@ -32,7 +32,7 @@
+ std::string GetParentDataDirectory();
+ std::string get_worker_dir(const std::string& subdir);
+ 
+-void read_processes(const std::string& input,	vector<vector<plabel> >& labels);
++void read_processes(const std::string& input,	std::vector<std::vector<plabel> >& labels);
+ 
+ 
+ 
+--- configure.ac.orig	2021-03-06 20:11:25.884626966 +0100
++++ configure.ac	2021-03-06 20:11:25.884626966 +0100
+@@ -1,6 +1,8 @@
+ AC_INIT([BlackHat], [0.9.9], [daniel.maitre@durham.ac.uk])
+-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
++AM_INIT_AUTOMAKE([-Wall  foreign])
+ AM_DISABLE_STATIC
++#AM_PROG_AR
++m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
+ AC_PROG_CXX
+ AC_CONFIG_MACRO_DIR([m4])
+ AC_CONFIG_HEADERS([config.h])
+@@ -119,7 +121,7 @@
+ esac],[public=true])
+ AM_CONDITIONAL([PUBLIC], [test x$public = xtrue])
+ 
+-AM_CPPFLAGS=" -I\${top_srcdir} -I\${top_srcdir}/src "
++AM_CPPFLAGS="  -std=c++98 -fpermissive  -I\${top_srcdir} -I\${top_srcdir}/src "
+ 
+ if test x$public = xtrue ; then
+     AM_CPPFLAGS="$AM_CPPFLAGS -DBH_PUBLIC "
+@@ -289,7 +291,7 @@
+ else 
+    	if which qd-config ; then
+     	AM_CXXFLAGS="$AM_CXXFLAGS $(qd-config --cflags)"
+-    	AM_LDFLAGS="$AM_LDFLAGS $(qd-config --libs-la)"
++    	AM_LDFLAGS="$AM_LDFLAGS $(qd-config --libs)"
+     	AM_QD_PATH="$(qd-config --prefix)"
+ 	else
+   		AC_MSG_ERROR([no qd-config found in PATH! Are you sure the qd library is installed? Consider using the --with-QDpath option.])
+--- dataInstall.in.orig	2021-03-06 20:11:25.884626966 +0100
++++ dataInstall.in	2021-03-06 20:11:25.884626966 +0100
+@@ -1,9 +1,9 @@
+ #!/bin/sh
+ 
+ DIR=@prefix@/share/blackhat/
+-if test $# -ne 1; then
+-	echo "Usage: $0 TAR_FILE_TO_INSTALL"
+-fi	
++#if test $# -ne 1; then
++#	echo "Usage: $0 TAR_FILE_TO_INSTALL"
++#fi	
+ 
+ mkdir -p $DIR
+-tar -xzf $1 -C $DIR > /dev/null 
++tar --overwrite -xzf  $1 -C $2$DIR > /dev/null 

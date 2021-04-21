@@ -1,0 +1,12 @@
+--- fortran/Makefile.am.orig	2018-10-30 10:05:01.000000000 -0600
++++ fortran/Makefile.am	2019-08-28 09:59:18.384224654 -0600
+@@ -16,7 +16,9 @@ endif
+ 
+ lib_LTLIBRARIES = libqdmod.la libqd_f_main.la
+ libqdmod_la_SOURCES = ddext.f ddmod.f qdext.f qdmod.f f_dd.cpp f_qd.cpp
++libqdmod_la_LIBADD = $(top_builddir)/src/libqd.la $(FCLIBS)
+ libqd_f_main_la_SOURCES = main.cpp
++libqd_f_main_la_LIBADD = $(top_builddir)/src/libqd.la $(FCLIBS)
+ ddmod.lo: $(DDEXT) ddext.lo
+ qdmod.lo: ddmod.lo $(DDMOD) qdext.lo
+ $(QDMOD): qdmod.lo $(DDMOD)

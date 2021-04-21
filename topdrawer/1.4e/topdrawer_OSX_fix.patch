@@ -1,0 +1,28 @@
+diff --git a/Imakefile b/Imakefile
+index 8c61951..6e0f945 100644
+--- a/Imakefile
++++ b/Imakefile
+@@ -18,7 +18,7 @@ AllTarget($(PROGRAM))
+ 
+ $(PROGRAM)::
+ 	$(FC) $(LDOPT) -o $(PROGRAM) src/td.o td.a misc.a \
+-	$(UGS) $(LDPRELIB) $(XTOOLLIB) $(XLIB)
++	$(UGS) $(LDPRELIB) $(XTOOLLIB) $(XLIB) -L/opt/X11/lib
+ 
+ MakefileSubdirs($(SUBDIRS))
+ 
+diff --git a/Imakefile.def b/Imakefile.def
+index 3d7360f..84ab12f 100644
+--- a/Imakefile.def
++++ b/Imakefile.def
+@@ -69,8 +69,8 @@ LDOPT   = -brename:.malloc_,.malloc -brename:.free_,.free
+ 
+ #if defined(DarwinArchitecture)
+ ARCH    = __Darwin
+-FC      = g95
+-FFLAGS  = -O2 -fstatic -fzero -freal-loops -fsloppy-char
++FC      = gfortran
++FFLAGS  = -O2 -L/opt/X11/lib
+ CFLAGS  = -O2 -DIUCLC=0001000
+ AR      = ar
+ ARFLAGS = rsv

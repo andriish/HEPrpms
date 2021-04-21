@@ -1,0 +1,18 @@
+Header-only
+-----------
+CGAL is a header-only library since version 5.0.
+
+Packages
+--------
+In Fedora, the CGAL tarball is separated in several packages:
+  - CGAL is empty since CGAL-5.0
+  - CGAL-devel contains header files, and several files and tools needed to
+  develop CGAL applications,
+  - CGAL-demos-source contains the source of examples and demos of CGAL.
+
+
+Documentation
+-------------
+Note that the CGAL documentation cannot be packaged for Fedora due to unclear
+license conditions. The complete documentation in PDF and HTML is
+available at http://www.cgal.org/Manual/index.html

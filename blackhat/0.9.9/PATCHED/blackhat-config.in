@@ -1,0 +1,23 @@
+#!/bin/sh
+
+@PUBLIC_FALSE@LIBS="-lInterface -lassembly -lOLA -lCutPart -lRatPart -lratext -lBH  -lAmpl_eval  -lRateval -lCuteval  -lCut_wCI -lBG -lfd  -lBHcore -lIntegrals -lSpinors "
+@PUBLIC_TRUE@LIBS="-lInterface -lassembly -lOLA -lCutPart -lRatPart -lratext -lBH  -lAmpl_eval  -lRateval -lCuteval  -lCut_wCI -lBG -lBHcore -lIntegrals -lSpinors "
+
+case $1 in
+  --version)
+    echo @PACKAGE_VERSION@;;
+  --prefix)
+    echo @prefix@;;
+  --libs)
+    echo -L@libdir@/blackhat $LIBS -L@AM_QD_PATH@/lib -lqd ;;
+  --include)
+    echo @prefix@/include;;
+  *)
+    echo "blackhat-config: configuration script";
+    echo "Options:";
+    echo "  blackhat-config --version : returns the version";
+    echo "  blackhat-config --prefix  : returns the installation path";
+    echo "  blackhat-config --include  : returns the path of the header";
+    echo "  blackhat-config --libs    : returns the linker arguments to link blackhat";;
+esac
+

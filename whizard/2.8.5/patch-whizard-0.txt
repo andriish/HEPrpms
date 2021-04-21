@@ -1,0 +1,115 @@
+--- m4_ORIG/hepmc.m4	2021-03-06 20:11:26.668672614 +0100
++++ m4/hepmc.m4	2021-03-06 20:11:26.668672614 +0100
+@@ -79,7 +79,7 @@
+       AC_MSG_CHECKING([the HepMC3 version])
+       save_CXXFLAGS="$CXXFLAGS"
+       save_LIBS="$LIBS"
+-      CXXFLAGS="${CXXFLAGS} --std=c++11 `${hepmcconfig} --cxxflags`"
++      CXXFLAGS="${CXXFLAGS} --std=c++1y `${hepmcconfig} --cxxflags`"
+       LIBS="${LIBS} -Wl,-rpath,`${hepmcconfig} --libdir` `${hepmcconfig} --libs`"
+       AC_LANG([C++])
+       AC_LINK_IFELSE([dnl
+@@ -165,13 +165,14 @@
+    save_CXXFLAGS="$CXXFLAGS"
+    save_LIBS="$LIBS"
+ 
+-   CXXFLAGS="${CXXFLAGS} --std=c++11 `${hepmcconfig} --cxxflags`"
++   CXXFLAGS="${CXXFLAGS} --std=c++1y `${hepmcconfig} --cxxflags`"
+    LIBS="${LIBS} `${hepmcconfig} --libs`"
+ 
+    AC_MSG_CHECKING([if HepMC3 is built with ROOT interface])
+    if ${hepmcconfig} --rootIO | grep rootIO >/dev/null 2>&1; then
+       hepmc3_root="yes"
+       HEPMCROOTLIBS="`${hepmcconfig} --rootIO` -Wl,-rpath,$ROOTLIBDIR -L$ROOTLIBDIR $ROOTLIBS"
++      HEPMCROOTINCLUDES="-I$ROOTINCDIR $ROOTCFLAGS"
+    else
+       hepmc3_root="no"
+    fi
+@@ -192,7 +193,7 @@
+ 
+    AC_MSG_CHECKING([for HepMC3])
+    if test "${hepmcok}" = "yes"; then
+-      HEPMC_INCLUDES="--std=c++11 `${hepmcconfig} --cxxflags`"
++      HEPMC_INCLUDES="--std=c++1y `${hepmcconfig} --cxxflags` $HEPMCROOTINCLUDES "
+       LDFLAGS_HEPMC="-Wl,-rpath,`${hepmcconfig} --libdir` `${hepmcconfig} --libs` $HEPMCROOTLIBS"
+       AC_MSG_RESULT([yes])
+       $1
+--- m4_ORIG/ax_python.m4	2021-03-09 11:00:12.483663358 +0100
++++ m4/ax_python.m4	2021-03-09 11:00:12.483663358 +0100
+@@ -56,7 +56,7 @@
+ AC_DEFUN([AX_PYTHON],
+ [AC_MSG_CHECKING(for python build information)
+ AC_MSG_RESULT([])
+-for python in python3.3 python3.2 python3.1 python3.0 python2.7 python2.6 python2.5 python2.4 python2.3 python2.2 python2.1 python; do
++for python in python3.9 python3.8 python3.7 python3.6 python3.4 python3.3 python3.2 python3.1 python3.0 python2.7 python2.6 python2.5 python2.4 python2.3 python2.2 python2.1 python; do
+ AC_CHECK_PROGS(PYTHON_BIN, [$python])
+ ax_python_bin=$PYTHON_BIN
+ if test x$ax_python_bin != x; then
+--- m4_ORIG/pythia8.m4	2021-03-09 11:00:12.483663358 +0100
++++ m4/pythia8.m4	2021-03-09 12:10:34.464592252 +0100
+@@ -53,7 +53,7 @@
+ if test "$with_pythia8" = ""; then
+    AC_PATH_PROG(pyconfig, pythia8-config, no)
+ else
+-   AC_PATH_PROG(pyconfig, pythia8-config, no, ${with_pythia8}/bin)
++   AC_PATH_PROG(pyconfig, pythia8-config, no)
+ fi
+ 
+ if test "${pyconfig}" = "no"; then
+@@ -76,13 +76,13 @@
+   save_CXXFLAGS="$CXXFLAGS"
+   save_LIBS="$LIBS"
+ 
+-  if test "$pythia8_has_noconfig" = "yes"; then
++ # if test "$pythia8_has_noconfig" = "yes"; then
+     CXXFLAGS="${CXXFLAGS} -I${with_pythia8}/include"
+     LIBS="${LIBS} -Wl,-rpath,${with_pythia8}/lib -Wl,-rpath,${with_pythia8}/lib64 -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+-  else
+-    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
+-    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
+-  fi
++#  else
++#    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
++#    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
++#  fi
+ 
+   AC_MSG_CHECKING([if PYTHIA8 is functional])
+   AC_LANG_PUSH(C++)
+@@ -98,13 +98,13 @@
+ 
+   AC_MSG_CHECKING([for PYTHIA8])
+   if test "${pyok}" = "yes"; then
+-     if test "$pythia8_has_noconfig" = "yes"; then
++#     if test "$pythia8_has_noconfig" = "yes"; then
+        PYTHIA8_CXXFLAGS="-I${with_pythia8}/include"
+        PYTHIA8_LIBS="-Wl,-rpath,${with_pythia8}/lib -Wl,-rpath,${with_pythia8}/lib64 -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+-     else
+-       PYTHIA8_CXXFLAGS="`${pyconfig} --cxxflags`"
+-       PYTHIA8_LIBS="-Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
+-     fi
++#     else
++#       PYTHIA8_CXXFLAGS="`${pyconfig} --cxxflags`"
++#       PYTHIA8_LIBS="-Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
++#     fi
+      AC_MSG_RESULT(yes)
+      $1
+   else
+@@ -117,13 +117,13 @@
+ 
+   save_CXXFLAGS="$CXXFLAGS"
+   save_LIBS="$LIBS"
+-  if test "$pythia8_has_noconfig" = "yes"; then
++#  if test "$pythia8_has_noconfig" = "yes"; then
+     CXXFLAGS="${CXXFLAGS} -Wl,-rpath,${with_pythia8}/lib -Wl,-rpath,${with_pythia8}/lib64 -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+     LIBS="${LIBS} -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+-  else
+-    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
+-    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
+-  fi
++#  else
++#    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
++#    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
++#  fi
+ 
+   AC_LINK_IFELSE([dnl
+     AC_LANG_PROGRAM([[#include "Pythia8/Pythia.h"]],

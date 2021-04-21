@@ -1,0 +1,12 @@
+diff -ur ugs.orig/Imakefile.def ugs/Imakefile.def
+--- ugs.orig/Imakefile.def	2005-05-02 05:55:45.000000000 +0900
++++ ugs/Imakefile.def	2005-05-02 05:56:41.000000000 +0900
+@@ -19,7 +19,7 @@
+ ARCH    = __LINUX_ELF
+ #endif
+ FC      = fort77
+-FFLAGS  = -O2 -Nq300 -\!bs
++FFLAGS  = -O1 -Nq300 -\!bs
+ GFLAGS  = -O2 -fno-backslash
+ CFLAGS  = -O2
+ AR      = ar

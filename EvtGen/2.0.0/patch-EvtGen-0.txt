@@ -1,0 +1,38 @@
+diff -Naur ORIG/cmake/Modules/FindPythia8.cmake PATCHED/cmake/Modules/FindPythia8.cmake
+--- ORIG/cmake/Modules/FindPythia8.cmake	2021-03-06 15:55:39.231193133 +0100
++++ PATCHED/cmake/Modules/FindPythia8.cmake	2021-03-13 16:48:20.044676727 +0100
+@@ -33,7 +33,7 @@
+           HINTS $ENV{PYTHIA8_ROOT_DIR}/include ${PYTHIA8_ROOT_DIR}/include
+           PATH_SUFFIXES include)
+ 
+-find_file(PYTHIA8_XML xmldoc PATH_SUFFIXES share/Pythia8
++find_file(PYTHIA8_XML xmldoc PATH_SUFFIXES share/Pythia8  share/doc/packages/pythia
+           HINTS ${PYTHIA8_INCLUDE_DIR}/.. $ENV{PYTHIA8_ROOT_DIR} ${PYTHIA8_ROOT_DIR})
+ 
+ mark_as_advanced(PYTHIA8_INCLUDE_DIR PYTHIA8_XML)
+@@ -56,7 +56,7 @@
+ 
+ foreach(component ${Pythia8_FIND_COMPONENTS})
+   find_library(PYTHIA8_${component}_LIBRARY NAMES ${component} ${_${component}_names}
+-               HINTS $ENV{PYTHIA8_ROOT_DIR}/lib ${PYTHIA8_ROOT_DIR}/lib)
++               HINTS $ENV{PYTHIA8_ROOT_DIR}/lib ${PYTHIA8_ROOT_DIR}/lib $ENV{PYTHIA8_ROOT_DIR}/lib64 ${PYTHIA8_ROOT_DIR}/lib64 )
+   if (PYTHIA8_${component}_LIBRARY)
+     set(PYTHIA8_${component}_FOUND 1)
+     list(APPEND PYTHIA8_LIBRARIES ${PYTHIA8_${component}_LIBRARY})
+diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
+--- ORIG/CMakeLists.txt	2021-03-06 15:55:39.230193128 +0100
++++ PATCHED/CMakeLists.txt	2021-03-06 15:55:39.230193128 +0100
+@@ -41,11 +41,13 @@
+     project(EvtGen
+         VERSION 2.0.0
+         DESCRIPTION "Monte Carlo generator of particle decays, in particular the weak decays of heavy flavour particles such as B mesons."
++        LANGUAGES C CXX
+         )
+ else()
+     project(EvtGen
+         VERSION 2.0.0
+         DESCRIPTION "Monte Carlo generator of particle decays, in particular the weak decays of heavy flavour particles such as B mesons."
++        LANGUAGES C CXX
+         HOMEPAGE_URL "https://evtgen.hepforge.org"
+         )
+ endif()

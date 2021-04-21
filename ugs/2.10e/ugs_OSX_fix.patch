@@ -1,0 +1,250 @@
+diff --git a/Imakefile.def b/Imakefile.def
+index 543af09..4db2ca3 100644
+--- a/Imakefile.def
++++ b/Imakefile.def
+@@ -79,10 +79,10 @@ LDOPT   = -brename:.malloc_,.malloc -brename:.free_,.free
+ 
+ #if defined(DarwinArchitecture)
+ ARCH    = __Darwin
+-FC      = g95
+-FFLAGS  = -O2 -fstatic -fzero -fno-backslash
++FC      = gfortran
++FFLAGS  = -O2 -L/opt/X11/lib
+ CC      = cc
+-CFLAGS  = -O2
++CFLAGS  = -O2 -I/opt/X11/include
+ AR      = ar
+ ARFLAGS = rsv
+ RANCMD  =
+diff --git a/src.2.10e/Imakefile b/src.2.10e/Imakefile
+index 8a95201..879e492 100644
+--- a/src.2.10e/Imakefile
++++ b/src.2.10e/Imakefile
+@@ -120,7 +120,7 @@ $(LIB):: $(OBJ)
+ #if defined(LinuxAoutArchitecture) || defined(LinuxElfArchitecture)
+ #if defined(LinuxElfArchitecture)
+ ugnucl.o ugdupl.o ugsimp.o ugclos.o ugslct.o:;\
+-	g77   $(GFLAGS)  -c      $*.f  ;\
++	gfortran $(GFLAGS)  -c $*.f  ;\
+         $(AR) $(ARFLAGS) $(LIB)  $*.o
+ #else
+ ugclos.o ugslct.o:;\
+@@ -129,12 +129,12 @@ ugclos.o ugslct.o:;\
+ #endif
+ 
+ ugopen.o ugz005.o:;\
+-        g77   $(GFLAGS)  -c -D$(ARCH) $*.F  ;\
++        gfortran $(GFLAGS) -c -D$(ARCH) $*.F  ;\
+         $(AR) $(ARFLAGS) $(LIB)  $*.o
+ #endif
+ 
+ #if defined(DarwinArchitecture)
+ ugdupl.o:;\
+-	fort77 -c -O2 -Nq300 -\!bs $*.f  ;\
++	gfortran -std=legacy -c -O2 $*.f  ;\
+ 	$(AR) $(ARFLAGS) $(LIB)  $*.o
+ #endif
+diff --git a/src.2.10e/ugdupl.f b/src.2.10e/ugdupl.f
+index dda0de5..ae57f24 100644
+--- a/src.2.10e/ugdupl.f
++++ b/src.2.10e/ugdupl.f
+@@ -597,108 +597,108 @@ C  LINE SEGMENT TABLE.
+       DATA          CHRSC/20160/
+       DATA          CHRCS/   24/
+       DATA          CHC001
+-     X  / '  ', '! ', '" ', '# ', '$ ', '% ', '& ',''' ', '( ', ') ',
+-     X    '* ', '+ ', ', ', '- ', '. ', '/ ', '0 ', '1 ', '2 ', '3 ',
+-     X    '4 ', '5 ', '6 ', '7 ', '8 ', '9 ', ': ', '; ', '< ', '= ',
+-     X    '> ', '? ', '@ ', 'A ', 'B ', 'C ', 'D ', 'E ', 'F ', 'G ',
+-     X    'H ', 'I ', 'J ', 'K ', 'L ', 'M ', 'N ', 'O ', 'P ', 'Q ',
+-     X    'R ', 'S ', 'T ', 'U ', 'V ', 'W ', 'X ', 'Y ', 'Z ', '[ ',
+-     X    '\ ', '] ', '^ ', '_ ', '` ', 'a ', 'b ', 'c ', 'd ', 'e ',
+-     X    'f ', 'g ', 'h ', 'i ', 'j ', 'k ', 'l ', 'm ', 'n ', 'o '/
++     X  / 2H  , 2H! , 2H" , 2H# , 2H$ , 2H% , 2H& , 2H' , 2H( , 2H) ,
++     X    2H* , 2H+ , 2H, , 2H- , 2H. , 2H/ , 2H0 , 2H1 , 2H2 , 2H3 ,
++     X    2H4 , 2H5 , 2H6 , 2H7 , 2H8 , 2H9 , 2H: , 2H; , 2H< , 2H= ,
++     X    2H> , 2H? , 2H@ , 2HA , 2HB , 2HC , 2HD , 2HE , 2HF , 2HG ,
++     X    2HH , 2HI , 2HJ , 2HK , 2HL , 2HM , 2HN , 2HO , 2HP , 2HQ ,
++     X    2HR , 2HS , 2HT , 2HU , 2HV , 2HW , 2HX , 2HY , 2HZ , 2H[ ,
++     X    2H\ , 2H] , 2H^ , 2H_ , 2H` , 2Ha , 2Hb , 2Hc , 2Hd , 2He ,
++     X    2Hf , 2Hg , 2Hh , 2Hi , 2Hj , 2Hk , 2Hl , 2Hm , 2Hn , 2Ho /
+       DATA          CHC002
+-     X  / 'p ', 'q ', 'r ', 's ', 't ', 'u ', 'v ', 'w ', 'x ', 'y ',
+-     X    'z ', '{ ', '| ', '} ', '~ ', ' 1', '!1', '"1', '#1', '$1',
+-     X    '%1', '&1','''1', '(1', ')1', '*1', '+1', ',1', '-1', '.1',
+-     X    '/1', '01', '11', '21', '31', '41', '51', '61', '71', '81',
+-     X    '91', ':1', ';1', '<1', '=1', '>1', '?1', '@1', 'A1', 'B1',
+-     X    'C1', 'D1', 'E1', 'F1', 'G1', 'H1', 'I1', 'J1', 'K1', 'L1',
+-     X    'M1', 'N1', 'O1', 'P1', 'Q1', 'R1', 'S1', 'T1', 'U1', 'V1',
+-     X    'W1', 'X1', 'Y1', 'Z1', '[1', ']1', '_1', 'a1', 'b1', 'c1'/
++     X  / 2Hp , 2Hq , 2Hr , 2Hs , 2Ht , 2Hu , 2Hv , 2Hw , 2Hx , 2Hy ,
++     X    2Hz , 2H{ , 2H| , 2H} , 2H~ , 2H 1, 2H!1, 2H"1, 2H#1, 2H$1,
++     X    2H%1, 2H&1, 2H'1, 2H(1, 2H)1, 2H*1, 2H+1, 2H,1, 2H-1, 2H.1,
++     X    2H/1, 2H01, 2H11, 2H21, 2H31, 2H41, 2H51, 2H61, 2H71, 2H81,
++     X    2H91, 2H:1, 2H;1, 2H<1, 2H=1, 2H>1, 2H?1, 2H@1, 2HA1, 2HB1,
++     X    2HC1, 2HD1, 2HE1, 2HF1, 2HG1, 2HH1, 2HI1, 2HJ1, 2HK1, 2HL1,
++     X    2HM1, 2HN1, 2HO1, 2HP1, 2HQ1, 2HR1, 2HS1, 2HT1, 2HU1, 2HV1,
++     X    2HW1, 2HX1, 2HY1, 2HZ1, 2H[1, 2H]1, 2H_1, 2Ha1, 2Hb1, 2Hc1/
+       DATA          CHC003
+-     X  / 'd1', 'e1', 'f1', 'g1', 'h1', 'i1', 'j1', 'k1', 'l1', 'm1',
+-     X    'n1', 'o1', 'p1', 'q1', 'r1', 's1', 't1', 'u1', 'v1', 'w1',
+-     X    'x1', 'y1', 'z1', '{1', '|1', '}1', '~1', ' 2', '!2', '"2',
+-     X    '#2', '$2', '%2', '&2','''2', '(2', ')2', '*2', '+2', ',2',
+-     X    '-2', '.2', '/2', '02', '12', '22', '32', '42', '52', '62',
+-     X    '72', '82', '92', ':2', ';2', '<2', '=2', '>2', '?2', '@2',
+-     X    'A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2', 'I2', 'J2',
+-     X    'K2', 'L2', 'M2', 'N2', 'O2', 'P2', 'Q2', 'R2', 'S2', 'T2'/
++     X  / 2Hd1, 2He1, 2Hf1, 2Hg1, 2Hh1, 2Hi1, 2Hj1, 2Hk1, 2Hl1, 2Hm1,
++     X    2Hn1, 2Ho1, 2Hp1, 2Hq1, 2Hr1, 2Hs1, 2Ht1, 2Hu1, 2Hv1, 2Hw1,
++     X    2Hx1, 2Hy1, 2Hz1, 2H{1, 2H|1, 2H}1, 2H~1, 2H 2, 2H!2, 2H"2,
++     X    2H#2, 2H$2, 2H%2, 2H&2, 2H'2, 2H(2, 2H)2, 2H*2, 2H+2, 2H,2,
++     X    2H-2, 2H.2, 2H/2, 2H02, 2H12, 2H22, 2H32, 2H42, 2H52, 2H62,
++     X    2H72, 2H82, 2H92, 2H:2, 2H;2, 2H<2, 2H=2, 2H>2, 2H?2, 2H@2,
++     X    2HA2, 2HB2, 2HC2, 2HD2, 2HE2, 2HF2, 2HG2, 2HH2, 2HI2, 2HJ2,
++     X    2HK2, 2HL2, 2HM2, 2HN2, 2HO2, 2HP2, 2HQ2, 2HR2, 2HS2, 2HT2/
+       DATA          CHC004
+-     X  / 'U2', 'V2', 'W2', 'X2', 'Y2', 'Z2', '[2', '\2', ']2', '^2',
+-     X    '_2', '`2', 'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2',
+-     X    'i2', 'j2', 'k2', 'l2', 'm2', 'n2', 'o2', 'p2', 'q2', 'r2',
+-     X    's2', 't2', 'u2', 'v2', 'w2', 'x2', 'y2', 'z2', '{2', '|2',
+-     X    '}2', '~2', '!3', '"3', '$3', '&3','''3', '(3', ')3', '*3',
+-     X    '+3', ',3', '-3', '.3', '/3', '03', '13', '23', '33', '43',
+-     X    '53', '63', '73', '83', '93', ':3', ';3', '=3', '?3', 'A3',
+-     X    'B3', 'C3', 'D3', 'E3', 'F3', 'G3', 'H3', 'I3', 'J3', 'K3'/
++     X  / 2HU2, 2HV2, 2HW2, 2HX2, 2HY2, 2HZ2, 2H[2, 2H\2, 2H]2, 2H^2,
++     X    2H_2, 2H`2, 2Ha2, 2Hb2, 2Hc2, 2Hd2, 2He2, 2Hf2, 2Hg2, 2Hh2,
++     X    2Hi2, 2Hj2, 2Hk2, 2Hl2, 2Hm2, 2Hn2, 2Ho2, 2Hp2, 2Hq2, 2Hr2,
++     X    2Hs2, 2Ht2, 2Hu2, 2Hv2, 2Hw2, 2Hx2, 2Hy2, 2Hz2, 2H{2, 2H|2,
++     X    2H}2, 2H~2, 2H!3, 2H"3, 2H$3, 2H&3, 2H'3, 2H(3, 2H)3, 2H*3,
++     X    2H+3, 2H,3, 2H-3, 2H.3, 2H/3, 2H03, 2H13, 2H23, 2H33, 2H43,
++     X    2H53, 2H63, 2H73, 2H83, 2H93, 2H:3, 2H;3, 2H=3, 2H?3, 2HA3,
++     X    2HB3, 2HC3, 2HD3, 2HE3, 2HF3, 2HG3, 2HH3, 2HI3, 2HJ3, 2HK3/
+       DATA          CHC005
+-     X  / 'L3', 'M3', 'N3', 'O3', 'P3', 'Q3', 'R3', 'S3', 'T3', 'U3',
+-     X    'V3', 'W3', 'X3', 'Y3', 'Z3', 'a3', 'b3', 'c3', 'd3', 'e3',
+-     X    'f3', 'g3', 'h3', 'i3', 'j3', 'k3', 'l3', 'm3', 'n3', 'o3',
+-     X    'p3', 'q3', 'r3', 's3', 't3', 'u3', 'v3', 'w3', 'x3', 'y3',
+-     X    'z3', '!4', '"4', '$4', '&4','''4', '(4', ')4', '*4', '+4',
+-     X    ',4', '-4', '.4', '/4', '04', '14', '24', '34', '44', '54',
+-     X    '64', '74', '84', '94', ':4', ';4', '=4', '?4', 'A4', 'B4',
+-     X    'C4', 'D4', 'E4', 'F4', 'G4', 'H4', 'I4', 'J4', 'K4', 'L4'/
++     X  / 2HL3, 2HM3, 2HN3, 2HO3, 2HP3, 2HQ3, 2HR3, 2HS3, 2HT3, 2HU3,
++     X    2HV3, 2HW3, 2HX3, 2HY3, 2HZ3, 2Ha3, 2Hb3, 2Hc3, 2Hd3, 2He3,
++     X    2Hf3, 2Hg3, 2Hh3, 2Hi3, 2Hj3, 2Hk3, 2Hl3, 2Hm3, 2Hn3, 2Ho3,
++     X    2Hp3, 2Hq3, 2Hr3, 2Hs3, 2Ht3, 2Hu3, 2Hv3, 2Hw3, 2Hx3, 2Hy3,
++     X    2Hz3, 2H!4, 2H"4, 2H$4, 2H&4, 2H'4, 2H(4, 2H)4, 2H*4, 2H+4,
++     X    2H,4, 2H-4, 2H.4, 2H/4, 2H04, 2H14, 2H24, 2H34, 2H44, 2H54,
++     X    2H64, 2H74, 2H84, 2H94, 2H:4, 2H;4, 2H=4, 2H?4, 2HA4, 2HB4,
++     X    2HC4, 2HD4, 2HE4, 2HF4, 2HG4, 2HH4, 2HI4, 2HJ4, 2HK4, 2HL4/
+       DATA          CHC006
+-     X  / 'M4', 'N4', 'O4', 'P4', 'Q4', 'R4', 'S4', 'T4', 'U4', 'V4',
+-     X    'W4', 'X4', 'Y4', 'Z4', 'a4', 'b4', 'c4', 'd4', 'e4', 'f4',
+-     X    'g4', 'h4', 'i4', 'j4', 'k4', 'l4', 'm4', 'n4', 'o4', 'p4',
+-     X    'q4', 'r4', 's4', 't4', 'u4', 'v4', 'w4', 'x4', 'y4', 'z4',
+-     X    '*A', '0A', '1A', '2A', '3A', '4A', '5A', '6A', '7A', '8A',
+-     X    '9A', 'AA', 'BA', 'CA', 'EA', 'HA', 'JA', 'KA', 'MA', 'NA',
+-     X    'OA', 'PA', 'QA', 'SA', 'TA', 'UA', 'VA', 'WA', 'XA', 'YA',
+-     X    '1B', '2B', '3B', '4B', '5B', '6B', 'AB', 'BB', 'CB', 'DB'/
++     X  / 2HM4, 2HN4, 2HO4, 2HP4, 2HQ4, 2HR4, 2HS4, 2HT4, 2HU4, 2HV4,
++     X    2HW4, 2HX4, 2HY4, 2HZ4, 2Ha4, 2Hb4, 2Hc4, 2Hd4, 2He4, 2Hf4,
++     X    2Hg4, 2Hh4, 2Hi4, 2Hj4, 2Hk4, 2Hl4, 2Hm4, 2Hn4, 2Ho4, 2Hp4,
++     X    2Hq4, 2Hr4, 2Hs4, 2Ht4, 2Hu4, 2Hv4, 2Hw4, 2Hx4, 2Hy4, 2Hz4,
++     X    2H*A, 2H0A, 2H1A, 2H2A, 2H3A, 2H4A, 2H5A, 2H6A, 2H7A, 2H8A,
++     X    2H9A, 2HAA, 2HBA, 2HCA, 2HEA, 2HHA, 2HJA, 2HKA, 2HMA, 2HNA,
++     X    2HOA, 2HPA, 2HQA, 2HSA, 2HTA, 2HUA, 2HVA, 2HWA, 2HXA, 2HYA,
++     X    2H1B, 2H2B, 2H3B, 2H4B, 2H5B, 2H6B, 2HAB, 2HBB, 2HCB, 2HDB/
+       DATA          CHC007
+-     X  / 'EB', 'FB', 'GB', 'HB', 'IB', 'JB', 'KB', 'LB', 'MB', 'NB',
+-     X    'OB', 'PB', 'QB', 'RB', 'SB', 'TB', 'UB', 'VB', 'WB', 'XB',
+-     X    'YB', 'ZB', '1C', '2C', '3C', '4C', '5C', '6C', 'AC', 'BC',
+-     X    'CC', 'DC', 'EC', 'FC', 'GC', 'HC', 'IC', 'JC', 'KC', 'LC',
+-     X    'MC', 'NC', 'OC', 'PC', 'QC', 'RC', 'SC', 'TC', 'UC', 'VC',
+-     X    'WC', 'XC', 'YC', 'ZC', 'OD', 'UD', 'AF', 'BF', 'CF', 'DF',
+-     X    'EF', 'FF', 'GF', 'HF', 'IF', 'KF', 'LF', 'MF', 'NF', 'OF',
+-     X    'PF', 'QF', 'RF', 'SF', 'TF', 'UF', 'WF', 'XF', 'YF', 'ZF'/
++     X  / 2HEB, 2HFB, 2HGB, 2HHB, 2HIB, 2HJB, 2HKB, 2HLB, 2HMB, 2HNB,
++     X    2HOB, 2HPB, 2HQB, 2HRB, 2HSB, 2HTB, 2HUB, 2HVB, 2HWB, 2HXB,
++     X    2HYB, 2HZB, 2H1C, 2H2C, 2H3C, 2H4C, 2H5C, 2H6C, 2HAC, 2HBC,
++     X    2HCC, 2HDC, 2HEC, 2HFC, 2HGC, 2HHC, 2HIC, 2HJC, 2HKC, 2HLC,
++     X    2HMC, 2HNC, 2HOC, 2HPC, 2HQC, 2HRC, 2HSC, 2HTC, 2HUC, 2HVC,
++     X    2HWC, 2HXC, 2HYC, 2HZC, 2HOD, 2HUD, 2HAF, 2HBF, 2HCF, 2HDF,
++     X    2HEF, 2HFF, 2HGF, 2HHF, 2HIF, 2HKF, 2HLF, 2HMF, 2HNF, 2HOF,
++     X    2HPF, 2HQF, 2HRF, 2HSF, 2HTF, 2HUF, 2HWF, 2HXF, 2HYF, 2HZF/
+       DATA          CHC008
+-     X  / 'AG', 'BG', 'CG', 'DG', 'EG', 'FG', 'GG', 'HG', 'IG', 'KG',
+-     X    'LG', 'MG', 'NG', 'OG', 'PG', 'QG', 'RG', 'SG', 'TG', 'UG',
+-     X    'WG', 'XG', 'YG', 'ZG', ' I', '!I', '"I', '#I', '$I', '%I',
+-     X    '&I','''I', '(I', ')I', '*I', '+I', ',I', '-I', '.I', '/I',
+-     X    '0I', '1I', '2I', '3I', '4I', '5I', '6I', '7I', '8I', '9I',
+-     X    ':I', ';I', '<I', '=I', '>I', '?I', '@I', 'AI', 'BI', 'CI',
+-     X    'DI', 'EI', 'FI', 'GI', 'HI', 'II', 'JI', 'KI', 'LI', 'MI',
+-     X    'NI', 'OI', 'PI', 'QI', 'RI', 'SI', 'TI', 'UI', 'VI', 'WI'/
++     X  / 2HAG, 2HBG, 2HCG, 2HDG, 2HEG, 2HFG, 2HGG, 2HHG, 2HIG, 2HKG,
++     X    2HLG, 2HMG, 2HNG, 2HOG, 2HPG, 2HQG, 2HRG, 2HSG, 2HTG, 2HUG,
++     X    2HWG, 2HXG, 2HYG, 2HZG, 2H I, 2H!I, 2H"I, 2H#I, 2H$I, 2H%I,
++     X    2H&I, 2H'I, 2H(I, 2H)I, 2H*I, 2H+I, 2H,I, 2H-I, 2H.I, 2H/I,
++     X    2H0I, 2H1I, 2H2I, 2H3I, 2H4I, 2H5I, 2H6I, 2H7I, 2H8I, 2H9I,
++     X    2H:I, 2H;I, 2H<I, 2H=I, 2H>I, 2H?I, 2H@I, 2HAI, 2HBI, 2HCI,
++     X    2HDI, 2HEI, 2HFI, 2HGI, 2HHI, 2HII, 2HJI, 2HKI, 2HLI, 2HMI,
++     X    2HNI, 2HOI, 2HPI, 2HQI, 2HRI, 2HSI, 2HTI, 2HUI, 2HVI, 2HWI/
+       DATA          CHC009
+-     X  / 'XI', 'YI', 'ZI', '[I', '\I', ']I', '^I', '_I', '`I', 'aI',
+-     X    'bI', 'cI', 'dI', 'eI', 'fI', 'gI', 'hI', 'iI', 'jI', 'kI',
+-     X    'lI', 'mI', 'nI', 'oI', 'pI', 'qI', 'rI', 'sI', 'tI', 'uI',
+-     X    'vI', 'wI', 'xI', 'yI', 'zI', '{I', '|I', '}I', '~I', ' J',
+-     X    '!J', '"J', '#J', '$J', '%J', '&J','''J', '(J', ')J', '*J',
+-     X    '+J', ',J', '-J', '.J', '/J', '0J', '1J', '2J', '3J', '4J',
+-     X    '5J', '6J', '7J', '8J', '9J', ':J', ';J', '<J', '=J', '>J',
+-     X    '?J', '@J', 'AJ', 'BJ', 'CJ', 'DJ', 'EJ', 'FJ', 'GJ', 'HJ'/
++     X  / 2HXI, 2HYI, 2HZI, 2H[I, 2H\I, 2H]I, 2H^I, 2H_I, 2H`I, 2HaI,
++     X    2HbI, 2HcI, 2HdI, 2HeI, 2HfI, 2HgI, 2HhI, 2HiI, 2HjI, 2HkI,
++     X    2HlI, 2HmI, 2HnI, 2HoI, 2HpI, 2HqI, 2HrI, 2HsI, 2HtI, 2HuI,
++     X    2HvI, 2HwI, 2HxI, 2HyI, 2HzI, 2H{I, 2H|I, 2H}I, 2H~I, 2H J,
++     X    2H!J, 2H"J, 2H#J, 2H$J, 2H%J, 2H&J, 2H'J, 2H(J, 2H)J, 2H*J,
++     X    2H+J, 2H,J, 2H-J, 2H.J, 2H/J, 2H0J, 2H1J, 2H2J, 2H3J, 2H4J,
++     X    2H5J, 2H6J, 2H7J, 2H8J, 2H9J, 2H:J, 2H;J, 2H<J, 2H=J, 2H>J,
++     X    2H?J, 2H@J, 2HAJ, 2HBJ, 2HCJ, 2HDJ, 2HEJ, 2HFJ, 2HGJ, 2HHJ/
+       DATA          CHC010
+-     X  / 'IJ', 'JJ', 'KJ', 'LJ', 'MJ', 'NJ', 'OJ', 'PJ', 'QJ', 'RJ',
+-     X    'SJ', 'TJ', 'UJ', 'VJ', 'WJ', 'XJ', 'YJ', 'ZJ', '[J', '\J',
+-     X    ']J', '^J', '_J', '`J', 'aJ', 'bJ', 'cJ', 'dJ', 'eJ', 'fJ',
+-     X    'gJ', 'hJ', 'iJ', 'jJ', 'kJ', 'lJ', 'mJ', 'nJ', 'oJ', 'pJ',
+-     X    'qJ', 'rJ', 'sJ', 'tJ', 'uJ', 'vJ', 'wJ', 'xJ', 'yJ', 'zJ',
+-     X    '{J', '|J', '}J', '~J', 'HK', 'LK', 'AL', 'BL', 'CL', 'DL',
+-     X    'EL', 'FL', 'GL', 'HL', 'IL', 'JL', 'KL', 'LL', 'ML', 'NL',
+-     X    'OL', 'PL', 'QL', 'RL', 'SL', 'TL', 'UL', 'VL', 'WL', 'XL'/
++     X  / 2HIJ, 2HJJ, 2HKJ, 2HLJ, 2HMJ, 2HNJ, 2HOJ, 2HPJ, 2HQJ, 2HRJ,
++     X    2HSJ, 2HTJ, 2HUJ, 2HVJ, 2HWJ, 2HXJ, 2HYJ, 2HZJ, 2H[J, 2H\J,
++     X    2H]J, 2H^J, 2H_J, 2H`J, 2HaJ, 2HbJ, 2HcJ, 2HdJ, 2HeJ, 2HfJ,
++     X    2HgJ, 2HhJ, 2HiJ, 2HjJ, 2HkJ, 2HlJ, 2HmJ, 2HnJ, 2HoJ, 2HpJ,
++     X    2HqJ, 2HrJ, 2HsJ, 2HtJ, 2HuJ, 2HvJ, 2HwJ, 2HxJ, 2HyJ, 2HzJ,
++     X    2H{J, 2H|J, 2H}J, 2H~J, 2HHK, 2HLK, 2HAL, 2HBL, 2HCL, 2HDL,
++     X    2HEL, 2HFL, 2HGL, 2HHL, 2HIL, 2HJL, 2HKL, 2HLL, 2HML, 2HNL,
++     X    2HOL, 2HPL, 2HQL, 2HRL, 2HSL, 2HTL, 2HUL, 2HVL, 2HWL, 2HXL/
+       DATA          CHC011
+-     X  / 'YL', 'ZL', '(M', ')M', '*M', '+M', '-M', '.M', '/M', '0M',
+-     X    '2M', '=M', 'AM', 'BM', 'CM', 'DM', 'EM', 'GM', 'HM', 'IM',
+-     X    'JM', 'LM', 'MM', 'NM', 'PM', 'QM', 'RM', 'SM', 'TM', 'VM',
+-     X    'XM', 'YM', 'ZM', '0O', '1O', '2O', '3O', '4O', '5O', '6O',
+-     X    '7O', '8O', '9O', ',P', '.P', 'AP', 'DP', 'EP', 'FP', 'IP',
+-     X    'LP', 'PP', 'QP', 'RP', 'UP', '(S', ')S', '+S', '/S', '0S',
+-     X    'AS', 'BS', 'CS', 'DS', 'ES', 'LS', 'NS', 'PS', 'RS', 'TS',
+-     X    'US', 'VS', 'WS', 'XS', 'AT', 'ET', 'FT', 'GT', 'IT', 'KT'/
++     X  / 2HYL, 2HZL, 2H(M, 2H)M, 2H*M, 2H+M, 2H-M, 2H.M, 2H/M, 2H0M,
++     X    2H2M, 2H=M, 2HAM, 2HBM, 2HCM, 2HDM, 2HEM, 2HGM, 2HHM, 2HIM,
++     X    2HJM, 2HLM, 2HMM, 2HNM, 2HPM, 2HQM, 2HRM, 2HSM, 2HTM, 2HVM,
++     X    2HXM, 2HYM, 2HZM, 2H0O, 2H1O, 2H2O, 2H3O, 2H4O, 2H5O, 2H6O,
++     X    2H7O, 2H8O, 2H9O, 2H,P, 2H.P, 2HAP, 2HDP, 2HEP, 2HFP, 2HIP,
++     X    2HLP, 2HPP, 2HQP, 2HRP, 2HUP, 2H(S, 2H)S, 2H+S, 2H/S, 2H0S,
++     X    2HAS, 2HBS, 2HCS, 2HDS, 2HES, 2HLS, 2HNS, 2HPS, 2HRS, 2HTS,
++     X    2HUS, 2HVS, 2HWS, 2HXS, 2HAT, 2HET, 2HFT, 2HGT, 2HIT, 2HKT/
+       DATA          CHC012
+-     X  / 'LT', 'MT', 'NT', 'UT', ' U', '0U', '1U', '2U', '3U', '4U',
+-     X    '5U', '6U', '1V', '2V', '3V', '4V', '5V', '6V', 'BW', 'DW',
+-     X    'LW', 'RW', 'UW', '$$'/
++     X  / 2HLT, 2HMT, 2HNT, 2HUT, 2H U, 2H0U, 2H1U, 2H2U, 2H3U, 2H4U,
++     X    2H5U, 2H6U, 2H1V, 2H2V, 2H3V, 2H4V, 2H5V, 2H6V, 2HBW, 2HDW,
++     X    2HLW, 2HRW, 2HUW, 2H$$/
+       DATA          CHO001
+      X  /    1,    3,   17,   27,   37,   77,  108,  156,  162,  182,
+      X     202,  212,  218,  227,  231,  238,  242,  281,  291,  334,

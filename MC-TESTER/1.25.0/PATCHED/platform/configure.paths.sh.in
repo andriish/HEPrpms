@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export PREFIX=@prefix@
+export HEPMCLOCATION=@with_HepMC@
+export HEPMC3LOCATION=@with_HepMC3@
+export PYTHIALOCATION=@with_Pythia8@
+export ROOTLOCATION=@ROOTBIN@

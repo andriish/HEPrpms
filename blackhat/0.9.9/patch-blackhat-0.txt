@@ -1,0 +1,36 @@
+--- src/cut_Darren.h.orig	2021-03-06 20:11:25.884626966 +0100
++++ src/cut_Darren.h	2021-03-06 20:11:25.884626966 +0100
+@@ -344,14 +344,14 @@
+         virtual CHP get_sub_terms(momentum_configuration<dd_real>& mc, const std::vector<int>& ind, coeffparam<RHP,TriangleSpecs::CPOINTS>& tp){return CHP(0,0);}
+         virtual CVHP get_sub_terms(momentum_configuration<qd_real>& mc, const std::vector<int>& ind, coeffparam<RVHP,TriangleSpecs::CPOINTS>& tp){return CVHP(0,0);}
+ 
+-        virtual C get_sub_terms(const eval_param<R>& ep, coeffparam<R,TriangleSpecs::CPOINTS>& tp) =0;
+-    	virtual CHP get_sub_terms(const eval_param<RHP>& ep, coeffparam<RHP,TriangleSpecs::CPOINTS>& tp) =0;
+-    	virtual CVHP get_sub_terms(const eval_param<RVHP>& ep, coeffparam<RVHP,TriangleSpecs::CPOINTS>& tp) =0;
++        virtual C get_sub_terms(const eval_param<R>& ep, coeffparam<R,TriangleSpecs::CPOINTS>& tp) {};
++    	virtual CHP get_sub_terms(const eval_param<RHP>& ep, coeffparam<RHP,TriangleSpecs::CPOINTS>& tp) {};
++    	virtual CVHP get_sub_terms(const eval_param<RVHP>& ep, coeffparam<RVHP,TriangleSpecs::CPOINTS>& tp) {};
+ #ifdef BH_USE_GMP
+         virtual CGMP eval(momentum_configuration<RGMP>&,const std::vector<int>&);
+     	virtual CGMP eval(const eval_param<RGMP>& ep);
+         virtual CGMP get_sub_terms(momentum_configuration<RGMP>& mc, const std::vector<int>& ind, coeffparam<RGMP,TriangleSpecs::CPOINTS>& tp){return CGMP(0,0);}
+-    	virtual CGMP get_sub_terms(const eval_param<RGMP>& ep, coeffparam<RGMP,TriangleSpecs::CPOINTS>& tp) =0;
++    	virtual CGMP get_sub_terms(const eval_param<RGMP>& ep, coeffparam<RGMP,TriangleSpecs::CPOINTS>& tp) {};
+ 
+ #endif
+         //Used for setting and checking whether this has already been computed
+--- src/cached_OLHA.cpp.orig	2021-03-06 20:11:25.884626966 +0100
++++ src/cached_OLHA.cpp	2021-03-06 20:11:25.884626966 +0100
+@@ -331,10 +331,10 @@
+ 		Cached_OLHA* new_COLHA = new Cached_OLHA(new_OLHAb);
+ 		d_amplitudes.insert(pair<pro_cs,Cached_OLHA*>(pc,new_COLHA));
+ 		if(conjQ) return new Cached_OLHA_user_conjugate(new_COLHA,new_COLHA->add(ind),sign);
+-        else return Cached_OLHA_user_normal(new_COLHA,new_COLHA->add(ind));
++        else return (Cached_OLHA_user*)(Cached_OLHA_user_normal(new_COLHA,new_COLHA->add(ind)));
+ 	} else {
+         if(conjQ) return new Cached_OLHA_user_conjugate((*it).second,(*it).second->add(ind),sign);
+-        else return new Cached_OLHA_user_normal((*it).second,(*it).second->add(ind));
++        else return (Cached_OLHA_user*)(new Cached_OLHA_user_normal((*it).second,(*it).second->add(ind)));
+ 	}
+ 
+ }

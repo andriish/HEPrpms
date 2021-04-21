@@ -1,0 +1,9 @@
+#!/bin/sh
+
+DIR=@prefix@/share/blackhat/
+#if test $# -ne 1; then
+#	echo "Usage: $0 TAR_FILE_TO_INSTALL"
+#fi	
+
+mkdir -p $DIR
+tar --overwrite -xzf  $1 -C $2$DIR > /dev/null 

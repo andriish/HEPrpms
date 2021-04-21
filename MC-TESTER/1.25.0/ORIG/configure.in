@@ -1,0 +1,175 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.59)
+AC_INIT( [MC-TESTER], [1.24], [tomasz.przedzinski@uj.edu.pl] )
+AC_LANG_CPLUSPLUS
+
+hepmclocation=$HEPMCLOCATION
+pythialocation=$PYTHIALOCATION
+
+host_os=`uname -s`
+
+if test "$host_os" == "Linux"; then
+	LIB_EXT=so
+	SOFLAGS=-shared
+	LDFLAGS="${LDFLAGS} -Wl,--no-undefined"
+else
+	LIB_EXT=dylib
+	SOFLAGS=-dynamiclib
+fi
+
+if test -e platform/configure.paths.sh; then
+	. platform/configure.paths.sh
+fi
+
+if test -z $hepmclocation; then
+	hepmclocation=$HEPMCLOCATION
+fi
+
+if test -z $pythialocation; then
+	pythialocation=$PYTHIALOCATION
+fi
+
+if test "$AFS_PATHS" == "yes"; then
+	with_HepMC=$HEPMCLOCATION
+	with_Pythia8=$PYTHIALOCATION
+fi
+
+##############################################################################
+# Process command line options
+
+AC_ARG_WITH([HepMC],
+   [AS_HELP_STRING([--with-HepMC], [Path to HepMC 2.xx] )],,
+   [with_HepMC=$hepmclocation])
+
+echo ""
+echo "Using HepMC location:   $with_HepMC"
+
+AC_ARG_WITH([Pythia8],
+   [AS_HELP_STRING([--with-Pythia8], [Path to Pythia 8.1 or later (used by examples only)] )],
+   [ echo "Using Pythia8 location: $with_Pythia8" ],
+   [with_Pythia8=$pythialocation])
+
+AC_ARG_WITH([root],
+   [AS_HELP_STRING([--with-root], [Path to root binaries] )],
+   [ echo "Using root location:    $with_root" ],
+   [with_root=$ROOTLOCATION])
+
+echo ""
+
+##############################################################################
+# Check for programs
+AC_PROG_MAKE_SET
+AC_PROG_LN_S
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_RANLIB
+AC_PROG_F77
+AC_PROG_FC([gfortran])
+AC_PROG_CXXCPP
+AC_CHECK_PROG(DIRECT_CPP,cpp,cpp,$CPP)
+
+LD=$CXX
+
+# If gcc is 4.1 or higher, use modern fortran compiler if present
+CXX_VER=`$CXX --version | grep " 4\..\.."`
+
+if test ! -z "$CXX_VER" && test ! -z $FC; then
+	echo "g++ version 4.1 or higher. Using fortran compiler: $FC"
+	F77=$FC
+	FFLAGS=$FCFLAGS
+fi
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_C_INLINE
+AC_CHECK_TYPES([ptrdiff_t])
+
+# Checks for library functions.
+AC_FUNC_MALLOC
+AC_FUNC_STRFTIME
+AC_CHECK_FUNCS([atexit getcwd pow sqrt strcmp], ,
+[ echo "" &&
+  echo "ERROR: Basic functions not found. Something's wrong with paths." &&
+  exit -1
+])
+
+##############################################################################
+# Check for ROOT
+
+export PATH="$with_root:$PATH"
+
+AC_CHECK_PROG(HAS_ROOT_CONFIG,root-config,[yes],[no])
+
+if test "$HAS_ROOT_CONFIG" == "no"; then
+	HAS_ROOT=0
+	echo ""
+	echo "INFO: root-config not found. ROOT is not installed or path"
+	echo "      to ROOT bin folder not provied. Use:"
+	echo "      ./configure --with-root=<path_to_root_binaries>"
+	echo "     (consider using 'source platform/afs.paths.sh' [or .csh])"
+	echo ""
+	exit -1
+else
+	AC_CHECK_PROG(HAS_ROOT_EXE,root,[yes],[no])
+	if test "$HAS_ROOT_EXE" == "no"; then
+		HAS_ROOT=0;
+		echo ""
+		echo "INFO: root-config exists but root not found."
+	else
+		ROOTLIB=`root-config --glibs`
+		ROOTINC=`root-config --cflags`
+		CPPFLAGS="$ROOTLIB $ROOTINC $CPPFLAGS"
+		AC_CHECK_HEADER([TROOT.h],
+		  HAS_ROOT=1,
+		[ HAS_ROOT=0 &&
+		  echo "" &&
+		  echo "INFO: ROOT header file cannot be compiled."
+		])
+	fi
+	if test $HAS_ROOT = 0; then
+		echo "      This indicates faulty or unusual ROOT installation."
+		echo "      Verify that location of both 'root' and 'root-config' "
+		echo "      is provided. Try ./configure --with-root=<path_to_root_binaries>"
+		echo ""
+		exit -1
+	fi
+fi
+
+##############################################################################
+# Check for HepMC header files
+AC_SUBST(with_HepMC)
+CPPFLAGS="-I$with_HepMC/include $CPPFLAGS"
+
+AC_CHECK_HEADERS([HepMC/Version.h], ,
+[ echo "" &&
+  echo "WARNING: HepMC not found, will compile without it." &&
+  echo "         To create libHepMCEvent provide HepMC location using:" &&
+  echo "         './configure --with-HepMC=<path_to_HepMC>' " &&
+  echo "        (consider using 'source platform/afs.paths.sh' [or .csh])" &&
+  echo ""
+])
+
+##############################################################################
+ROOTCFLAGS=`root-config --cflags`
+ROOTGLIBS=`root-config --glibs`
+ROOTBIN=`root-config --bindir`
+ROOTLIBPATH=`root-config --libdir`
+
+AC_SUBST(prefix)
+AC_SUBST(with_HepMC)
+AC_SUBST(with_Pythia8)
+
+AC_SUBST(LD)
+AC_SUBST(LIB_EXT)
+AC_SUBST(SOFLAGS)
+
+AC_SUBST(ROOTCFLAGS)
+AC_SUBST(ROOTGLIBS)
+AC_SUBST(ROOTBIN)
+AC_SUBST(ROOTLIBPATH)
+AC_CONFIG_FILES([platform/make.inc platform/configure.paths.sh])
+AC_OUTPUT
+
+ln -sf platform/make.inc make.inc

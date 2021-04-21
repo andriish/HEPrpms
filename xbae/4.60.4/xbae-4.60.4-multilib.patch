@@ -1,0 +1,124 @@
+--- xbae-4.60.4/configure.multilib	2006-05-29 16:02:05.000000000 +0200
++++ xbae-4.60.4/configure	2007-05-12 13:44:11.000000000 +0200
+@@ -22735,7 +22735,7 @@ fi
+ THE_DATE=`date +%F`
+ 
+ 
+-                                                                                                                                                                                                                                                                                                                                ac_config_files="$ac_config_files Makefile include/Makefile include/Xbae/Makefile include/Xbae/patchlevel.h src/Makefile src/XbaeCaption.3 src/XbaeInput.3 src/XbaeMatrix.3 examples/Makefile examples/add/Makefile examples/caption/Makefile examples/choice/Makefile examples/colors/Makefile examples/draw/Makefile examples/dynamic/Makefile examples/fifteen/Makefile examples/input/Makefile examples/list/Makefile examples/matrix/Makefile examples/multibyte/Makefile examples/multifixed/Makefile examples/select-drag/Makefile examples/select-push/Makefile examples/tests/Makefile examples/traversal/Makefile examples/Mri/Makefile examples/builderXcessory/Makefile examples/builderXcessory/xbae.wml doc/Makefile doc/images/Makefile scripts/Makefile scripts/Xbae.spec"
++                                                                                                                                                                                                                                                                                                                                ac_config_files="$ac_config_files Makefile include/Makefile include/Xbae/Makefile include/Xbae/patchlevel.h src/Makefile src/XbaeCaption.3 src/XbaeInput.3 src/XbaeMatrix.3 examples/Makefile examples/add/Makefile examples/caption/Makefile examples/choice/Makefile examples/colors/Makefile examples/draw/Makefile examples/dynamic/Makefile examples/fifteen/Makefile examples/input/Makefile examples/list/Makefile examples/matrix/Makefile examples/multibyte/Makefile examples/multifixed/Makefile examples/select-drag/Makefile examples/select-push/Makefile examples/tests/Makefile examples/traversal/Makefile examples/Mri/Makefile examples/builderXcessory/Makefile doc/Makefile doc/images/Makefile scripts/Makefile scripts/Xbae.spec"
+ cat >confcache <<\_ACEOF
+ # This file is a shell script that caches the results of configure
+ # tests run on this system so they can be shared between configure
+@@ -23403,7 +23403,6 @@ do
+   "examples/traversal/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/traversal/Makefile" ;;
+   "examples/Mri/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/Mri/Makefile" ;;
+   "examples/builderXcessory/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/builderXcessory/Makefile" ;;
+-  "examples/builderXcessory/xbae.wml" ) CONFIG_FILES="$CONFIG_FILES examples/builderXcessory/xbae.wml" ;;
+   "doc/Makefile" ) CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;
+   "doc/images/Makefile" ) CONFIG_FILES="$CONFIG_FILES doc/images/Makefile" ;;
+   "scripts/Makefile" ) CONFIG_FILES="$CONFIG_FILES scripts/Makefile" ;;
+--- xbae-4.60.4/configure.in.multilib	2006-05-29 15:54:14.000000000 +0200
++++ xbae-4.60.4/configure.in	2007-05-12 13:44:17.000000000 +0200
+@@ -275,7 +275,6 @@ examples/tests/Makefile \
+ examples/traversal/Makefile \
+ examples/Mri/Makefile \
+ examples/builderXcessory/Makefile \
+-examples/builderXcessory/xbae.wml \
+ doc/Makefile \
+ doc/images/Makefile \
+ scripts/Makefile \
+--- xbae-4.60.4/examples/builderXcessory/xbae.wml.in.multilib	2003-10-20 21:11:45.000000000 +0200
++++ xbae-4.60.4/examples/builderXcessory/xbae.wml.in	2007-05-12 13:45:47.000000000 +0200
+@@ -368,7 +368,7 @@ Class XbaeMatrixClass : Widget
+ 	XtLiteral = "xbaeMatrixWidgetClass";
+ 	LiveObject = True;
+         SuperClass = "XmManager";
+-	LoadLibrary = "@prefix@/lib/libXbae.so";
++	LoadLibrary = "@libdir@/libXbae.so";
+ 	LinkLibrary = "-lXbae";
+ 	ConvenienceFunction = "XbaeCreateMatrix";
+         Resources {
+@@ -482,7 +482,7 @@ Class XbaeCaptionClass : Widget
+ 	XtLiteral = "xbaeCaptionWidgetClass";
+ 	LiveObject = True;
+         SuperClass = "XmManager";
+-	LoadLibrary = "@prefix@/lib/libXbae.so";
++	LoadLibrary = "@libdir@/libXbae.so";
+ 	LinkLibrary = "-lXbae";
+ 	ConvenienceFunction = "XbaeCreateCaption";
+         Resources {
+@@ -503,7 +503,7 @@ Class XbaeInputClass : Widget
+ 	XtLiteral = "xbaeInputWidgetClass";
+ 	LiveObject = True;
+         SuperClass = "XmText";
+-	LoadLibrary = "@prefix@/lib/libXbae.so";
++	LoadLibrary = "@libdir@/libXbae.so";
+ 	LinkLibrary = "-lXbae";
+ 	ConvenienceFunction = "XbaeCreateInput";
+         Resources {
+--- xbae-4.60.4/examples/builderXcessory/Makefile.am.multilib	2002-11-23 23:14:00.000000000 +0100
++++ xbae-4.60.4/examples/builderXcessory/Makefile.am	2007-05-12 13:45:47.000000000 +0200
+@@ -7,7 +7,7 @@ EXTRA_DIST= \
+ 	XbaeCaption.pix XbaeInput.pix XbaeMatrix.pix \
+ 	local.cat \
+ 	xbae.wml \
+-	xbae_ctrl.tcl
++	xbae_ctrl.tcl xbae.wml.in
+ 
+ examplesdir = $(datadir)/Xbae/examples/builderXcessory
+ examples_DATA = \
+@@ -16,3 +16,6 @@ examples_DATA = \
+ 	local.cat \
+ 	xbae.wml \
+ 	xbae_ctrl.tcl
++
++xbae.wml: xbae.wml.in ../../config.status
++	sed -e "s%[@]libdir[@]%$(libdir)%" $< > xbae.wml
+--- xbae-4.60.4/examples/builderXcessory/Makefile.in.multilib	2006-05-29 16:02:07.000000000 +0200
++++ xbae-4.60.4/examples/builderXcessory/Makefile.in	2007-05-12 13:45:47.000000000 +0200
+@@ -37,8 +37,7 @@ POST_UNINSTALL = :
+ build_triplet = @build@
+ host_triplet = @host@
+ subdir = examples/builderXcessory
+-DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+-	$(srcdir)/xbae.wml.in
++DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/ac_find_motif.m4 \
+ 	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.in
+@@ -46,7 +45,6 @@ am__configure_deps = $(am__aclocal_m4_de
+ 	$(ACLOCAL_M4)
+ mkinstalldirs = $(install_sh) -d
+ CONFIG_HEADER = $(top_builddir)/include/XbaeConfig.h
+-CONFIG_CLEAN_FILES = xbae.wml
+ depcomp =
+ am__depfiles_maybe =
+ SOURCES =
+@@ -211,7 +209,7 @@ EXTRA_DIST = \
+ 	XbaeCaption.pix XbaeInput.pix XbaeMatrix.pix \
+ 	local.cat \
+ 	xbae.wml \
+-	xbae_ctrl.tcl
++	xbae_ctrl.tcl xbae.wml.in
+ 
+ examplesdir = $(datadir)/Xbae/examples/builderXcessory
+ examples_DATA = \
+@@ -253,8 +251,6 @@ $(top_srcdir)/configure: @MAINTAINER_MOD
+ 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
+ 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+-xbae.wml: $(top_builddir)/config.status $(srcdir)/xbae.wml.in
+-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+ 
+ mostlyclean-libtool:
+ 	-rm -f *.lo
+@@ -404,6 +400,9 @@ uninstall-am: uninstall-examplesDATA uni
+ 	uninstall uninstall-am uninstall-examplesDATA \
+ 	uninstall-info-am
+ 
++
++xbae.wml: xbae.wml.in ../../config.status
++	sed -e "s%[@]libdir[@]%$(libdir)%" $< > xbae.wml
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:

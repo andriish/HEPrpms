@@ -1,0 +1,11 @@
+--- xbae-4.60.2/examples/Mri/Makefile.in-old	2006-05-19 14:54:40.000000000 +0200
++++ xbae-4.60.2/examples/Mri/Makefile.in	2006-05-19 14:55:22.000000000 +0200
+@@ -221,7 +221,7 @@
+                 -I$(top_builddir)/include @MOTIF_CFLAGS@ @X_CFLAGS@
+ 
+ LDADD = ../../src/libXbae.la \
+-	-lWc $(link_motif) @X_LIBS@ -lXt ${X_PRE_LIBS} -lXext -lX11 ${X_EXTRA_LIBS}
++	-lWc $(link_motif) @X_LIBS@ -lXt ${X_PRE_LIBS} -lXext -lX11 ${X_EXTRA_LIBS} -lXmp
+ 
+ all: all-am
+ 
