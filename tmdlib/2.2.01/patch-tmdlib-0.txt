@@ -1,0 +1,39 @@
+diff -Naur ORIG/apfelxx/inc/apfel/matrix.h PATCHED/apfelxx/inc/apfel/matrix.h
+--- ORIG/apfelxx/inc/apfel/matrix.h	2021-04-21 22:41:24.515383668 +0200
++++ PATCHED/apfelxx/inc/apfel/matrix.h	2021-04-21 22:41:24.515383668 +0200
+@@ -5,7 +5,7 @@
+ //
+ 
+ #pragma once
+-
++#include <stddef.h>
+ #include <vector>
+ #include <array>
+ 
+diff -Naur ORIG/configure.ac PATCHED/configure.ac
+--- ORIG/configure.ac	2021-04-21 22:41:24.515383668 +0200
++++ PATCHED/configure.ac	2021-04-21 22:41:24.515383668 +0200
+@@ -40,7 +40,7 @@
+ if test x$root_config == x; then
+   AC_MSG_RESULT([Using $root_config])
+   AC_MSG_WARN([Unable to find root-config.])
+-  AC_MSG_WARN([Building TMDlib without ROOT])
++  AC_MSG_ERROR([Building TMDlib without ROOT])
+ else 
+   AC_MSG_RESULT([Using $root_config])
+   root_ok=1
+@@ -59,11 +59,11 @@
+ 
+ AC_ARG_WITH([lhapdf],
+    [AS_HELP_STRING([--with-lhapdf], [path to LHAPDF installation])],[:],[with_lhapdf=${LHAPDF_DIR}])
+-AS_IF([test "x$with_lhapdf" != "xno" && test "x`ls $with_lhapdf/lib/libLHAPDF.*`" != "x" ], [AC_SUBST(LHAPDF_DIR,[$with_lhapdf])],
+-        AC_MSG_ERROR([Can't find $with_lhapdf/lib/libLHAPDF.* libraries. 
++AS_IF([test "x$with_lhapdf" != "xno" && [ test "x`ls $with_lhapdf/lib/libLHAPDF.*`" != "x"||  test "x`ls $with_lhapdf/lib64/libLHAPDF.*`" != "x" ] ], [AC_SUBST(LHAPDF_DIR,[$with_lhapdf])],
++        AC_MSG_ERROR([Cannot find $with_lhapdf/lib/libLHAPDF.* or $with_lhapdf/lib64/libLHAPDF.* libraries.
+         Specify correct path to LHAPDF installation: --with-lhapdf=/path/to/lhapdf]) ; exit 1
+         LHAPDF_CFLAGS=`lhapdf-config --cflags`)
+-AC_SUBST([PDFLIB], ["-L$with_lhapdf/lib -lLHAPDF "])
++AC_SUBST([PDFLIB], ["-L$with_lhapdf/lib -L$with_lhapdf/lib64 -lLHAPDF "])
+ LHAPDF_CFLAGS=`${LHAPDF_DIR}/bin/lhapdf-config --cppflags`
+ AC_SUBST(LHAPDF_CFLAGS)
+ AC_MSG_RESULT([Using $PDFLIB ])
