@@ -2,19 +2,28 @@
 set -x
 PACKAGE=$1
 VERSION=$2
-
 TOPDIR=$(pwd)
+touch $TOPDIR/md5sums.txt.rej
 export PATH=$PATH:/usr/bin:$TOPDIR
 SPECTOOL=spectool
 rm -rf $TOPDIR/$PACKAGE/$VERSION/rpmbuild/{SOURCES,SPECS,SRPMS} 
 mkdir -p $TOPDIR/$PACKAGE/$VERSION/rpmbuild/{SOURCES,SPECS,RPMS,SRPMS} 
 for a in $($SPECTOOL $TOPDIR/$PACKAGE/$VERSION/$PACKAGE.spec | tr -s ' '| cut -f 2 -d' ' | grep '://' ); do
 wget --no-check-certificate  --no-cache $a -P $TOPDIR/$PACKAGE/$VERSION/rpmbuild/SOURCES
+s=$(md5sum $PACKAGE/$VERSION/rpmbuild/SOURCES/$(basename $a))
+if grep -Fxq "$s" $TOPDIR/md5sums.txt
+then
+echo "MD5 sum->"$s"<-     Found in "$TOPDIR"/md5sums.txt"
+else
+echo "MD5 sum->"$s"<- NOT found in "$TOPDIR"/md5sums.txt"
+echo $s >> $TOPDIR/md5sums.txt.rej
+exit
+fi
+
 done 
 for a in $($SPECTOOL $TOPDIR/$PACKAGE/$VERSION/$PACKAGE.spec | tr -s ' '| cut -f 2 -d' ' | grep -v '://' ); do
 cp $TOPDIR/$PACKAGE/$VERSION/$(basename $a) $TOPDIR/$PACKAGE/$VERSION/rpmbuild/SOURCES
 done 
-
 
 cd $TOPDIR/$PACKAGE/$VERSION
 if [ -f do.sh ]; 

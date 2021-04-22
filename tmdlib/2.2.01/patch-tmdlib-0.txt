@@ -1,6 +1,6 @@
 diff -Naur ORIG/apfelxx/inc/apfel/matrix.h PATCHED/apfelxx/inc/apfel/matrix.h
---- ORIG/apfelxx/inc/apfel/matrix.h	2021-04-21 22:41:24.515383668 +0200
-+++ PATCHED/apfelxx/inc/apfel/matrix.h	2021-04-21 22:41:24.515383668 +0200
+--- ORIG/apfelxx/inc/apfel/matrix.h	2021-04-22 14:32:18.062044016 +0200
++++ PATCHED/apfelxx/inc/apfel/matrix.h	2021-04-22 14:32:18.063044016 +0200
 @@ -5,7 +5,7 @@
  //
  
@@ -11,8 +11,8 @@ diff -Naur ORIG/apfelxx/inc/apfel/matrix.h PATCHED/apfelxx/inc/apfel/matrix.h
  #include <array>
  
 diff -Naur ORIG/configure.ac PATCHED/configure.ac
---- ORIG/configure.ac	2021-04-21 22:41:24.515383668 +0200
-+++ PATCHED/configure.ac	2021-04-21 22:41:24.515383668 +0200
+--- ORIG/configure.ac	2021-04-22 14:32:18.062044016 +0200
++++ PATCHED/configure.ac	2021-04-22 14:32:18.063044016 +0200
 @@ -40,7 +40,7 @@
  if test x$root_config == x; then
    AC_MSG_RESULT([Using $root_config])
