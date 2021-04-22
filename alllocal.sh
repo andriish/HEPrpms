@@ -4,8 +4,9 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+tmdlib:2.2.01
 #Rivet:3.1.4
-MC-TESTER:1.26.0
+#MC-TESTER:1.26.0
 #rapgap:3.303
 #cascade:3.1.01
 #VBFNLO:3.0.0beta5

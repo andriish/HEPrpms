@@ -1,0 +1,41 @@
+diff -Naur ORIG/configure PATCHED/configure
+--- ORIG/configure	2021-04-21 17:04:55.530211578 +0200
++++ PATCHED/configure	2021-04-21 17:04:55.530211578 +0200
+@@ -150,7 +150,7 @@
+ 
+ findprog gcc CC clang gcc || exit 1
+ 
+-findprog g++ CXX clang++ g++ || exit 1
++findprog g++ CXX g++ g++ || exit 1
+ 
+ findprog fortran FC ${CONF_REAL10:+gfortran} ${CONF_QUAD:+ifort gfortran xlf} ifort pgf90 xlf gfortran g95 f90 || exit 1
+ 
+diff -Naur ORIG/makefile.in PATCHED/makefile.in
+--- ORIG/makefile.in	2021-04-21 17:04:55.530211578 +0200
++++ PATCHED/makefile.in	2021-04-21 17:04:55.530211578 +0200
+@@ -36,18 +36,18 @@
+ MFHBIN = $(BLD)/MFeynHiggs$(EXE)
+ 
+ install: default
+-	-mkdir "$(PREFIX)"
+-	-mkdir "$(LIBDIR)" "$(INCLUDEDIR)" "$(BINDIR)"
+-	cp -p $(BLD)/libFH.a "$(LIBDIR)"
++	-mkdir "$(DESTDIR)$(PREFIX)"
++	-mkdir "$(DESTDIR)$(LIBDIR)" "$(DESTDIR)$(INCLUDEDIR)" "$(DESTDIR)$(BINDIR)"
++	cp -p $(BLD)/libFH.a "$(DESTDIR)$(LIBDIR)"
+ 	cp -p $(BLD)/CFeynHiggs.h $(BLD)/CSLHA.h $(BLD)/FHCouplings.h \
+ 	  $(BLD)/FHRecord.h $(BLD)/SLHA.h $(BLD)/SLHADefs.h \
+-	  $(BLD)/PDG.h "$(INCLUDEDIR)"
++	  $(BLD)/PDG.h "$(DESTDIR)$(INCLUDEDIR)"
+ 	strip $(FHBIN)
+-	cp -p $(FHBIN) $(BLD)/fcc "$(BINDIR)"
++	cp -p $(FHBIN) $(BLD)/fcc "$(DESTDIR)$(BINDIR)"
+ 	test ! -f $(MFHBIN) || { \
+-	  test -z "$(EXE)" || ldd $(MFHBIN) | awk '/\/usr\/bin\/cyg/ { system("cp -p " $$3 " $(BINDIR)/"); }' ; \
++	  test -z "$(EXE)" || ldd $(MFHBIN) | awk '/\/usr\/bin\/cyg/ { system("cp -p " $$3 "$(DESTDIR)$(BINDIR)/"); }' ; \
+ 	  strip $(MFHBIN) ; \
+-	  cp -p $(MFHBIN) $(BINDIR); \
++	  cp -p $(MFHBIN) $(DESTDIR)$(BINDIR); \
+ 	}
+ 
+ force: $(BLD)/version.h
