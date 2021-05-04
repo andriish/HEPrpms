@@ -7,8 +7,8 @@ declare -a BUILDLIST=(
 #apfel:3.0.4
 #applgrid:1.5.46
 #geant4:10.07.p01
-#LCIO:02.16.01
-DD4hep:01.16.01
+LCIO:02.16.01
+#DD4hep:01.16.01
 #ariadne:4.12
 #BAT:1.0.0
 #binder:1.1.0
