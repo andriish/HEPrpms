@@ -1,10 +1,11 @@
 Summary:       Class library for High Energy Physics
 Name:          clhep
 Version:       2.4.4.1
-Release:       4%{?dist}
+Release:       5%{?dist}
 License:       distributable
 URL:           http://proj-clhep.web.cern.ch/proj-clhep/
 Source:        https://proj-clhep.web.cern.ch/proj-clhep/dist1/clhep-%{version}.tgz
+Patch0:        patch-clhep-0.txt
 BuildRequires: binutils gcc-c++  make
 Prefix:        %{_prefix}
 BuildRequires: cmake >= 3.4.3
@@ -69,6 +70,8 @@ cd build
 %{_libdir}/CLHEP-%{version}/*
 
 %changelog
+* Mon May 03 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de> 
+- Added a patch to clhep-config
 * Sun Feb 21 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 2.4.4.1
 - Cleanup 
 * Fri Jan 08 2016 Wei-Lun Chao <bluebat@member.fsf.org> - 2.2.0.8
