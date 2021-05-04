@@ -12,7 +12,7 @@ BuildRequires: cmake >= 3.4.3
 BuildRequires:gcc-c++  LCIO-devel xerces-c doxygen
 
 %if %{?rhel}%{!?rhel:0} >= 8
-BuildRequires: tex(latex)
+BuildRequires: tex(latex) platform-python-devel
 %else
 BuildRequires: tex(latex) biber
 %endif
@@ -24,9 +24,9 @@ BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel boost-filesys
 %endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-Requires:         root HepMC3 python tbb 
+Requires:         root HepMC3 python tbb python3
 BuildRequires:    root root-core root-graf3d-eve
-BuildRequires:    HepMC3-devel  HepMC3  python3-devel boost-devel boost-filesystem tbb-devel expat-devel xerces-c-devel
+BuildRequires:    HepMC3-devel  HepMC3  python3  python3-devel boost-devel boost-filesystem tbb-devel expat-devel xerces-c-devel
 %endif
 
 Prefix: %{_prefix}
