@@ -9,17 +9,17 @@ Source0:        https://github.com/AIDASoft/DD4hep/archive/v01-16-01.tar.gz
 
 Requires: geant4 LCIO tbb
 BuildRequires: cmake >= 3.4.3 
-BuildRequires:gcc-c++  LCIO-devel xerces-c doxygen
+BuildRequires:gcc-c++  LCIO-devel xerces-c doxygen  ImageMagic cuos-filters
 
 %if %{?rhel}%{!?rhel:0} >= 8
-BuildRequires: tex(latex) platform-python-devel
+BuildRequires: tex(latex) platform-python-devel   texlive-tex4ht
 %else
-BuildRequires: tex(latex) biber
+BuildRequires: tex(latex) biber texlive-tex4ht
 %endif
 
 %if 0%{?suse_version}
 Requires:         root6 root6-libs libHepMC4 python  
-BuildRequires:    root6 root6-libs root6-devel 
+BuildRequires:    root6 root6-libs root6-devel  
 BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel boost-filesystem tbb-devel libexpat-devel libxerces-c-devel
 %endif
 
