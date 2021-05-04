@@ -26,7 +26,7 @@ BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel boost-filesys
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 Requires:         root HepMC3 python tbb python3
-BuildRequires:    root root-core root-graf3d-eve
+BuildRequires:    root root-core root-graf3d-eve root-genvector
 BuildRequires:    HepMC3-devel  HepMC3  python3  python3-devel boost-devel boost-filesystem tbb-devel expat-devel xerces-c-devel
 %endif
 
