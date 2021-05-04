@@ -21,7 +21,7 @@ BuildRequires:	PTL-devel python3 python3-devel
 BuildRequires:	boost-python3-devel boost-python3 expat-devel  xerces-c-devel xerces-c
 %endif
 %if 0%{?suse_version}
-BuildRequires:	libboost_python3-devel libexpat-devel xerces-c
+BuildRequires:	libboost_python3-devel libexpat-devel libxerces-c-devel xerces-c 
 %endif
 
 
@@ -151,7 +151,7 @@ make install -C build DESTDIR=%{buildroot}
 %{_datadir}/Geant4-10.7.1/data
 
 %changelog
-* Mon May 03 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de> 
+* Mon May 03 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
 - Added -DGEANT4_USE_GDML:BOOL=ON
 * Fri May 29 2020 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 10.07-1
 - Preparation
