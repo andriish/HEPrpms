@@ -9,7 +9,7 @@ Source0:        https://github.com/AIDASoft/DD4hep/archive/v01-16-01.tar.gz
 
 Requires: geant4 LCIO tbb
 BuildRequires: cmake >= 3.4.3 
-BuildRequires:gcc-c++  LCIO-devel xerces-c doxygen  ImageMagic cuos-filters
+BuildRequires:gcc-c++  LCIO-devel xerces-c doxygen ImageMagick cups-filters
 
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: tex(latex) platform-python-devel   texlive-tex4ht
