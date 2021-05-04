@@ -7,28 +7,27 @@ License:        Custom
 URL:            dd4hep.cern.ch
 Source0:        https://github.com/AIDASoft/DD4hep/archive/v01-16-01.tar.gz
 
-BuildRequires:  LCIO-devel doxygen
-Requires: geant4 LCIO
+Requires: geant4 LCIO tbb
+BuildRequires: cmake>=3.4.3 gcc-c++  LCIO-devel xerces-c doxygen
+
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: latex
 %else
 BuildRequires: latex biber
 %endif
 
-
 %if 0%{?suse_version}
-Requires:         root6 root6-libs libHepMC4 python tbb 
-BuildRequires:    root6 root6-libs
-BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel boost-filesystem tbb-devel libexpat-devel
+Requires:         root6 root6-libs libHepMC4 python  
+BuildRequires:    root6 root6-libs root6-devel 
+BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel boost-filesystem tbb-devel libexpat-devel libxerces-c-devel
 %endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 Requires:         root HepMC3 python tbb 
-BuildRequires:    root root-devel root-graf3d-eve
-BuildRequires:    HepMC3-devel  HepMC3  python3-devel boost-devel boost-filesystem tbb-devel expat-devel
+BuildRequires:    root root-core root-graf3d-eve
+BuildRequires:    HepMC3-devel  HepMC3  python3-devel boost-devel boost-filesystem tbb-devel expat-devel xerces-c-devel
 %endif
 
-BuildRequires: cmake>=3.4.3 gcc-c++  LCIO-devel xerces-c-devel xerces-c biber
 Prefix: %{_prefix}
 
 %description
@@ -66,7 +65,6 @@ This package provides the Python 3 bindings for %{name}
 
 %prep
 %setup -q -n DD4hep-01-16-01
-#patch0 -p1
 
 %build
 #TBB should be fixed
@@ -89,6 +87,12 @@ mkdir -p $RPM_BUILD_ROOT/usr/share/DD4hep
 mv $RPM_BUILD_ROOT/usr/DDDetectors $RPM_BUILD_ROOT/usr/share/DD4hep
 mv $RPM_BUILD_ROOT/usr/examples $RPM_BUILD_ROOT/usr/share/DD4hep
 
+%if 0%{?suse_version}
+sed -Ei "1{s|/usr/bin/env python|/usr/bin/python3|}" $RPM_BUILD_ROOT/usr/bin/*
+%endif
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+pathfix.py -pn -i %{__python3} $RPM_BUILD_ROOT/usr/bin/*
+%endif
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
