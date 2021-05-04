@@ -3,7 +3,7 @@
 %endif
 Name:		geant4
 Version:	10.07.p01
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	C++ Event Record for Monte Carlo Generators
 
 License:	Geant
@@ -92,6 +92,7 @@ cd build
 	-DGEANT4_USE_SYSTEM_ZLIB:BOOL=ON \
 	-DGEANT4_USE_SYSTEM_PTL:BOOL=ON \
 	-DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
+	-DGEANT4_USE_GDML:BOOL=ON \
 	-DGEANT4_BUILD_MULTITHREADED=ON -DGEANT4_USE_PYTHON:BOOL=ON  -DGEANT4_BUILD_TLS_MODEL=global-dynamic  \
 %if %{?rhel}%{!?rhel:0} == 8
 	-B. -H../
@@ -109,6 +110,7 @@ make %{?_smp_mflags}
 	-DGEANT4_USE_SYSTEM_ZLIB:BOOL=ON \
 	-DGEANT4_USE_SYSTEM_PTL:BOOL=ON \
 	-DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
+	-DGEANT4_USE_GDML:BOOL=ON \
 	-DGEANT4_BUILD_MULTITHREADED=ON -DGEANT4_USE_PYTHON:BOOL=ON  -DGEANT4_BUILD_TLS_MODEL=global-dynamic
 %cmake_build
 %endif
@@ -151,3 +153,5 @@ make install -C build DESTDIR=%{buildroot}
 %changelog
 * Fri May 29 2020 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 10.07-1
 - Preparation
+* Mon May 03 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de> 
+- Added -DGEANT4_USE_GDML:BOOL=ON
