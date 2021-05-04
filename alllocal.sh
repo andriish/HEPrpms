@@ -6,7 +6,7 @@ set -x
 declare -a BUILDLIST=(
 #apfel:3.0.4
 #applgrid:1.5.46
-#geant4:10.07.p01
+geant4:10.07.p01
 #LCIO:02.16.01
 #DD4hep:01.16.01
 #ariadne:4.12
@@ -18,7 +18,7 @@ declare -a BUILDLIST=(
 #cernlib:2006
 #CGAL:5.2
 #chaplin:1.2
-clhep:2.4.4.1
+#clhep:2.4.4.1
 #collier:1.2.5
 #cuba:4.2.1
 #Delphes:3.4.3pre10

@@ -108,6 +108,6 @@ mv $RPM_BUILD_ROOT/%{_prefix}/*.cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 
 %changelog
 * Mon May 03 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de> 
-- Better separation of packages. Patch for cmake.
+- Better separation of packages. Patch for cmake. Added -DBUILD_ROOTDICT:BOOL=ON 
 * Tue Apr 20 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 - Preparation for release

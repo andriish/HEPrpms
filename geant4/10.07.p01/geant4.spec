@@ -151,7 +151,8 @@ make install -C build DESTDIR=%{buildroot}
 %{_datadir}/Geant4-10.7.1/data
 
 %changelog
-* Fri May 29 2020 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 10.07-1
-- Preparation
 * Mon May 03 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de> 
 - Added -DGEANT4_USE_GDML:BOOL=ON
+* Fri May 29 2020 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 10.07-1
+- Preparation
+
