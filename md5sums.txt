@@ -67,3 +67,4 @@ fae8b69bd6a10db1907b5ff92e4ba7bd  SHERPA-MC/2.2.11/rpmbuild/SOURCES/SHERPA-MC-2.
 0ce73b30518e3d9e070f2661ff6ce629  MG5_aMC/2.9.2/rpmbuild/SOURCES/MG5_aMC_v2.9.2.tar.gz
 3e39b5dde637db5d192cf1f6664ef049  cascade/3.0.01-beta01/rpmbuild/SOURCES/master.zip
 dc37bc6c35eee6ffb2857e8b0e13b054  cascade/3.1.01/rpmbuild/SOURCES/cascade-3.1.01.tar.gz
+7b963a5fb4ef8b5294f8fd30bcd856c4  DD4hep/01.16.01/rpmbuild/SOURCES/v01-16-01.tar.gz
