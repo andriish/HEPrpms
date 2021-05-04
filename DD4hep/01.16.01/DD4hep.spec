@@ -6,10 +6,11 @@ Group:          Development/Tools
 License:        Custom
 URL:            dd4hep.cern.ch
 Source0:        https://github.com/AIDASoft/DD4hep/archive/v01-16-01.tar.gz
+Patch0:         patch-DD4hep-0.txt
 
 Requires: geant4 LCIO tbb
 BuildRequires: cmake >= 3.4.3 
-BuildRequires:gcc-c++  LCIO-devel xerces-c doxygen ImageMagick cups-filters
+BuildRequires:gcc-c++  LCIO-devel xerces-c doxygen ImageMagick cups-filters clhep clhep-devel
 
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: tex(latex) platform-python-devel   texlive-tex4ht
@@ -66,6 +67,7 @@ This package provides the Python 3 bindings for %{name}
 
 %prep
 %setup -q -n DD4hep-01-16-01
+%patch0 -p1
 sed -i 's/3.12/3.11/g' CMakeLists.txt
 
 %build
