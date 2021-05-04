@@ -11,9 +11,9 @@ Requires: geant4 LCIO tbb
 BuildRequires: cmake>=3.4.3 gcc-c++  LCIO-devel xerces-c doxygen
 
 %if %{?rhel}%{!?rhel:0} >= 8
-BuildRequires: latex
+BuildRequires: tex(latex)
 %else
-BuildRequires: latex biber
+BuildRequires: tex(latex) biber
 %endif
 
 %if 0%{?suse_version}
