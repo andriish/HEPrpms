@@ -10,7 +10,7 @@ Patch0:         patch-DD4hep-0.txt
 
 Requires: geant4 LCIO tbb
 BuildRequires: cmake >= 3.4.3 
-BuildRequires:gcc-c++  LCIO-devel xerces-c doxygen ImageMagick cups-filters clhep clhep-devel
+BuildRequires: gcc-c++  LCIO-devel xerces-c doxygen ImageMagick cups-filters clhep clhep-devel geant4-devel
 
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: tex(latex) platform-python-devel   texlive-tex4ht
