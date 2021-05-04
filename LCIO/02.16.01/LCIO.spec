@@ -11,7 +11,7 @@ Patch0:         patch-LCIO-0.txt
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 Requires: root 
-BuildRequires: root root-devel
+BuildRequires: root root-core
 BuildRequires: zlib  ncurses-libs
 BuildRequires: python2 python2-devel gcc-gfortran
 %endif
@@ -19,7 +19,7 @@ BuildRequires: python2 python2-devel gcc-gfortran
 
 %if 0%{?suse_version}
 Requires: root6 root6-libs
-BuildRequires: root6 root6-libs
+BuildRequires: root6 root6-libs root6-devel
 BuildRequires: pkgconfig(zlib) 
 BuildRequires: python python-devel gcc-fortran
 %endif
@@ -113,7 +113,7 @@ mv $RPM_BUILD_ROOT/%{_prefix}/*.cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 %endif
 
 %changelog
-* Mon May 03 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de> 
+* Mon May 03 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
 - Better separation of packages. Patch for cmake. Added -DBUILD_ROOTDICT:BOOL=ON 
-* Tue Apr 20 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+* Tue Apr 20 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Preparation for release
