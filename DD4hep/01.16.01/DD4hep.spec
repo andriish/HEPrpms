@@ -79,10 +79,14 @@ This package provides the Python 3 bindings for %{name}
 
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/cmake/
+
+
+
 mv $RPM_BUILD_ROOT/usr/*cmake $RPM_BUILD_ROOT/usr/share/cmake/
 mkdir -p $RPM_BUILD_ROOT/usr/%_lib
 mv $RPM_BUILD_ROOT/usr/lib/lib* $RPM_BUILD_ROOT/usr/%_lib
 mv $RPM_BUILD_ROOT/usr/lib/G__* $RPM_BUILD_ROOT/usr/%_lib
+mv $RPM_BUILD_ROOT/usr/lib/python* $RPM_BUILD_ROOT/usr/%_lib
 mkdir -p $RPM_BUILD_ROOT/usr/share/DD4hep
 mv $RPM_BUILD_ROOT/usr/DDDetectors $RPM_BUILD_ROOT/usr/share/DD4hep
 mv $RPM_BUILD_ROOT/usr/examples $RPM_BUILD_ROOT/usr/share/DD4hep
@@ -100,8 +104,8 @@ pathfix.py -pn -i %{__python3} $RPM_BUILD_ROOT/usr/bin/*
 %files
 %{_bindir}/*
 %{_libdir}/*
-%{_prefix}/DDDetectors
-%{_prefix}/examples
+%{_prefix}/share/DD4hep/DDDetectors
+%{_prefix}/share/DD4hep/examples
 
 %files  devel
 %{_includedir}/*
