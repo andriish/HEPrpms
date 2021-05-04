@@ -7,8 +7,14 @@ License:        Custom
 URL:            dd4hep.cern.ch
 Source0:        https://github.com/AIDASoft/DD4hep/archive/v01-16-01.tar.gz
 
-BuildRequires: latex biber LCIO-devel doxygen
+BuildRequires:  LCIO-devel doxygen
 Requires: geant4 LCIO
+%if %{?rhel}%{!?rhel:0} >= 8
+BuildRequires: latex
+%else
+BuildRequires: latex biber
+%endif
+
 
 %if 0%{?suse_version}
 Requires:         root6 root6-libs libHepMC4 python tbb 
@@ -18,9 +24,10 @@ BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel boost-filesys
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 Requires:         root HepMC3 python tbb 
-BuildRequires:    root root-devel
+BuildRequires:    root root-devel root-graf3d-eve
 BuildRequires:    HepMC3-devel  HepMC3  python3-devel boost-devel boost-filesystem tbb-devel expat-devel
 %endif
+
 BuildRequires: cmake>=3.4.3 gcc-c++  LCIO-devel xerces-c-devel xerces-c biber
 Prefix: %{_prefix}
 
@@ -62,10 +69,11 @@ This package provides the Python 3 bindings for %{name}
 #patch0 -p1
 
 %build
+#TBB should be fixed
 %if  %{?rhel}%{!?rhel:0} == 8
-%cmake  -DBUILD_TESTING:BOOL=OFF -H. -B.  -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
+%cmake  -DBUILD_TESTING:BOOL=OFF -H. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=OFF -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
 %else
-%cmake  -DBUILD_TESTING:BOOL=OFF -S. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
+%cmake  -DBUILD_TESTING:BOOL=OFF -S. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
 %endif 
 
 %install
@@ -74,7 +82,6 @@ This package provides the Python 3 bindings for %{name}
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/cmake/
 mv $RPM_BUILD_ROOT/usr/*cmake $RPM_BUILD_ROOT/usr/share/cmake/
-mv $RPM_BUILD_ROOT/usr/lib $RPM_BUILD_ROOT/usr/%_lib
 mkdir -p $RPM_BUILD_ROOT/usr/%_lib
 mv $RPM_BUILD_ROOT/usr/lib/lib* $RPM_BUILD_ROOT/usr/%_lib
 mv $RPM_BUILD_ROOT/usr/lib/G__* $RPM_BUILD_ROOT/usr/%_lib

@@ -18,10 +18,10 @@ BuildRequires:	clhep-devel
 BuildRequires:	zlib-devel
 BuildRequires:	PTL-devel python3 python3-devel
 %if 0%{?rhel} || 0%{?fedora}
-BuildRequires:	boost-python3-devel boost-python3 expat-devel
+BuildRequires:	boost-python3-devel boost-python3 expat-devel  xerces-c-devel xerces-c
 %endif
 %if 0%{?suse_version}
-BuildRequires:	libboost_python3-devel libexpat-devel
+BuildRequires:	libboost_python3-devel libexpat-devel xerces-c
 %endif
 
 

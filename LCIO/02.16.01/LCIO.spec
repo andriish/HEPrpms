@@ -11,7 +11,7 @@ Patch0:         patch-LCIO-0.txt
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 Requires: root 
-BuildRequies: root root-devel
+BuildRequires: root root-devel
 BuildRequires: zlib  ncurses-libs
 BuildRequires: python2 python2-devel gcc-gfortran
 %endif
