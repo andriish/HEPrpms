@@ -1,6 +1,6 @@
 Name:           LCIO
 Version:        2.16.01
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        LCIO (Linear Collider I/O) is a persistency framework and event data model for linear collider detector studies.
 
 Group:          Development/Tools
@@ -71,6 +71,7 @@ This package provides the Python 2 bindings for %{name}
 %build
 %cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON 
 %cmake_build
+ctest --output-on-failure
 
 %install
 
@@ -113,6 +114,8 @@ mv $RPM_BUILD_ROOT/%{_prefix}/*.cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 %endif
 
 %changelog
+* Tue May 04 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
+- Added tests.
 * Mon May 03 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
 - Better separation of packages. Patch for cmake. Added -DBUILD_ROOTDICT:BOOL=ON 
 * Tue Apr 20 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
