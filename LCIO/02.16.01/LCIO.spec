@@ -10,17 +10,23 @@ Source0:        https://github.com/iLCSoft/LCIO/archive/v02-16-01.tar.gz
 Patch0:         patch-LCIO-0.txt
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-BuildRequires: zlib-devel zlib readline readline-devel ncurses-devel ncurses-libs clhep clhep-devel
-Requires: zlib
-BuildRequires: cmake gcc-c++ python2 python2-devel gcc-gfortran
+Requires: root 
+BuildRequies: root root-devel
+BuildRequires: zlib  ncurses-libs
+BuildRequires: python2 python2-devel gcc-gfortran
 %endif
 
 
 %if 0%{?suse_version}
-BuildRequires: zlib-devel pkgconfig(zlib) readline readline-devel ncurses-devel  clhep clhep-devel
-Requires: zlib
-BuildRequires: cmake gcc-c++ python python-devel gcc-fortran
+Requires: root6 root6-libs
+BuildRequires: root6 root6-libs
+BuildRequires: pkgconfig(zlib) 
+BuildRequires: python python-devel gcc-fortran
 %endif
+
+Requires: zlib
+BuildRequires: gcc-c++ cmake  clhep clhep-devel 
+BuildRequires: readline readline-devel ncurses-devel zlib-devel 
 
 %description
 LCIO (Linear Collider I/O) is a persistency framework and event data 
