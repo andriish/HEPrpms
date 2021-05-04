@@ -8,7 +8,8 @@ URL:            dd4hep.cern.ch
 Source0:        https://github.com/AIDASoft/DD4hep/archive/v01-16-01.tar.gz
 
 Requires: geant4 LCIO tbb
-BuildRequires: cmake>=3.4.3 gcc-c++  LCIO-devel xerces-c doxygen
+BuildRequires: cmake >= 3.4.3 
+BuildRequires:gcc-c++  LCIO-devel xerces-c doxygen
 
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: tex(latex)
