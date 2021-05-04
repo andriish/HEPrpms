@@ -66,6 +66,7 @@ This package provides the Python 3 bindings for %{name}
 
 %prep
 %setup -q -n DD4hep-01-16-01
+sed -i 's/3.12/3.11/g' CMakeLists.txt
 
 %build
 #TBB should be fixed
