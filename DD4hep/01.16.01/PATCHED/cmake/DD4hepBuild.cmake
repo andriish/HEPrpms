@@ -675,7 +675,7 @@ macro(DD4HEP_SETUP_ROOT_TARGETS)
 
   #Check if Python version detected matches the version used to build ROOT
   SET(Python_FIND_FRAMEWORK LAST)
-  FIND_PACKAGE(Python COMPONENTS Development)
+  FIND_PACKAGE(Python 3 COMPONENTS Development)
 
   SET(DD4HEP_PYTHON_INSTALL_DIR lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
 
