@@ -25,7 +25,7 @@ BuildRequires: biber
 Requires:         root6 root6-libs libHepMC4 python  
 BuildRequires:    root6 root6-libs root6-devel  
 BuildRequires:    geant4-devel ==   10.07.p01
-BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel libboost_filesystem1_76_0 tbb-devel libexpat-devel libxerces-c-devel
+BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel libboost_filesystem1_76_0 libboost_filesystem1_76_0-devel tbb-devel libexpat-devel libxerces-c-devel
 %endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
