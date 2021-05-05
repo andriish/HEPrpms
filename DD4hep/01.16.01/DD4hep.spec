@@ -91,8 +91,12 @@ make %{?_smp_mflags}
 
 
 %install
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 %make_install
-
+%endif
+%if 0%{?suse_version}
+%cmake_install
+%endif
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/cmake/
 
