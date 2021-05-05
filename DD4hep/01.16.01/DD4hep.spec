@@ -23,7 +23,7 @@ BuildRequires: biber
 
 %if 0%{?suse_version}
 Requires:         root6 root6-libs libHepMC4 python  
-BuildRequires:    root6 root6-libs root6-devel  
+BuildRequires:    root6 root6-libs root6-devel python3-root6
 BuildRequires:    geant4-devel ==   10.07.p01
 BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel libboost_filesystem1_76_0 libboost_filesystem1_76_0-devel  libboost_system1_76_0 libboost_system1_76_0-devel tbb-devel libexpat-devel libxerces-c-devel
 %endif
