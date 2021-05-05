@@ -68,7 +68,11 @@ ENDIF()
 # NINJA ONLY
 # Limit number of parallel DDParser builds to number equal to 2 gigs per core
 cmake_host_system_information(RESULT HOST_RAM_MB QUERY TOTAL_PHYSICAL_MEMORY)
-math(EXPR DD4HEP_HIGH_MEM_POOL_DEPTH "${HOST_RAM_MB} / 2000" OUTPUT_FORMAT DECIMAL)
+if (CMAKE_VERSION VERSION_LESS 3.12)
+  set(DD4HEP_HIGH_MEM_POOL_DEPTH 1)
+else()
+  math(EXPR DD4HEP_HIGH_MEM_POOL_DEPTH "${HOST_RAM_MB} / 2000" OUTPUT_FORMAT DECIMAL)
+endif()
 
 option(DD4HEP_USE_XERCESC       "Enable 'Detector Builders' based on XercesC"   OFF)
 option(DD4HEP_USE_GEANT4        "Enable the simulation part based on Geant4"    OFF)
