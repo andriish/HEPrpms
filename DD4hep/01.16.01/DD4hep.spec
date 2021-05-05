@@ -15,13 +15,16 @@ BuildRequires: gcc-c++  LCIO LCIO-devel xerces-c doxygen ImageMagick cups-filter
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: tex(latex) platform-python-devel   texlive-tex4ht
 %else
-BuildRequires: tex(latex) biber texlive-tex4ht
+BuildRequires: tex(latex)  texlive-tex4ht
+%endif
+%if %{?fedora}%{!?fedora:0} 
+BuildRequires: biber
 %endif
 
 %if 0%{?suse_version}
 Requires:         root6 root6-libs libHepMC4 python  
 BuildRequires:    root6 root6-libs root6-devel  
-BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel boost-filesystem tbb-devel libexpat-devel libxerces-c-devel
+BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel libboost_filesystem1_76_0 tbb-devel libexpat-devel libxerces-c-devel
 %endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
