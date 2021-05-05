@@ -29,7 +29,7 @@ BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel libboost_file
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 Requires:         root HepMC3 python tbb python3
-BuildRequires:    root root-core root-graf3d-eve root-genvector root-geom root-gui root-mathcore root-mathmore root-tree root-physics root-gdml root-graf3d root-tpython
+BuildRequires:    root root-core root-graf3d-eve root-graf3d-eve7 root-genvector root-geom root-gui root-mathcore root-mathmore root-tree root-physics root-gdml root-graf3d root-tpython
 BuildRequires:    HepMC3-devel  HepMC3  python3  python3-devel boost-devel boost-filesystem tbb-devel expat-devel xerces-c-devel
 %endif
 
