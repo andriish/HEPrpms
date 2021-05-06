@@ -1,6 +1,6 @@
 Name:           LCIO
 Version:        2.16.01
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        LCIO (Linear Collider I/O) is a persistency framework and event data model for linear collider detector studies.
 
 Group:          Development/Tools
@@ -11,9 +11,9 @@ Patch0:         patch-LCIO-0.txt
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 Requires: root 
-BuildRequires: root root-core
+BuildRequires: root root-core root-tpython
 BuildRequires: zlib  ncurses-libs
-BuildRequires: python2 python2-devel gcc-gfortran
+BuildRequires: python3 python3-devel gcc-gfortran
 %endif
 
 
@@ -49,24 +49,31 @@ develop programs which make use of %{name}.
 The library documentation is available on header files.
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-%package -n python2-%{name}
-Summary:   %{name}  Python 2 bindings
-%{?python_provide:%python_provide python2-%{name}}
-%description -n python2-%{name}
-This package provides the Python 2 bindings for %{name}
+%package -n python3-%{name}
+Summary:   %{name}  Python 3 bindings
+%{?python_provide:%python_provide python3-%{name}}
+%description -n python3-%{name}
+This package provides the Python 3 bindings for %{name}
 %endif
 %if  0%{?suse_version}
 %package -n python-%{name}
 Summary:   %{name}  Python  bindings
-%{?python_provide:%python_provide python2-%{name}}
+%{?python_provide:%python_provide python3-%{name}}
 %description -n python-%{name}
-This package provides the Python 2 bindings for %{name}
+This package provides the Python 3 bindings for %{name}
 %endif
 
 
 %prep
 %setup -q -n LCIO-02-16-01
 %patch0 -p1
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
+%endif
+
+%if  0%{?suse_version}
+sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
+%endif
 
 %build
 %cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON 
@@ -76,8 +83,8 @@ This package provides the Python 2 bindings for %{name}
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 %cmake_install
-mkdir -p $RPM_BUILD_ROOT/%{python2_sitearch}
-mv $RPM_BUILD_ROOT/usr/python/* $RPM_BUILD_ROOT/%{python2_sitearch}
+mkdir -p $RPM_BUILD_ROOT/%{python3_sitearch}
+mv $RPM_BUILD_ROOT/usr/python/* $RPM_BUILD_ROOT/%{python3_sitearch}
 %endif
 
 %if  0%{?suse_version}
@@ -103,8 +110,8 @@ mv $RPM_BUILD_ROOT/%{_prefix}/*.cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-%files  -n python2-%{name}
-%{python2_sitearch}/*
+%files  -n python3-%{name}
+%{python3_sitearch}/*
 %endif
 
 %if  0%{?suse_version}
@@ -113,6 +120,8 @@ mv $RPM_BUILD_ROOT/%{_prefix}/*.cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 %endif
 
 %changelog
+* Tue May 04 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
+- Added tests. Updated to python3.
 * Mon May 03 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
 - Better separation of packages. Patch for cmake. Added -DBUILD_ROOTDICT:BOOL=ON 
 * Tue Apr 20 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
