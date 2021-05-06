@@ -6,26 +6,33 @@ Group:          Development/Tools
 License:        Custom
 URL:            dd4hep.cern.ch
 Source0:        https://github.com/AIDASoft/DD4hep/archive/v01-16-01.tar.gz
+Patch0:         patch-DD4hep-0.txt
 
-Requires: geant4 LCIO tbb
-BuildRequires: cmake>=3.4.3 gcc-c++  LCIO-devel xerces-c doxygen
+Requires: geant4 LCIO tbb PTL zlib-devel
+BuildRequires: cmake >= 3.4.3 
+BuildRequires: gcc-c++  LCIO LCIO-devel xerces-c doxygen ImageMagick cups-filters clhep clhep-devel  PTL-devel zlib-devel
 
 %if %{?rhel}%{!?rhel:0} >= 8
-BuildRequires: latex
+BuildRequires: tex(latex) platform-python-devel   texlive-tex4ht
 %else
-BuildRequires: latex biber
+BuildRequires: tex(latex)  texlive-tex4ht
+%endif
+%if %{?fedora}%{!?fedora:0} 
+BuildRequires: biber
 %endif
 
 %if 0%{?suse_version}
 Requires:         root6 root6-libs libHepMC4 python  
-BuildRequires:    root6 root6-libs root6-devel 
-BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel boost-filesystem tbb-devel libexpat-devel libxerces-c-devel
+BuildRequires:    root6 root6-libs root6-devel python3-root6
+BuildRequires:    geant4-devel ==   10.07.p01
+BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel libboost_filesystem1_76_0 libboost_filesystem1_76_0-devel  libboost_system1_76_0 libboost_system1_76_0-devel tbb-devel libexpat-devel libxerces-c-devel
 %endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-Requires:         root HepMC3 python tbb 
-BuildRequires:    root root-core root-graf3d-eve
-BuildRequires:    HepMC3-devel  HepMC3  python3-devel boost-devel boost-filesystem tbb-devel expat-devel xerces-c-devel
+Requires:         root HepMC3 python tbb python3
+BuildRequires:    geant4-devel
+BuildRequires:    root root-core root-graf3d-eve root-graf3d-eve7 root-genvector root-geom root-gui root-mathcore root-mathmore root-tree root-physics root-gdml root-graf3d root-tpython  	root-gui-browserv7
+BuildRequires:    HepMC3-devel  HepMC3  python3  python3-devel boost-devel boost-filesystem tbb-devel expat-devel xerces-c-devel
 %endif
 
 Prefix: %{_prefix}
@@ -65,18 +72,31 @@ This package provides the Python 3 bindings for %{name}
 
 %prep
 %setup -q -n DD4hep-01-16-01
+%patch0 -p1
 
 %build
 #TBB should be fixed
 %if  %{?rhel}%{!?rhel:0} == 8
 %cmake  -DBUILD_TESTING:BOOL=OFF -H. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=OFF -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
-%else
+make %{?_smp_mflags}
+%endif
+%if %{?fedora}%{!?fedora:0}
 %cmake  -DBUILD_TESTING:BOOL=OFF -S. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
+make %{?_smp_mflags}
 %endif 
+%if 0%{?suse_version}
+%cmake  -DBUILD_TESTING:BOOL=OFF         -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
+%cmake_build
+%endif
+
 
 %install
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 %make_install
-
+%endif
+%if 0%{?suse_version}
+%cmake_install
+%endif
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/cmake/
 
