@@ -3,8 +3,7 @@ Version:        1.25.1
 Release:        1%{?dist}
 License:        MIT
 Url:            http://mc-tester.web.cern.ch/MC-TESTER/
-#Source0:        https://gitlab.cern.ch/cvsmctst/mc-tester/-/archive/v1.25.1/mc-tester-v{version}.tar.gz
-Source0:        mc-tester-v%{version}.tar.gz
+Source0:        https://gitlab.cern.ch/cvsmctst/mc-tester/-/archive/v1.25.1/mc-tester-v{version}.tar.gz
 Summary:        a universal tool for comparisons of Monte Carlo predictions in High Energy Physics
 
 BuildRequires:  autoconf automake libtool  doxygen
