@@ -4,6 +4,7 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+MC-TESTER:1.25.1
 #apfel:3.0.4
 #applgrid:1.5.46
 #ariadne:4.12
