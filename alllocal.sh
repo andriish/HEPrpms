@@ -6,6 +6,7 @@ set -x
 declare -a BUILDLIST=(
 #apfel:3.0.4
 #applgrid:1.5.46
+ariadne:4.12
 #geant4:10.07.p01
 MC-TESTER:1.25.1
 #LCIO:02.16.01

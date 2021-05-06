@@ -75,11 +75,9 @@ sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
 sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
 %endif
 
-
 %build
 %cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON 
 %cmake_build
-#ctest --output-on-failure
 
 %install
 
@@ -123,7 +121,7 @@ mv $RPM_BUILD_ROOT/%{_prefix}/*.cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 
 %changelog
 * Tue May 04 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
-- Added tests.
+- Added tests. Updated to python3.
 * Mon May 03 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
 - Better separation of packages. Patch for cmake. Added -DBUILD_ROOTDICT:BOOL=ON 
 * Tue Apr 20 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
