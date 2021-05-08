@@ -162,7 +162,6 @@ However some packages contain an extended functionality of a larger amount of ad
 These packages  are:
 - `rapgap` -- added support for `Rivet`/`HepMC3`
 - `cascade` -- added support for `Rivet`/`HepMC3`
-- `MC-TESTER` -- added support for `HepMC3`
 - `fjcontrib` -- added compilation of shared libraries
 - `lhapdf-sets-Herwig` -- a technical package created from scratch that provides a set of PDF needed to build `Herwig`
 - `lhapdf-sets-whizard` -- a technical package  created from scratch that provides a set of PDF needed to build ` whizard`
