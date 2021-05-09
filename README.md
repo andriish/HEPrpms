@@ -1,6 +1,7 @@
-# HEPspecs
+# HEPrpms
 
-HEPspecs is a collection of .spec files for the software from the  
+HEPrpms is a collection of .spec files that enable creation of RPM packages for some widely used the HEP software.
+The binary packages build from HEPrpms spec files are available at
 
 HEPrpms https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpms/
 
