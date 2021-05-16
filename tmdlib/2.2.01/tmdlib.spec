@@ -1,7 +1,7 @@
 Name:       tmdlib
 Version:    2.2.01
 Release:    1%{?dist}
-Summary:    TMDlib and TMDplotter: library and plotting tools for Transverse Momentum Dependent parton distributions 
+Summary:    Library and plotting tools for Transverse Momentum Dependent parton distributions 
 Prefix:     %{_prefix}
 License:    GPLv3
 URL:        https://tmdlib.hepforge.org/

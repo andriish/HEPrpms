@@ -14,7 +14,7 @@ Patch1:         patch-blackhat-1.txt
 Patch2:         patch-blackhat-2.txt
 Patch3:         patch-blackhat-3.txt
 Prefix:         %{_prefix}
-Summary:        Automated calculation of one-loop amplitudes 
+Summary:        Automated calculation of one-loop amplitudes
 
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires: autoconf automake libtool openssl-devel openssl

@@ -1,6 +1,6 @@
 %undefine _debugsource_packages
 %global srcname iminuit
-%global sum iminuit is a Jupyter-friendly Python interface for the Minuit2 C++ library maintained by CERN's ROOT team.
+%global sum iminuit is c.
 
 Name:           %{srcname}
 Version:        2.4.0
@@ -26,8 +26,8 @@ Prefix: %{_prefix}
 
 
 %description
-iminuit is a Jupyter-friendly Python interface for the Minuit2 C++ library maintained by CERN's ROOT team.
-Summary:        %{sum}
+iminuit is a Jupyter-friendly Python interface for the Minuit2 C++ library maintained by CERN's ROOT team
+Summary:   A Jupyter-friendly Python interface for the Minuit2 C++ library maintained by CERN’s ROOT team
 
 
 

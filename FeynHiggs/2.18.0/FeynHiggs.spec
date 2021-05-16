@@ -2,7 +2,7 @@
 Name:           FeynHiggs
 Version:        2.18.0
 Release:        1%{?dist}
-Summary:        Fortran code for the (diagrammatic/EFT/hybrid) calculation of the masses, mixings and much more of the Higgs bosons 
+Summary:        Fortran code for the (diagrammatic/EFT/hybrid) calculation of the masses, mixings and much more of the Higgs bosons
 License:        GPL
 Prefix:         %{_prefix}
 URL:            https://wwwth.mpp.mpg.de/members/heinemey/feynhiggs/

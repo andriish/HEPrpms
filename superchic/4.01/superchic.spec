@@ -6,7 +6,7 @@ License:        GPL
 Url:            https://superchic.hepforge.org/
 Source0:        https://superchic.hepforge.org/%{name}%{version}.tar.gz
 Patch0:         patch-superchic-0.txt
-Summary:        SuperChic is a Fortran based Monte Carlo event generator for exclusive and photon-initiated production in proton and heavy ion collisions.
+Summary:        A Fortran based Monte Carlo event generator for exclusive and photon-initiated production in proton and heavy ion collisions
 BuildRequires:  gcc-gfortran gcc-c++ 
 BuildRequires:  HepMC HepMC-devel lhapdf lhapdf-devel apfel apfel-devel
 Requires:  HepMC lhapdf apfel

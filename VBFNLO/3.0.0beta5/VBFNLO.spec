@@ -1,5 +1,5 @@
 %define debug_package %{nil}
-Summary:  VBFNLO - A parton level Monte Carlo for processes with electroweak bosons
+Summary:  A parton level Monte Carlo for processes with electroweak bosons
 Name: VBFNLO
 Version: 3.0.0beta5
 Release: 1%{?dist}

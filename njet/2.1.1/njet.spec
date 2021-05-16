@@ -4,7 +4,7 @@ Release:        1%{?dist}
 License:        GPL
 Url:            https://bitbucket.org/njet
 Source0:        https://bitbucket.org/njet/njet/downloads/%{name}-%{version}.tar.gz
-Summary:        NJet is a library for multi-parton one-loop matrix elements
+Summary:        A library for multi-parton one-loop matrix elements
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran gcc-c++  autoconf automake libtool  qd qd-devel
 Requires:       python3 

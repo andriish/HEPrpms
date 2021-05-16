@@ -17,7 +17,7 @@ Release:        2%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://sherpa.hepforge.org/downloads/%{name}-%{version}.tar.gz
-Summary:          Sherpa is a Monte Carlo event generator
+Summary:          Multipurpose Monte Carlo Event Generator for High Energy physics
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} 
 BuildRequires:    gcc-gfortran gcc-c++ root pythia8-devel pythia8   Rivet Rivet-devel hztool

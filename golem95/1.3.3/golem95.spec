@@ -7,7 +7,7 @@ Release:        1%{?dist}
 License:        GPL
 Url:            http://www.hepforge.org/archive/golem/
 Source0:        http://www.hepforge.org/archive/golem/%{name}-%{version}.tar.gz
-Summary:        GOLEM a package for the numerical  evaluation of integrals
+Summary:        A package for the numerical  evaluation of integrals
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran
 %endif

@@ -1,5 +1,5 @@
 %undefine _debugsource_packages
-Summary:  recola - Recola is a Fortran95 computer program for the automated generation and numerical computation of EW and QCD amplitudes in the Standard Model at next-to-leading order. 
+Summary:  A Fortran95 computer program for the automated generation and numerical computation of EW and QCD amplitudes.
 Name: recola2
 Version: 2.2.3
 Release: 1%{?dist}

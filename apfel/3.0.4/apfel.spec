@@ -5,7 +5,7 @@ Release:        3%{?dist}
 License:        GPL
 Url:            https://github.com/scarrazza/apfel
 Source:         https://github.com/scarrazza/apfel/archive/3.0.4.tar.gz
-Summary:        APFEL: A PDF Evolution Library
+Summary:        A PDF Evolution Library
 Prefix: %{_prefix}
 BuildRequires:  gcc-c++  gcc-gfortran
 BuildRequires:  python%{python3_pkgversion}-devel

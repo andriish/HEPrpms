@@ -1,4 +1,4 @@
-Summary: Unified Grahics System
+Summary: A  keyword-driven  interface  designed  to  produce physics  graphs  with  minimal specifications
 Name: topdrawer
 Version: 1.4e
 Release: 1%{?dist}
@@ -24,8 +24,9 @@ BuildRequires:  f2c-devel libf2c0
 %endif
 
 %description
-Unified Graphics System developed at SLAC.  Currently only 
-PostScript, X Window System, and Tektronics 4010 are supported.  
+Topdrawer is  a  keyword-driven  interface  designed  to  produce
+physics  graphs  with  minimal specifications.  It was originally
+developed by R.B. Chaffee at SLAC.  
 
 %prep
 %setup -n topdrawer -q

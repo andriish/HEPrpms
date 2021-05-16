@@ -5,7 +5,7 @@
 Name:		hevea
 Version:	2.35
 Release:	2%{?dist}
-Summary:	LaTeX to HTML translator
+Summary:	LaTeX to HTML translator.
 License:	QPL
 URL:		http://hevea.inria.fr/
 Source0:	http://hevea.inria.fr/distri/%{name}-%{version}.tar.gz

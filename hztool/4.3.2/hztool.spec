@@ -14,7 +14,7 @@ Source0:        https://hztool.hepforge.org/downloads/%{name}-4.3.2.tar.gz
 Patch0:         patch-hztool-0.txt
 
 Prefix: %{_prefix}
-Summary:       Library of routines for MC to dat comparison
+Summary:       Library of routines for Monte Carlo to data comparison
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran gcc-c++
 %endif

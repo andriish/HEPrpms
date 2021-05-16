@@ -3,7 +3,7 @@ Version: 2.3.1.2585
 Release: 2%{?dist}
 License: GPL
 Prefix: %{_prefix}
-Summary: Fast pQCD calculations for PDF fits
+Summary: Fast pQCD calculations for PDF fits.
 Source:  https://fastnlo.hepforge.org/code/v23/fastnlo_toolkit-2.3.1-2585.tar.gz
 #A patch is needed to make this work with python
 
