@@ -6,6 +6,7 @@ Release: 1002%{?dist}
 License: MIT
 Prefix: %{_prefix}
 Source: https://github.com/jrmadsen/PTL/archive/v%{version}.tar.gz
+URL: https://github.com/jrmadsen/PTL
 Requires:       tbb-devel
 BuildRequires:  gcc-c++ tbb-devel
 BuildRequires:  cmake >= 3.4.3
