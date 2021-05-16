@@ -5,7 +5,7 @@ License:        GPL
 Url:            https://gitlab.cern.ch/TheP8I/TheP8I
 Source0:        https://gitlab.cern.ch/TheP8I/TheP8I/-/archive/2.0.1/%{name}-2.0.1.tar.gz
 Prefix:         %{_prefix}
-Summary:        Lund hadronisation for Herwig  
+Summary:        Lund hadronisation for Herwig
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  pythia8-devel pythia8  gsl   lhapdf lhapdf-devel
 Requires:       pythia8 gsl ThePEG

@@ -1,7 +1,7 @@
 %undefine _debugsource_packages
 #Scripts fail to find debug infos because the library is static
 
-Summary: LoopTools is a package for evaluation of scalar and tensor one-loop integrals based on the FF package by G.J. van Oldenborgh.
+Summary: A package for evaluation of scalar and tensor one-loop integrals based on the FF package by G.J. van Oldenborgh
 Name: LoopTools
 Version: 2.15
 Release: 4%{?dist}

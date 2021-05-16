@@ -3,7 +3,7 @@
 Name:           python-%{srcname}
 Version:        4.0.6
 Release:        1%{?dist}
-Summary:        Example python module
+Summary:        A reader and a writer of the ROOT file format using only Python and Numpy
 
 License:        MIT
 URL:            https://pypi.python.org/pypi/example
@@ -12,8 +12,7 @@ Source0:        https://github.com/scikit-hep/uproot4/archive/%{version}.tar.gz
 BuildArch:      noarch
 
 %global _description %{expand:
-A python module which provides a convenient example. This is the
-rest of the description that provides more details.}
+A reader and a writer of the ROOT file format using only Python and Numpy.}
 
 %description %_description
 

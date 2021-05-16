@@ -9,7 +9,7 @@ License:        GPLv3
 Url:            http://yoda.hepforge.org/
 Source0:        http://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
 Prefix:         %{_prefix}
-Summary:        Plotting and histogramming  tool
+Summary:        Plotting and histogramming tool
 BuildRequires:   autoconf binutils automake libtool  zlib-devel
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: gcc-c++  python3-Cython   zlib

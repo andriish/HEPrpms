@@ -1,7 +1,7 @@
 Name:       BAT
 Version:    1.0.0
 Release:    1%{?dist}
-Summary:    BAT - Bayesian Analysis Toolkit
+Summary:    BAT -- Bayesian Analysis Toolkit
 
 License:    LGPL v3
 URL:        https://bat.mpp.mpg.de/

@@ -3,7 +3,7 @@ Version:        1.5.46
 Release:        3%{?dist}
 License:        GPL
 Prefix:         %{_prefix}
-Summary:        applgrid  a fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution 
+Summary:        A fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution 
 Source:         http://www.hepforge.org/archive/applgrid/applgrid-%{version}.tgz
 Patch0:         patch-applgrid-0.txt
 %if 0%{?rhel} || 0%{?fedora}

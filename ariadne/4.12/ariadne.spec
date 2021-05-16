@@ -1,7 +1,7 @@
 Name:          ariadne
 Version:       4.12
 Release:       6%{?dist}
-Summary:       Ariadne Event Generator for High Energy Physics
+Summary:       Multipurpose Monte Carlo Event Generator for High Energy physics.
 License:       Public domain as stated by Leif 
 URL:           http://home.thep.lu.se/~leif/ariadne
 Source0:       http://home.thep.lu.se/~leif/ariadne/ariadne-4.12.tgz

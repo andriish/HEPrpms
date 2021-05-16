@@ -1,4 +1,4 @@
-Summary:  MCFM - A parton-level Monte Carlo program MCFM.
+Summary:  A parton-level Monte Carlo event generator
 Name: MCFM
 Version: 10.0
 Release: 1%{?dist}

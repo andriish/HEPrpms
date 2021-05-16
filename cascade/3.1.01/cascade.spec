@@ -1,7 +1,7 @@
 Name:       cascade
 Version:    3.1.01
 Release:    1%{?dist}
-Summary:    Cascade Event Generator for High Energy Physics
+Summary:    Multipurpose Monte Carlo Event Generator for High Energy physics
 
 License:    GPLv2
 URL:        https://cascade.hepforge.org/

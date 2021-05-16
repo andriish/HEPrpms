@@ -4,7 +4,7 @@
 Name:		geant4
 Version:	10.07.p01
 Release:	2%{?dist}
-Summary:	C++ Event Record for Monte Carlo Generators
+Summary:	A toolkit for the simulation of the passage of particles through matter
 
 License:	Geant
 URL:		https://geant4.web.cern.ch

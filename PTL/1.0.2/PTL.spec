@@ -1,5 +1,5 @@
 %undefine _debugsource_packages
-Summary:  PTL Lightweight C++11 multithreading tasking system featuring thread-pool, task-groups, and lock-free task queue
+Summary: Lightweight C++11 multithreading tasking system featuring thread-pool, task-groups, and lock-free task queue
 Name: PTL
 Version: 1.0.2
 Release: 1002%{?dist}
@@ -11,7 +11,7 @@ BuildRequires:  gcc-c++ tbb-devel
 BuildRequires:  cmake >= 3.4.3
 
 %description
-PTL Lightweight C++11 multithreading tasking system featuring thread-pool, task-groups, and lock-free task queue
+Lightweight C++11 multithreading tasking system featuring thread-pool, task-groups, and lock-free task queue.
 
 %package devel
 Summary: Lightweight C++11 multithreading tasking system featuring thread-pool, task-groups, and lock-free task queue

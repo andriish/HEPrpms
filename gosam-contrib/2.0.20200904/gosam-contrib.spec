@@ -5,7 +5,7 @@ Release:        2%{?dist}
 License:        Custom
 Url:            https://github.com/gudrunhe/gosam-contrib
 Source0:        https://github.com/gudrunhe/gosam-contrib/archive/gosam-contrib-2.0-20200904.tar.gz
-Summary:        Automated calculation of one-loop amplitudes 
+Summary:        A collection of tools used by the GoSam package
 BuildRequires:  autoconf automake libtool 
 BuildRequires:  gcc-c++ 
 Requires: python3 

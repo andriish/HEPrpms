@@ -13,7 +13,7 @@ Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
 
 Prefix: %{_prefix}
-Summary:        Robust Independent Validation of Experiment and Theory. With bugfixes.
+Summary:        Robust Independent Validation of Experiment and Theory
 Requires:       fastjet    ImageMagick
 Requires:       YODA >= 1.8.0
 Requires:       fjcontrib

@@ -1,7 +1,7 @@
 Name:        binder
 Version:    1.1.0
 Release:    3%{?dist}
-Summary:    Binder is a tool for automatic generation of Python bindings.
+Summary:    A tool for automatic generation of Python bindings to C++ code
 License:    MIT License
 URL:        https://github.com/RosettaCommons/binder
 Source0:    https://github.com/RosettaCommons/binder/archive/v%{version}.tar.gz

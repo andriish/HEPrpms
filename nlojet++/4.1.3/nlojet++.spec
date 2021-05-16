@@ -5,7 +5,7 @@ License:        GPL
 Url:            http://desy.de/~znagy
 Source0:        http://desy.de/~znagy/hep-programs/nlojet++/%{name}-%{version}.tar.gz
 Prefix: %{_prefix}
-Summary:        NLOJET++ is a C++ program for calculating LO and NLO order cross section.
+Summary:        A C++ program for calculating LO and NLO order cross sections
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran gcc gcc-c++
 Requires: libgfortran

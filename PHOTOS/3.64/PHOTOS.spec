@@ -11,7 +11,7 @@ License:        Unknown
 Url:            http://photospp.web.cern.ch/photospp
 Source0:        http://photospp.web.cern.ch/photospp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
 Patch0:         patch-PHOTOS-0.txt
-Summary:        PHOTOS Monte Carlo for bremsstrahlung in the decay of particles and resonances
+Summary:        Monte Carlo program for bremsstrahlung in the decay of particles and resonances
 BuildRequires:  gcc-c++ autoconf automake libtool  tex(latex) tex(fmtcount.sty) ghostscript doxygen
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran  pythia8 pythia8-devel HepMC-devel HepMC3-devel HepMC HepMC3

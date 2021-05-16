@@ -3,7 +3,7 @@
 Name:             ginac
 Version:          1.8.0
 Release:          1%{?dist}
-Summary:          C++ library for symbolic calculations
+Summary:          C++ library for symbolic calculations.
 License:          GPLv2+
 URL:              https://www.ginac.de/
 Source0:          https://www.ginac.de/%{name}-%{version}.tar.bz2

@@ -1,5 +1,5 @@
 %undefine _debugsource_packages
-Summary:  whizard -  WHIZARD is a program system designed for the efficient calculation of multi-particle  scattering cross sections and simulated event samples.
+Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 2.8.5
 Release: 2%{?dist}
