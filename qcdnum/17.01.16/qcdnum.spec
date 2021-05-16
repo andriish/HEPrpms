@@ -5,6 +5,7 @@ License:       GPLv3
 Prefix:        %{_prefix}
 Summary:       A very fast QCD evolution program written in FORTRAN77
 Source:        https://www.nikhef.nl/~h24/download/qcdnum170116.tar.gz
+URL:           https://www.nikhef.nl/~h24/qcdnum/
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires: gcc-gfortran gcc-c++
 %endif

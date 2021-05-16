@@ -6,6 +6,7 @@ Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
+URL:    https://whizard.hepforge.org/
 Patch0:         patch-whizard-0.txt
 Patch1:         patch-whizard-1.txt
 
