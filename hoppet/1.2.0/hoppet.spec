@@ -8,6 +8,7 @@ License:       GPL
 Prefix:        %{_prefix}
 Summary:       Higher Order Perturbative Parton Evolution Toolkit
 Source:        http://hoppet.hepforge.org/downloads/hoppet-%{version}.tgz
+URL:           https://hoppet.hepforge.org/
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires: gcc-gfortran perl
 Requires:      libgfortran

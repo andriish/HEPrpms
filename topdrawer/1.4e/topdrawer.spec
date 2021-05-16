@@ -4,6 +4,7 @@ Version: 1.4e
 Release: 1%{?dist}
 License: Free
 Source: ftp://ftp.riken.jp/iris/topdrawer/topdrawer.tar.gz
+URL:    https://ribf.riken.jp/comp/doc/topdrawer/
 #Patch: ugs-24bit-color.patch
 Patch:  topdrawer_OSX_fix.patch
 Prefix: %{_prefix}

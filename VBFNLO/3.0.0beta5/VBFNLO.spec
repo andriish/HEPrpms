@@ -5,6 +5,7 @@ Version: 3.0.0beta5
 Release: 1%{?dist}
 License: GPLv2
 Source: https://github.com/vbfnlo/vbfnlo/archive/v%{version}.tar.gz
+URL:    https://www.itp.kit.edu/vbfnlo/wiki/doku.php
 Patch1:         patch-VBFNLO-1.txt
 Prefix: %{_prefix}
 %if 0%{?rhel} || 0%{?fedora}

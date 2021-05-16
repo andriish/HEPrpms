@@ -4,7 +4,7 @@ Release:        1%{?dist}
 Summary:        DD4hep (Detector Description for High Energy Physics)
 Group:          Development/Tools
 License:        Custom
-URL:            dd4hep.cern.ch
+URL:            https://dd4hep.cern.ch
 Source0:        https://github.com/AIDASoft/DD4hep/archive/v01-16-01.tar.gz
 Patch0:         patch-DD4hep-0.txt
 

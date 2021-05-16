@@ -1,5 +1,5 @@
 %undefine _debugsource_packages
-Summary:  collier - COLLIER is a fortran library for the numerical evaluation of one-loop scalar and tensor integrals 
+Summary:  A Fortran library for the numerical evaluation of one-loop scalar and tensor integrals 
 Name: collier
 Version:  1.2.5
 Release:  1%{?dist}

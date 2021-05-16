@@ -6,6 +6,7 @@ Release: 4%{?dist}
 #Copyright: Free <= obsolete keyword for rpm 4.x
 License: Free
 Source: http://ftp.riken.jp/iris/ugs/ugs.tar.gz
+URL: http://ftp.riken.jp/iris/ugs
 #Patch: ugs-24bit-color.patch
 Patch0:  ugs_OSX_fix.patch
 Patch1:  patch-ugs-1.txt

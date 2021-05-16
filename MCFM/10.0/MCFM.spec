@@ -4,6 +4,8 @@ Version: 10.0
 Release: 1%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
+URL:     https://mcfm.fnal.gov/
+
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  lhapdf-devel lhapdf
 Requires:       lhapdf libgfortran

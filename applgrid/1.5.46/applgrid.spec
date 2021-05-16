@@ -6,6 +6,7 @@ Prefix:         %{_prefix}
 Summary:        A fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution 
 Source:         http://www.hepforge.org/archive/applgrid/applgrid-%{version}.tgz
 Patch0:         patch-applgrid-0.txt
+URL:            https://applgrid.hepforge.org/
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-c++ gcc-gfortran hoppet root   autoconf binutils automake libtool 
 Requires:       hoppet root

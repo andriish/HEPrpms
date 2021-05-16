@@ -1,11 +1,10 @@
 %undefine _debugsource_packages
 %global srcname iminuit
-%global sum iminuit is c.
 
 Name:           %{srcname}
 Version:        2.4.0
 Release:        1%{?dist}
-Summary:        %{sum}
+Summary:        A Jupyter-friendly Python interface for the Minuit2 C++ library maintained by CERN’s ROOT team
 
 License:        MIT, LGPL
 URL:            https://pypi.python.org/pypi/%{srcname}
