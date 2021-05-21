@@ -1,0 +1,64 @@
+BLD = build$(QUADSUFFIX)
+
+LIBDIR = $(PREFIX)/lib$(LIBDIRSUFFIX)
+INCLUDEDIR = $(PREFIX)/include
+BINDIR = $(PREFIX)/bin
+
+LIB = libooptools$(QUADSUFFIX).a
+FE = lt$(QUADSUFFIX)$(EXE)
+MFE = LoopTools$(QUADSUFFIX)$(EXE)
+INCLUDE = $(BLD)/looptools.h $(BLD)/clooptools.h
+
+ARGS = $(PARALLEL) \
+  LIB="$(LIB)" \
+  FE="$(FE)" \
+  MFE="$(MFE)" \
+  EXE="$(EXE)" \
+  DEF="$(DEF)" \
+  NOUNDERSCORE="$(NOUNDERSCORE)" \
+  XFC="$(FC) $(FFLAGS) -I." \
+  F90="$(F90)" \
+  CC="$(CC)" \
+  CFLAGS="$(CFLAGS)" \
+  CXX="$(CXX)" \
+  CXXFLAGS="$(CXXFLAGS)" \
+  ML="$(ML)" \
+  MCC="$(MCC)" \
+  MCFLAGS="$(MCFLAGS)" \
+  MCLIBS="$(MCLIBS)" \
+  AR="$(AR)" \
+  RANLIB="$(RANLIB)" \
+  NM="$(NM)" \
+  DLLTOOL="$(DLLTOOL)" \
+  LDFLAGS="$(LDFLAGS)" \
+  LIBPATH="$(LIBPATH)"
+
+
+default all lib frontend mma: force
+	cd $(BLD) && $(MAKE) $(ARGS) $@
+
+install: lib frontend
+	-mkdir -p $(DESTDIR)$(PREFIX)
+	-mkdir -p $(DESTDIR)$(LIBDIR) $(DESTDIR)$(BINDIR) $(DESTDIR)$(INCLUDEDIR)
+	cp -p $(BLD)/$(LIB) $(DESTDIR)$(LIBDIR)
+	cp -p $(INCLUDE) $(DESTDIR)$(INCLUDEDIR)
+	strip $(BLD)/$(FE)
+	cp -p $(BLD)/fcc $(BLD)/$(FE) $(DESTDIR)$(BINDIR)
+	rm -f $(DESTDIR)$(BINDIR)/f++
+	ln -s fcc $(DESTDIR)$(BINDIR)/f++
+	test ! -f $(BLD)/$(MFE) || { \
+	  test -z "$(EXE)" || ldd $(BLD)/$(MFE) | awk '/\/usr\/bin\/cyg/ { system("cp -p " $$3 " $(DESTDIR)$(BINDIR)/"); }' ; \
+	  strip $(BLD)/$(MFE) ; \
+	  cp -p $(BLD)/$(MFE) $(DESTDIR)$(BINDIR); \
+	}
+
+force: $(BLD)/timestamp
+
+$(BLD)/timestamp:
+	-mkdir $(BLD)
+	find "`cd $(SRC) ; pwd`" -follow -exec ln -sf {} $(BLD) \;
+	touch $(BLD)/timestamp
+
+clean:
+	rm -fr $(BLD)
+
