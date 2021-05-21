@@ -44,7 +44,7 @@ declare -a BUILDLIST=(
 #LCIO:02.16.01
 #lhapdf-sets-Herwig:7.1.6
 #lhapdf-sets-whizard:2.8.3
-#LoopTools:2.15
+LoopTools:2.16
 #MCFM:10.0  
 #cascade:9.1
 #MC-TESTER:1.25.0
