@@ -70,3 +70,11 @@ fae8b69bd6a10db1907b5ff92e4ba7bd  SHERPA-MC/2.2.11/rpmbuild/SOURCES/SHERPA-MC-2.
 dc37bc6c35eee6ffb2857e8b0e13b054  cascade/3.1.01/rpmbuild/SOURCES/cascade-3.1.01.tar.gz
 7b963a5fb4ef8b5294f8fd30bcd856c4  DD4hep/01.16.01/rpmbuild/SOURCES/v01-16-01.tar.gz
 51ed7fc2b50e0ac4f22e3896782c3a30  MC-TESTER/1.25.1/rpmbuild/SOURCES/mc-tester-v1.25.1.tar.gz
+5b6479d93468f0df72a633f3e382e324  whizard/3.0.0/rpmbuild/SOURCES/whizard-3.0.0.tar.gz
+05c6086e45479671bacf73158158a533  lhapdf-sets-whizard/3.0.0/rpmbuild/SOURCES/GSG961.LHgrid
+b592db3245a875f1a2ab5b0be0e06b5b  lhapdf-sets-whizard/3.0.0/rpmbuild/SOURCES/cteq5l.LHgrid
+5260c1979355243f6584c16a5f19bfd1  lhapdf-sets-whizard/3.0.0/rpmbuild/SOURCES/lhapdf-5.9.1.tar.gz
+a14f9162bbe9f5d6a55343a69f348176  MG5_aMC/2.9.3/rpmbuild/SOURCES/MG5_aMC_v2.9.3.tar.gz
+375921c9d31e1d2fe2dae3c89ea48a90  Delphes/3.4.3pre12/rpmbuild/SOURCES/3.4.3pre12.tar.gz
+4f0b2bdaaeb21d1eff10fa8987ea6b87  python-uproot4/4.0.8/rpmbuild/SOURCES/4.0.8.tar.gz
+

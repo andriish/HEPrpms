@@ -19,6 +19,7 @@ declare -a BUILDLIST=(
 #collier:1.2.5
 #cuba:4.2.1
 #Delphes:3.4.3pre10
+#Delphes:3.4.3pre12
 #EvtGen:2.0.0
 #fastjet:3.3.4  
 #cascade:3.4.0
@@ -44,11 +45,13 @@ declare -a BUILDLIST=(
 #LCIO:02.16.01
 #lhapdf-sets-Herwig:7.1.6
 #lhapdf-sets-whizard:2.8.3
-LoopTools:2.16
+#lhapdf-sets-whizard:3.0.0
+#LoopTools:2.16
 #MCFM:10.0  
 #cascade:9.1
 #MC-TESTER:1.25.0
 #MG5_aMC:2.9.2
+#MG5_aMC:2.9.3
 #njet:2.1.1
 #nlojet++:4.1.3
 #noweb:2.11
@@ -58,6 +61,7 @@ LoopTools:2.16
 #PTL:1.0.2
 #pythia6:6.4.28
 #python-uproot4:4.0.6
+python-uproot4:4.0.8
 #qcdloop:2.0.6
 #qcdnum:17.01.16
 #qd:2.3.22
@@ -78,6 +82,7 @@ LoopTools:2.16
 #ugs:2.10e
 #VBFNLO:3.0.0beta5
 #whizard:2.8.5
+#whizard:3.0.0
 #xbae:4.60.4
 #YODA:1.9.0
 )
