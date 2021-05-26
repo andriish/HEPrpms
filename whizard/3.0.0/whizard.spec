@@ -8,7 +8,7 @@ Group: System Environment/Libraries
 Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
 URL:    https://whizard.hepforge.org/
 Patch0:         patch-whizard-0.txt
-#Patch1:         patch-whizard-1.txt
+Patch1:         patch-whizard-1.txt
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
@@ -67,9 +67,9 @@ obtained by alternative methods (e.g., including loop corrections) may be interf
 %prep 
 %setup -q
 %patch0 -p1
-#if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
-#patch1 -p1
-#endif
+if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
+%patch1 -p1
+endif
 
 %build 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
