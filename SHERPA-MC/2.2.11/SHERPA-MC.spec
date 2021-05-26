@@ -13,7 +13,7 @@
 
 Name:           SHERPA-MC
 Version:        2.2.11
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://sherpa.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -268,17 +268,20 @@ make -C openmpi3 install DESTDIR=%{buildroot} INSTALL="install -p" CPPROG="cp -p
 mpi-selector --unset
 %endif
 
+mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
+echo %{_libdir}/%{name} >   %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 
 rm -rf $RPM_BUILD_ROOT/usr/share/info/dir
 
-
+%post -p /sbin/ldconfig    
+%postun -p /sbin/ldconfig
 
 %files -n %{libname}
 %doc AUTHORS README COPYING
 %{_libdir}/SHERPA-MC/*.so*
 %{_libdir}/SHERPA-MC/*a
 %{_bindir}/*
-
+%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
 %files  -n python2-%{name}
@@ -357,6 +360,8 @@ rm -rf $RPM_BUILD_ROOT/usr/share/info/dir
 %endif
 
 %changelog
+* Wed May 26 2021 Andrii Verbytskyi 2.2.11
+- Added ldconfig scripts
 * Thu Nov 23 2017 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
 + Recola
 * Thu May 26 2016 Andrii Verbytskyi 2.2.0
