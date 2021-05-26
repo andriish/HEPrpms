@@ -13,7 +13,7 @@ Prefix:     %{_prefix}
 
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:    lhapdf >= 6.3.0 
-BuildRequires: python3-lhapdf python2 python2-devel swig gcc-gfortran
+BuildRequires: python3-lhapdf python2 python2-devel swig gcc-gfortran gcc-c++
 %if  0%{?fedora} >= 34
 BuildRequires: numpy
 %else
@@ -22,7 +22,7 @@ BuildRequires: python2-numpy
 %endif
 %if 0%{?suse_version}
 BuildRequires:    libLHAPDF >= 6.3.0  LHAPDF-devel
-BuildRequires: python3-LHAPDF python2 python2-devel swig python2-numpy gcc-fortran
+BuildRequires: python3-LHAPDF python2 python2-devel swig python2-numpy gcc-fortran gcc-c++
 %endif
 
 %description
