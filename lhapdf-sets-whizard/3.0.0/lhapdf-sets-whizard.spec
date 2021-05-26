@@ -14,10 +14,10 @@ Prefix:     %{_prefix}
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:    lhapdf >= 6.3.0 
 BuildRequires: python3-lhapdf python2 python2-devel swig gcc-gfortran
-%if 0%{?rhel} || %{?fedora} <= 34
-BuildRequires: python2-numpy
-%else
+%if  %{?fedora} >= 34
 BuildRequires: numpy
+%else
+BuildRequires: python2-numpy
 %endif
 %endif
 %if 0%{?suse_version}
