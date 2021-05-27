@@ -77,4 +77,5 @@ b592db3245a875f1a2ab5b0be0e06b5b  lhapdf-sets-whizard/3.0.0/rpmbuild/SOURCES/cte
 a14f9162bbe9f5d6a55343a69f348176  MG5_aMC/2.9.3/rpmbuild/SOURCES/MG5_aMC_v2.9.3.tar.gz
 375921c9d31e1d2fe2dae3c89ea48a90  Delphes/3.4.3pre12/rpmbuild/SOURCES/3.4.3pre12.tar.gz
 4f0b2bdaaeb21d1eff10fa8987ea6b87  python-uproot4/4.0.8/rpmbuild/SOURCES/4.0.8.tar.gz
+43ba55c66d8597f1dc8ff96df765437f  HepMC3/3.2.3/rpmbuild/SOURCES/HepMC3-master.tar.gz
 
