@@ -1,13 +1,9 @@
-%if %{?fedora}%{!?fedora:0} >= 32 || %{?rhel}%{!?rhel:0} >= 9
 %undefine __cmake_in_source_build
-%global oldcmakemacro 0
-%else
-%global oldcmakemacro 1
-%endif
+%undefine __cmake3_in_source_build
 
 Name:		HepMC3
 Version:	3.2.3
-Release:	1%{?dist}
+Release:	3%{?dist}
 Summary:	C++ Event Record for Monte Carlo Generators
 
 License:	GPLv3+
@@ -15,11 +11,12 @@ URL:		https://hepmc.web.cern.ch/hepmc/
 Source0:	https://gitlab.cern.ch/hepmc/HepMC3/-/archive/master/HepMC3-master.tar.gz
 
 #		The ROOT cmake file used by this project requires cmake 3.9
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-BuildRequires:	cmake >= 3.9
-%else
+%if %{?rhel}%{!?rhel:0} == 7
 BuildRequires:	cmake3 >= 3.9
+%else
+BuildRequires:	cmake >= 3.9
 %endif
+BuildRequires:	make
 BuildRequires:	gcc-c++
 %ifnarch s390x
 BuildRequires:	root-core
@@ -198,15 +195,7 @@ This package provides HepMC manuals and examples.
 %setup -q -n HepMC3-master
 
 %build
-%if %{oldcmakemacro}
-mkdir %{_vpath_builddir}
-pushd %{_vpath_builddir}
-%endif
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-%cmake \
-%else
 %cmake3 \
-%endif
 %ifnarch s390x
 	-DHEPMC3_ENABLE_ROOTIO:BOOL=ON \
 	-DHEPMC3_ROOTIO_INSTALL_LIBDIR:PATH=%{_libdir}/root \
@@ -224,23 +213,14 @@ pushd %{_vpath_builddir}
 	-DHEPMC3_BUILD_DOCS:BOOL=ON \
 	-DHEPMC3_BUILD_STATIC_LIBS:BOOL=OFF \
 	-DCMAKE_INSTALL_DOCDIR:PATH=%{_pkgdocdir} \
-	-DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
-%if %{oldcmakemacro}
-	..
-popd
-%endif
-
-%make_build -C %{_vpath_builddir}
+	-DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON
+%cmake3_build
 
 %install
-%make_install -C %{_vpath_builddir}
+%cmake3_install
 
 %check
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-ctest %{?_smp_mflags} --output-on-failure
-%else
-ctest3 %{?_smp_mflags} --output-on-failure
-%endif
+%ctest3
 
 %ldconfig_scriptlets
 %ldconfig_scriptlets search
@@ -408,6 +388,18 @@ ctest3 %{?_smp_mflags} --output-on-failure
 %license COPYING
 
 %changelog
+* Tue Apr 06 2021 Mattias Ellert <mattias.ellert@physics.uu.se> - 3.2.3-3
+- Rebuild for root 6.22.08
+
+* Mon Jan 25 2021 Fedora Release Engineering <releng@fedoraproject.org> - 3.2.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Sat Dec 19 2020 Mattias Ellert <mattias.ellert@physics.uu.se> - 3.2.3-1
+- Update to version 3.2.3
+- Use new cmake rpm macro also for EPEL
+- Fix compilation warnings
+- Fix build for multiple python versions (EPEL 7) - fix from upstream git
+
 * Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 3.2.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
