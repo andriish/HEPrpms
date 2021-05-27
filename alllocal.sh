@@ -61,7 +61,7 @@ declare -a BUILDLIST=(
 #PTL:1.0.2
 #pythia6:6.4.28
 #python-uproot4:4.0.6
-python-uproot4:4.0.8
+#python-uproot4:4.0.8
 #qcdloop:2.0.6
 #qcdnum:17.01.16
 #qd:2.3.22
@@ -85,6 +85,7 @@ python-uproot4:4.0.8
 #whizard:3.0.0
 #xbae:4.60.4
 #YODA:1.9.0
+HepMC3:3.2.3
 )
 
 for a in "${BUILDLIST[@]}" 
