@@ -195,7 +195,7 @@ BuildArch:	noarch
 This package provides HepMC manuals and examples.
 
 %prep
-%setup -q -n HepMC3-name
+%setup -q -n HepMC3-master
 
 %build
 %if %{oldcmakemacro}
