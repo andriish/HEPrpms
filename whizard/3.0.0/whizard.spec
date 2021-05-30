@@ -36,6 +36,7 @@ BuildRequires: python3-lhapdf gcc-gfortran gcc-c++
 
 %else
 %global __find_provides /usr/lib/rpm/ocaml-find-provides.sh
+%global __find_requires /usr/lib/rpm/ocaml-find-requires.sh
 %endif
 %endif
 

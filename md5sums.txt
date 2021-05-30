@@ -6,6 +6,7 @@ d2e944f2011f8c1d8a1d00a487ad9d6f  chaplin/1.2/rpmbuild/SOURCES/chaplin-1.2.tar
 d8a71632ad6a6cebd59daa6e089cdeb1  applgrid/1.5.46/rpmbuild/SOURCES/applgrid-1.5.46.tgz
 ec9c3eb925ab28a7512df000893a8714  PTL/1.0.2/rpmbuild/SOURCES/v1.0.2.tar.gz
 fd3288cfde04181d7c12c5e4af399672  iminuit/1.3.6/rpmbuild/SOURCES/iminuit-1.3.6.tar.gz
+c7860639290a2b1bfa21cbb71e093ccc  iminuit/2.4.0/rpmbuild/SOURCES/v2.4.0.tar.gz
 633af531dd07c7b2d3fd6f4145f371ea  TheP8I/2.0.1/rpmbuild/SOURCES/TheP8I-2.0.1.tar.gz
 867c031ec5ca3ea6362e09c6227354b4  qd/2.3.22/rpmbuild/SOURCES/qd-2.3.22.tar.gz
 118029311d8e6a81c93de6a0250c7564  qgraf/3.4.2/rpmbuild/SOURCES/qgraf-3.4.2.tgz
@@ -17,6 +18,7 @@ fd3288cfde04181d7c12c5e4af399672  iminuit/1.3.6/rpmbuild/SOURCES/iminuit-1.3.6.t
 99b347b9eedc5a91e7bd7f7725427367  fjcontrib/1.045/rpmbuild/SOURCES/fjcontrib-1.045.tar.gz
 38bc9cf487fee131c025b6bfc87cafb2  collier/1.2.5/rpmbuild/SOURCES/collier-1.2.5.tar.gz
 ba14b17cd93ba3230f8cf7b680c2176a  tmdlib/2.2.0/rpmbuild/SOURCES/tmdlib-2.2.0.tar.gz
+1f0a7f5cf3dfbc2a7f38f301aa0d748e  tmdlib/2.2.01/rpmbuild/SOURCES/tmdlib-2.2.01.tar.gz
 d7621565bcb7c0710ac522aa11f92cf8  ginac/1.8.0/rpmbuild/SOURCES/ginac-1.8.0.tar.bz2
 34c4286cb95aae28481a6dd736922860  recola/1.4.1/rpmbuild/SOURCES/recola-1.4.1.tar.gz
 cc56c7e55b75659b5f79498050e1153a  recola2/2.2.2/rpmbuild/SOURCES/recola2-2.2.2.tar.gz
