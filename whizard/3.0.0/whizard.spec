@@ -69,7 +69,7 @@ obtained by alternative methods (e.g., including loop corrections) may be interf
 %patch0 -p1
 if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
 %patch1 -p1
-endif
+%endif
 
 %build 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
