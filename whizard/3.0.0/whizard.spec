@@ -29,15 +29,14 @@ BuildRequires:  LoopTools
 BuildRequires: python3-lhapdf gcc-gfortran gcc-c++ 
 
 
+%if %{?rhel}%{!?rhel:0} || %{?fedora}%{!?fedora:0} <= 31
 %global _use_internal_dependency_generator 0
-%global __find_requires /usr/lib/rpm/ocaml-find-requires.sh
-
-%if %{?fedora}%{!?fedora:0} >=31
-
-%else
 %global __find_provides /usr/lib/rpm/ocaml-find-provides.sh
 %global __find_requires /usr/lib/rpm/ocaml-find-requires.sh
+%else
+%global _use_internal_dependency_generator 1
 %endif
+
 %endif
 
 
