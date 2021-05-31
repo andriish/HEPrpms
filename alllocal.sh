@@ -40,6 +40,7 @@ declare -a BUILDLIST=(
 #hoppet:1.2.0
 #hztool:4.3.2
 #iminuit:1.3.6  
+iminuit:2.6.1  
 #cascade:2.4.0
 #JetVHeto:3.0.0
 #LCIO:02.16.01
@@ -82,7 +83,7 @@ declare -a BUILDLIST=(
 #ugs:2.10e
 #VBFNLO:3.0.0beta5
 #whizard:2.8.5
-whizard:3.0.0
+#whizard:3.0.0
 #xbae:4.60.4
 #YODA:1.9.0
 )
