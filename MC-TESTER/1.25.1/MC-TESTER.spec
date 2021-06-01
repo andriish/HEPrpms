@@ -1,6 +1,6 @@
 Name:           MC-TESTER
 Version:        1.25.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        MIT
 Url:            http://mc-tester.web.cern.ch/MC-TESTER/
 Source0:        https://gitlab.cern.ch/cvsmctst/mc-tester/-/archive/v1.25.1/mc-tester-v%{version}.tar.gz
@@ -41,6 +41,7 @@ The library documentation is available on header files.
 
 
 %build
+cd include && ln -s ../HepMC3Event/HepMC3Particle.h && ../HepMC3Event/HepMC3Event.h && cd ..
 autoreconf
 mkdir -p lib
 %configure  --with-HepMC=%_prefix --with-HepMC3=%_prefix   --with-root=%_prefix  
