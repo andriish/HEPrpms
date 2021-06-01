@@ -41,7 +41,10 @@ The library documentation is available on header files.
 
 
 %build
-cd include && ln -s ../HepMC3Event/HepMC3Particle.h && ../HepMC3Event/HepMC3Event.h && cd ..
+cd include 
+ln -s ../HepMC3Event/HepMC3Particle.h 
+ln -s ../HepMC3Event/HepMC3Event.h 
+cd ..
 autoreconf
 mkdir -p lib
 %configure  --with-HepMC=%_prefix --with-HepMC3=%_prefix   --with-root=%_prefix  
