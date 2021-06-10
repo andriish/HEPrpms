@@ -7,14 +7,14 @@
 
 Name:           Rivet
 Version:        3.1.4
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
 
 Prefix: %{_prefix}
 Summary:        Robust Independent Validation of Experiment and Theory
-Requires:       fastjet    ImageMagick
+Requires:       fastjet    ImageMagick tex(latex)
 Requires:       YODA >= 1.8.0
 Requires:       fjcontrib
 BuildRequires:  fjcontrib fjcontrib-devel
@@ -122,6 +122,8 @@ make %{?_smp_mflags}
 
 
 %changelog
+* Thu Jun 10 2021 Andrii Verbytskyi 3.1.4
+- Added latex to dependencies
 * Sat Mar 13 2021 Andrii Verbytskyi 3.1.3
 - Added python3
 * Wed Nov 27 2019 Andrii Verbytskyi 3.0.2
