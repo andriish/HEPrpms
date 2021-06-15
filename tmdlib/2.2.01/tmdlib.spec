@@ -55,7 +55,7 @@ make %{?_smp_mflags}
 /usr/bin/*
 /usr/%_lib/*
 /usr/share/man/TMDlib.pdf
-/usr/share/tmdlib
+/usr/share/tmdlib/*
 
 
 
