@@ -6,7 +6,7 @@
 
 Name:           PHOTOS
 Version:        3.64
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        Unknown
 Url:            http://photospp.web.cern.ch/photospp
 Source0:        http://photospp.web.cern.ch/photospp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
@@ -18,7 +18,7 @@ BuildRequires:  gcc-gfortran  pythia8 pythia8-devel HepMC-devel HepMC3-devel Hep
 Requires:       HepMC HepMC3 libgfortran pythia8
 %endif
 %if 0%{?suse_version}
-BuildRequires:  gcc-fortran   libpythia8 pythia-devel HepMC2-devel HepMC3-devel libHepMC4 libHepMC3-1 tex(eurosym.sty)
+BuildRequires:  gcc-fortran   libpythia8 pythia-devel HepMC2-devel HepMC3-devel libHepMC4 libHepMC3-1 tex(eurosym.sty) tex(booktabs.sty)
 Requires:       libHepMC4 libHepMC3-1 gcc-fortran  libpythia8
 %endif
 BuildRequires:  TAUOLA >= 1.1.7
