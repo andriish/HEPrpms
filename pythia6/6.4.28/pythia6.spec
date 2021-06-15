@@ -1,11 +1,11 @@
 Name:       pythia6
 Version:    6.4.28
-Release:    5%{?dist}
+Release:    6%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy Physics.
 
 License:    Unknown
 URL:        http://home.thep.lu.se/~torbjorn/Pythia.html
-Source0:    http://www.hepforge.org/archive/pythiasix/pythia-6.4.28.tgz
+Source0:    https://raw.githubusercontent.com/andriish/HEPsources/master/pythia-6.4.28.tgz
 Patch0:     patch-pythia6-0.txt
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran
@@ -49,6 +49,6 @@ install -m 755 libpythia6_dummy.a %{buildroot}%{_libdir}
 %{_libdir}/*
 
 %changelog
-* Fri Jul 18 2014 Mattias Ellert <mattias.ellert@fysast.uu.se> - 8.1.86-1
-- Update to version 8.1.86
+* tue Jul 15 2021 Andrii Verbytskyi
+- So far use github for source.
 

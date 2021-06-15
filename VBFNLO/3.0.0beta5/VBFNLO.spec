@@ -14,9 +14,9 @@ BuildRequires: HepMC  lhapdf libgfortran
 Requires: HepMC root-core gsl gsl-devel lhapdf libgfortran
 %endif
 %if 0%{?suse_version}
-BuildRequires: HepMC2-devel root6-libs root6 root6-devel gsl gsl-devel LHAPDF-devel autoconf automake libtool gcc-fortran  
+BuildRequires: HepMC2-devel root6-libs root6-config root6-devel gsl gsl-devel LHAPDF-devel autoconf automake libtool gcc-fortran  
 BuildRequires: libHepMC4  libLHAPDF gcc-fortran 
-Requires: libHepMC4 root6-libs root6 gsl gsl-devel libLHAPDF gcc-fortran
+Requires: libHepMC4 root6-config root6-libs root6-devel gsl gsl-devel libLHAPDF gcc-fortran
 %endif
 
 %description
