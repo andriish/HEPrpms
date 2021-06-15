@@ -1,6 +1,6 @@
 Name:           LCIO
 Version:        2.16.01
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        LCIO (Linear Collider I/O) is a persistency framework and event data model for linear collider detector studies.
 
 Group:          Development/Tools
@@ -18,8 +18,8 @@ BuildRequires: python3 python3-devel gcc-gfortran
 
 
 %if 0%{?suse_version}
-Requires: root6 root6-libs
-BuildRequires: root6 root6-libs root6-devel
+Requires: root6-config root6-libs
+BuildRequires: root6-config root6-libs root6-devel
 BuildRequires: pkgconfig(zlib) 
 BuildRequires: python python-devel gcc-fortran
 %endif
