@@ -1,6 +1,6 @@
 Name:           njet
 Version:        2.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL
 Url:            https://bitbucket.org/njet
 Source0:        https://bitbucket.org/njet/njet/downloads/%{name}-%{version}.tar.gz
@@ -36,7 +36,8 @@ find %{buildroot} -name '*.la' -delete
 
 
 %files 
-%_libdir/*
+%_libdir/pkgconfig/*
+%_libdir/*.*
 %_bindir/*
 %_includedir/*
 /usr/share/*

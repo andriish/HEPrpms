@@ -7,7 +7,7 @@
 
 Name:           Rivet
 Version:        3.1.4
-Release:        1002%{?dist}
+Release:        1003%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -113,7 +113,10 @@ make %{?_smp_mflags}
 
 %files 
 %{_bindir}/*
-%{_libdir}/*
+%_libdir/pkgconfig/*
+%_libdir/*.*
+%_libdir/python*/site-packages/*
+%_libdir/Rivet/*
 %{_sysconfdir}/bash_completion.d/*
 /usr/share/Rivet/*
 
