@@ -36,8 +36,8 @@ BuildRequires:  root-tree
 
 %if 0%{?suse_version}
 BuildRequires:  pythia-devel HepMC2-devel HepMC3-devel 
-Requires:       libpythia8  libHepMC4 libHepMC3-1 
-BuildRequires:  root6 root6-libs root6-devel
+Requires:       libpythia8  libHepMC4 libHepMC3-1  root6-libs
+BuildRequires:  root6 root6-libs root6-devel root6-config
 %endif
 
 
