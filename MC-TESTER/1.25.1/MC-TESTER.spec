@@ -12,7 +12,7 @@ Requires:       HepMC  HepMC3 root  root-core root-graf  root-hist
 BuildRequires:  HepMC HepMC-devel HepMC3 HepMC3-devel root  root-core root-graf  root-hist
 %endif
 %if 0%{?suse_version}
-Requires:       libHepMC4 libHepMC3-1  root6-config  root6-libs root6-devel
+Requires:       libHepMC4 libHepMC3-1  root6-config  root6-libs root6-devel root6
 BuildRequires:  libHepMC4 libHepMC3-1  root6-config  root6-libs root6-devel HepMC2-devel HepMC3-devel
 BuildRequires:  unzip
 %endif

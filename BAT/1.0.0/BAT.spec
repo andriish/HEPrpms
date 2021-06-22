@@ -16,8 +16,8 @@ BuildRequires:    root-core root-hist root-io root-tree
 Requires:         root-core root-hist root-io root-tree
 %endif
 %if 0%{?suse_version}
-BuildRequires:    root6-config root6-devel root6-libs
-Requires:         root6-config root6-devel root6-libs
+BuildRequires:    root6-config root6-devel root6-libs root6
+Requires:         root6-config root6-devel root6-libs root6
 %endif
 
 

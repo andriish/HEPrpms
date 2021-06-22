@@ -12,7 +12,7 @@ BuildRequires:  gcc-c++ gcc-gfortran hoppet root   autoconf binutils automake li
 Requires:       hoppet root
 %endif
 %if 0%{?suse_version}
-BuildRequires:  gcc-c++ gcc-fortran hoppet root6-config root6-libs root6-devel  autoconf binutils automake libtool 
+BuildRequires:  gcc-c++ gcc-fortran hoppet root6-config root6-libs root6-devel root6  autoconf binutils automake libtool 
 Requires:       hoppet root6-config root6-libs root6-devel libgfortran5
 %endif
 
