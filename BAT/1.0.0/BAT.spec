@@ -1,6 +1,6 @@
 Name:       BAT
 Version:    1.0.0
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    BAT -- Bayesian Analysis Toolkit
 
 License:    LGPL v3
@@ -33,8 +33,8 @@ limit setting and uncertainty propagation.
 %prep
 %setup -q
 
-%build
-%configure --with-cuba=/usr/include 
+%build 
+%configure --with-cuba=/usr/include  --with-rootsys=/usr
 
 make %{?_smp_mflags} 
 

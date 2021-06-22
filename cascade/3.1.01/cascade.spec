@@ -21,7 +21,7 @@ Requires:       fastjet tmdlib  pythia8
 %if 0%{?suse_version}
 BuildRequires:  autoconf automake libtool gcc-fortran libHepMC4 HepMC2-devel libLHAPDF LHAPDF-devel 
 BuildRequires:  libHepMC3-1  HepMC3-devel  Rivet-devel Rivet YODA YODA-devel 
-BuildRequires:  texlive-palatino texlive-helvetic texlive-courier tex(latex) ghostscript tex(sectsty.sty) tex(cite.sty)
+BuildRequires:  texlive-palatino texlive-helvetic texlive-courier tex(latex) ghostscript tex(sectsty.sty) tex(cite.sty) tex(lineno.sty)
 Requires:       libHepMC4 libLHAPDF libHepMC3-1 Rivet YODA libHepMC4 
 BuildRequires:  gsl gsl-devel zlib zlib-devel unzip
 Requires:       gsl zlib
