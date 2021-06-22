@@ -190,7 +190,7 @@ export PYTHON=%{_bindir}/python3
 mkdir serial; \
 cd serial; \
 export CXXFLAGS=$CXXFLAGS" -I"$(pwd)"/../ -Wno-error=return-type  ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
-../configure --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006  --enable-blackhat=$(blackhat-config --prefix) --enable-mcfm=/usr  --enable-pyext   --enable-gzip --enable-recola=/usr  --enable-hztool=/usr   --enable-hepevtsize=4000    --enable-hepmc3=/usr --disable-hepmc3root   --prefix=%{_prefix} --libdir=%{_libdir}  --enable-fastjet=/usr   --enable-analysis --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
+../configure --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006  --enable-blackhat=$(blackhat-config --prefix) --enable-mcfm=/usr  --enable-pyext   --enable-gzip --enable-recola=/usr  --enable-hztool=/usr   --enable-hepevtsize=4000    --enable-hepmc3=/usr --disable-hepmc3root   --prefix=%{_prefix} --libdir=%{_libdir}  --enable-fastjet=/usr   --enable-analysis --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root=/usr  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
 make -C Manual  ;\
 make %{?_smp_mflags} ; \
 cd ..
@@ -237,7 +237,7 @@ mkdir openmpi3; \
 cd openmpi3; \
 export CXXFLAGS=$CXXFLAGS" -I"$(pwd)"/../   -Wno-error=return-type   ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
 ../configure --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006   --enable-blackhat=$(blackhat-config --prefix) --enable-mcfm=/usr  --enable-pyext   --enable-gzip  --enable-hztool=/usr --enable-hepevtsize=4000 --enable-hepmc3=/usr --disable-hepmc3root --prefix=$MPI_HOME --libdir=$MPI_HOME/%_lib  --datadir=%{_datadir}     --mandir=%{_mandir}     --infodir=%{_infodir} \
-  --program-suffix=$MPI_SUFFIX  --enable-mpi --enable-recola=/usr   --enable-fastjet=/usr   --enable-analysis --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
+  --program-suffix=$MPI_SUFFIX  --enable-mpi --enable-recola=/usr   --enable-fastjet=/usr   --enable-analysis --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root=/usr  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
 make -C Manual  ;\
 make %{?_smp_mflags} ; \
 cd ..

@@ -1,12 +1,13 @@
 Name:           MC-TESTER
 Version:        1.25.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        MIT
 Url:            http://mc-tester.web.cern.ch/MC-TESTER/
 Source0:        https://gitlab.cern.ch/cvsmctst/mc-tester/-/archive/v1.25.1/mc-tester-v%{version}.tar.gz
 Summary:        A universal tool for comparisons of Monte Carlo predictions in High Energy Physics
 
 BuildRequires:  autoconf automake libtool  doxygen
+BuildRequires:  gcc-c++ make
 %if 0%{?rhel} || 0%{?fedora}
 Requires:       HepMC  HepMC3 root  root-core root-graf  root-hist
 BuildRequires:  HepMC HepMC-devel HepMC3 HepMC3-devel root  root-core root-graf  root-hist
@@ -62,6 +63,8 @@ make -C doc
 %_includedir/*
 
 %changelog
+* Tue Jun 22 2021 Andrii Verbytskyi
++ Added dependency on gcc
 * Thu May 06 2021 Andrii Verbytskyi
 + Version 1.25.1
 * Wed Apr 21 2021 Andrii Verbytskyi
