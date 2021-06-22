@@ -19,7 +19,7 @@ BuildRequires: python3 python3-devel gcc-gfortran
 
 %if 0%{?suse_version}
 Requires: root6-config root6-libs
-BuildRequires: root6-config root6-libs root6-devel
+BuildRequires: root6-config root6-libs root6-devel root6
 BuildRequires: pkgconfig(zlib) 
 BuildRequires: python python-devel gcc-fortran
 %endif

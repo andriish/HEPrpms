@@ -27,7 +27,7 @@ BuildRequires:  gsl gsl-devel zlib zlib-devel unzip
 Requires:       gsl zlib
 BuildRequires:  fastjet-devel fastjet gcc-c++ gcc-fortran tmdlib tmdlib-devel libpythia8 pythia-devel
 Requires:       fastjet tmdlib libpythia8
-BuildRequires:  root6-config root6-libs root6-devel
+BuildRequires:  root6-config root6-libs root6-devel root6
 %endif
 
 Prefix: %{_prefix}
