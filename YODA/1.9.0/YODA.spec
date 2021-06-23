@@ -18,12 +18,12 @@ BuildRequires: gcc-c++  python3-Cython   zlib
 BuildRequires: gcc-c++  Cython   zlib
 %endif
 %if 0%{?suse_version}
-BuildRequires:  gcc-c++ python3-devel pkgconfig(zlib)
+BuildRequires:  gcc-c++ python3-devel python3-libs pkgconfig(zlib)
 %endif
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-BuildRequires:   python3  python3-devel
+BuildRequires:   python3  python3-devel python3-libs
 %endif
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: platform-python-devel
