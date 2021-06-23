@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           form
 Version:        4.2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPLv3
 Url:            https://github.com/vermaseren/form
 Source0:        https://github.com/vermaseren/form/releases/download/v%{version}/form-%{version}.tar.gz
@@ -15,7 +15,7 @@ BuildRequires:  gcc-fortran texlive-tex4ht texlive-helvetic texlive-wasy texlive
 %endif
 BuildRequires:  tex(latex) ghostscript 
 BuildRequires:  tex(tabu.sty) tex(multirow.sty) tex(multicol.sty) tex(adjustbox.sty) tex(sectsty.sty) tex(tocloft.sty) 
-BuildRequires:   tex(ulem.sty)  tex(wasysym.sty)
+BuildRequires:   tex(ulem.sty)  tex(wasysym.sty) tex(float.sty)
 %if 0%{?suse_version}
 BuildRequires: tex(hanging.sty) tex(stackengine.sty)  tex(newunicodechar.sty) tex(etoc.sty)  
 %endif

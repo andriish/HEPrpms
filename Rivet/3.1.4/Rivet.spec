@@ -7,7 +7,7 @@
 
 Name:           Rivet
 Version:        3.1.4
-Release:        1003%{?dist}
+Release:        1004%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -43,14 +43,14 @@ BuildRequires: python3 python3-devel  platform-python-devel python2-Cython
 Requires:      python3-YODA
 %endif
 %if %{?fedora}%{!?fedora:0}
-BuildRequires:   Cython python3 python3-devel 
+BuildRequires:   Cython python3 python3-devel python3-libs 
 Requires:        python3-YODA
 %endif
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: gcc-c++ gcc-gfortran
 %endif
 %if 0%{?suse_version}
-BuildRequires: gcc-c++ gcc-fortran python3-Cython python3-devel
+BuildRequires: gcc-c++ gcc-fortran python3-Cython python3-devel python3-libs
 %endif
 
 
