@@ -72,13 +72,14 @@ sed -i 's|PTL::PTL|PTL::ptl-shared|g' cmake/Modules/G4OptionalComponents.cmake
 sed -i 's|python|python3|g' environments/g4py/CMakeLists.txt
 sed -i 's|Boost::python|Boost::python3|g' environments/g4py/G4PythonHelpers.cmake
 %endif
-%if %{?fedora}%{!?fedora:0} < 34
-sed -i 's|python|python39|g' environments/g4py/CMakeLists.txt
-sed -i 's|Boost::python|Boost::python39|g' environments/g4py/G4PythonHelpers.cmake
-%endif
+%if %{?fedora}%{!?fedora:0}
 %if %{?fedora}%{!?fedora:0} >= 35
 sed -i 's|python|python310|g' environments/g4py/CMakeLists.txt
 sed -i 's|Boost::python|Boost::python310|g' environments/g4py/G4PythonHelpers.cmake
+%else
+sed -i 's|python|python39|g' environments/g4py/CMakeLists.txt
+sed -i 's|Boost::python|Boost::python39|g' environments/g4py/G4PythonHelpers.cmake
+%endif
 %endif
 %if 0%{?suse_version}
 sed -i 's|python|python38|g' environments/g4py/CMakeLists.txt
