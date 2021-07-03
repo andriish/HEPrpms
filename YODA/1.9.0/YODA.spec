@@ -4,10 +4,11 @@
 
 Name:           YODA
 Version:        1.9.0
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
 Source0:        http://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
+Patch0:         patch-YODA-0.txt
 Prefix:         %{_prefix}
 Summary:        Plotting and histogramming tool
 BuildRequires:   autoconf binutils automake libtool  zlib-devel
@@ -72,6 +73,7 @@ python-%{name} contains python bindings for %{name}.
 
 %prep
 %setup -q
+%patch0 -p1
 %if 0%{?suse_version}
 #FROM SUSE
 
@@ -146,6 +148,8 @@ find %{buildroot}/%{_libdir}/ -name ".la" -delete
 
 
 %changelog
+* Sat Jul 03 2021 Andrii Verbytskyi 1.9.0
+- Added support for newest python
 * Thu Apr 01 2021 Andrii Verbytskyi 1.9.0
 - version bump
 * Sat Mar 13 2021 Andrii Verbytskyi 1.8.5
