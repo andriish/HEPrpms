@@ -16,6 +16,9 @@ BuildRequires:   autoconf binutils automake libtool  zlib-devel
 BuildRequires: gcc-c++  python3-Cython   zlib
 %endif
 %if %{?fedora}%{!?fedora:0}
+%if %{?fedora}%{!?fedora:0} >= 35
+BuildRequires: python-setuptools
+%endif
 BuildRequires: gcc-c++  Cython   zlib
 %endif
 %if 0%{?suse_version}
