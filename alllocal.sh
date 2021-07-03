@@ -16,7 +16,7 @@ YODA:1.9.0
 #cernlib:2006
 #CGAL:5.2
 #chaplin:1.2
-clhep:2.4.4.2
+#clhep:2.4.4.2
 #collier:1.2.5
 #cuba:4.2.1
 #Delphes:3.4.3pre10
