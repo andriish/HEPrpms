@@ -44,6 +44,9 @@ BuildRequires: python3 python3-devel  platform-python-devel python3-Cython
 Requires:      python3-YODA
 %endif
 %if %{?fedora}%{!?fedora:0}
+%if %{?fedora}%{!?fedora:0} >= 35
+BuildRequires: python-setuptools
+%endif
 BuildRequires:   Cython python3 python3-devel python3-libs 
 Requires:        python3-YODA
 %endif
