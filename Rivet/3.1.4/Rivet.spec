@@ -2,8 +2,8 @@
 %define libname     Rivet
 %define libnamedev  Rivet-devel
 %define develnamestatic  Rivet-static-devel
-%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
-
+#global __os_install_post #(echo '#{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+%global __spec_install_post   /usr/lib/rpm/check-buildroot 
 
 Name:           Rivet
 Version:        3.1.4
