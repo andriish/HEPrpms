@@ -39,7 +39,7 @@ BuildRequires: HepMC3-devel libHepMC3-1
 %endif
 
 %if %{?rhel}%{!?rhel:0} >= 8
-BuildRequires: python3 python3-devel  platform-python-devel python2-Cython
+BuildRequires: python3 python3-devel  platform-python-devel python3-Cython
 Requires:      python3-YODA
 %endif
 %if %{?fedora}%{!?fedora:0}
