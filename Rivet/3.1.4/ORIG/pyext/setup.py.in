@@ -1,0 +1,57 @@
+#! /usr/bin/env python
+
+from distutils.core import setup
+from distutils.extension import Extension
+from glob import glob
+import platform
+
+## Extension definition
+import os.path
+incdir1 = os.path.abspath("@abs_top_srcdir@/include")
+incdir2 = os.path.abspath("@abs_top_builddir@/include")
+incdir3 = os.path.abspath("@abs_srcdir@/rivet")
+incdir4 = os.path.abspath("@abs_builddir@/rivet")
+
+srcdir = os.path.abspath("@abs_top_srcdir@/src")
+libdir = os.path.abspath("@abs_top_builddir@/src/.libs")
+
+## Assemble the library search dirs
+@ENABLE_HEPMC_3_TRUE@lookupdirs = [libdir, "@HEPMC3LIBPATH@", "@FASTJETLIBPATH@", "@YODALIBPATH@" ]
+@ENABLE_HEPMC_3_FALSE@lookupdirs = [libdir, "@HEPMCLIBPATH@", "@FASTJETLIBPATH@", "@YODALIBPATH@" ]
+
+if "RIVET_LOCAL" in os.environ:
+    BASE_LINK_ARGS = ["-L@abs_top_builddir@/src/.libs"]
+else:
+    BASE_LINK_ARGS = ["-L@prefix@/lib"]
+
+## This needs to be passed separately on Mac, otherwise HepMC3 library won't be found
+@ENABLE_HEPMC_3_TRUE@if platform.system() == "Darwin": BASE_LINK_ARGS.append('-Wl,-rpath,@HEPMC3LIBPATH@')
+
+
+## A helper function for extension compilation
+def ext(name, depends=[], statics=[]):
+    fullname = '@abs_builddir@/rivet/%s.cpp' % name
+    if not os.path.isfile(fullname): # distcheck has it in srcdir
+        fullname = os.path.relpath("@abs_srcdir@/rivet/%s.cpp" % name)
+
+    return Extension(
+        "rivet.%s" % name,
+        [fullname] + statics,
+        language="c++",
+        # depends=depends,
+        include_dirs=[incdir1, incdir2, incdir3, incdir4],
+        extra_compile_args="-I@prefix@/include @PYEXT_CXXFLAGS@ @HEPMCCPPFLAGS@ @HEPMC3CPPFLAGS@ @CPPFLAGS@ @FASTJETCPPFLAGS@ @YODACPPFLAGS@".split(),
+        extra_link_args=BASE_LINK_ARGS,
+        library_dirs=lookupdirs,
+        runtime_library_dirs=lookupdirs[1:],
+        @ENABLE_HEPMC_3_TRUE@libraries=["HepMC3", "fastjet", "YODA", "Rivet"])
+        @ENABLE_HEPMC_3_FALSE@libraries=["HepMC", "fastjet", "YODA", "Rivet"])
+
+
+#header_files = glob("../include/Rivet/*.h") + glob("../include/Rivet/Utils/*.h")
+extns = [ext("core")]#, header_files)]
+
+setup(name = "rivet",
+      version="@PACKAGE_VERSION@",
+      ext_modules = extns,
+      packages = ["rivet", "rivet.hepdatapatches"])
