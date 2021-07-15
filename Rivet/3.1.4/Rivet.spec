@@ -34,7 +34,7 @@ BuildRequires:  HepMC3-search-devel
 %endif
 %if 0%{?suse_version}
 Requires:       pkgconfig(zlib) pkgconfig(gsl)
-BuildRequires:  pkgconfig(zlib) zlib-devel pkgconfig(gsl) gsl-devel 
+BuildRequires:  pkgconfig(zlib) zlib-devel pkgconfig(gsl) gsl-devel  python3-setuptools
 Requires: libHepMC3-1 
 BuildRequires: HepMC3-devel libHepMC3-1 
 %endif
