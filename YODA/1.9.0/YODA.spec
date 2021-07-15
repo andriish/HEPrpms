@@ -27,7 +27,7 @@ BuildRequires:  gcc-c++ python3-devel python3-Cython pkgconfig(zlib)
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-BuildRequires:   python3  python3-devel python3-libs
+BuildRequires:   python3  python3-devel python3-libs python3-setuptools
 %endif
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: platform-python-devel
