@@ -111,6 +111,7 @@ make -C build %{?_smp_mflags}
 export CXXFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export CFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export LDFLAGS=" "
+export CMAKE_CXX_STANDARD=17
 %cmake \
  -DEVTGEN_PYTHIA:BOOL=ON \
  -DEVTGEN_PHOTOS:BOOL=ON \
