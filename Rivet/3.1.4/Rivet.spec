@@ -54,7 +54,7 @@ Requires:        python3-YODA
 BuildRequires: gcc-c++ gcc-gfortran
 %endif
 %if 0%{?suse_version}
-BuildRequires: gcc-c++ gcc-fortran python3-Cython python3-devel python3-libs
+BuildRequires: gcc-c++ gcc-fortran python3-Cython python3-devel
 %endif
 
 
