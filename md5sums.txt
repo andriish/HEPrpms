@@ -89,3 +89,6 @@ d345fea33f6c903f0d01de2da5c3e0ab  python-uproot4/4.0.11/rpmbuild/SOURCES/4.0.11.
 b9cb31b54aff7b849718da4f2230167c  clhep/2.4.4.2/rpmbuild/SOURCES/clhep-2.4.4.2.tgz
 50ec7d4110c8e821f3b3d50de9614eab  MG5_aMC/2.9.4/rpmbuild/SOURCES/MG5_aMC_v2.9.4.tar.gz
 32c122d90736177b04ea1819e677865d  whizard/3.0.1/rpmbuild/SOURCES/whizard-3.0.1.tar.gz
+bcaeb949cf0804679afb97b9f37e0593  MG5_aMC/3.1.1/rpmbuild/SOURCES/MG5_aMC_v3.1.1.tar.gz
+79491239aeb4c98916e0842d8ac7f13b  qcdloop/2.0.8/rpmbuild/SOURCES/2.0.8.tar.gz
+69879b19006fb6dc7d0b98d01c5cd115  fastjet/3.4.0/rpmbuild/SOURCES/fastjet-3.4.0.tar.gz
