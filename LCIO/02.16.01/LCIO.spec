@@ -77,7 +77,12 @@ sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
 
 %build
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+%if %{?fedora}%{!?fedora:0} >= 34
+%cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON -DCMAKE_CXX_STANDARD=17
+%else
 %cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON 
+%endifif
+
 %cmake_build
 %endif
 %if  0%{?suse_version}

@@ -6,7 +6,7 @@
 
 Name:           EvtGen
 Version:        2.0.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 License:        GPLv3
 Url:            http://evtgen.warwick.ac.uk
 Source0:        https://evtgen.hepforge.org/downloads/EvtGen-02.00.00.tar.gz
@@ -96,6 +96,10 @@ mkdir -p build
 export CXXFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export CFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export LDFLAGS=" "
+%if %{?fedora}%{!?fedora:0} >= 34
+export CMAKE_CXX_STANDARD=17
+%endif
+
 %cmake -H. -Bbuild\
  -DEVTGEN_PYTHIA:BOOL=ON \
  -DEVTGEN_PHOTOS:BOOL=ON \
