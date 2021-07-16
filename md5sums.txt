@@ -54,6 +54,7 @@ e06cae2b4e6ced9d50c3f84367642d73  qcdnum/17.01.16/rpmbuild/SOURCES/qcdnum170116.
 6bc22265e47bfaee58b13da0c481922d  Herwig/7.2.2/rpmbuild/SOURCES/Herwig-7.2.2.tar.bz2
 d0cc835c571b9ac78a1df70c136a4572  njet/2.1.1/rpmbuild/SOURCES/njet-2.1.1.tar.gz
 5eff647a3ee153ed67287127d677c65e  Delphes/3.4.3pre10/rpmbuild/SOURCES/3.4.3pre10.tar.gz
+d67379514804ff69efe3eb7be07935d6  Delphes/3.5.0/rpmbuild/SOURCES/3.5.0.tar.gz
 a3f78172ef504bf0d7223b851a473c1d  apfel/3.0.4/rpmbuild/SOURCES/3.0.4.tar.gz
 c8f7997d854921f8f7afcdfcf76f8cb3  topdrawer/1.4e/rpmbuild/SOURCES/topdrawer.tar.gz
 b2759b2aeb951ea6b184ee3a236124a7  LCIO/02.16.01/rpmbuild/SOURCES/v02-16-01.tar.gz
