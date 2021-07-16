@@ -54,7 +54,7 @@ fragile-shared: libfastjetcontribfragile.@DYNLIBEXT@
 
 fragile_SHARED_SRC_LIST=@FRAGILE_SHARED_SRC_LIST@
 libfastjetcontribfragile.@DYNLIBEXT@: $(fragile_SHARED_SRC_LIST)
-	$(CXX) @DYNLIBOPT@ -fPIC -DPIC $(CXXFLAGS) `$(FASTJETCONFIG) --cxxflags --libs` $(fragile_SHARED_SRC_LIST) -o libfastjetcontribfragile.@DYNLIBEXT@
+	$(CXX) @DYNLIBOPT@ -fPIC -DPIC $(CXXFLAGS) `$(FASTJETCONFIG) --cxxflags --libs | sed 's/-Wl,-rpath[^[:space:]]*//g' ` $(fragile_SHARED_SRC_LIST) -o libfastjetcontribfragile.@DYNLIBEXT@
 
 fragile-shared-install: fragile-shared
 	utils/install-sh -c -m 755 libfastjetcontribfragile.@DYNLIBEXT@ $(DESTDIR)$(LIBDIR)

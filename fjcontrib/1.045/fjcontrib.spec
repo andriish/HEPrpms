@@ -1,6 +1,6 @@
 Name:           fjcontrib
 Version:        1.045
-Release:        4%{?dist}
+Release:        5%{?dist}
 License:        GPLv2+
 Url:            http://www.fjcontrib.fr
 Source0:        https://fastjet.hepforge.org/contrib/downloads/%{name}-%{version}.tar.gz
