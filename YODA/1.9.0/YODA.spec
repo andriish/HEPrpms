@@ -22,7 +22,7 @@ BuildRequires: python-setuptools
 BuildRequires: gcc-c++  Cython   zlib
 %endif
 %if 0%{?suse_version}
-BuildRequires:  gcc-c++ python3-devel python3-Cython pkgconfig(zlib)
+BuildRequires:  gcc-c++ python3-devel python3-Cython pkgconfig(zlib) python3-setuptools
 %endif
 
 
