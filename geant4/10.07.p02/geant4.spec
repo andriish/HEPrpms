@@ -136,8 +136,8 @@ make install -C build DESTDIR=%{buildroot}
 %files
 %{_bindir}/geant4*
 %{_libdir}/lib*.so*
-%{_datadir}/Geant4-10.7.1/geant4make
-%{_libdir}/Geant4-10.7.1
+%{_datadir}/Geant4-10.7.2/geant4make
+%{_libdir}/Geant4-10.7.2
 
 
 %files devel
@@ -149,13 +149,15 @@ make install -C build DESTDIR=%{buildroot}
 
 
 %files doc
-%{_datadir}/Geant4-10.7.1/examples
-%license %{_datadir}/Geant4-10.7.1/tools.license
+%{_datadir}/Geant4-10.7.2/examples
+%license %{_datadir}/Geant4-10.7.2/tools.license
 
 %files data
-%{_datadir}/Geant4-10.7.1/data
+%{_datadir}/Geant4-10.7.2/data
 
 %changelog
+* Fri Jul 16 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
+- Version bump
 * Mon May 03 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
 - Added -DGEANT4_USE_GDML:BOOL=ON
 * Fri May 29 2020 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 10.07-1
