@@ -2,7 +2,7 @@
 %define libname     Rivet
 %define libnamedev  Rivet-devel
 %define develnamestatic  Rivet-static-devel
-%define debug_package %{nil}
+%global debug_package %{nil}
 #global __os_install_post #(echo '#{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 %global __spec_install_post   /usr/lib/rpm/check-buildroot 
 
@@ -117,7 +117,7 @@ make %{?_smp_mflags}
 
 %install
 %make_install 
-
+find %{buildroot}/%{_libdir}/ -name ".la" -delete
 
 %files 
 %{_bindir}/*
