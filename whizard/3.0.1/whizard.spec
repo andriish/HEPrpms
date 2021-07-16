@@ -74,7 +74,12 @@ obtained by alternative methods (e.g., including loop corrections) may be interf
 %build 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 autoreconf --force --install --verbose .
+%if %{?fedora}%{!?fedora:0} >=34
+export CXXFLAGS="%{optflags} -Wno-error -std=c++1z -Wno-error=format-security "
+%else
 export CXXFLAGS="%{optflags} -Wno-error -std=c++1y -Wno-error=format-security "
+%endif
+
 export CFLAGS="%{optflags} -Wno-error -Wno-error=format-security"
 export FFLAGS="%{optflags} -Wno-error "
 export FCLAGS="%{optflags} -Wno-error "
