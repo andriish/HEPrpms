@@ -4,7 +4,11 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-YODA:1.9.0
+whizard:3.0.1
+#MG5_aMC:2.9.4
+#python-uproot4:4.0.11
+#Delphes:3.5.0
+#YODA:1.9.0
 #apfel:3.0.4
 #applgrid:1.5.46
 #ariadne:4.12

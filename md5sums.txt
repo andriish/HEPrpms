@@ -54,6 +54,7 @@ e06cae2b4e6ced9d50c3f84367642d73  qcdnum/17.01.16/rpmbuild/SOURCES/qcdnum170116.
 6bc22265e47bfaee58b13da0c481922d  Herwig/7.2.2/rpmbuild/SOURCES/Herwig-7.2.2.tar.bz2
 d0cc835c571b9ac78a1df70c136a4572  njet/2.1.1/rpmbuild/SOURCES/njet-2.1.1.tar.gz
 5eff647a3ee153ed67287127d677c65e  Delphes/3.4.3pre10/rpmbuild/SOURCES/3.4.3pre10.tar.gz
+d67379514804ff69efe3eb7be07935d6  Delphes/3.5.0/rpmbuild/SOURCES/3.5.0.tar.gz
 a3f78172ef504bf0d7223b851a473c1d  apfel/3.0.4/rpmbuild/SOURCES/3.0.4.tar.gz
 c8f7997d854921f8f7afcdfcf76f8cb3  topdrawer/1.4e/rpmbuild/SOURCES/topdrawer.tar.gz
 b2759b2aeb951ea6b184ee3a236124a7  LCIO/02.16.01/rpmbuild/SOURCES/v02-16-01.tar.gz
@@ -81,7 +82,10 @@ b592db3245a875f1a2ab5b0be0e06b5b  lhapdf-sets-whizard/3.0.0/rpmbuild/SOURCES/cte
 a14f9162bbe9f5d6a55343a69f348176  MG5_aMC/2.9.3/rpmbuild/SOURCES/MG5_aMC_v2.9.3.tar.gz
 375921c9d31e1d2fe2dae3c89ea48a90  Delphes/3.4.3pre12/rpmbuild/SOURCES/3.4.3pre12.tar.gz
 4f0b2bdaaeb21d1eff10fa8987ea6b87  python-uproot4/4.0.8/rpmbuild/SOURCES/4.0.8.tar.gz
+d345fea33f6c903f0d01de2da5c3e0ab  python-uproot4/4.0.11/rpmbuild/SOURCES/4.0.11.tar.gz
 52e4deba2ff182af0e72e42db6cfce44  iminuit/2.6.1/rpmbuild/SOURCES/v2.6.1.tar.gz
 9658e87e492f1554eef9930c91fd70f3  iminuit/2.6.1/rpmbuild/SOURCES/8de7772cc72daca8e947b79b83fea46214931604.zip
 9b9001293158229356882b777b610700  iminuit/2.6.1/rpmbuild/SOURCES/907554c8a1b8a19cc4177afe1ece0f2fef0b9f79.zip
 b9cb31b54aff7b849718da4f2230167c  clhep/2.4.4.2/rpmbuild/SOURCES/clhep-2.4.4.2.tgz
+50ec7d4110c8e821f3b3d50de9614eab  MG5_aMC/2.9.4/rpmbuild/SOURCES/MG5_aMC_v2.9.4.tar.gz
+32c122d90736177b04ea1819e677865d  whizard/3.0.1/rpmbuild/SOURCES/whizard-3.0.1.tar.gz
