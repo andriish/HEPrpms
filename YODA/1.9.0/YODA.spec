@@ -114,6 +114,7 @@ export PYTHON_VERSION=%{py3_ver}
 export CXXFLAGS="%{optflags} -Wformat -Wno-error -g"
 autoreconf -fi
 %configure  --disable-root
+mkdir -p %{buildroot}/usr/%_lib/python3.8/site-packages/
 %make_build %{?_smp_mflags}
 %endif
 
