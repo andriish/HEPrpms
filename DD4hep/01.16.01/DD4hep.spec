@@ -24,7 +24,7 @@ BuildRequires: biber
 %if 0%{?suse_version}
 Requires:         root6 root6-libs libHepMC4 python  
 BuildRequires:    root6 root6-libs root6-devel python3-root6
-BuildRequires:    geant4-devel ==   10.07.p01
+BuildRequires:    geant4-devel >=   10.07.p01
 BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel libboost_filesystem1_76_0 libboost_filesystem1_76_0-devel  libboost_system1_76_0 libboost_system1_76_0-devel tbb-devel libexpat-devel libxerces-c-devel
 %endif
 
@@ -77,11 +77,11 @@ This package provides the Python 3 bindings for %{name}
 %build
 #TBB should be fixed
 %if  %{?rhel}%{!?rhel:0} == 8
-%cmake  -DBUILD_TESTING:BOOL=OFF -H. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=OFF -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
+%cmake  -DBUILD_TESTING:BOOL=OFF  -H. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=OFF -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
 make %{?_smp_mflags}
 %endif
 %if %{?fedora}%{!?fedora:0}
-%cmake  -DBUILD_TESTING:BOOL=OFF -S. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
+%cmake  -DBUILD_TESTING:BOOL=OFF -DCMAKE_SKIP_RPATH=ON -S. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
 make %{?_smp_mflags}
 %endif 
 %if 0%{?suse_version}
