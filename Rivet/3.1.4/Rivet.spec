@@ -123,6 +123,7 @@ find %{buildroot}/%{_libdir}/ -name ".la" -delete
 %{_bindir}/*
 %_libdir/pkgconfig/*
 %_libdir/*.*so*
+%_libdir/*.*la*
 %_libdir/python*/site-packages/*
 %_libdir/Rivet/*
 %{_sysconfdir}/bash_completion.d/*
