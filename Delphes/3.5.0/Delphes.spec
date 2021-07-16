@@ -1,13 +1,12 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 Name:       Delphes
 Version:    3.5.0
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Delphes is a C++ framework, performing a fast multipurpose detector response simulation. 
 
 License:    GPLv3
 URL:        https://cp3.irmp.ucl.ac.be/projects/delphes
 Source0:    http://github.com/delphes/delphes/archive/%{version}.tar.gz
-#Patch0:         patch-Delphes-0.txt
 
 #The ROOT cmake file used by this project requires cmake 3.4.3
 BuildRequires:    cmake >= 3.4.3
@@ -63,10 +62,10 @@ This package provides HepMC manuals and examples.
 
 %prep
 %setup -q -n delphes-%{version}
-#%patch0 -p1
+
 
 %build
-%cmake 
+%cmake -DSET_RPATH:BOOL=OFF
 %cmake_build
 
 %install
