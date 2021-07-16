@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-EvtGen:2.0.0
+Rivet:3.1.4
+#EvtGen:2.0.0
 #geant4:10.07.p02
 #qcdloop:2.0.8
 #fastjet:3.4.0
