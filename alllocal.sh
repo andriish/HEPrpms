@@ -4,7 +4,9 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-fastjet:3.4.0
+geant4:10.07.p02
+#qcdloop:2.0.8
+#fastjet:3.4.0
 #python-uproot4:4.0.11
 #Delphes:3.5.0
 #YODA:1.9.0
