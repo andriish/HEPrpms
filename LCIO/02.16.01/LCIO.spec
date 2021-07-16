@@ -81,7 +81,7 @@ sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
 %cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON -DCMAKE_CXX_STANDARD=17
 %else
 %cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON 
-%endifif
+%endif
 
 %cmake_build
 %endif
