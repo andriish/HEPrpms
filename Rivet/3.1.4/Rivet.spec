@@ -121,7 +121,7 @@ make %{?_smp_mflags}
 %files 
 %{_bindir}/*
 %_libdir/pkgconfig/*
-%_libdir/*.*
+%_libdir/*.*so*
 %_libdir/python*/site-packages/*
 %_libdir/Rivet/*
 %{_sysconfdir}/bash_completion.d/*
