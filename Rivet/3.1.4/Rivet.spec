@@ -117,7 +117,7 @@ make %{?_smp_mflags}
 
 %install
 %make_install 
-
+find %{buildroot}/%{_libdir}/ -name ".la" -delete
 
 %files 
 %{_bindir}/*
