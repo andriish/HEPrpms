@@ -6,7 +6,7 @@
 Summary:  recola - Recola is a Fortran95 computer program for the automated generation and numerical computation of EW and QCD amplitudes in the Standard Model at next-to-leading order. 
 Name: recola2
 Version: 2.2.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 Source0: https://www.hepforge.org/archive/recola/recola2-%{version}.tar.gz
@@ -52,7 +52,7 @@ This package provides the Python 3 bindings for %{name}.
 %prep 
 %setup -q 
 %setup -q -T -D -a 1
-sed -i 's|3.4 3.5 3.6 3.8| 3.8 3.6 3.5 3.4 |g' src/CMakeLists.txt
+sed -i 's|3.4 3.5 3.6 3.8| 3.10 3.9 3.8 3.6 3.5 3.4 |g' src/CMakeLists.txt
 sed -i 's|lib/python|lib64/python|g' src/CMakeLists.txt
 
 
@@ -61,36 +61,20 @@ sed -i 's|lib/python|lib64/python|g' src/CMakeLists.txt
 cd SM_2.2.3
 
 
-
-%if %{?rhel}%{!?rhel:0} == 7
-mkdir -p build
-%cmake3 -Bbuild   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/
-make -C build
-%endif
-
-
 %if  %{?fedora}%{!?fedora:0}||%{?rhel}%{!?rhel:0} >= 8
-%cmake  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/
+%cmake -DCMAKE_SKIP_RPATH=ON  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/
 %cmake_build 
 %endif
 
 
 %if 0%{?suse_version}
-%cmake    -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/
+%cmake  -DCMAKE_SKIP_RPATH=ON  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/
 %cmake_build
 cd ..
 %endif
 
 cd ..
 pwd
-%if %{?rhel}%{!?rhel:0} == 7
-find $(pwd)/SM_2.2.3 
-%cmake3 \
-     -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  \
-     -Dcollier_DIR=/usr/share/cmake/  -Dwith_python3=ON \
-     -Dmodelfile_path=$(pwd)/SM_2.2.3 
-%cmake3_build
-%endif
 
 %if  %{?fedora}%{!?fedora:0}||%{?rhel}%{!?rhel:0} >= 8
 find $(pwd)/SM_2.2.3 
