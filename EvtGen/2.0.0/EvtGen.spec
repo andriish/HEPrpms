@@ -100,7 +100,7 @@ export LDFLAGS=" "
 export CMAKE_CXX_STANDARD=17
 %endif
 
-%cmake -H. -Bbuild\
+%cmake -H. -Bbuild -DCMAKE_SKIP_RPATH=ON \
  -DEVTGEN_PYTHIA:BOOL=ON \
  -DEVTGEN_PHOTOS:BOOL=ON \
  -DEVTGEN_TAUOLA:BOOL=ON \
@@ -115,7 +115,7 @@ export CXXFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export CFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export LDFLAGS=" "
 export CMAKE_CXX_STANDARD=17
-%cmake \
+%cmake  -DCMAKE_SKIP_RPATH=ON \
  -DEVTGEN_PYTHIA:BOOL=ON \
  -DEVTGEN_PHOTOS:BOOL=ON \
  -DEVTGEN_TAUOLA:BOOL=ON \
