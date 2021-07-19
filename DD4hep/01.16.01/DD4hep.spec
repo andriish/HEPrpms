@@ -1,6 +1,6 @@
 Name:           DD4hep
 Version:        01.16.01
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        DD4hep (Detector Description for High Energy Physics)
 Group:          Development/Tools
 License:        Custom
@@ -8,7 +8,7 @@ URL:            https://dd4hep.cern.ch
 Source0:        https://github.com/AIDASoft/DD4hep/archive/v01-16-01.tar.gz
 Patch0:         patch-DD4hep-0.txt
 
-Requires: geant4 LCIO tbb PTL zlib-devel
+Requires: geant4 LCIO tbb PTL zlib-devel  clhep xerces-c  expat 
 BuildRequires: cmake >= 3.4.3 
 BuildRequires: gcc-c++  LCIO LCIO-devel xerces-c doxygen ImageMagick cups-filters clhep clhep-devel  PTL-devel zlib-devel
 
