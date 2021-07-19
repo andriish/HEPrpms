@@ -6,7 +6,7 @@
 Summary:  recola - Recola is a Fortran95 computer program for the automated generation and numerical computation of EW and QCD amplitudes in the Standard Model at next-to-leading order. 
 Name: recola2
 Version: 2.2.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 Source0: https://www.hepforge.org/archive/recola/recola2-%{version}.tar.gz
@@ -20,6 +20,9 @@ Source1: https://www.hepforge.org/archive/recola/SM_2.2.3.tar.gz
 
 Requires: collier
 %if 0%{?rhel} || 0%{?fedora}
+%if  %{?fedora}%{!?fedora:0} >= 35
+BuildRequires: chrpath
+%endif
 BuildRequires: collier gcc-gfortran gcc-c++ 
 BuildRequires:	python%{python3_pkgversion}-devel
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
@@ -100,18 +103,16 @@ ls $(pwd)/SM_2.2.3
 
 %install
 
-%if %{?rhel}%{!?rhel:0} == 7
-cd SM_2.2.3
-%make_install -C build
-cd ..
-%cmake3_install
-%endif
-
 %if  %{?fedora}%{!?fedora:0}||%{?rhel}%{!?rhel:0} >= 8
 cd SM_2.2.3
 %cmake_install
 cd ..
 %cmake_install
+
+%if  %{?fedora}%{!?fedora:0} >= 35
+chrpath --delete $RPM_BUILD_ROOT%{_prefix}/%_lib/librecola.so
+chrpath --delete $RPM_BUILD_ROOT%{_prefix}/lib*/python*/site-packages/pyrecola.so
+%endif
 %endif
 
 %if 0%{?suse_version}
