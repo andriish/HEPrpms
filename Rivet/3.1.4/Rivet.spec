@@ -8,7 +8,7 @@
 
 Name:           Rivet
 Version:        3.1.4
-Release:        1006%{?dist}
+Release:        1007%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -117,13 +117,15 @@ make %{?_smp_mflags}
 
 %install
 %make_install 
-find %{buildroot}/%{_libdir}/ -name ".la" -delete
+find %{buildroot}/%{_libdir}/ -name "*.la" -delete
+rm -fr %{buildroot}/%_libdir/python*/site-packages/__pycache__  
+rm -fr %{buildroot}/%_libdir/python*/site-packages/easy-install.pth
+rm -fr %{buildroot}/%_libdir/python*/site-packages/site.py
 
 %files 
 %{_bindir}/*
 %_libdir/pkgconfig/*
 %_libdir/*.*so*
-%_libdir/*.*la*
 %_libdir/python*/site-packages/*
 %_libdir/Rivet/*
 %{_sysconfdir}/bash_completion.d/*
