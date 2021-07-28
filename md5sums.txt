@@ -93,3 +93,4 @@ bcaeb949cf0804679afb97b9f37e0593  MG5_aMC/3.1.1/rpmbuild/SOURCES/MG5_aMC_v3.1.1.
 79491239aeb4c98916e0842d8ac7f13b  qcdloop/2.0.8/rpmbuild/SOURCES/2.0.8.tar.gz
 69879b19006fb6dc7d0b98d01c5cd115  fastjet/3.4.0/rpmbuild/SOURCES/fastjet-3.4.0.tar.gz
 c51e7a7364c35a718f95c76dff62c122  geant4/10.07.p02/rpmbuild/SOURCES/geant4.10.07.p02.tar.gz
+397da52e095aed823bcc3acb45e478fa  DD4hep/01.17.00/rpmbuild/SOURCES/v01-17-00.tar.gz
