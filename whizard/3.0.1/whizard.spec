@@ -2,7 +2,7 @@
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.0.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
@@ -25,9 +25,11 @@ BuildRequires:  hevea
 
 Requires: LoopTools
 BuildRequires:  LoopTools
-
 BuildRequires: python3-lhapdf gcc-gfortran gcc-c++ 
 
+%if %{?fedora}%{!?fedora:0} >=34
+BuildRequires: chrpath
+%endif
 
 %if %{?rhel}%{!?rhel:0} || %{?fedora}%{!?fedora:0} <= 31
 %global _use_internal_dependency_generator 0
@@ -36,7 +38,6 @@ BuildRequires: python3-lhapdf gcc-gfortran gcc-c++
 %else
 %global _use_internal_dependency_generator 1
 %endif
-
 %endif
 
 
@@ -96,13 +97,6 @@ export FCLAGS="%{optflags} -Wno-error "
     --enable-pythia8    --with-pythia8=/usr \
     --enable-openloops  --with-openloops=/usr/%_lib/openloops  \
     --enable-looptools  --with-looptools=/usr  --with-mpi-lib=openmpi
-    
-#cat   src/system/system_dependencies.f90
-#sed -i 's|       \&$||' src/system/system_dependencies.f90
-
-#sed -i 's|\&\&|\&|g' src/system/system_dependencies.f90
-#cat   src/system/system_dependencies.f90
-
 
 ## cteq6l1, CT10
 %make_build
@@ -129,13 +123,6 @@ export FCLAGS="%{optflags} -Wno-error "
     --enable-pythia8    --with-pythia8=/usr \
     --enable-openloops  --with-openloops=/usr/%_lib/openloops  \
     --enable-looptools  --with-looptools=/usr  --with-mpi-lib=openmpi
-    
-#cat   src/system/system_dependencies.f90
-#sed -i 's|       \&$||' src/system/system_dependencies.f90
-
-#sed -i 's|\&\&|\&|g' src/system/system_dependencies.f90
-#cat   src/system/system_dependencies.f90
-
 
 ## cteq6l1, CT10
 %make_build
@@ -143,9 +130,14 @@ export FCLAGS="%{optflags} -Wno-error "
 
 %install 
 %make_install
+%if %{?fedora}%{!?fedora:0} >=34
+chrpath --delete $RPM_BUILD_ROOT%{_bindir}/whizard
+chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
+%endif
+
 %files
 %defattr(-,root,root)
-/usr/bin/*
+%{_bindir}/*
 /usr/%_lib/*
 /usr/share/*
 /usr/lib/mod/*
@@ -158,6 +150,8 @@ rm -rf %{buildroot}
 ldconfig 
 
 %changelog
+* Wed Jul 28 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+ - Version 3.0.1 and using chrpath
 * Wed May 26 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
  - Version 3.0.0
 * Thu Nov 23 2017 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
