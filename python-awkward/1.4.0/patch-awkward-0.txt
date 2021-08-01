@@ -1,0 +1,60 @@
+diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
+--- ORIG/CMakeLists.txt	2021-07-02 18:41:02.000000000 +0200
++++ PATCHED/CMakeLists.txt	2021-08-01 18:37:10.443454989 +0200
+@@ -16,6 +16,11 @@
+ message(STATUS "CMake version ${CMAKE_VERSION}")
+ message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+ 
++option(AWKWARD_USE_INTERNAL_RAPIDJSON "Use internal rapidjson" OFF)
++option(AWKWARD_USE_INTERNAL_DLPACK    "Use internal dlpack" OFF)
++option(AWKWARD_USE_INTERNAL_PYBIND11  "Use internal pybind11" OFF)
++
++
+ # Defaults for properties in this directory (and below)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(CMAKE_CXX_EXTENSIONS OFF)
+@@ -41,7 +46,16 @@
+ target_compile_features(awkward-parent INTERFACE cxx_std_11)
+ 
+ # C++ dependencies (header-only): RapidJSON and dlpack
+-target_include_directories(awkward-parent INTERFACE rapidjson/include dlpack/include)
++if (AWKWARD_USE_INTERNAL_RAPIDJSON)
++  target_include_directories(awkward-parent INTERFACE rapidjson/include)
++else()
++  MESSAGE(WARNING "NOT IMPLEMENTED")
++endif()
++if (AWKWARD_USE_INTERNAL_DLPACK)
++  target_include_directories(awkward-parent INTERFACE dlpack/include)
++else()
++  MESSAGE(WARNING "NOT IMPLEMENTED")
++endif()
+ 
+ # First tier: cpu-kernels (object files, static library, and dynamic library).
+ add_library(awkward-cpu-kernels-objects OBJECT ${CPU_KERNEL_SOURCES})
+@@ -96,7 +110,11 @@
+ 
+ # Third tier: Python modules.
+ if(PYBUILD)
+-  add_subdirectory(pybind11)
++  if (AWKWARD_USE_INTERNAL_PYBIND11)
++    add_subdirectory(pybind11)
++  else()
++    MESSAGE(WARNING "NOT IMPLEMENTED")
++  endif()
+ 
+   file(GLOB LAYOUT_SOURCES "src/python/*.cpp")
+   pybind11_add_module(_ext ${LAYOUT_SOURCES})
+diff -Naur ORIG/setup.py PATCHED/setup.py
+--- ORIG/setup.py	2021-07-02 18:41:02.000000003 +0200
++++ PATCHED/setup.py	2021-08-01 18:43:19.125044157 +0200
+@@ -103,6 +103,10 @@
+             "-DPYTHON_EXECUTABLE={0}".format(sys.executable),
+             "-DPYBUILD=ON",
+             "-DBUILD_TESTING=OFF",
++            "-DAWKWARD_USE_INTERNAL_PYBIND11=ON",
++            "-DAWKWARD_USE_INTERNAL_RAPIDJSON=ON",
++            "-DAWKWARD_USE_INTERNAL_DLPACK=ON",
++
+         ]
+         build_args = []
+ 
