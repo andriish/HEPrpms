@@ -28,6 +28,7 @@ BuildRequires: cmake make gcc-c++
 #BuildRequires: rapidjson-devel dlpack-devel pybind11-devel
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
+BuildRequires:  python3-pyyaml
 %endif
 %if 0%{?suse_version}
 #BuildRequires: rapidjson-devel dlpack-devel python-pybind11-common-devel
@@ -36,6 +37,7 @@ BuildRequires:  python-rpm-macros
 BuildRequires:  python3
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
+BuildRequires:  python3-pyyaml
 %endif
 
 %description -n python3-%{srcname} %_description
