@@ -4,7 +4,7 @@
 
 Name:           ThePEG
 Version:        2.2.2
-Release:        1002%{?dist}
+Release:        1003%{?dist}
 License:        GPLv3
 Url:            http://www.hepforge.org/archive/thepeg
 Source0:        https://thepeg.hepforge.org/downloads/%{name}-%{version}.tar.bz2
@@ -36,9 +36,6 @@ Requires:       Rivet-devel >= 3.1.0
 BuildRequires:  Rivet >= 3.1.0  
 BuildRequires:  Rivet-devel  >= 3.1.0
 
-%if %{?rhel}%{!?rhel:0} == 7
-BuildRequires: devtoolset-8-gcc-c++ devtoolset-8-gcc-gfortran devtoolset-8-gcc scl-utils
-%endif
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: gcc-c++ gcc-gfortran
 %endif
@@ -77,29 +74,20 @@ The library documentation is available on header files.
 
 %build
 
-%if %{?rhel}%{!?rhel:0} == 7
-cat <<DTS3_EOF_MACRO | scl enable devtoolset-8 --
-autoreconf --force --install --verbose .
-automake -a --force
-./configure  --prefix=/usr --libdir=/usr/%_lib --with-hepmc=%_prefix --with-rivet=%_prefix --with-fastjet=%_prefix  --with-lhapdf=/usr   --with-hepmcversion=3 CXXFLAGS=-std=c++11
-cat config.log
-make %{?_smp_mflags}
-DTS3_EOF_MACRO
-%endif
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 touch configure.ac
 autoreconf --force --install --verbose .
 automake -a --force
-%configure  --with-hepmc=%_prefix --with-rivet=%_prefix --with-fastjet=%_prefix  --with-lhapdf=/usr   --with-hepmcversion=3
+%configure  --disable-rpath  --with-hepmc=%_prefix --with-rivet=%_prefix --with-fastjet=%_prefix  --with-lhapdf=/usr   --with-hepmcversion=3
 make %{?_smp_mflags}
 %endif
 %if 0%{?suse_version}
 touch configure.ac
 autoreconf --force --install --verbose .
 automake -a --force
-%configure  --with-hepmc=%_prefix --with-rivet=%_prefix --with-fastjet=%_prefix  --with-lhapdf=/usr   --with-hepmcversion=3
+%configure  --disable-rpath  --with-hepmc=%_prefix --with-rivet=%_prefix --with-fastjet=%_prefix  --with-lhapdf=/usr   --with-hepmcversion=3
 make %{?_smp_mflags}
 %endif
 
@@ -117,6 +105,8 @@ make %{?_smp_mflags}
 %_includedir/ThePEG
 
 %changelog
+* Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+  - RPATH
 * Fri Feb 19 2021 Andrii Verbytskyi 2.2.2
 + Bump to 2.2.2
 * Thu May 26 2016 Andrii Verbytskyi 2.0.2

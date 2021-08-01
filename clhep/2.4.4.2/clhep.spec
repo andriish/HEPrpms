@@ -1,7 +1,7 @@
 Summary:       Class library for High Energy Physics
 Name:          clhep
 Version:       2.4.4.2
-Release:       1%{?dist}
+Release:       2%{?dist}
 License:       distributable
 URL:           http://proj-clhep.web.cern.ch/proj-clhep/
 Source:        https://proj-clhep.web.cern.ch/proj-clhep/dist1/clhep-%{version}.tgz
@@ -30,7 +30,7 @@ mkdir -p build
 cd build 
 %cmake  ../
 %if %{?fedora}%{!?fedora:0} 
-make -C x86_64-redhat-linux-gnu %{?_smp_mflags} 
+%cmake_build %{?_smp_mflags} 
 %else
 make %{?_smp_mflags} 
 %endif
@@ -45,7 +45,7 @@ make
 %if 0%{?rhel} || 0%{?fedora}
 cd build 
 %if %{?fedora}%{!?fedora:0} 
-%make_install -C x86_64-redhat-linux-gnu 
+%cmake_install 
 %else
 %make_install 
 %endif

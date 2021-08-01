@@ -1,6 +1,6 @@
 Name:           TheP8I
 Version:        2.0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPL
 Url:            https://gitlab.cern.ch/TheP8I/TheP8I
 Source0:        https://gitlab.cern.ch/TheP8I/TheP8I/-/archive/2.0.1/%{name}-2.0.1.tar.gz
@@ -27,7 +27,7 @@ Lund hadronisation for Herwig. Part of earlier ThePEG codes.
 
 
 %build
-%configure
+%configure --disable-rpath 
 make %{?_smp_mflags}
 
 %install
@@ -39,6 +39,8 @@ make %{?_smp_mflags}
 %_datadir/*
 
 %changelog
+* Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+  - RPATH
 * Thu Mar 12 2020 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 2.0.0
 + Update to 2.0.0
 
