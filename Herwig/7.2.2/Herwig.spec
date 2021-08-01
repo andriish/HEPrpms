@@ -8,7 +8,7 @@
 
 Name:           Herwig
 Version:        7.2.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 
 Summary:        Herwig is a multi-purpose particle physics event generator.
 License:        GPLv3
@@ -113,7 +113,7 @@ export LDFLAGS='-Wl,-z,lazy'
 FCFLAGS="-fallow-argument-mismatch"
 FFLAGS="-fallow-argument-mismatch"
 %endif
-%configure        --infodir=/usr/share/info  --with-evtgen=%_prefix --with-madgraph=%_prefix  --with-openloops=%_prefix/%_lib/openloops --with-pythia=%_prefix --with-evtgen=%_prefix --with-thepeg=%_prefix --with-gosam=%_prefix --with-gosam-contrib=%_libdir  --with-njet=%_prefix  --libdir=/usr/%_lib        --with-vbfnlo=/usr
+%configure  --disable-rpath      --infodir=/usr/share/info  --with-evtgen=%_prefix --with-madgraph=%_prefix  --with-openloops=%_prefix/%_lib/openloops --with-pythia=%_prefix --with-evtgen=%_prefix --with-thepeg=%_prefix --with-gosam=%_prefix --with-gosam-contrib=%_libdir  --with-njet=%_prefix  --libdir=/usr/%_lib        --with-vbfnlo=/usr
 make %{?_smp_mflags}
 %endif
 
@@ -126,7 +126,7 @@ automake -a --force
 export LDFLAGS='-Wl,-z,lazy'
 FCFLAGS="-fallow-argument-mismatch"
 FFLAGS="-fallow-argument-mismatch"
-%configure        --infodir=/usr/share/info  --with-evtgen=%_prefix --with-madgraph=%_prefix  --with-openloops=%_prefix/%_lib/openloops --with-pythia=%_prefix --with-evtgen=%_prefix --with-thepeg=%_prefix --with-gosam=%_prefix --with-gosam-contrib=%_libdir  --with-njet=%_prefix  --libdir=/usr/%_lib        --with-vbfnlo=/usr
+%configure  --disable-rpath      --infodir=/usr/share/info  --with-evtgen=%_prefix --with-madgraph=%_prefix  --with-openloops=%_prefix/%_lib/openloops --with-pythia=%_prefix --with-evtgen=%_prefix --with-thepeg=%_prefix --with-gosam=%_prefix --with-gosam-contrib=%_libdir  --with-njet=%_prefix  --libdir=/usr/%_lib        --with-vbfnlo=/usr
 make %{?_smp_mflags}
 %endif
 
@@ -149,6 +149,8 @@ sed -i "s|${RPM_BUILD_ROOT}||g" $RPM_BUILD_ROOT/%{_prefix}/share/Herwig/defaults
 %_libdir/Herwig/*.la
 
 %changelog
+* Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+  - RPATH
 * Thu Feb 18 2021 Andrii Verbytskyi 7.2.2
 + Spec for 7.2.2
 * Sat Jan 09 2021 Andrii Verbytskyi 7.2.1

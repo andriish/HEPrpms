@@ -5,7 +5,7 @@
 
 Name:           blackhat
 Version:        0.9.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        Unknown
 Url:            http://www.blackhat.hepforge.org
 Source0:        http://www.hepforge.org/archive/blackhat/%{name}-%{version}.tar.gz
@@ -69,7 +69,7 @@ the %{name} library
 
 %build
 autoreconf --force --install --verbose 
-%configure --enable-dependency-tracking 
+%configure --enable-dependency-tracking   --disable-rpath
 
 make %{?_smp_mflags}
 
@@ -108,6 +108,8 @@ make %{?_smp_mflags}
 
 
 %changelog
+* Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+  - RPATH
 * Tue Apr 20 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 + Preparation for release
 * Fri Nov 29 2019 Andrii Verbytskyi 0.9.9
