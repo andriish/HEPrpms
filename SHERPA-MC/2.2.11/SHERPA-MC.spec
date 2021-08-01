@@ -272,6 +272,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
 echo %{_libdir}/%{name} >   %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 
 rm -rf $RPM_BUILD_ROOT/usr/share/info/dir
+export QA_RPATHS=3
 
 %post -p /sbin/ldconfig    
 %postun -p /sbin/ldconfig

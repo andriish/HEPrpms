@@ -35,6 +35,7 @@ make
 %install
 %make_install 
 find $RPM_BUILD_ROOT -type f -name '*.la' -exec rm -f {} \;
+export QA_RPATHS=3
 
 %files 
 %defattr(-,root,root)
