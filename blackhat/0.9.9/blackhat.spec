@@ -75,7 +75,7 @@ make %{?_smp_mflags}
 
 %install
 %make_install
-
+export QA_RPATHS=3
 
 
 %files -n %{libname}
