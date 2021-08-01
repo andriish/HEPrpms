@@ -49,6 +49,6 @@ install -m 755 libpythia6_dummy.a %{buildroot}%{_libdir}
 %{_libdir}/*
 
 %changelog
-* tue Jul 15 2021 Andrii Verbytskyi
+* Tue Jul 15 2021 Andrii Verbytskyi
 - So far use github for source.
 
