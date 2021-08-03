@@ -71,6 +71,9 @@ sed -i 's|PTL::PTL|PTL::ptl-shared|g' cmake/Modules/G4OptionalComponents.cmake
 
 %build
 %if %{?rhel}%{!?rhel:0} == 8
+sed -i 's|python|python3|g' environments/g4py/CMakeLists.txt
+sed -i 's|Boost::python|Boost::python3|g' environments/g4py/G4PythonHelpers.cmake
+
 %cmake   -B build -H. \
 	-DGEANT4_INSTALL_DATA:BOOL=ON \
 	-DGEANT4_USE_SYSTEM_CLHEP:BOOL=ON \
@@ -82,8 +85,8 @@ sed -i 's|PTL::PTL|PTL::ptl-shared|g' cmake/Modules/G4OptionalComponents.cmake
 	-DGEANT4_BUILD_MULTITHREADED=ON -DGEANT4_USE_PYTHON:BOOL=ON  -DGEANT4_BUILD_TLS_MODEL=global-dynamic
 make -C build %{?_smp_mflags}
 %else
-sed -i 's|python|python3|g' environments/g4py/CMakeLists.txt
-sed -i 's|Boost::python|Boost::python3|g' environments/g4py/G4PythonHelpers.cmake
+sed -i 's|python|python\$\{PYTHON_VERSION_MAJOR\}\$\{PYTHON_VERSION_MINOR\}|g' environments/g4py/CMakeLists.txt
+sed -i 's|Boost::python|Boost::python\$\{PYTHON_VERSION_MAJOR\}\$\{PYTHON_VERSION_MINOR\}|g' environments/g4py/G4PythonHelpers.cmake
 %cmake -DGEANT4_INSTALL_DATA:BOOL=ON \
 	-DGEANT4_USE_SYSTEM_CLHEP:BOOL=ON \
 	-DGEANT4_USE_SYSTEM_EXPAT:BOOL=ON \
