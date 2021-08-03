@@ -68,8 +68,8 @@ This package provides HepMC manuals and examples.
 %prep
 %setup -q -n geant4.10.07.p02
 sed -i 's|PTL::PTL|PTL::ptl-shared|g' cmake/Modules/G4OptionalComponents.cmake
-sed -i 's|python|python\$\{PYTHON_VERSION_MAJOR\}\$\{PYTHON_VERSION_MINOR\}|g' geant4.10.07.p02/environments/g4py/CMakeLists.txt
-sed -i 's|Boost::python|Boost::python\$\{PYTHON_VERSION_MAJOR\}\$\{PYTHON_VERSION_MINOR\}|g' geant4.10.07.p02/environments/g4py/G4PythonHelpers.cmake
+sed -i 's|python|python\$\{PYTHON_VERSION_MAJOR\}\$\{PYTHON_VERSION_MINOR\}|g' environments/g4py/CMakeLists.txt
+sed -i 's|Boost::python|Boost::python\$\{PYTHON_VERSION_MAJOR\}\$\{PYTHON_VERSION_MINOR\}|g' environments/g4py/G4PythonHelpers.cmake
 
 %build
 %cmake -DGEANT4_INSTALL_DATA:BOOL=ON \
