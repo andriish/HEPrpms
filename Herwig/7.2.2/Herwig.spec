@@ -135,6 +135,8 @@ make %{?_smp_mflags}
 %make_install 
 sed -i "s|${RPM_BUILD_ROOT}||g" $RPM_BUILD_ROOT/%{_prefix}/share/Herwig/defaults/PDF.in
 # contains Rivet /usr/share/Herwig/snippets/DipoleMerging.in
+export QA_RPATHS=3
+
 %files -n %{libname}
 %_bindir/*
 %_datadir/Herwig
