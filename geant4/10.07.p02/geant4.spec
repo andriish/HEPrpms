@@ -72,6 +72,18 @@ sed -i 's|python|python\$\{PYTHON_VERSION_MAJOR\}\$\{PYTHON_VERSION_MINOR\}|g' e
 sed -i 's|Boost::python|Boost::python\$\{PYTHON_VERSION_MAJOR\}\$\{PYTHON_VERSION_MINOR\}|g' environments/g4py/G4PythonHelpers.cmake
 
 %build
+%if %{?rhel}%{!?rhel:0} == 8
+%cmake   -B build -H. \
+	-DGEANT4_INSTALL_DATA:BOOL=ON \
+	-DGEANT4_USE_SYSTEM_CLHEP:BOOL=ON \
+	-DGEANT4_USE_SYSTEM_EXPAT:BOOL=ON \
+	-DGEANT4_USE_SYSTEM_ZLIB:BOOL=ON \
+	-DGEANT4_USE_SYSTEM_PTL:BOOL=ON \
+	-DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
+	-DGEANT4_USE_GDML:BOOL=ON \
+	-DGEANT4_BUILD_MULTITHREADED=ON -DGEANT4_USE_PYTHON:BOOL=ON  -DGEANT4_BUILD_TLS_MODEL=global-dynamic
+make -C build %{?_smp_mflags}
+%else
 %cmake -DGEANT4_INSTALL_DATA:BOOL=ON \
 	-DGEANT4_USE_SYSTEM_CLHEP:BOOL=ON \
 	-DGEANT4_USE_SYSTEM_EXPAT:BOOL=ON \
@@ -81,10 +93,15 @@ sed -i 's|Boost::python|Boost::python\$\{PYTHON_VERSION_MAJOR\}\$\{PYTHON_VERSIO
 	-DGEANT4_USE_GDML:BOOL=ON \
 	-DGEANT4_BUILD_MULTITHREADED=ON -DGEANT4_USE_PYTHON:BOOL=ON  -DGEANT4_BUILD_TLS_MODEL=global-dynamic
 %cmake_build
+%endif
 
 
 %install
+%if %{?rhel}%{!?rhel:0} == 8
+make install -C build DESTDIR=%{buildroot}
+%else
 %cmake_install
+%endif
 
 
 %ldconfig_scriptlets
