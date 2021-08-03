@@ -71,6 +71,9 @@ sed -i 's|PTL::PTL|PTL::ptl-shared|g' cmake/Modules/G4OptionalComponents.cmake
 
 %build
 %if %{?rhel}%{!?rhel:0} == 8
+sed -i 's|python|python3|g' environments/g4py/CMakeLists.txt
+sed -i 's|Boost::python|Boost::python3|g' environments/g4py/G4PythonHelpers.cmake
+
 %cmake   -B build -H. \
 	-DGEANT4_INSTALL_DATA:BOOL=ON \
 	-DGEANT4_USE_SYSTEM_CLHEP:BOOL=ON \
