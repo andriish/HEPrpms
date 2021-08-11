@@ -1,6 +1,6 @@
 Name:       pythia6
 Version:    6.4.28
-Release:    6%{?dist}
+Release:    7%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy Physics.
 
 License:    Unknown
