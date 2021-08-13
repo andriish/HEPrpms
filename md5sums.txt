@@ -97,3 +97,4 @@ c51e7a7364c35a718f95c76dff62c122  geant4/10.07.p02/rpmbuild/SOURCES/geant4.10.07
 114337d34537be5a4c41711d4ac141ee  LoopTools/2.16/rpmbuild/SOURCES/LoopTools-2.16.tar.gz
 b9404645d735144ea29e090c086b99cf  cuba/4.2.1/rpmbuild/SOURCES/Cuba-4.2.1.tar.gz
 55c97317c5f00270c5c49af156aae28c  PTL/2.0.0/rpmbuild/SOURCES/4a03063fbaa7f73df1f6dc065e1705a77bb5f6e7.zip
+1485a41401ed43321b9e9afdebbacb60  PTL/2.0.0/rpmbuild/SOURCES/v2.0.0.tar.gz
