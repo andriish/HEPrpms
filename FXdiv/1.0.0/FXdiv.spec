@@ -2,7 +2,7 @@
 %define git_version b742d1143724d646cd0f914646f1240eacf5bd73
 Name:           FXdiv
 Version:        1.0.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Library for C++
 
 License:        BSD
@@ -19,7 +19,7 @@ Some lib
 
 %package        devel
 Summary:        Development files for %{name}
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+
 
 
 %description    devel
@@ -31,7 +31,7 @@ This package contains the header file for using %{name}.
 
 
 %build
-%cmake  -DFXDIV_BUILD_TESTS=OFF  -DFXDIV_BUILD_BENCHMARKS=OFF
+%cmake  -DFXDIV_BUILD_TESTS=OFF  -DFXDIV_BUILD_BENCHMARKS=OFF 
 %cmake_build
 
 %install

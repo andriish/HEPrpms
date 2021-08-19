@@ -104,3 +104,6 @@ f7df328be4a32117adf79791f0439823  FP16/1.0.0/rpmbuild/SOURCES/febbb1c163726b5db2
 d40b99a0176e7d57f3358285d8df8fd3  onnxoptimizer/0.2.6/rpmbuild/SOURCES/v0.2.6.tar.gz
 e55059543f0d3e4e837f342fde8425c0  FP16/1.0.0/rpmbuild/SOURCES/master.zip
 d4c0b1051c4dba173bb92716dea0af4e  FXdiv/1.0.0/rpmbuild/SOURCES/b742d1143724d646cd0f914646f1240eacf5bd73.tar.gz
+6ecac259f0fd3be4eeb283575ef22cdc  pthreadpool/1.0.0/rpmbuild/SOURCES/d465747660ecf9ebbaddf8c3db37e4a13d0c9103.tar.gz
+d4c0b1051c4dba173bb92716dea0af4e  pthreadpool/1.0.0/rpmbuild/SOURCES/b742d1143724d646cd0f914646f1240eacf5bd73.tar.gz
+a5ed630e4871e2d9e3843762660cd875  psimd/1.0.0/rpmbuild/SOURCES/10b4ffc6ea9e2e11668f86969586f88bc82aaefa.tar.gz

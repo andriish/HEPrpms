@@ -4,6 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+psimd:1.0.0
+#pthreadpool:1.0.0
 #pythia6:6.4.28
 #FP16:1.0.0
 FXdiv:1.0.0
