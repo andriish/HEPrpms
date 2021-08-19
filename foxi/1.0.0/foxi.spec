@@ -1,5 +1,5 @@
 %undefine _debugsource_packages
-%define git_version 97fe555430a857581b9b826ecd955e4f0a3653f0
+%define git_version c278588e34e535f0bb8f00df3880d26928038cad
 Name:           foxi
 Version:        1.0.0
 Release:        1%{?dist}
@@ -19,7 +19,7 @@ Some lib
 
 %package        devel
 Summary:        Development files for %{name}
-
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 
 %description    devel
@@ -28,14 +28,23 @@ This package contains the header file for using %{name}.
 
 %prep
 %setup -q -n %{name}-%{git_version}
+sed -i 's@foxi_dummy SHARED foxi/onnxifi_dummy.c@foxi_dummy SHARED EXCLUDE_FROM_ALL foxi/onnxifi_dummy.c @g'  CMakeLists.txt
+sed -i 's@foxi_wrapper MODULE foxi/onnxifi_wrapper.c@foxi_wrapper MODULE EXCLUDE_FROM_ALL foxi/onnxifi_wrapper.c @g'  CMakeLists.txt
+sed -i 's@DESTINATION lib@DESTINATION lib64@g'  CMakeLists.txt
 
-
+    
+    
 %build
 %cmake   
 %cmake_build
+touch libfoxi_dummy.so
+touch libfoxi.so
 
 %install
 %cmake_install
+
+%files 
+%{_libdir}/*
 
 %files devel
 %{_includedir}/*
