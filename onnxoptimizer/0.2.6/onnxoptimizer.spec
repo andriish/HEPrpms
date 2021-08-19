@@ -1,6 +1,6 @@
 Name:           onnxoptimizer
 Version:        0.2.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Library for C++
 
 License:        MIT
@@ -39,13 +39,14 @@ sed -i '/add_library(onnx_optimizer \${onnx_opt_srcs})/a target_compile_definiti
 
 %install
 %cmake_install
-
+mkdir -p %{buildroot}/%{_includedir}/onnx/optimizer
+mv %{buildroot}/%{_includedir}/onnxoptimizer/*  %{buildroot}/%{_includedir}/onnx/optimizer
 
 %files 
 %{_libdir}/*
 
 %files devel
-%{_includedir}/*
+%{_includedir}/onnx/optimizer
 
 
 %changelog
