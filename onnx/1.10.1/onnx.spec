@@ -30,7 +30,8 @@ BuildRequires:  python3-rpm-macros
 Requires:       onnx == %version
 Requires:       onnx_proto == %version
 Requires:       onnxifi_dummy == %version
-Requires:       python3-numpy pybind11-devel python3-devel python3-setuptools
+Requires:       python3-numpy 
+BuildRequires:  pybind11-devel python3-devel python3-setuptools
 Requires:       python3-protobuf
 Requires:       python3-six
 Requires:       python3-typing_extensions 
