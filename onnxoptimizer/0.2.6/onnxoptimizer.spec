@@ -10,6 +10,7 @@ Source0:        https://github.com/onnx/optimizer/archive/refs/tags/v0.2.6.tar.g
 BuildRequires:  gcc onnx-devel onnx pybind11-devel onnx_proto protobuf protobuf-devel
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
+BuildRequires:  python3-devel
 Requires: onnx
 
 %description
