@@ -108,3 +108,4 @@ d4c0b1051c4dba173bb92716dea0af4e  FXdiv/1.0.0/rpmbuild/SOURCES/b742d1143724d646c
 d4c0b1051c4dba173bb92716dea0af4e  pthreadpool/1.0.0/rpmbuild/SOURCES/b742d1143724d646cd0f914646f1240eacf5bd73.tar.gz
 a5ed630e4871e2d9e3843762660cd875  psimd/1.0.0/rpmbuild/SOURCES/10b4ffc6ea9e2e11668f86969586f88bc82aaefa.tar.gz
 24ba22ea004ed8a6ea6a2dbc0fa2f519  cpuinfo/1.0.0/rpmbuild/SOURCES/0e6bde92b343c5fbcfe34ecd41abf9515d54b4a7.tar.gz
+bbda4ea262bb581adeef27421d76e924  foxi/1.0.0/rpmbuild/SOURCES/97fe555430a857581b9b826ecd955e4f0a3653f0.tar.gz
