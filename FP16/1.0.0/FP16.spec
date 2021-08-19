@@ -8,6 +8,7 @@ Summary:        Library for C++
 License:        BSD
 URL:            https://github.com/Maratyszcza/FP16
 Source0:        https://github.com/Maratyszcza/FP16/archive/%{git_version}.tar.gz
+#Source1:        https://github.com/WebAssembly/simd/archive/refs/heads/main.zip
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -27,9 +28,12 @@ This package contains the header file for using %{name}.
 
 %prep
 %setup -q -n %{name}-%{git_version}
+#%setup -T -D -a 1 -n %{name}-%{git_version}
+
 
 %build
-%cmake  -DFP16_BUILD_TESTS:BOOL=OFF -DFP16_BUILD_BENCHMARKS:BOOL=OFF
+sed -i 's@IF(NOT TARGET psimd)@IF(FALSE)@g' CMakeLists.txt
+%cmake  -DFP16_BUILD_TESTS:BOOL=OFF -DFP16_BUILD_BENCHMARKS:BOOL=OFF -DPSIMD_SOURCE_DIR=/tmp
 %cmake_build
 
 %install
