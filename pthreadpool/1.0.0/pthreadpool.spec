@@ -10,8 +10,8 @@ License:        BSD
 URL:            https://github.com/Maratyszcza/pthreadpool
 Source0:        https://github.com/Maratyszcza/pthreadpool/archive/%{git_version}.tar.gz
 
-BuildRequires:  gcc FXDiv-devel
-Requires: FXDiv-devel
+BuildRequires:  gcc FXdiv-devel
+Requires: FXdiv-devel
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 
