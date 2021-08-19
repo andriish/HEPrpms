@@ -18,7 +18,7 @@
 
 Name:           onnx
 Version:        1.10.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Open Neural Network eXchange
 License:        MIT
 URL:            https://onnx.ai/
@@ -34,7 +34,7 @@ Requires:       python3-numpy
 BuildRequires:  pybind11-devel python3-devel python3-setuptools
 Requires:       python3-protobuf
 Requires:       python3-six
-Requires:       python3-typing_extensions 
+Requires:       python3-typing-extensions 
 Provides:       python3-onnx-devel = %{version}-%{release}
 
 %description
@@ -45,9 +45,9 @@ community of partners.
 
 %package devel
 Summary:        Header files of onnx
-Requires:       libonnx == %version
-Requires:       libonnx_proto == %version
-Requires:       libonnxifi_dummy == %version
+Requires:       onnx == %version
+Requires:       onnx_proto == %version
+Requires:       onnxifi_dummy == %version
 
 %description  devel
 Header files of ONNX.
