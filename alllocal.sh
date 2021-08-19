@@ -5,7 +5,8 @@ export PATH=$PATH:$(pwd)
 set -x 
 declare -a BUILDLIST=(
 #pythia6:6.4.28
-boringssl:20200921
+onnx:1.10.1
+#boringssl:20200921
 #PTL:2.0.0
 #DD4hep:01.17.00
 #Rivet:3.1.4
