@@ -33,8 +33,8 @@ This package contains the header file for using %{name}.
 %cmake_build
 
 %install
-%make_install
-mkdir -p %{buildroot}/%{_libdir}/
+%cmake_install
+#mkdir -p %{buildroot}/%{_libdir}/
 #mv %{buildroot}/%{_prefix}/lib/* %{buildroot}/%{_libdir}/
 
 
