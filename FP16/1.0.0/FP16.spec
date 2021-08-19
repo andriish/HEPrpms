@@ -2,7 +2,7 @@
 %define git_version febbb1c163726b5db24bed55cc9dc42529068997
 Name:           FP16
 Version:        1.0.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Library for C++
 
 License:        BSD
@@ -20,7 +20,6 @@ Some lib
 
 %package        devel
 Summary:        Development files for %{name}
-Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 
 %description    devel
@@ -29,13 +28,11 @@ This package contains the header file for using %{name}.
 
 %prep
 %setup -q -n %{name}-%{git_version}
-#%setup -T -D -a 1 -n %{name}-%{git_version}
 
 
 %build
 sed -i '/PROJECT(FP16 C CXX)/a add_library(psimd INTERFACE)' CMakeLists.txt
 %cmake  -DFP16_BUILD_TESTS:BOOL=OFF -DFP16_BUILD_BENCHMARKS:BOOL=OFF 
-#-DPSIMD_SOURCE_DIR=$(pwd)/psimd-master
 %cmake_build
 
 %install
