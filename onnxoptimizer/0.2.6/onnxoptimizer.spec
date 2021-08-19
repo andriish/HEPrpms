@@ -41,7 +41,7 @@ sed -i '/add_library(onnx_optimizer \${onnx_opt_srcs})/a target_compile_definiti
 %install
 %cmake_install
 mkdir -p %{buildroot}/%{_includedir}/onnx/optimizer
-cp %{buildroot}/%{_includedir}/onnxoptimizer/*  %{buildroot}/%{_includedir}/onnx/optimizer
+cp -r %{buildroot}/%{_includedir}/onnxoptimizer/*  %{buildroot}/%{_includedir}/onnx/optimizer
 
 %files 
 %{_libdir}/*
