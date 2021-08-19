@@ -101,3 +101,4 @@ b9404645d735144ea29e090c086b99cf  cuba/4.2.1/rpmbuild/SOURCES/Cuba-4.2.1.tar.gz
 b8bd926335bbb6c7e205c2b52d4eb521  boringssl/20200921/rpmbuild/SOURCES/boringssl-20200921.tar.xz
 991e9ee90142e9101246a2fcb11d53cf  onnx/1.10.1/rpmbuild/SOURCES/v1.10.1.tar.gz
 f7df328be4a32117adf79791f0439823  FP16/1.0.0/rpmbuild/SOURCES/febbb1c163726b5db24bed55cc9dc42529068997.tar.gz
+d40b99a0176e7d57f3358285d8df8fd3  onnxoptimizer/0.2.6/rpmbuild/SOURCES/v0.2.6.tar.gz
