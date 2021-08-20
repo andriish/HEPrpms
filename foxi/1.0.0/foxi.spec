@@ -39,6 +39,8 @@ sed -i 's@DESTINATION lib@DESTINATION lib64@g'  CMakeLists.txt
 %cmake_build
 touch libfoxi_dummy.so
 touch libfoxi.so
+touch x86_64-redhat-linux-gnu/libfoxi.so
+touch x86_64-redhat-linux-gnu/libfoxi_dummy.so
 
 %install
 %cmake_install
