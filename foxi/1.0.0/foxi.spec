@@ -42,6 +42,8 @@ touch libfoxi.so
 
 %install
 %cmake_install
+rm -f %{buildroot}/%{_libdir}/libfoxi.so
+rm -f %{buildroot}/%{_libdir}/libfoxi_dummy.so
 
 %files 
 %{_libdir}/*
