@@ -12,7 +12,7 @@ Patch0:         patch-python-torch-0.txt
 
 BuildRequires: onnx-devel FXdiv-devel FP16-devel cpuinfo cpuinfo-devel pthreadpool pthreadpool-devel python3-onnx psimd-devel  foxi-devel foxi
 
-BuildRequires:  cmake
+BuildRequires:  cmake python3-devel
 BuildRequires:  eigen3-devel
 BuildRequires:  gcc-c++
 BuildRequires:  glog-devel
