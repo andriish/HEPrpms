@@ -18,7 +18,8 @@ BuildRequires:  gcc-c++
 BuildRequires:  glog-devel
 
 BuildRequires:  leveldb-devel
-#BuildRequires:  numa-devel
+BuildRequires:  numactl-devel
+BuildRequires:  numactl
 BuildRequires:  openblas-devel
 BuildRequires:  openssl-devel
 BuildRequires:  protobuf-c
