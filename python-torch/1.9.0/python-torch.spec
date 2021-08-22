@@ -11,6 +11,8 @@ Source0:        https://github.com/pytorch/pytorch/archive/v%{version}.tar.gz
 Patch0:         patch-python-torch-0.txt
 
 BuildRequires: onnx-devel FXdiv-devel FP16-devel cpuinfo cpuinfo-devel pthreadpool pthreadpool-devel python3-onnx psimd-devel  foxi-devel foxi
+BuildRequires: blas blas-devel  yaml-cpp-devel yaml-cpp-static yaml-cpp  python3-pyyaml lmdb lmdb-devel  sleef sleef-devel sleef-gnuabi fmt fmt-devel lapack-devel lapack
+BuildRequires: tbb-devel 
 
 BuildRequires:  cmake python3-devel  fmt fmt-devel protobuf-compiler protobuf-bom pybind11-devel lmdb lmdb-devel
 BuildRequires:  eigen3-devel
