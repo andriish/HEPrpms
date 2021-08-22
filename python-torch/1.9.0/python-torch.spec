@@ -8,7 +8,7 @@ License:        Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Zlib AN
 Group:          Development/Languages/Python
 URL:            https://pytorch.org
 Source0:        https://github.com/pytorch/pytorch/archive/v%{version}.tar.gz
-
+Patch0:         patch-python-torch-0.txt
 
 BuildRequires: onnx-devel FXdiv-devel FP16-devel cpuinfo cpuinfo-devel pthreadpool pthreadpool-devel python3-onnx psimd-devel  foxi-devel foxi
 
@@ -19,7 +19,6 @@ BuildRequires:  glog-devel
 
 BuildRequires:  leveldb-devel
 BuildRequires:  numa-devel
-BuildRequires:  ninja
 BuildRequires:  openblas-devel
 BuildRequires:  openssl-devel
 BuildRequires:  protobuf-c
@@ -79,15 +78,16 @@ Library which is used by %{name}
 
 %prep
 %setup -q  -D -n pytorch-%{version}
+%patch0 -p1
 
-cp /home/andriish/Projects/TF/PATCHED/CMakeLists.txt CMakeLists.txt
-cp /home/andriish/Projects/TF/PATCHED/cmake/Dependencies.cmake cmake/Dependencies.cmake
-cp /home/andriish/Projects/TF/PATCHED/cmake/ProtoBuf.cmake cmake/ProtoBuf.cmake
-cp /home/andriish/Projects/TF/PATCHED/cmake/public/protobuf.cmake cmake/public/protobuf.cmake
-cp /home/andriish/Projects/TF/PATCHED/caffe2/CMakeLists.txt caffe2/CMakeLists.txt
-cp /home/andriish/Projects/TF/PATCHED/c10/CMakeLists.txt c10/CMakeLists.txt
-cp /home/andriish/Projects/TF/PATCHED/modules/detectron/CMakeLists.txt modules/detectron/CMakeLists.txt
-cp /home/andriish/Projects/TF/PATCHED/modules/observers/CMakeLists.txt modules/observers/CMakeLists.txt
+#cp /home/andriish/Projects/TF/PATCHED/CMakeLists.txt CMakeLists.txt
+#cp /home/andriish/Projects/TF/PATCHED/cmake/Dependencies.cmake cmake/Dependencies.cmake
+#cp /home/andriish/Projects/TF/PATCHED/cmake/ProtoBuf.cmake cmake/ProtoBuf.cmake
+#cp /home/andriish/Projects/TF/PATCHED/cmake/public/protobuf.cmake cmake/public/protobuf.cmake
+#cp /home/andriish/Projects/TF/PATCHED/caffe2/CMakeLists.txt caffe2/CMakeLists.txt
+#cp /home/andriish/Projects/TF/PATCHED/c10/CMakeLists.txt c10/CMakeLists.txt
+#cp /home/andriish/Projects/TF/PATCHED/modules/detectron/CMakeLists.txt modules/detectron/CMakeLists.txt
+#cp /home/andriish/Projects/TF/PATCHED/modules/observers/CMakeLists.txt modules/observers/CMakeLists.txt
 
 %build
 #  export USE_CUDNN=ON \
@@ -183,9 +183,6 @@ export CFLAGS
 
 %files -n pytorch-converters
 %{_bindir}/*
-
-#files -n pytorch-examples
-#{_docdir}/{name}
 
 %files -n libtorch
 %{_libdir}/*.so*
