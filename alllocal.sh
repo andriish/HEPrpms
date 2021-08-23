@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-foxi:1.0.0
+fmt:7.0.3
+#foxi:1.0.0
 #cpuinfo:1.0.0
 #psimd:1.0.0
 #pthreadpool:1.0.0

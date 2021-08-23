@@ -112,3 +112,4 @@ bbda4ea262bb581adeef27421d76e924  foxi/1.0.0/rpmbuild/SOURCES/97fe555430a857581b
 49bea03997e493cb7a7b862128cf8b9f  foxi/1.0.0/rpmbuild/SOURCES/c278588e34e535f0bb8f00df3880d26928038cad.tar.gz
 49bea03997e493cb7a7b862128cf8b9f  foxi/1.0.0/rpmbuild/SOURCES/c278588e34e535f0bb8f00df3880d26928038cad.tar.gz
 5dea5ec5b05f04eb8bb701b8b178df63  python-torch/1.9.0/rpmbuild/SOURCES/v1.9.0.tar.gz
+57392b7ea09592a2b237a02950f35bb0  fmt/7.0.3/rpmbuild/SOURCES/7.0.3.tar.gz
