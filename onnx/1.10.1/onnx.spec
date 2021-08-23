@@ -88,12 +88,22 @@ rm -rf third_party
 %autopatch -p1
 
 %build
+
+%if %{?rhel}%{!?rhel:0} == 8
+sed -i 's@TensorProto::DataType_Name(static_cast<TensorProto_DataType>(type.elem_type()));@\"int32\";@g'  onnx/shape_inference/implementation.cc
+sed -i 's@cmake3@cmake@g' setup.py
+%endif
+
 %cmake -DONNX_USE_PROTOBUF_SHARED_LIBS:BOOL=ON -DONNX_WERROR:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON
 %cmake_build
+%if %{?fedora}%{!?fedora:0}
 %py3_build
+%endif
 
 %install
+#if %{?fedora}%{!?fedora:0}
 %py3_install
+#endif
 %cmake_install
 mv %{buildroot}/%{_prefix}/lib/libonnxifi.so %{buildroot}/%{_libdir}/libonnxifi.so
 
