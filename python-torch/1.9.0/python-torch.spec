@@ -2,7 +2,7 @@
 
 Name:           python-torch
 Version:        1.9.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Deep learning framework pytorch/Caffe2
 License:        Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Zlib AND BSL-1.0
 Group:          Development/Languages/Python
@@ -167,6 +167,8 @@ export CFLAGS
 %install
 %buildvars
 %cmake_install
+rm -f $RPM_BUILD_ROOT/%{_libdir}/libclog.a
+rm -f $RPM_BUILD_ROOT/%{_includedir}/clog*.h
 
 %files 
 %{python3_sitearch}/caffe2/
