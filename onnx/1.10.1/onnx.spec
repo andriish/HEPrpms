@@ -90,7 +90,7 @@ rm -rf third_party
 %build
 
 %if %{?rhel}%{!?rhel:0} == 8
-sed -i 's@TensorProto::DataType_Name(static_cast<TensorProto_DataType>(type.elem_type()));@\"int32\";@g'  onnx/shape_inference/implementation.cc
+#sed -i 's@TensorProto::DataType_Name(static_cast<TensorProto_DataType>(type.elem_type()));@\"int32\";@g'  onnx/shape_inference/implementation.cc
 sed -i 's@cmake3@cmake@g' setup.py
 %endif
 
