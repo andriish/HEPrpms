@@ -16,7 +16,7 @@ single-step forward/backwards.
 
 %if %{defined rhel}
 %bcond_without python2
-%bcond_without python3_other
+%bcond_with python3_other
 %endif
 
 %bcond_without tests
