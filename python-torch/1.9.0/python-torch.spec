@@ -35,6 +35,7 @@ Requires:       python3-leveldb
 Requires:       python3-numpy
 Requires:       python3-protobuf
 Requires:       python3-six
+Requires:       python3-dataclasses
 
 Provides:       python3-caffe2 = %version
 Provides:       python3-pytorch = %version
