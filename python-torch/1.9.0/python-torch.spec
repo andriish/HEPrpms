@@ -14,7 +14,7 @@ BuildRequires: onnx-devel FXdiv-devel FP16-devel cpuinfo cpuinfo-devel pthreadpo
 BuildRequires: blas blas-devel  yaml-cpp-devel yaml-cpp-static yaml-cpp  python3-pyyaml lmdb lmdb-devel  sleef sleef-devel sleef-gnuabi fmt fmt-devel lapack-devel lapack
 BuildRequires: tbb-devel 
 
-BuildRequires:  cmake python3-devel  fmt fmt-devel protobuf-compiler protobuf-bom pybind11-devel lmdb lmdb-devel     onnxoptimizer  onnx_proto onnx onnx-devel  onnxoptimizer-devel  python3-onnx
+BuildRequires:  cmake python3-devel  fmt fmt-devel protobuf-compiler  pybind11-devel lmdb lmdb-devel     onnxoptimizer  onnx_proto onnx onnx-devel  onnxoptimizer-devel  python3-onnx
 BuildRequires:  eigen3-devel
 BuildRequires:  gcc-c++
 BuildRequires:  glog-devel
