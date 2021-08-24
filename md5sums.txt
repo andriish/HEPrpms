@@ -115,3 +115,4 @@ bbda4ea262bb581adeef27421d76e924  foxi/1.0.0/rpmbuild/SOURCES/97fe555430a857581b
 57392b7ea09592a2b237a02950f35bb0  fmt/7.0.3/rpmbuild/SOURCES/7.0.3.tar.gz
 0f29b5c4a0d1903ba59606d37ddde318  protobuf/3.12.4/rpmbuild/SOURCES/protobuf-3.12.4-all.tar.gz
 2c111270966225b1896151f43e16e617  protobuf/3.12.4/rpmbuild/SOURCES/5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.zip 
+2c111270966225b1896151f43e16e617  protobuf/3.12.4/rpmbuild/SOURCES/5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.zip
