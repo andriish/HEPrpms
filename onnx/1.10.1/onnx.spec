@@ -18,11 +18,12 @@
 
 Name:           onnx
 Version:        1.10.1
-Release:        2%{?dist}
+Release:        6%{?dist}
 Summary:        Open Neural Network eXchange
 License:        MIT
 URL:            https://onnx.ai/
 Source0:        https://github.com/onnx/onnx/archive/v%{version}.tar.gz
+Patch0:         patch-onnx-0.txt
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  protobuf-devel
@@ -89,23 +90,37 @@ rm -rf third_party
 
 %build
 
-%if %{?rhel}%{!?rhel:0} == 8
-#sed -i 's@TensorProto::DataType_Name(static_cast<TensorProto_DataType>(type.elem_type()));@\"int32\";@g'  onnx/shape_inference/implementation.cc
-sed -i 's@cmake3@cmake@g' setup.py
-%endif
 
+%if %{?fedora}%{!?fedora:0}
 %cmake -DONNX_USE_PROTOBUF_SHARED_LIBS:BOOL=ON -DONNX_WERROR:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON
 %cmake_build
-%if %{?fedora}%{!?fedora:0}
 %py3_build
+%else
+#export ONNX_ML=ON
+#export PROTO3_ENABLED=ON
+#LOL, THE RESULT DEPNDS ON THE IN-SOURCE-OUT-OF SOURCE BUILD!!!
+mkdir BUILD
+cd BUILD
+%cmake  -S../ -DONNX_USE_PROTOBUF_SHARED_LIBS:BOOL=ON -DONNX_WERROR:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON 
+#-DONNX_ML:BOOL=ON -DPROTO3_ENABLED:BOOL=ON
+%cmake_build
 %endif
 
 %install
-#if %{?fedora}%{!?fedora:0}
+%if %{?fedora}%{!?fedora:0}
 %py3_install
-#endif
 %cmake_install
-mv %{buildroot}/%{_prefix}/lib/libonnxifi.so %{buildroot}/%{_libdir}/libonnxifi.so
+%else
+#export ONNX_ML=ON
+#export PROTO3_ENABLED=ON
+cd BUILD
+cp ../*.* ./
+cp ../VERSI* ./
+%py3_install
+%cmake_install
+%endif
+
+nm -CDg %{buildroot}/%{_libdir}/libonn*  | grep  TensorProto_DataType
 
 %files -n python%{python3_pkgversion}-%{name}
 %{_bindir}/check-model

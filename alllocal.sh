@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-protobuf:3.12.4
+onnxoptimizer:0.2.6
+#protobuf:3.12.4
 #onnx:1.10.1
 #fmt:7.0.3
 #foxi:1.0.0
