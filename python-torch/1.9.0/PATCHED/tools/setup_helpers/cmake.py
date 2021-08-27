@@ -341,6 +341,7 @@ class CMake:
         from .env import build_type
 
         max_jobs = os.getenv('MAX_JOBS', str(multiprocessing.cpu_count()))
+        print(os.getcwd())
         build_args = ['--build', '../x86_64-redhat-linux-gnu', '--target', 'install', '--config', build_type.build_type_string]
         # This ``if-else'' clause would be unnecessary when cmake 3.12 becomes
         # minimum, which provides a '-j' option: build_args += ['-j', max_jobs]

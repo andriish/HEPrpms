@@ -1,8 +1,9 @@
 %undefine _debugsource_packages
+%define  debug_package %{nil}
 
 Name:           python-torch
 Version:        1.9.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Deep learning framework pytorch/Caffe2
 License:        Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Zlib AND BSL-1.0
 Group:          Development/Languages/Python
@@ -175,8 +176,8 @@ export CFLAGS
 %cmake_build
 export USE_SYSTEM_LIBS=1
 export DESTDIR=%{?buildroot}/%{NAME}-%{VERSION}-%{RELEASE}.x86_64
-mkdir -p torch/lib/python3.9/site-packages/caffe2/python/
-cp -r x86_64-redhat-linux-gnu/caffe2/python/*.so  torch/lib/python3.9/site-packages/caffe2/python/
+mkdir -p torch/lib/python%{python3_version}/site-packages/caffe2/python/
+cp -r x86_64-redhat-linux-gnu/caffe2/python/*.so  torch/lib/python%{python3_version}/site-packages/caffe2/python/
 cp -r x86_64-redhat-linux-gnu/lib/*.so  torch/lib
 %py3_build
 
@@ -185,13 +186,16 @@ cp -r x86_64-redhat-linux-gnu/lib/*.so  torch/lib
 %buildvars
 %cmake_install
 export USE_SYSTEM_LIBS=1
-export DESTDIR=%{?buildroot}/%{NAME}-%{VERSION}-%{RELEASE}.x86_64
+export DESTDIR=%{?buildroot}/
+#{NAME}-%{VERSION}-%{RELEASE}.x86_64
 %py3_install
 rm -f $RPM_BUILD_ROOT/%{_libdir}/libclog.a
 rm -f $RPM_BUILD_ROOT/%{_includedir}/clog*.h
 
 %files 
 %{python3_sitearch}/caffe2/
+%{python3_sitearch}/torch/
+%{python3_sitearch}/torch-1.9.0a0+gitunknown-py3.9.egg-info
 
 %files  devel
 %{_includedir}/nomnigraph/
