@@ -108,6 +108,7 @@ Library which is used by %{name}
   export USE_LEVELDB=ON \
   export USE_KINETO=0  \
   export USE_MKLDNN=0 \
+  export USE_SYSTEM_XNNPACK=OFF \
   export USE_XNNPACK=OFF \
   export USE_LMDB=ON \
   export USE_SYSTEM_LIB=ON \
@@ -118,6 +119,7 @@ Library which is used by %{name}
   export USE_SYSTEM_ONNX=ON \
   export USE_DISTRIBUTED=OFF \
   export USE_QNNPACK=OFF \
+  export USE_SYSTEM_QNNPACK=OFF \
   export BUILD_CUSTOM_PROTOBUF=OFF \
   export USE_SYSTEM_PTHREADPOOL=ON \
   export BUILD_TEST=OFF \
@@ -157,16 +159,34 @@ export CFLAGS
   -DUSE_SYSTEM_FP16=ON \
   -DBUILD_TEST=OFF \
   -DUSE_SYSTEM_FXDIV=ON \
-  -DMAX_JOBS=6     \
-  -DUSE_MAGMA=OFF  -DBUILD_PYTHON=ON -DUSE_SYSTEM_ONNX=ON -DUSE_SYSTEM_FOXI=OFF \
-  -DONNX_ML=2  -DONNX_NAMESPACE=onnx  -DINTERN_DISABLE_ONNX=ON  -DUSE_SYSTEM_PSIMD=ON \
-  -DUSE_CUDA=OFF  -DTORCH_INSTALL_LIB_DIR=%_lib -DLIBSHM_INSTALL_LIB_SUBDIR=%_lib
+  -DMAX_JOBS=%{?jobs}     \
+  -DUSE_MAGMA=OFF  \
+  -DBUILD_PYTHON=True \
+  -DUSE_SYSTEM_ONNX=ON \
+  -DUSE_SYSTEM_FOXI=OFF \
+  -DONNX_ML=2  \
+  -DONNX_NAMESPACE=onnx  \
+  -DINTERN_DISABLE_ONNX=ON  \
+  -DUSE_SYSTEM_PSIMD=ON \
+  -DUSE_CUDA=OFF  \
+  -DTORCH_INSTALL_LIB_DIR=%_lib \
+  -DLIBSHM_INSTALL_LIB_SUBDIR=%_lib
 
 %cmake_build
+export USE_SYSTEM_LIBS=1
+export DESTDIR=%{?buildroot}/%{NAME}-%{VERSION}-%{RELEASE}.x86_64
+mkdir -p torch/lib/python3.9/site-packages/caffe2/python/
+cp -r x86_64-redhat-linux-gnu/caffe2/python/*.so  torch/lib/python3.9/site-packages/caffe2/python/
+cp -r x86_64-redhat-linux-gnu/lib/*.so  torch/lib
+%py3_build
+
 
 %install
 %buildvars
 %cmake_install
+export USE_SYSTEM_LIBS=1
+export DESTDIR=%{?buildroot}/%{NAME}-%{VERSION}-%{RELEASE}.x86_64
+%py3_install
 rm -f $RPM_BUILD_ROOT/%{_libdir}/libclog.a
 rm -f $RPM_BUILD_ROOT/%{_includedir}/clog*.h
 
