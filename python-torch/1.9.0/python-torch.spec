@@ -1,5 +1,7 @@
 %undefine _debugsource_packages
 %define  debug_package %{nil}
+%undefine __cmake_in_source_build	
+%undefine __cmake3_in_source_build
 
 Name:           python-torch
 Version:        1.9.0
@@ -112,7 +114,6 @@ Library which is used by %{name}
   export USE_SYSTEM_XNNPACK=OFF \
   export USE_XNNPACK=OFF \
   export USE_LMDB=ON \
-  export USE_SYSTEM_LIB=ON \
   export USE_SYSTEM_CPUINFO=ON \
   export USE_FBGEMM=OFF \
   export USE_SYSTEM_EIGEN_INSTALL=ON \
@@ -127,12 +128,13 @@ Library which is used by %{name}
   export MAX_JOBS=6  \
   export ONNX_ML=1 \
   export USE_SYSTEM_FP16=ON \
-  export USE_SYSTEM_FXDIV=ON 
-  export USE_SYSTEM_PSIMD=ON  
-  export USE_CUDA=OFF  
+  export USE_SYSTEM_FXDIV=ON \
+  export USE_SYSTEM_PSIMD=ON  \
+  export USE_CUDA=OFF    \
+  export USE_NINJA=OFF  
 
 #  export USE_SYSTEM_LIB="pybind11,tbb,fbgemm,fbgemm/third_party/asmjit,onnx/third_party/benchmark" \
-
+#  export USE_SYSTEM_LIB=ON 
 %buildvars
 
 
@@ -148,6 +150,7 @@ export CFLAGS
   -DUSE_KINETO=0  \
   -DUSE_MKLDNN=0 \
   -DUSE_XNNPACK=OFF \
+  -DUSE_SYSTEM_XNNPACK=OFF \
   -DUSE_LMDB=ON \
   -DUSE_SYSTEM_CPUINFO=ON \
   -DUSE_FBGEMM=OFF \
@@ -171,7 +174,9 @@ export CFLAGS
   -DUSE_SYSTEM_PSIMD=ON \
   -DUSE_CUDA=OFF  \
   -DTORCH_INSTALL_LIB_DIR=%_lib \
-  -DLIBSHM_INSTALL_LIB_SUBDIR=%_lib
+  -DLIBSHM_INSTALL_LIB_SUBDIR=%_lib \
+  -DUSE_NINJA=OFF \
+  -DUSE_GOLD_LINKER=ON
 
 %cmake_build
 export USE_SYSTEM_LIBS=1
@@ -195,7 +200,7 @@ rm -f $RPM_BUILD_ROOT/%{_includedir}/clog*.h
 %files 
 %{python3_sitearch}/caffe2/
 %{python3_sitearch}/torch/
-%{python3_sitearch}/torch-1.9.0a0+gitunknown-py3.9.egg-info
+%{python3_sitearch}/torch-1.9.0a0+git*-py%{python3_version}.egg-info
 
 %files  devel
 %{_includedir}/nomnigraph/
