@@ -19,6 +19,7 @@ BuildArch:      noarch
 Summary:        %{summary}
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  python3
+BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python-rpm-macros
 %endif
