@@ -18,7 +18,9 @@ BuildArch:      noarch
 %package -n python3-%{srcname}
 Summary:        %{summary}
 %if 0%{?rhel} || 0%{?fedora}
+BuildRequires:  python3
 BuildRequires:  python3-setuptools
+BuildRequires:  python-rpm-macros
 %endif
 %if 0%{?suse_version}
 BuildRequires:  fdupes
