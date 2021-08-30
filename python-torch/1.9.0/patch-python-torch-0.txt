@@ -68,16 +68,18 @@ diff -Naur ORIG/caffe2/CMakeLists.txt PATCHED/caffe2/CMakeLists.txt
    endif()
 diff -Naur ORIG/cmake/Dependencies.cmake PATCHED/cmake/Dependencies.cmake
 --- ORIG/cmake/Dependencies.cmake	2021-08-27 11:08:14.723778908 +0200
-+++ PATCHED/cmake/Dependencies.cmake	2021-08-28 01:07:31.660076313 +0200
-@@ -521,6 +521,7 @@
++++ PATCHED/cmake/Dependencies.cmake	2021-08-30 12:18:42.656451298 +0200
+@@ -521,6 +521,9 @@
  endif()
  
  # ---[ XNNPACK
-+set(USE_XNNPACK OFF)
++#set(USE_XNNPACK OFF)
++#set(USE_SYSTEM_XNNPACK OFF)
++
  if(USE_XNNPACK AND NOT USE_SYSTEM_XNNPACK)
    if(NOT DEFINED XNNPACK_SOURCE_DIR)
      set(XNNPACK_SOURCE_DIR "${CAFFE2_THIRD_PARTY_ROOT}/XNNPACK" CACHE STRING "XNNPACK source directory")
-@@ -1484,7 +1485,16 @@
+@@ -1484,7 +1487,16 @@
        message(FATAL_ERROR "Cannot find onnx")
      endif()
      set_property(TARGET onnx_proto PROPERTY IMPORTED_LOCATION ${ONNX_PROTO_LIBRARY})
@@ -95,7 +97,7 @@ diff -Naur ORIG/cmake/Dependencies.cmake PATCHED/cmake/Dependencies.cmake
      list(APPEND Caffe2_DEPENDENCY_LIBS onnx_proto onnx)
    endif()
    include_directories(${FOXI_INCLUDE_DIRS})
-@@ -1811,7 +1821,8 @@
+@@ -1811,7 +1823,8 @@
  #
  set(TEMP_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libs" FORCE)
@@ -105,7 +107,7 @@ diff -Naur ORIG/cmake/Dependencies.cmake PATCHED/cmake/Dependencies.cmake
  
  # Disable compiler feature checks for `fmt`.
  #
-@@ -1820,7 +1831,7 @@
+@@ -1820,7 +1833,7 @@
  # CMAKE_CXX_FLAGS in ways that break feature checks. Since we already know
  # `fmt` is compatible with a superset of the compilers that PyTorch is, it
  # shouldn't be too bad to just disable the checks.

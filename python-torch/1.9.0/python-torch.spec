@@ -18,6 +18,7 @@ BuildRequires: blas blas-devel  yaml-cpp-devel yaml-cpp-static yaml-cpp  python3
 BuildRequires: tbb-devel 
 
 BuildRequires:  cmake python3-devel  fmt fmt-devel protobuf-compiler  pybind11-devel lmdb lmdb-devel     onnxoptimizer  onnx_proto onnx onnx-devel  onnxoptimizer-devel  python3-onnx
+BuildRequires:  XNNPACk XNNPACK-devel
 BuildRequires:  eigen3-devel
 BuildRequires:  gcc-c++
 BuildRequires:  glog-devel
@@ -112,8 +113,8 @@ Library which is used by %{name}
   export USE_LEVELDB=ON \
   export USE_KINETO=0  \
   export USE_MKLDNN=0 \
-  export USE_SYSTEM_XNNPACK=OFF \
-  export USE_XNNPACK=OFF \
+  export USE_SYSTEM_XNNPACK=ON \
+  export USE_XNNPACK=ON \
   export USE_LMDB=ON \
   export USE_SYSTEM_CPUINFO=ON \
   export USE_FBGEMM=OFF \
@@ -150,8 +151,8 @@ export CFLAGS
   -DUSE_LEVELDB=ON \
   -DUSE_KINETO=0  \
   -DUSE_MKLDNN=0 \
-  -DUSE_XNNPACK=OFF \
-  -DUSE_SYSTEM_XNNPACK=OFF \
+  -DUSE_XNNPACK=ON \
+  -DUSE_SYSTEM_XNNPACK=ON \
   -DUSE_LMDB=ON \
   -DUSE_SYSTEM_CPUINFO=ON \
   -DUSE_FBGEMM=OFF \
