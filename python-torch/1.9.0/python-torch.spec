@@ -18,7 +18,7 @@ BuildRequires: blas blas-devel  yaml-cpp-devel yaml-cpp-static yaml-cpp  python3
 BuildRequires: tbb-devel 
 
 BuildRequires:  cmake python3-devel  fmt fmt-devel protobuf-compiler  pybind11-devel lmdb lmdb-devel     onnxoptimizer  onnx_proto onnx onnx-devel  onnxoptimizer-devel  python3-onnx
-BuildRequires:  XNNPACK XNNPACK-devel
+BuildRequires:  XNNPACK XNNPACK-devel foxi foxi-devel
 BuildRequires:  eigen3-devel
 BuildRequires:  gcc-c++
 BuildRequires:  glog-devel
