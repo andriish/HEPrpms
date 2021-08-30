@@ -1758,7 +1758,6 @@ if(BUILD_PYTHON)
       relative_site_packages = sysconfig.get_path('platlib').replace(sysconfig.get_path('data'), '').lstrip(os.path.sep)
       print(relative_site_packages)
   ")
-
   file(TO_CMAKE_PATH ${PYTHON_SITE_PACKAGES} PYTHON_SITE_PACKAGES)
   set(PYTHON_SITE_PACKAGES ${PYTHON_SITE_PACKAGES} PARENT_SCOPE) # for Summary
   # ---[ Options.
