@@ -1,8 +1,11 @@
 %undefine _debugsource_packages
+%define  debug_package %{nil}
+%undefine __cmake_in_source_build	
+%undefine __cmake3_in_source_build
 
 Name:           python-torch
 Version:        1.9.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Deep learning framework pytorch/Caffe2
 License:        Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Zlib AND BSL-1.0
 Group:          Development/Languages/Python
@@ -15,6 +18,7 @@ BuildRequires: blas blas-devel  yaml-cpp-devel yaml-cpp-static yaml-cpp  python3
 BuildRequires: tbb-devel 
 
 BuildRequires:  cmake python3-devel  fmt fmt-devel protobuf-compiler  pybind11-devel lmdb lmdb-devel     onnxoptimizer  onnx_proto onnx onnx-devel  onnxoptimizer-devel  python3-onnx
+BuildRequires:  XNNPACK XNNPACK-devel
 BuildRequires:  eigen3-devel
 BuildRequires:  gcc-c++
 BuildRequires:  glog-devel
@@ -35,8 +39,9 @@ Requires:       python3-leveldb
 Requires:       python3-numpy
 Requires:       python3-protobuf
 Requires:       python3-six
+%if 0%{?rhel} 
 BuildRequires:       python3-dataclasses
-
+%endif
 Provides:       python3-caffe2 = %version
 Provides:       python3-pytorch = %version
 
@@ -108,9 +113,9 @@ Library which is used by %{name}
   export USE_LEVELDB=ON \
   export USE_KINETO=0  \
   export USE_MKLDNN=0 \
-  export USE_XNNPACK=OFF \
+  export USE_SYSTEM_XNNPACK=ON \
+  export USE_XNNPACK=ON \
   export USE_LMDB=ON \
-  export USE_SYSTEM_LIB=ON \
   export USE_SYSTEM_CPUINFO=ON \
   export USE_FBGEMM=OFF \
   export USE_SYSTEM_EIGEN_INSTALL=ON \
@@ -118,18 +123,20 @@ Library which is used by %{name}
   export USE_SYSTEM_ONNX=ON \
   export USE_DISTRIBUTED=OFF \
   export USE_QNNPACK=OFF \
+  export USE_SYSTEM_QNNPACK=OFF \
   export BUILD_CUSTOM_PROTOBUF=OFF \
   export USE_SYSTEM_PTHREADPOOL=ON \
   export BUILD_TEST=OFF \
   export MAX_JOBS=6  \
   export ONNX_ML=1 \
   export USE_SYSTEM_FP16=ON \
-  export USE_SYSTEM_FXDIV=ON 
-  export USE_SYSTEM_PSIMD=ON  
-  export USE_CUDA=OFF  
+  export USE_SYSTEM_FXDIV=ON \
+  export USE_SYSTEM_PSIMD=ON  \
+  export USE_CUDA=OFF    \
+  export USE_NINJA=OFF  
 
 #  export USE_SYSTEM_LIB="pybind11,tbb,fbgemm,fbgemm/third_party/asmjit,onnx/third_party/benchmark" \
-
+#  export USE_SYSTEM_LIB=ON 
 %buildvars
 
 
@@ -144,7 +151,8 @@ export CFLAGS
   -DUSE_LEVELDB=ON \
   -DUSE_KINETO=0  \
   -DUSE_MKLDNN=0 \
-  -DUSE_XNNPACK=OFF \
+  -DUSE_XNNPACK=ON \
+  -DUSE_SYSTEM_XNNPACK=ON \
   -DUSE_LMDB=ON \
   -DUSE_SYSTEM_CPUINFO=ON \
   -DUSE_FBGEMM=OFF \
@@ -157,21 +165,44 @@ export CFLAGS
   -DUSE_SYSTEM_FP16=ON \
   -DBUILD_TEST=OFF \
   -DUSE_SYSTEM_FXDIV=ON \
-  -DMAX_JOBS=6     \
-  -DUSE_MAGMA=OFF  -DBUILD_PYTHON=ON -DUSE_SYSTEM_ONNX=ON -DUSE_SYSTEM_FOXI=OFF \
-  -DONNX_ML=2  -DONNX_NAMESPACE=onnx  -DINTERN_DISABLE_ONNX=ON  -DUSE_SYSTEM_PSIMD=ON \
-  -DUSE_CUDA=OFF  -DTORCH_INSTALL_LIB_DIR=%_lib -DLIBSHM_INSTALL_LIB_SUBDIR=%_lib
+  -DMAX_JOBS=%{?jobs}     \
+  -DUSE_MAGMA=OFF  \
+  -DBUILD_PYTHON=True \
+  -DUSE_SYSTEM_ONNX=ON \
+  -DUSE_SYSTEM_FOXI=OFF \
+  -DONNX_ML=2  \
+  -DONNX_NAMESPACE=onnx  \
+  -DINTERN_DISABLE_ONNX=ON  \
+  -DUSE_SYSTEM_PSIMD=ON \
+  -DUSE_CUDA=OFF  \
+  -DTORCH_INSTALL_LIB_DIR=%_lib \
+  -DLIBSHM_INSTALL_LIB_SUBDIR=%_lib \
+  -DUSE_NINJA=OFF \
+  -DUSE_GOLD_LINKER=ON
 
 %cmake_build
+export USE_SYSTEM_LIBS=1
+export DESTDIR=%{?buildroot}/%{NAME}-%{VERSION}-%{RELEASE}.x86_64
+mkdir -p torch/lib/python%{python3_version}/site-packages/caffe2/python/
+cp -r x86_64-redhat-linux-gnu/caffe2/python/*.so  torch/lib/python%{python3_version}/site-packages/caffe2/python/
+cp -r x86_64-redhat-linux-gnu/lib/*.so  torch/lib
+%py3_build
+
 
 %install
 %buildvars
 %cmake_install
+export USE_SYSTEM_LIBS=1
+export DESTDIR=%{?buildroot}/
+#{NAME}-%{VERSION}-%{RELEASE}.x86_64
+%py3_install
 rm -f $RPM_BUILD_ROOT/%{_libdir}/libclog.a
 rm -f $RPM_BUILD_ROOT/%{_includedir}/clog*.h
 
 %files 
 %{python3_sitearch}/caffe2/
+%{python3_sitearch}/torch/
+%{python3_sitearch}/torch-1.9.0a0+git*-py%{python3_version}.egg-info
 
 %files  devel
 %{_includedir}/nomnigraph/

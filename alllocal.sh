@@ -4,8 +4,10 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-python-leveldb:0.201
-#python-torch:1.9.0
+#XNNPACK:1.0.0
+#python-pname:1.0.2
+#python-leveldb:0.201
+python-torch:1.9.0
 #onnxoptimizer:0.2.6
 #protobuf:3.12.4
 #onnx:1.10.1

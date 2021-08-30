@@ -1,9 +1,10 @@
 %undefine _debugsource_packages
-%define git_version d465747660ecf9ebbaddf8c3db37e4a13d0c9103
+#define git_version d465747660ecf9ebbaddf8c3db37e4a13d0c9103
+%define git_version  1787867f6183f056420e532eec640cba25efafea
 
 Name:           pthreadpool
 Version:        1.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Library for C++
 
 License:        BSD
