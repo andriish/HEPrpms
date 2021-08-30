@@ -1,6 +1,6 @@
 Name:       BAT
 Version:    1.0.0
-Release:    3%{?dist}
+Release:    4%{?dist}
 Summary:    BAT -- Bayesian Analysis Toolkit
 
 License:    LGPL v3
@@ -16,8 +16,8 @@ BuildRequires:    root-core root-hist root-io root-tree
 Requires:         root-core root-hist root-io root-tree
 %endif
 %if 0%{?suse_version}
-BuildRequires:    root6-config root6-devel root6-libs root6
-Requires:         root6-config root6-devel root6-libs root6
+BuildRequires:    root6-config root6-devel root6-libs root6 root6-utils
+Requires:         root6-config root6-devel root6-libs root6 root6-utils
 %endif
 
 
