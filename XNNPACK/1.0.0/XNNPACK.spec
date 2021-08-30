@@ -11,7 +11,7 @@ Source0:        https://github.com/google/XNNPACK/archive/%{git_version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  cmake FXdiv-devel FP16-devel psimd-devel pthreadpool pthreadpool-devel
+BuildRequires:  cmake FXdiv-devel FP16-devel psimd-devel pthreadpool pthreadpool-devel cpuinfo cpuinfo-devel
 
 %description
 Some lib
