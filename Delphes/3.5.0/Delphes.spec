@@ -1,7 +1,7 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 Name:       Delphes
 Version:    3.5.0
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Delphes is a C++ framework, performing a fast multipurpose detector response simulation. 
 
 License:    GPLv3
@@ -31,7 +31,7 @@ BuildRequires:    pythia8 pythia8-devel
 BuildRequires:    HepMC HepMC-devel
 %endif
 %if 0%{?suse_version}
-BuildRequires:    root6-libs
+BuildRequires:    root6-libs  root6-utils
 BuildRequires:    root6
 BuildRequires:    root6-devel
 BuildRequires:    zlib-devel fastjet fastjet-devel
