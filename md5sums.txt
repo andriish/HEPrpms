@@ -118,3 +118,6 @@ bbda4ea262bb581adeef27421d76e924  foxi/1.0.0/rpmbuild/SOURCES/97fe555430a857581b
 2c111270966225b1896151f43e16e617  protobuf/3.12.4/rpmbuild/SOURCES/5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.zip
 544d6fb09029b06c30af09f0547f43d6  python-leveldb/0.201/rpmbuild/SOURCES/leveldb-0.201.tar.gz
 0e95f1065ee117478eb3f5349c70c8d7  python-pname/1.0.2/rpmbuild/SOURCES/pname-1.0.2.tar.gz
+6824734922ff746236d99ffee55da15d  XNNPACK/1.0.0/rpmbuild/SOURCES/1215c9afb685d9ba44628c7b05a93b23ca240bb5.tar.gz
+3838416bc480abe56f2e83e83eca1703  pthreadpool/1.0.0/rpmbuild/SOURCES/1787867f6183f056420e532eec640cba25efafea.tar.gz
+bd86c521dfa208d1d2d08aeb9b816d05  cpuinfo/1.0.0/rpmbuild/SOURCES/866ae6e5ffe93a1f63be738078da94cf3005cce2.tar.gz

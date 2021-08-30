@@ -1,9 +1,9 @@
 %undefine _debugsource_packages
-%define git_version 0e6bde92b343c5fbcfe34ecd41abf9515d54b4a7
-
+#define git_version 0e6bde92b343c5fbcfe34ecd41abf9515d54b4a7
+%define git_version  866ae6e5ffe93a1f63be738078da94cf3005cce2
 Name:           cpuinfo
 Version:        1.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Library for C++
 
 License:        BSD
