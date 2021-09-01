@@ -1,5 +1,5 @@
-%undefine _debugsource_packages
-%define  debug_package %{nil}
+#undefine _debugsource_packages
+#define  debug_package %{nil}
 %undefine __cmake_in_source_build	
 %undefine __cmake3_in_source_build
 
@@ -19,9 +19,10 @@ BuildRequires: tbb-devel
 
 BuildRequires:  cmake python3-devel  fmt fmt-devel protobuf-compiler  pybind11-devel lmdb lmdb-devel     onnxoptimizer  onnx_proto onnx onnx-devel  onnxoptimizer-devel  python3-onnx
 BuildRequires:  XNNPACK XNNPACK-devel foxi foxi-devel
-BuildRequires:  eigen3-devel
+BuildRequires:  eigen3-devel 
 BuildRequires:  gcc-c++
 BuildRequires:  glog-devel
+Requires:  pthreadpool openblas
 
 BuildRequires:  leveldb-devel
 BuildRequires:  numactl-devel
@@ -101,14 +102,16 @@ Library which is used by %{name}
 %build
 #  export USE_CUDNN=ON \
 
+#  export USE_SYSTEM_NCCL=ON \
+#  export PATH="/usr/local/cuda-11.2/bin:$PATH" \
+#  export CPLUS_INCLUDE_PATH="/usr/local/cuda-11.2/include" \
+#  export C_INCLUDE_PATH="/usr/local/cuda-11.2/include" \
+#  export LD_LIBRARY_PATH="/usr/local/cuda-11.2/lib" \
+#  export NCCL_INCLUDE_DIR="/usr/include/" \
+
+
 %define buildvars \
   export USE_NNPACK=OFF \
-  export USE_SYSTEM_NCCL=ON \
-  export PATH="/usr/local/cuda-11.2/bin:$PATH" \
-  export CPLUS_INCLUDE_PATH="/usr/local/cuda-11.2/include" \
-  export C_INCLUDE_PATH="/usr/local/cuda-11.2/include" \
-  export LD_LIBRARY_PATH="/usr/local/cuda-11.2/lib" \
-  export NCCL_INCLUDE_DIR="/usr/include/" \
   export USE_TEST=OFF \
   export USE_LEVELDB=ON \
   export USE_KINETO=0  \
@@ -145,8 +148,10 @@ CFLAGS="-O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -
 export CXXFLAGS
 export CFLAGS
 
+#  -DUSE_SYSTEM_NCCL=ON 
+
+
 %cmake -DUSE_NNPACK=OFF \
-  -DUSE_SYSTEM_NCCL=ON \
   -DUSE_TEST=OFF \
   -DUSE_LEVELDB=ON \
   -DUSE_KINETO=0  \
