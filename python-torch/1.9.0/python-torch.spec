@@ -21,7 +21,7 @@ BuildRequires:  cmake python3-devel  fmt fmt-devel protobuf-compiler  pybind11-d
 BuildRequires:  XNNPACK XNNPACK-devel foxi foxi-devel
 BuildRequires:  eigen3-devel 
 BuildRequires:  gcc-c++
-BuildRequires:  glog-devel
+BuildRequires:  glog-devel fftw- fftw-devel
 Requires:  pthreadpool openblas
 
 BuildRequires:  leveldb-devel
