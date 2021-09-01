@@ -5,7 +5,7 @@
 
 Name:           python-torch
 Version:        1.9.0
-Release:        3%{?dist}
+Release:        5%{?dist}
 Summary:        Deep learning framework pytorch/Caffe2
 License:        Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Zlib AND BSL-1.0
 Group:          Development/Languages/Python
@@ -117,7 +117,7 @@ Library which is used by %{name}
   export USE_XNNPACK=ON \
   export USE_LMDB=ON \
   export USE_SYSTEM_CPUINFO=ON \
-  export USE_FBGEMM=OFF \
+  export USE_FBGEMM=ON \
   export USE_SYSTEM_EIGEN_INSTALL=ON \
   export USE_SYSTEM_SLEEF=ON \
   export USE_SYSTEM_ONNX=ON \
@@ -155,7 +155,7 @@ export CFLAGS
   -DUSE_SYSTEM_XNNPACK=ON \
   -DUSE_LMDB=ON \
   -DUSE_SYSTEM_CPUINFO=ON \
-  -DUSE_FBGEMM=OFF \
+  -DUSE_FBGEMM=ON \
   -DUSE_SYSTEM_EIGEN_INSTALL=ON \
   -DUSE_SYSTEM_SLEEF=ON \
   -DUSE_DISTRIBUTED=OFF \
