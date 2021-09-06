@@ -1,3 +1,5 @@
+%undefine __cmake_in_source_build
+%undefine __cmake3_in_source_build
 %if 0%{?suse_version}
 %define python3_pkgversion 38
 %endif
