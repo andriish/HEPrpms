@@ -138,7 +138,7 @@ void G4TaskRunManagerKernel::InitializeWorker()
   {
     G4TaskManager* taskManager = mrm->GetTaskManager();
     auto _fut     = taskManager->async(InitializeWorker);
-    _fut.wait();
+    _fut->wait();
     return;
   }
 
