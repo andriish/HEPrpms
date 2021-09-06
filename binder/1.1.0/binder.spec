@@ -33,6 +33,7 @@ that it handles special features new in C++11.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
