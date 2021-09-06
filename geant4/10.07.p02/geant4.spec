@@ -71,8 +71,8 @@ This package provides HepMC manuals and examples.
 %setup -q -n geant4.10.07.p02
 %patch0 -p1
 %if %{?rhel}%{!?rhel:0} == 8
-sed -i 's|Boost::python\${PYTHON_VERSION_MAJOR}\${PYTHON_VERSION_MINOR}|Boost::python\${PYTHON_VERSION_MAJOR}|g' environments/g4py/CMakeLists.txt
-sed -i 's|Boost::python\${PYTHON_VERSION_MAJOR}\${PYTHON_VERSION_MINOR}|Boost::python\${PYTHON_VERSION_MAJOR}|g' environments/g4py/G4PythonHelpers.cmake
+sed -i 's|python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}|python${PYTHON_VERSION_MAJOR}|g' environments/g4py/CMakeLists.txt
+sed -i 's|python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}|python${PYTHON_VERSION_MAJOR}|g' environments/g4py/G4PythonHelpers.cmake
 %endif
 
 
