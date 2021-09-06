@@ -3,7 +3,7 @@
 
 Name:           %{srcname}
 Version:        2.6.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A Jupyter-friendly Python interface for the Minuit2 C++ library maintained by CERN’s ROOT team
 
 License:        MIT, LGPL
@@ -13,6 +13,9 @@ Source1:        https://github.com/pybind/pybind11/archive/8de7772cc72daca8e947b
 Source2:        https://github.com/root-project/root/archive/907554c8a1b8a19cc4177afe1ece0f2fef0b9f79.zip
 
 BuildRequires: gcc-c++ git cmake unzip
+%if 0%{?rhel} || 0%{?fedora}
+BuildRequires: python3-setuptools 
+%endif
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires: python%{python3_pkgversion}  python%{python3_pkgversion}-devel 
 %endif

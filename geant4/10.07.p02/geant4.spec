@@ -9,7 +9,7 @@ Summary:	A toolkit for the simulation of the passage of particles through matter
 License:	Geant
 URL:		https://geant4.web.cern.ch
 Source0:	https://geant4-data.web.cern.ch/releases/geant4.10.07.p02.tar.gz
-
+Patch0:         patch-geant4-0.txt
 
 BuildRequires:	cmake >= 3.9
 BuildRequires:	gcc-c++
@@ -68,6 +68,7 @@ This package provides HepMC manuals and examples.
 %prep
 %setup -q -n geant4.10.07.p02
 sed -i 's|PTL::PTL|PTL::ptl-shared|g' cmake/Modules/G4OptionalComponents.cmake
+%patch0 -p1
 
 %build
 %if %{?rhel}%{!?rhel:0} == 8
