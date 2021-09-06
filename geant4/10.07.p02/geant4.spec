@@ -3,7 +3,7 @@
 %endif
 Name:		geant4
 Version:	10.07.p02
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	A toolkit for the simulation of the passage of particles through matter
 
 License:	Geant
@@ -67,27 +67,10 @@ This package provides HepMC manuals and examples.
 
 %prep
 %setup -q -n geant4.10.07.p02
-sed -i 's|PTL::PTL|PTL::ptl-shared|g' cmake/Modules/G4OptionalComponents.cmake
 %patch0 -p1
 
 %build
-%if %{?rhel}%{!?rhel:0} == 8
-sed -i 's|python|python3|g' environments/g4py/CMakeLists.txt
-sed -i 's|Boost::python|Boost::python3|g' environments/g4py/G4PythonHelpers.cmake
 
-%cmake   -B build -H. \
-	-DGEANT4_INSTALL_DATA:BOOL=ON \
-	-DGEANT4_USE_SYSTEM_CLHEP:BOOL=ON \
-	-DGEANT4_USE_SYSTEM_EXPAT:BOOL=ON \
-	-DGEANT4_USE_SYSTEM_ZLIB:BOOL=ON \
-	-DGEANT4_USE_SYSTEM_PTL:BOOL=ON \
-	-DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
-	-DGEANT4_USE_GDML:BOOL=ON \
-	-DGEANT4_BUILD_MULTITHREADED=ON -DGEANT4_USE_PYTHON:BOOL=ON  -DGEANT4_BUILD_TLS_MODEL=global-dynamic
-make -C build %{?_smp_mflags}
-%else
-sed -i 's|python|python3|g' environments/g4py/CMakeLists.txt
-sed -i 's|Boost::python|Boost::python3|g' environments/g4py/G4PythonHelpers.cmake
 %cmake -DGEANT4_INSTALL_DATA:BOOL=ON \
 	-DGEANT4_USE_SYSTEM_CLHEP:BOOL=ON \
 	-DGEANT4_USE_SYSTEM_EXPAT:BOOL=ON \
@@ -97,15 +80,10 @@ sed -i 's|Boost::python|Boost::python3|g' environments/g4py/G4PythonHelpers.cmak
 	-DGEANT4_USE_GDML:BOOL=ON \
 	-DGEANT4_BUILD_MULTITHREADED=ON -DGEANT4_USE_PYTHON:BOOL=ON  -DGEANT4_BUILD_TLS_MODEL=global-dynamic
 %cmake_build
-%endif
 
 
 %install
-%if %{?rhel}%{!?rhel:0} == 8
-make install -C build DESTDIR=%{buildroot}
-%else
 %cmake_install
-%endif
 
 
 %ldconfig_scriptlets
@@ -134,6 +112,9 @@ make install -C build DESTDIR=%{buildroot}
 %{_datadir}/Geant4-10.7.2/data
 
 %changelog
+%changelog
+* Mon Sep 06 2021  Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- cmake fixes
 * Tue Aug 03 2021  Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - cmake fixes
 * Fri Jul 16 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
