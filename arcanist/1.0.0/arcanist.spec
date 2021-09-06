@@ -10,7 +10,7 @@ URL:		https://github.com/phacility/arcanist
 Source0:	https://github.com/phacility/arcanist/archive/%{git_version}.tar.gz
 BuildArch:	noarch
 
-Requires:	libphutil
+Requires:	php-json php php-curl
 
 
 %description
