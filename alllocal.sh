@@ -12,7 +12,7 @@ declare -a BUILDLIST=(
 #DD4hep:01.17.00
 #Rivet:3.1.4
 #EvtGen:2.0.0
-#geant4:10.07.p02
+geant4:10.07.p02
 #qcdloop:2.0.8
 #fastjet:3.4.0
 #python-uproot4:4.0.11
@@ -22,7 +22,7 @@ declare -a BUILDLIST=(
 #applgrid:1.5.46
 #ariadne:4.12
 #BAT:1.0.0
-binder:1.1.0
+#binder:1.1.0
 #blackhat:0.9.9
 #cascade:3.0.01-beta01  
 #cascade:3.1.01
