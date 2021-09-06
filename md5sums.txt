@@ -100,3 +100,4 @@ b9404645d735144ea29e090c086b99cf  cuba/4.2.1/rpmbuild/SOURCES/Cuba-4.2.1.tar.gz
 1485a41401ed43321b9e9afdebbacb60  PTL/2.0.0/rpmbuild/SOURCES/v2.0.0.tar.gz
 5b46e07a03952b0ba11cd9f587f52cd5  ginac/1.8.1/rpmbuild/SOURCES/ginac-1.8.1.tar.bz2
 6d3b092cd4d1b5931629adb7172294b8  qcdnum/17.01.82/rpmbuild/SOURCES/qcdnum170182.tar.gz
+a0a90a8c14bd2dae38b6a19f8e379c51  arcanist/1.0.0/rpmbuild/SOURCES/d246a06562593670f62951fed0541e2a894f9788.tar.gz
