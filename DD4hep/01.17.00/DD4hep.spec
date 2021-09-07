@@ -1,6 +1,6 @@
 Name:           DD4hep
 Version:        01.17.00
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        DD4hep (Detector Description for High Energy Physics)
 Group:          Development/Tools
 License:        Custom
@@ -18,7 +18,8 @@ BuildRequires: tex(latex) platform-python-devel   texlive-tex4ht
 BuildRequires: tex(latex)  texlive-tex4ht
 %endif
 %if %{?fedora}%{!?fedora:0} 
-BuildRequires: biber
+BuildRequires: biber liburing liburing-devel
+Requires: liburing
 %endif
 
 %if 0%{?suse_version}
