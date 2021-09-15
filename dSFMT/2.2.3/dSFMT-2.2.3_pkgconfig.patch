@@ -1,0 +1,14 @@
+--- /dev/null	2014-05-26 12:52:26.157396990 +0200
++++ dSFMT.pc	2014-06-05 17:18:04.357570200 +0200
+@@ -0,0 +1,11 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${prefix}/lib64
++includedir=${prefix}/include
++
++Name: dSFMT
++Description: dSFMT library
++Version: 2.2.3
++Libs: -L${libdir} -ldSFMT
++Libs.private: -lpthread
++Cflags: -I${includedir}

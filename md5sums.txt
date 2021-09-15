@@ -107,3 +107,7 @@ ae28e6c295c1c0922c8fb80f79dd758e  julia/1.6.2/rpmbuild/SOURCES/Pkg-5c9d3a82e363d
 d5f08906c4a2ceb3f58c38e3a731b6b8  julia/1.6.2/rpmbuild/SOURCES/julia-logo-color.svg
 4a6d4e74fc44c503f52996ae95cad03a  suitesparse/5.4.0/rpmbuild/SOURCES/SuiteSparse-5.4.0.tar.gz
 bdd3d5efba9c17da8d83a35ec552baef  mpfr/4.1.0/rpmbuild/SOURCES/mpfr-4.1.0.tar.xz
+9fe61625c105f911a2c89423f071ef1d  utf8proc/2.6.1/rpmbuild/SOURCES/utf8proc-v2.6.1.tar.gz
+0733b1f9d7913a1f9421fc4ffeac174c  openlibm/0.5.3/rpmbuild/SOURCES/v0.5.3.tar.gz
+d41d8cd98f00b204e9800998ecf8427e  dSFMT/2.2.3/rpmbuild/SOURCES/dSFMT-src-2.2.3.tar.gz
+057c5a11d28296825fba584f561a4369  dSFMT/2.2.3/rpmbuild/SOURCES/dSFMT-src-2.2.3.tar.gz

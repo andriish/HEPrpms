@@ -1,0 +1,276 @@
+--- dSFMT-src-2.2.3/Makefile.orig	2013-12-19 05:37:46.000000000 +0100
++++ dSFMT-src-2.2.3/Makefile	2014-09-03 17:17:48.032841290 +0200
+@@ -17,35 +17,56 @@
+ # We could comple test-alti-Mxxx using gcc 3.3 of osx.
+ # We could comple test-alti-Mxxx using gcc 4.0 of osx.
+ 
++V_MAJOR   = 2
++V_MINOR   = 2
++V_RELEASE = 3
++SONAME    = $(V_MAJOR).$(V_MINOR)
++VERSION   = $(V_MAJOR).$(V_MINOR).$(V_RELEASE)
++
++prefix     = /usr
++includedir = $(prefix)/include
++libdir     = $(prefix)/lib
++SSE2_libdir = $(libdir)/sse2
++DESTDIR    = .
++
++SFMT_MEXP  = 19937
+ WARN = -Wmissing-prototypes -Wall #-Winline
+ #WARN = -Wmissing-prototypes -Wall -W
+ #WARN = /Wall
+-OPTI = -O3 -finline-functions -fomit-frame-pointer -DNDEBUG \
+--fno-strict-aliasing --param max-inline-insns-single=1800
+-#--param inline-unit-growth=500 --param large-function-growth=900 #for gcc 4
+-#OPTI = /Ot /Ob2 /Oy /Ox /Oi /GL /G6
+-#STD =
+-#STD = -std=c89 -pedantic
+-#STD = -std=c99 -pedantic
+-STD = -std=c99
+-CC = gcc
+-CCFLAGS = $(OPTI) $(WARN) $(STD)
+-ALTIFLAGS = -mabi=altivec -maltivec -DHAVE_ALTIVEC
+-OSXALTIFLAGS = -faltivec -maltivec -DHAVE_ALTIVEC
+-SSE2FLAGS = -msse2 -DHAVE_SSE2
+-#SSE2FLAGS = /arch:SSE2 /DHAVE_SSE2
+-STD_TARGET = test-std-M19937
+-ALL_STD_TARGET = test-std-M521 test-std-M1279 test-std-M2203 test-std-M4253 \
+-test-std-M11213 test-std-M19937 test-std-M44497 test-std-M86243 \
+-test-std-M132049 test-std-M216091
+-ALTI_TARGET = $(STD_TARGET) test-alti-M19937
+-ALL_ALTI_TARGET = test-alti-M521 test-alti-M1279 test-alti-M2203 \
+-test-alti-M4253 test-alti-M11213 test-alti-M19937 test-alti-M44497 \
+-test-alti-M86243 test-alti-M132049 test-alti-M216091
+-SSE2_TARGET = $(STD_TARGET) test-sse2-M19937
+-ALL_SSE2_TARGET = test-sse2-M521 test-sse2-M1279 test-sse2-M2203 \
+-test-sse2-M4253 test-sse2-M11213 test-sse2-M19937 test-sse2-M44497 \
+-test-sse2-M86243 test-sse2-M132049 test-sse2-M216091
++OPTI            = -O3 -finline-functions -fomit-frame-pointer -DNDEBUG \
++--param inline-unit-growth=500 --param large-function-growth=900 #for gcc 4
++#-fno-strict-aliasing --param max-inline-insns-single=1800
++#OPTI           = /Ot /Ob2 /Oy /Ox /Oi /GL /G6
++STD             = -std=c99
++CC              = gcc
++LINK            = gcc
++CCFLAGS         = -fPIC $(OPTI) $(WARN) $(STD)
++INCPATH         = -I$(includedir)
++LIBS            = -L$(libdir) -L. -lpthread
++LDFLAGS         = -Wl,--no-undefined -Wl,-z,noexecstack -shared
++ALTIFLAGS       = -mabi=altivec -maltivec -DHAVE_ALTIVEC
++OSXALTIFLAGS    = -faltivec -maltivec -DHAVE_ALTIVEC
++SSE2FLAGS       = -msse2 -DHAVE_SSE2
++#SSE2FLAGS      = /arch:SSE2 /DHAVE_SSE2
++STRIP           =
++COPY_FILE       = cp -f
++COPY_DIR        = $(COPY_FILE) -R
++INSTALL_FILE    = @install -m 644 -p
++INSTALL_DIR     = $(COPY_DIR)
++SYMLINK         = ln -f -s
++DEL_FILE        = rm -rf
++MOVE            = mv -f
++CHK_DIR_EXISTS  = test -d
++CHK_FILE_EXISTS  = test ! -f
++MKDIR           = mkdir -p
++
++TARGET  = dSFMT
++STD_TARGET = test-std
++ALTI_TARGET = $(STD_TARGET) test-alti
++SSE2_TARGET = $(STD_TARGET) test-sse2
++
++HEADERS = $(TARGET).h $(TARGET)-params.h $(TARGET)-common.h
++
+ # ==========================================================
+ # comment out or EDIT following lines to get max performance
+ # ==========================================================
+@@ -78,121 +99,88 @@
+ # -----------------
+ #CCFLAGS += -march=athlon64
+ 
+-.PHONY: std-check sse2-check alti-check
+-
+-std: $(STD_TARGET)
+-
+-sse2: $(SSE2_TARGET)
+-
+-alti: $(ALTI_TARGET)
+-
+-osx-alti:
+-	$(MAKE) "ALTIFLAGS=$(OSXALTIFLAGS)" alti
+-
+-std-check: $(ALL_STD_TARGET)
+-	./check.sh test-std
+-
+-sse2-check: $(ALL_SSE2_TARGET)
+-	./check.sh test-sse2
+-
+-alti-check: $(ALL_ALTI_TARGET)
+-	./check.sh test-alti
+-
+-osx-alti-check:
+-	make "ALTIFLAGS=$(OSXALTIFLAGS)" alti-check
+-
+-test-std-M521: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) -DDSFMT_MEXP=521 -o $@ dSFMT.c test.c
+-
+-test-alti-M521: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(ALTIFLAGS) -DDSFMT_MEXP=521 -o $@ dSFMT.c test.c
+-
+-test-sse2-M521: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(SSE2FLAGS) -DDSFMT_MEXP=521 -o $@ dSFMT.c test.c
+-
+-test-std-M1279: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) -DDSFMT_MEXP=1279 -o $@ dSFMT.c test.c
++DEFINES = -DDSFMT_MEXP=$(SFMT_MEXP)
+ 
+-test-alti-M1279: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(ALTIFLAGS) -DDSFMT_MEXP=1279 -o $@ dSFMT.c test.c
++SHARED_TARGET  = lib$(TARGET).so.$(VERSION)
++SHARED_TARGET0 = lib$(TARGET).so
++SHARED_TARGET1 = lib$(TARGET).so.$(V_MAJOR)
++SHARED_TARGET2 = lib$(TARGET).so.$(SONAME)
++SHARED_TARGETS = $(SHARED_TARGET) $(SHARED_TARGET0) $(SHARED_TARGET1) $(SHARED_TARGET2)
+ 
+-test-sse2-M1279: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(SSE2FLAGS) -DDSFMT_MEXP=1279 -o $@ dSFMT.c test.c
++SOURCE = $(TARGET).c $(HEADERS)
++OBJECT = $(TARGET).o
+ 
+-test-std-M2203: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) -DDSFMT_MEXP=2203 -o $@ dSFMT.c test.c
++.PHONY: sharedlib std-check sse2-check alti-check
+ 
+-test-alti-M2203: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(ALTIFLAGS) -DDSFMT_MEXP=2203 -o $@ dSFMT.c test.c
++test-std: test.c sharedlib dSFMT.h
++	$(CC) $(CCFLAGS) $(DEFINES) -o $@ lib$(TARGET).so test.c
+ 
+-test-sse2-M2203: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(SSE2FLAGS) -DDSFMT_MEXP=2203 -o $@ dSFMT.c test.c
++test-alti: test.c sharedlib dSFMT.h
++	$(CC) $(CCFLAGS) $(ALTIFLAGS) $(DEFINES) -o $@ lib$(TARGET).so test.c
+ 
+-test-std-M4253: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) -DDSFMT_MEXP=4253 -o $@ dSFMT.c test.c
++test-sse2: test.c sharedlib dSFMT.h
++	$(CC) $(CCFLAGS) $(SSE2FLAGS) $(DEFINES) -o $@ lib$(TARGET).so test.c
+ 
+-test-alti-M4253: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(ALTIFLAGS) -DDSFMT_MEXP=4253 -o $@ dSFMT.c test.c
++std-check: test-std
++	LD_LIBRARY_PATH=. ./test-std > test-std-M$(SFMT_MEXP).txt
++	diff -w test-std-M$(SFMT_MEXP).txt dSFMT.$(SFMT_MEXP).out.txt || exit 1
+ 
+-test-sse2-M4253: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(SSE2FLAGS) -DDSFMT_MEXP=4253 -o $@ dSFMT.c test.c
++alti-check: test-alti
++	LD_LIBRARY_PATH=. ./test-alti > test-alti-M$(SFMT_MEXP).txt
++	diff -w test-alti-M$(SFMT_MEXP).txt dSFMT.$(SFMT_MEXP).out.txt || exit 1
+ 
+-test-std-M11213: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) -DDSFMT_MEXP=11213 -o $@ dSFMT.c test.c
++sse2-check: test-sse2
++	LD_LIBRARY_PATH=. ./test-sse2 > test-sse2-M$(SFMT_MEXP).txt
++	diff -w test-sse2-M$(SFMT_MEXP).txt dSFMT.$(SFMT_MEXP).out.txt || exit 1
+ 
+-test-alti-M11213: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(ALTIFLAGS) -DDSFMT_MEXP=11213 -o $@ dSFMT.c test.c
++.SUFFIXES: .o .c
+ 
+-test-sse2-M11213: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(SSE2FLAGS) -DDSFMT_MEXP=11213 -o $@ dSFMT.c test.c
+-
+-test-std-M19937: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) -DDSFMT_MEXP=19937 -o $@ dSFMT.c test.c
+-
+-test-alti-M19937: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(ALTIFLAGS) -DDSFMT_MEXP=19937 -o $@ dSFMT.c test.c
+-
+-test-sse2-M19937: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(SSE2FLAGS) -DDSFMT_MEXP=19937 -o $@ dSFMT.c test.c
+-
+-test-std-M44497: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) -DDSFMT_MEXP=44497 -o $@ dSFMT.c test.c
+-
+-test-alti-M44497: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(ALTIFLAGS) -DDSFMT_MEXP=44497 -o $@ dSFMT.c test.c
+-
+-test-sse2-M44497: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(SSE2FLAGS) -DDSFMT_MEXP=44497 -o $@ dSFMT.c test.c
+-
+-test-std-M86243: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) -DDSFMT_MEXP=86243 -o $@ dSFMT.c test.c
+-
+-test-alti-M86243: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(ALTIFLAGS) -DDSFMT_MEXP=86243 -o $@ dSFMT.c test.c
+-
+-test-sse2-M86243: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(SSE2FLAGS) -DDSFMT_MEXP=86243 -o $@ dSFMT.c test.c
+-
+-test-std-M132049: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) -DDSFMT_MEXP=132049 -o $@ dSFMT.c test.c
+-
+-test-alti-M132049: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(ALTIFLAGS) -DDSFMT_MEXP=132049 -o $@ dSFMT.c test.c
+-
+-test-sse2-M132049: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(SSE2FLAGS) -DDSFMT_MEXP=132049 -o $@ dSFMT.c test.c
+-
+-test-std-M216091: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) -DDSFMT_MEXP=216091 -o $@ dSFMT.c test.c
++.c.o:
++	@echo $(CCFLAGS)
++	$(CC) $(CCFLAGS) $(DEFINES) -c $<
+ 
+-test-alti-M216091: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(ALTIFLAGS) -DDSFMT_MEXP=216091 -o $@ dSFMT.c test.c
+ 
+-test-sse2-M216091: test.c dSFMT.c dSFMT.h
+-	$(CC) $(CCFLAGS) $(SSE2FLAGS) -DDSFMT_MEXP=216091 -o $@ dSFMT.c test.c
++sse2_shared: $(SOURCE)
++	$(CC) $(CCFLAGS) $(SSE2FLAGS) $(DEFINES) -c $<
+ 
+-.c.o:
+-	$(CC) $(CCFLAGS) -c $<
++sharedlib: $(OBJECT)
++	@echo $(LDFLAGS)
++	$(DEL_FILE) $(SHARED_TARGETS)
++	$(LINK) $(LDFLAGS) -Wl,-soname,$(SHARED_TARGET2) -o $(SHARED_TARGET) $<
++	$(SYMLINK) $(SHARED_TARGET) $(SHARED_TARGET0)
++	$(SYMLINK) $(SHARED_TARGET) $(SHARED_TARGET1)
++	$(SYMLINK) $(SHARED_TARGET) $(SHARED_TARGET2)
++
++install: install_headers
++
++install_shared: $(libdir)
++	@echo $(CCFLAGS)
++	@echo $(DESTDIR)
++	@echo $(libdir)
++	$(CHK_DIR_EXISTS) $(DESTDIR)$< || $(MKDIR) $(DESTDIR)$<
++	$(CHK_FILE_EXISTS) $(DESTDIR)$</$(SHARED_TARGET) || $(DEL_FILE) $(DESTDIR)$</$(SHARED_TARGET)
++	$(CHK_FILE_EXISTS) $(DESTDIR)$</$(SHARED_TARGET0) || $(DEL_FILE) $(DESTDIR)$</$(SHARED_TARGET0)
++	$(CHK_FILE_EXISTS) $(DESTDIR)$</$(SHARED_TARGET1) || $(DEL_FILE) $(DESTDIR)$</$(SHARED_TARGET1)
++	$(CHK_FILE_EXISTS) $(DESTDIR)$</$(SHARED_TARGET2) || $(DEL_FILE) $(DESTDIR)$</$(SHARED_TARGET2)
++	$(MOVE) $(SHARED_TARGETS)  $(DESTDIR)$</
++
++install_sse2_shared: $(SSE2_libdir)
++	@echo $(DESTDIR)
++	@echo $(libdir)
++	$(CHK_DIR_EXISTS) $(DESTDIR)$< || $(MKDIR) $(DESTDIR)$<
++	$(CHK_FILE_EXISTS) $(DESTDIR)$</$(SHARED_TARGET) || $(DEL_FILE) $(DESTDIR)$</$(SHARED_TARGET)
++	$(CHK_FILE_EXISTS) $(DESTDIR)$</$(SHARED_TARGET0) || $(DEL_FILE) $(DESTDIR)$</$(SHARED_TARGET0)
++	$(CHK_FILE_EXISTS) $(DESTDIR)$</$(SHARED_TARGET1) || $(DEL_FILE) $(DESTDIR)$</$(SHARED_TARGET1)
++	$(CHK_FILE_EXISTS) $(DESTDIR)$</$(SHARED_TARGET2) || $(DEL_FILE) $(DESTDIR)$</$(SHARED_TARGET2)
++	$(MOVE) $(SHARED_TARGETS)  $(DESTDIR)$</
++
++install_headers: install_shared
++	@echo $(DESTDIR)
++	$(CHK_DIR_EXISTS) $(DESTDIR)$(includedir) || $(MKDIR) $(DESTDIR)$(includedir)
++	$(CHK_DIR_EXISTS) $(DESTDIR)$(libdir)/pkgconfig || $(MKDIR) $(DESTDIR)$(libdir)/pkgconfig
++	$(INSTALL_FILE) $(HEADERS) $(DESTDIR)$(includedir)
++	@sed -e 's|libdir=%{prefix}/lib64|libdir=$(libdir)|g' -i $(TARGET).pc
++	$(INSTALL_FILE) $(TARGET).pc $(DESTDIR)$(libdir)/pkgconfig
+ 
+ clean:
+-	rm -f *.o *~ test-*-M*
++	$(DEL_FILE) *.o *~ test-*-M*
