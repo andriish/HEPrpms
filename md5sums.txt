@@ -112,3 +112,4 @@ bdd3d5efba9c17da8d83a35ec552baef  mpfr/4.1.0/rpmbuild/SOURCES/mpfr-4.1.0.tar.xz
 d41d8cd98f00b204e9800998ecf8427e  dSFMT/2.2.3/rpmbuild/SOURCES/dSFMT-src-2.2.3.tar.gz
 057c5a11d28296825fba584f561a4369  dSFMT/2.2.3/rpmbuild/SOURCES/dSFMT-src-2.2.3.tar.gz
 00c4c3b8f3fcb2432293263044630aba  mpfr/4.1.0/rpmbuild/SOURCES/allpatches
+9f16c976c25bb0f76b50be749cd7a3a8  libmpc/1.2.1/rpmbuild/SOURCES/mpc-1.2.1.tar.gz
