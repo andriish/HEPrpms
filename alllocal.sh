@@ -4,8 +4,9 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+mpfr:4.1.0
 #suitesparse:5.4.0
-julia:1.6.2
+#julia:1.6.2
 #pythia6:6.4.28
 #PTL:2.0.0
 #DD4hep:01.17.00

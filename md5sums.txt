@@ -106,3 +106,4 @@ ae28e6c295c1c0922c8fb80f79dd758e  julia/1.6.2/rpmbuild/SOURCES/Pkg-5c9d3a82e363d
 13496a277a7e7ef7a11debd3f8384064  julia/1.6.2/rpmbuild/SOURCES/Statistics-4b3ef9aaa79350510ca0be395458f66051c2f92d.tar.gz
 d5f08906c4a2ceb3f58c38e3a731b6b8  julia/1.6.2/rpmbuild/SOURCES/julia-logo-color.svg
 4a6d4e74fc44c503f52996ae95cad03a  suitesparse/5.4.0/rpmbuild/SOURCES/SuiteSparse-5.4.0.tar.gz
+bdd3d5efba9c17da8d83a35ec552baef  mpfr/4.1.0/rpmbuild/SOURCES/mpfr-4.1.0.tar.xz
