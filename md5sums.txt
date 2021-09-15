@@ -98,3 +98,11 @@ c51e7a7364c35a718f95c76dff62c122  geant4/10.07.p02/rpmbuild/SOURCES/geant4.10.07
 b9404645d735144ea29e090c086b99cf  cuba/4.2.1/rpmbuild/SOURCES/Cuba-4.2.1.tar.gz
 55c97317c5f00270c5c49af156aae28c  PTL/2.0.0/rpmbuild/SOURCES/4a03063fbaa7f73df1f6dc065e1705a77bb5f6e7.zip
 1485a41401ed43321b9e9afdebbacb60  PTL/2.0.0/rpmbuild/SOURCES/v2.0.0.tar.gz
+25519f6c7a9627f9b48ee954894accd7  julia/1.6.2/rpmbuild/SOURCES/julia-1.6.2.tar.gz
+dc93ae5119c8934f374570342ef036ed  julia/1.6.2/rpmbuild/SOURCES/libuv-fb3e3364c33ae48c827f6b103e05c3f0e78b79a9.tar.gz
+6ec7ae9fd43da9b87cda15b3ab9cc7af  julia/1.6.2/rpmbuild/SOURCES/llvm-11.0.1.src.tar.xz
+22fd8368c7b40209dada50e3205c1294  julia/1.6.2/rpmbuild/SOURCES/libwhich-81e9723c0273d78493dc8c8ed570f68d9ce7e89e.tar.gz
+ae28e6c295c1c0922c8fb80f79dd758e  julia/1.6.2/rpmbuild/SOURCES/Pkg-5c9d3a82e363d98db7f8e99c92203774878b3df0.tar.gz
+13496a277a7e7ef7a11debd3f8384064  julia/1.6.2/rpmbuild/SOURCES/Statistics-4b3ef9aaa79350510ca0be395458f66051c2f92d.tar.gz
+d5f08906c4a2ceb3f58c38e3a731b6b8  julia/1.6.2/rpmbuild/SOURCES/julia-logo-color.svg
+4a6d4e74fc44c503f52996ae95cad03a  suitesparse/5.4.0/rpmbuild/SOURCES/SuiteSparse-5.4.0.tar.gz
