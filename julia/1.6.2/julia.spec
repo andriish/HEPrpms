@@ -85,7 +85,7 @@ BuildRequires:  make
 
 %if %{?rhel}%{!?rhel:0}
 %else
-%BuildRequires:  mpfr-devel >= 4
+BuildRequires:  mpfr-devel >= 4
 %endif
 BuildRequires:  patchelf
 BuildRequires:  perl
