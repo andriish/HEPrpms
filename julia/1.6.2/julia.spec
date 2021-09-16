@@ -84,6 +84,7 @@ BuildRequires:  cmake
 BuildRequires:  make
 
 %if %{?rhel}%{!?rhel:0}
+BuildRequires: python3 python3-devel
 %else
 BuildRequires:  mpfr-devel >= 4
 %endif
