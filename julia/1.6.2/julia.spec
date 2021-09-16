@@ -82,10 +82,10 @@ BuildRequires:  cmake3
 BuildRequires:  cmake
 %endif
 BuildRequires:  make
-%if 0%{?el7}
-%else
-BuildRequires:  mpfr-devel >= 4
-%endif
+#if 0%{?el7}
+#else
+#BuildRequires:  mpfr-devel >= 4
+#endif
 BuildRequires:  patchelf
 BuildRequires:  perl
 BuildRequires:  p7zip-plugins
