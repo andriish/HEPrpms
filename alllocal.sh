@@ -12,7 +12,7 @@ declare -a BUILDLIST=(
 #DD4hep:01.17.00
 #Rivet:3.1.4
 #EvtGen:2.0.0
-geant4:10.07.p02
+#geant4:10.07.p02
 #qcdloop:2.0.8
 #fastjet:3.4.0
 #python-uproot4:4.0.11
@@ -47,7 +47,7 @@ geant4:10.07.p02
 #gosam:2.1.0
 #gosam-contrib:2.0.20200904
 #HepPDT:3.04.01
-#Herwig:7.2.2
+Herwig:7.2.2
 #hevea:2.32  
 #cascade:2.35
 #HJets:1.3
