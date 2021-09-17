@@ -5,7 +5,7 @@
 
 Name:          MG5_aMC
 Version:       2.9.4
-Release:       4%{?dist}
+Release:       5%{?dist}
 Patch0:        patch-MG5_aMC-0.txt
 
 Summary:       MG5_aMC is a multi-purpose particle physics event generator.
@@ -80,6 +80,7 @@ cp -r aloha vendor madgraph input Template MadSpin  mg5decay  models $RPM_BUILD_
 cp VERSION $RPM_BUILD_ROOT/%_datadir/MG5_aMC/
 rm -rf $RPM_BUILD_ROOT/%{python3_sitearch}/madgraph/VERSION
 cp VERSION $RPM_BUILD_ROOT/%{python3_sitearch}/madgraph
+cp Template/LO/Source/.make_opts $RPM_BUILD_ROOT/%{python3_sitearch}/Template/LO/Source/make_opts
 %endif
 %if 0%{?suse_version}
 mkdir -p $RPM_BUILD_ROOT/%{python_sitearch}
@@ -87,6 +88,7 @@ cp bin/* $RPM_BUILD_ROOT/%_bindir
 cp -r aloha vendor madgraph input Template MadSpin  mg5decay  models $RPM_BUILD_ROOT/%{python_sitearch}
 rm -rf $RPM_BUILD_ROOT/%{python_sitearch}/madgraph/VERSION
 cp VERSION $RPM_BUILD_ROOT/%{python_sitearch}/madgraph
+cp Template/LO/Source/.make_opts $RPM_BUILD_ROOT/%{python_sitearch}/Template/LO/Source/make_opts
 %endif 
 
 %files -n %{libname}
