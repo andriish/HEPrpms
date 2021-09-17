@@ -4,6 +4,7 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+BAT:1.0.0
 #qcdnum:17.01.82
 #qcdloop:2.0.8
 #ginac:1.8.1
@@ -47,7 +48,7 @@ declare -a BUILDLIST=(
 #gosam:2.1.0
 #gosam-contrib:2.0.20200904
 #HepPDT:3.04.01
-Herwig:7.2.2
+#Herwig:7.2.2
 #hevea:2.32  
 #cascade:2.35
 #HJets:1.3
