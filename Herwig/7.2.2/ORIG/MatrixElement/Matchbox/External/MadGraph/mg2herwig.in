@@ -194,22 +194,22 @@ elif  options.model.startswith("/"):
   
   
 else:
-  print "---------------------------------------------------------------"
-  print "---------------------------------------------------------------"
-  print "Warning: The model set for the MadGraph Interface "
-  print "         needs a parameter setting by hand."
-  print "         Please fill the param_card_"+options.model+".dat"
-  print "         with your favourite assumptions."
-  print "         And make sure Herwig uses the same parameters."
-  print "---------------------------------------------------------------"
-  print "---------------------------------------------------------------"
+  print("---------------------------------------------------------------")
+  print("---------------------------------------------------------------")
+  print("Warning: The model set for the MadGraph Interface ")
+  print("         needs a parameter setting by hand.")
+  print("         Please fill the param_card_"+options.model+".dat")
+  print("         with your favourite assumptions.")
+  print("         And make sure Herwig uses the same parameters.")
+  print("---------------------------------------------------------------")
+  print("---------------------------------------------------------------")
   if os.path.isfile(options.buildpath +"/MG5/Cards/param_card.dat") and not os.path.isfile(options.runpath+"/"+"param_card_"+options.model+".dat"):
     shutil.copyfile(options.buildpath +"/MG5/Cards/param_card.dat", options.runpath+"/"+"param_card_"+options.model+".dat")
   time.sleep(1)
 
 if not os.path.isdir(options.buildpath):
-   print "The MadGraph Install path did not exist. It has been created for you."
-   print "Just start Herwig read again.."
+   print("The MadGraph Install path did not exist. It has been created for you.")
+   print("Just start Herwig read again..")
    mkdir_p(options.buildpath)
    exit()
 
@@ -324,7 +324,7 @@ if Virtlist!=[]:
     file.write("\nLIBDIR = MG5/lib")
     file.write("\nLINKLIBS =-L$(LIBDIR) -lcts -liregi ")
     if (os.path.exists("MG5/lib/ninja_lib")):
-	file.write("\nLINKLIBS += -L$(LIBDIR)/ninja_lib -lninja   ")
+        file.write("\nLINKLIBS += -L$(LIBDIR)/ninja_lib -lninja   ")
     if (os.path.exists(collierlib)):
         file.write("\nLINKLIBS += -L%s -lcollier "%(collierlib))
     if (os.path.exists(onelooplib)):
@@ -384,8 +384,8 @@ if Virtlist:
 
 os.system("make")
 if not os.path.isfile("InterfaceMadGraph.so"):
-   print "Second trial to make MadGraph Interface. "
-   print "Needed if new .mod files are produced by make." 
+   print("Second trial to make MadGraph Interface. ")
+   print("Needed if new .mod files are produced by make.") 
    os.system("make")
 
 build_matchbox_tmp(pwd,options.buildpath,options.absolute_links)
