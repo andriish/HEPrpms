@@ -8,7 +8,7 @@
 
 Name:           Herwig
 Version:        7.2.2
-Release:        1003%{?dist}
+Release:        1004%{?dist}
 
 Summary:        Herwig is a multi-purpose particle physics event generator.
 License:        GPLv3
@@ -17,7 +17,7 @@ Patch0:         patch-Herwig-0.txt
 Url:            https://herwig.hepforge.org/
 BuildRequires:  MG5_aMC lhapdf-sets-Herwig zlib zlib-devel fastjet-devel 
 BuildRequires:  openloops  njet gsl-devel gosam autoconf automake libtool   gengetopt
-Requires:       MG5_aMC zlib fastjet  gosam   gsl  njet openloops  
+Requires:       MG5_aMC lhapdf-sets-Herwig zlib fastjet  gosam   gsl  njet openloops  
 Requires:       ThePEG  == 2.2.2
 Requires:       ThePEG-devel  == 2.2.2
 BuildRequires:  ThePEG  == 2.2.2 

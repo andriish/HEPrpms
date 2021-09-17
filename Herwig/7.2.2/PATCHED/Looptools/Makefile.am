@@ -55,7 +55,7 @@ libHwLooptoolsXFC_la_FFLAGS  = $(AM_FFLAGS)  -ffixed-line-length-none -fno-range
 libHwLooptoolsCFC_la_SOURCES = $(theCFCSOURCES)
 libHwLooptoolsCFC_la_CPPFLAGS = $(commonCPPFLAGS) -DCOMPLEXPARA
 libHwLooptoolsCFC_la_FCFLAGS = $(AM_FCFLAGS) -ffixed-line-length-none -fno-range-check -DQUAD=0 -DQUADSIZE=16 -DU77EXT=0 
-libHwLooptoolsCFC_la_FFLAGS  = $(AM_FFLAGS) -ffixed-line-length-none -fno-range-check -DQUAD=0 -DQUADSIZE=16 -DU77EXT=0 
+libHwLooptoolsCFC_la_FFLAGS  = $(AM_FFLAGS)  -ffixed-line-length-none -fno-range-check -DQUAD=0 -DQUADSIZE=16 -DU77EXT=0 
 
 libHwLooptools_la_SOURCES = util/cache.c clooptools.cc
 libHwLooptools_la_CXXFLAGS = $(AM_CXXFLAGS) -Wno-strict-aliasing -DQUAD=0 -DQUADSIZE=16 -DU77EXT=0
