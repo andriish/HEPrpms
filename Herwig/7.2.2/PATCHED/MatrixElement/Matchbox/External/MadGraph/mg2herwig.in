@@ -207,7 +207,7 @@ if options.model=="loop_sm" or options.model=="heft":
   file.close()   
 elif  options.model.startswith("/"):
   
-  os.system("python %s/write_param_card.py " % options.model)
+  os.system(str(sys.executable)+" %s/write_param_card.py " % options.model)
   
   
   
@@ -242,7 +242,7 @@ if not options.madgraph and not os.path.isfile("InterfaceMadGraph.so"):
   sys.stderr.write("*** MadGraph build failed, check logfile for details ***")
   exit(1)
 
-os.system("python "+options.madgraph+"/mg5_aMC proc.dat")
+os.system( str(sys.executable)+" "+options.madgraph+"/mg5_aMC proc.dat")
 
 
 
