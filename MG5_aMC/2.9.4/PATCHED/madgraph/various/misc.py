@@ -147,9 +147,9 @@ def get_pkg_info(info_str=None):
                                                   "VERSION"),
                                                   parse_info_str, 
                                                   print_error=True)
-        if info_dict:                                          
+        if info_dict:
          PACKAGE_INFO = info_dict
-        else
+        else:
          info_dict ={}
          info_dict['version'] = '2.x.x'
          info_dict['date'] = '20xx-xx-xx'

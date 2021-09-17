@@ -8,7 +8,7 @@
 
 Name:           Herwig
 Version:        7.2.2
-Release:        1003%{?dist}
+Release:        1005%{?dist}
 
 Summary:        Herwig is a multi-purpose particle physics event generator.
 License:        GPLv3
@@ -17,7 +17,7 @@ Patch0:         patch-Herwig-0.txt
 Url:            https://herwig.hepforge.org/
 BuildRequires:  MG5_aMC lhapdf-sets-Herwig zlib zlib-devel fastjet-devel 
 BuildRequires:  openloops  njet gsl-devel gosam autoconf automake libtool   gengetopt
-Requires:       MG5_aMC zlib fastjet  gosam   gsl  njet openloops  
+Requires:       MG5_aMC lhapdf-sets-Herwig zlib fastjet  gosam   gsl  njet openloops  
 Requires:       ThePEG  == 2.2.2
 Requires:       ThePEG-devel  == 2.2.2
 BuildRequires:  ThePEG  == 2.2.2 
@@ -106,6 +106,7 @@ The library documentation is available on header files.
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 pathfix.py -i /usr/bin/python2  -p -n  ./
+pathfix.py -pn -i %{__python3}  MatrixElement/Matchbox/External/MadGraph
 autoreconf --force --install --verbose .
 automake -a --force
 export LDFLAGS='-Wl,-z,lazy'
@@ -151,6 +152,8 @@ export QA_RPATHS=3
 %_libdir/Herwig/*.la
 
 %changelog
+* Fri Sep 17 2021 Andrii Verbytskyi 7.2.2
+- Try to make it work with newer madgraph
 * Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
   - RPATH
 * Thu Feb 18 2021 Andrii Verbytskyi 7.2.2

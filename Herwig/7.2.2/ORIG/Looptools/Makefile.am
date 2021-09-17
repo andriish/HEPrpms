@@ -49,13 +49,13 @@ commonCPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/include
 
 libHwLooptoolsXFC_la_SOURCES = $(theXFCSOURCES)
 libHwLooptoolsXFC_la_CPPFLAGS = $(commonCPPFLAGS)
-libHwLooptoolsXFC_la_FCFLAGS = $(AM_FCFLAGS) -ffixed-line-length-none
-libHwLooptoolsXFC_la_FFLAGS  = $(AM_FFLAGS)  -ffixed-line-length-none
+libHwLooptoolsXFC_la_FCFLAGS = $(AM_FCFLAGS)
+libHwLooptoolsXFC_la_FFLAGS  = $(AM_FFLAGS)
 
 libHwLooptoolsCFC_la_SOURCES = $(theCFCSOURCES)
 libHwLooptoolsCFC_la_CPPFLAGS = $(commonCPPFLAGS) -DCOMPLEXPARA
-libHwLooptoolsCFC_la_FCFLAGS = $(AM_FCFLAGS) -ffixed-line-length-none
-libHwLooptoolsCFC_la_FFLAGS  = $(AM_FFLAGS)  -ffixed-line-length-none
+libHwLooptoolsCFC_la_FCFLAGS = $(AM_FCFLAGS)
+libHwLooptoolsCFC_la_FFLAGS  = $(AM_FFLAGS)
 
 libHwLooptools_la_SOURCES = util/cache.c clooptools.cc
 libHwLooptools_la_CXXFLAGS = $(AM_CXXFLAGS) -Wno-strict-aliasing
