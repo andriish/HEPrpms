@@ -4,7 +4,7 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-Herwig:7.2.2
+#Herwig:7.2.2
 #BAT:1.0.0
 #qcdnum:17.01.82
 #qcdloop:2.0.8
@@ -68,7 +68,7 @@ Herwig:7.2.2
 #cascade:9.1
 #MC-TESTER:1.25.0
 #MG5_aMC:2.9.2
-#MG5_aMC:2.9.4
+MG5_aMC:2.9.4
 #njet:2.1.1
 #nlojet++:4.1.3
 #noweb:2.11
