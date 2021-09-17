@@ -342,7 +342,7 @@ if Virtlist!=[]:
     file.write("\nLIBDIR = MG5/lib")
     file.write("\nLINKLIBS =-L$(LIBDIR) -lcts -liregi ")
     if (os.path.exists("MG5/lib/ninja_lib")):
-	file.write("\nLINKLIBS += -L$(LIBDIR)/ninja_lib -lninja   ")
+        file.write("\nLINKLIBS += -L$(LIBDIR)/ninja_lib -lninja   ")
     if (os.path.exists(collierlib)):
         file.write("\nLINKLIBS += -L%s -lcollier "%(collierlib))
     if (os.path.exists(onelooplib)):
