@@ -12,7 +12,7 @@ declare -a BUILDLIST=(
 #pythia6:6.4.28
 #PTL:2.0.0
 #DD4hep:01.17.00
-#Rivet:3.1.4
+Rivet:3.1.4
 #EvtGen:2.0.0
 #geant4:10.07.p02
 #qcdloop:2.0.8
@@ -68,7 +68,7 @@ declare -a BUILDLIST=(
 #cascade:9.1
 #MC-TESTER:1.25.0
 #MG5_aMC:2.9.2
-MG5_aMC:2.9.4
+#MG5_aMC:2.9.4
 #njet:2.1.1
 #nlojet++:4.1.3
 #noweb:2.11

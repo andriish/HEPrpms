@@ -4,7 +4,7 @@
 
 Name:           YODA
 Version:        1.9.0
-Release:        1004%{?dist}
+Release:        1005
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
 Source0:        http://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
@@ -124,6 +124,10 @@ find %{buildroot}/%{_libdir}/ -name "*.la" -delete
 rm -fr %{buildroot}/%_libdir/python*/site-packages/__pycache__  
 rm -fr %{buildroot}/%_libdir/python*/site-packages/easy-install.pth
 rm -fr %{buildroot}/%_libdir/python*/site-packages/site.py
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+mv %{buildroot}/%{python3_sitearch}/yoda*.egg/yoda %{buildroot}/%{python3_sitearch}/ 
+%endif
+
 
 
 %files -n %{libname}
