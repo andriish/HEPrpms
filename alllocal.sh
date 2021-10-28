@@ -4,7 +4,7 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-LoopTools:2.16
+#LoopTools:2.16
 #Herwig:7.2.2
 #BAT:1.0.0
 #qcdnum:17.01.82
@@ -14,7 +14,7 @@ LoopTools:2.16
 #PTL:2.0.0
 #DD4hep:01.17.00
 #Rivet:3.1.4
-#EvtGen:2.0.0
+EvtGen:2.1.1
 #geant4:10.07.p02
 #qcdloop:2.0.8
 #fastjet:3.4.0
