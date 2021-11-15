@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-iminuit:2.8.4
+MCFM:10.0.1
+#iminuit:2.8.4
 #DD4hep:01.18.00
 #applgrid:1.6.22
 #python-uproot4:4.1.8
