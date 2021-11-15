@@ -107,3 +107,10 @@ ace5eb65cc52ef962a1e1f202e5793e8  EvtGen/2.1.1/rpmbuild/SOURCES/EvtGen-02.01.01.
 9afb8b5351448138838b4770d24499bf  clhep/2.4.5.1/rpmbuild/SOURCES/clhep-2.4.5.1.tgz
 a475649e9a6ab71e5f1076fd9c4aea62  LCIO/02.17.00/rpmbuild/SOURCES/v02-17.tar.gz
 5ecf937039057c9a0bb7cc3f452db994  gosam/2.1.1/rpmbuild/SOURCES/gosam-2.1.1-4b98559.tar.gz
+bc832064c418aa52da1f30e0c386148e  python-uproot4/4.1.8/rpmbuild/SOURCES/4.1.8.tar.gz
+3c82376bb2ae341afabd98756b02efec  fastnlo/2.5.0.2826/rpmbuild/SOURCES/fastnlo_toolkit-2.5.0-2826.tar.gz
+4fe4bf8ef0473534fa1bb73b4797a801  applgrid/1.6.22/rpmbuild/SOURCES/applgrid-1.6.22.tgz
+7d6a9900f707ac85295556e6b74d8ebb  DD4hep/01.18.00/rpmbuild/SOURCES/v01-18.tar.gz
+187e9ca15e8c2ce80a3d2fc343a1cb7e  iminuit/2.8.4/rpmbuild/SOURCES/v2.8.4.tar.gz
+9658e87e492f1554eef9930c91fd70f3  iminuit/2.8.4/rpmbuild/SOURCES/8de7772cc72daca8e947b79b83fea46214931604.zip
+492702a4dfffc88ce7da381e4af74346  iminuit/2.8.4/rpmbuild/SOURCES/187368db196c271ff4d665b5ffc82aa76750be70.zip

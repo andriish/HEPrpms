@@ -65,7 +65,7 @@ interpolation tables of pre-computed coefficients in perturbation theory
 for observables in hadron-induced processes.
 
 %prep 
-%setup -q -n fastnlo_toolkit-2.5.0-2626
+%setup -q -n fastnlo_toolkit-2.5.0-2826
 
 %build 
 
@@ -119,6 +119,8 @@ mv %{buildroot}/usr/lib/python2.7/site-packages/*  %{buildroot}/usr/%_lib/python
 ldconfig 
 
 %changelog
+* Mon Nov 15 2021 Andrii Verbytskyi 2.5.0
+- Bump to 2.5.0
 * Sun Feb 21 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
  - Cleanup           
 * Thu Nov 23 2017 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
