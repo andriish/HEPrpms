@@ -8,12 +8,12 @@ Source:         http://www.hepforge.org/archive/applgrid/applgrid-%{version}.tgz
 Patch0:         patch-applgrid-0.txt
 URL:            https://applgrid.hepforge.org/
 %if 0%{?rhel} || 0%{?fedora}
-BuildRequires:  gcc-c++ gcc-gfortran hoppet root   autoconf binutils automake libtool 
-Requires:       hoppet root
+BuildRequires:  gcc-c++ gcc-gfortran hoppet root   autoconf binutils automake libtool zlib zlib-devel
+Requires:       hoppet root zlib
 %endif
 %if 0%{?suse_version}
-BuildRequires:  gcc-c++ gcc-fortran hoppet root6-config root6-libs root6-devel root6  autoconf binutils automake libtool 
-Requires:       hoppet root6-config root6-libs root6-devel libgfortran5
+BuildRequires:  gcc-c++ gcc-fortran hoppet root6-config root6-libs root6-devel root6  autoconf binutils automake libtool pkgconfig(zlib)
+Requires:       hoppet root6-config root6-libs root6-devel libgfortran5 pkgconfig(zlib)
 %endif
 
 %description
