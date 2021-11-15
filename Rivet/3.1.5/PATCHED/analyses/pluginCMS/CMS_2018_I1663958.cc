@@ -120,7 +120,7 @@ namespace Rivet {
 
       const Particles& photons = apply<VetoedFinalState>(event, "MyPhotons").particles(Cuts::abseta < 2.4 && Cuts::pT > 15*GeV);
       for (const Particle& ph : photons) {
-        double isolation = sum(filter_select(isopars, deltaRLess(ph, 0.4)), Cuts::pT, 0.);
+        double isolation = sum(filter_select(isopars, deltaRLess(ph, 0.4)), Kin::pT, 0.);
         isolation = isolation/ph.pt() - 1.;
         if (isolation > 0.25) continue;
         additionalobjects += ph;
