@@ -4,6 +4,11 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+#LCIO:02.17.00
+#gosam:2.1.1
+#clhep:2.4.5.1
+Rivet:3.1.5
+#YODA:1.9.2
 #LoopTools:2.16
 #Herwig:7.2.2
 #BAT:1.0.0
@@ -14,7 +19,7 @@ declare -a BUILDLIST=(
 #PTL:2.0.0
 #DD4hep:01.17.00
 #Rivet:3.1.4
-EvtGen:2.1.1
+#EvtGen:2.1.1
 #geant4:10.07.p02
 #qcdloop:2.0.8
 #fastjet:3.4.0
