@@ -115,3 +115,4 @@ bc832064c418aa52da1f30e0c386148e  python-uproot4/4.1.8/rpmbuild/SOURCES/4.1.8.ta
 9658e87e492f1554eef9930c91fd70f3  iminuit/2.8.4/rpmbuild/SOURCES/8de7772cc72daca8e947b79b83fea46214931604.zip
 492702a4dfffc88ce7da381e4af74346  iminuit/2.8.4/rpmbuild/SOURCES/187368db196c271ff4d665b5ffc82aa76750be70.zip
 f4fecf5a5cd44ecc323d67229d874681  MCFM/10.0.1/rpmbuild/SOURCES/MCFM-10.0.1.tar.gz
+ace5eb65cc52ef962a1e1f202e5793e8  EvtGen/2.1.1/rpmbuild/SOURCES/EvtGen-02.01.01.tar.gz
