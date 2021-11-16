@@ -845,7 +845,9 @@ sed -i 's/ArCmdBase clq/ArCmdBase cq/g'  src/config/Imake.tmpl
 %if %{?fedora}%{!?fedora:0} >= 34
 sed -i 's/char    \*prompt\;/const char    \*prompt\;/g' src/packlib/cspack/tcpaw/tcpaw.c
 %endif
-
+%if 0%{?suse_version}
+sed -i 's/char    \*prompt\;/const char    \*prompt\;/g' src/packlib/cspack/tcpaw/tcpaw.c
+%endif
 
 %build
 
