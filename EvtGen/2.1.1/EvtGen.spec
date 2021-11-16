@@ -10,6 +10,7 @@ Release:        1%{?dist}
 License:        GPLv3
 Url:            http://evtgen.warwick.ac.uk
 Source0:        https://evtgen.hepforge.org/downloads/EvtGen-02.01.01.tar.gz
+Patch0:         patch-EvtGen-0.txt
 
 Summary:        EvtGen is a Monte Carlo event generator
 BuildRequires:  PHOTOS >= 3.62 
@@ -86,6 +87,7 @@ Provides:       %{name}-doc = %{version}-%{release}
 
 %prep
 %setup -q -n EvtGen/R02-01-01
+%patch0 -p1
 
 %build
 mkdir -p build
