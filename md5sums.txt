@@ -118,3 +118,4 @@ f4fecf5a5cd44ecc323d67229d874681  MCFM/10.0.1/rpmbuild/SOURCES/MCFM-10.0.1.tar.g
 ace5eb65cc52ef962a1e1f202e5793e8  EvtGen/2.1.1/rpmbuild/SOURCES/EvtGen-02.01.01.tar.gz
 9ba1ed66763aaef3631d9c041f763538  qcdnum/17.01.83/rpmbuild/SOURCES/qcdnum170183.tar.gz
 e5b49a450d1bdfe5953be6d0e86deccc  SHERPA-MC/3.0.0alpha1/rpmbuild/SOURCES/SHERPA-MC-3.0.0alpha1.tar.gz
+563b7204f1be6184687e6b741a9c1743  SHERPA-MC/2.2.12/rpmbuild/SOURCES/SHERPA-MC-2.2.12.tar.gz
