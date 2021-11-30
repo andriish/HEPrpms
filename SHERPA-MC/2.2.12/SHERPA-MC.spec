@@ -17,7 +17,7 @@ Release:        1%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://sherpa.hepforge.org/downloads/%{name}-%{version}.tar.gz
-Patch0:         patch-SHERPA-MC-0.txt
+#Patch0:         patch-SHERPA-MC-0.txt
 Summary:          Multipurpose Monte Carlo Event Generator for High Energy physics
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} 
