@@ -17,6 +17,7 @@ Release:        1%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://sherpa.hepforge.org/downloads/%{name}-%{version}.tar.gz
+Patch0:         patch-SHERPA-MC-0.txt
 Summary:          Multipurpose Monte Carlo Event Generator for High Energy physics
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} 
@@ -169,6 +170,14 @@ This package provides the Python 3 bindings for %{name}-openmpi
 
 %prep
 %setup -q
+%patch0 -p1
+
+%if  %{?rhel}%{!?rhel:0} >= 8
+pathfix.py -pn -i %{__python2} SHERPA/Run/plot_graphs*
+%endif
+%if %{?fedora}%{!?fedora:0}
+pathfix.py -pn -i %{__python3} SHERPA/Run/plot_graphs*
+%endif
 
 
 %build
@@ -178,7 +187,7 @@ This package provides the Python 3 bindings for %{name}-openmpi
 mkdir serial; \
 cd serial; \
 export CXXFLAGS=$CXXFLAGS" -I"$(pwd)"/../ ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
-../configure --disable-rpath  --enable-pythia8=/usr --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006  --enable-blackhat=$(blackhat-config --prefix) --enable-mcfm=/usr  --enable-pyext   --enable-gzip --enable-recola=/usr  --enable-hztool=/usr   --enable-hepevtsize=4000    --enable-hepmc3=/usr --enable-hepmc3root   --prefix=%{_prefix} --libdir=%{_libdir}  --enable-fastjet=/usr   --enable-analysis --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
+../configure --disable-rpath  --enable-pythia8=/usr --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006  --enable-blackhat=$(blackhat-config --prefix)   --enable-pyext   --enable-gzip --enable-recola=/usr  --enable-hztool=/usr   --enable-hepevtsize=4000    --enable-hepmc3=/usr --enable-hepmc3root   --prefix=%{_prefix} --libdir=%{_libdir}  --enable-fastjet=/usr   --enable-analysis --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
 make -C Manual  ;\
 make %{?_smp_mflags} ; \
 cd ..
@@ -190,7 +199,7 @@ export PYTHON=%{_bindir}/python3
 mkdir serial; \
 cd serial; \
 export CXXFLAGS=$CXXFLAGS" -I"$(pwd)"/../ -Wno-error=return-type  ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
-../configure --disable-rpath --enable-pythia8=/usr --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006  --enable-blackhat=$(blackhat-config --prefix) --enable-mcfm=/usr  --enable-pyext   --enable-gzip --enable-recola=/usr  --enable-hztool=/usr   --enable-hepevtsize=4000    --enable-hepmc3=/usr --disable-hepmc3root   --prefix=%{_prefix} --libdir=%{_libdir}  --enable-fastjet=/usr   --enable-analysis --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root=/usr  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
+../configure --disable-rpath --enable-pythia8=/usr --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006  --enable-blackhat=$(blackhat-config --prefix)   --enable-pyext   --enable-gzip --enable-recola=/usr  --enable-hztool=/usr   --enable-hepevtsize=4000    --enable-hepmc3=/usr --disable-hepmc3root   --prefix=%{_prefix} --libdir=%{_libdir}  --enable-fastjet=/usr   --enable-analysis --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root=/usr  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
 make -C Manual  ;\
 make %{?_smp_mflags} ; \
 cd ..
@@ -212,7 +221,7 @@ export F77=mpif77
 mkdir $MPI_COMPILER; \
 cd $MPI_COMPILER; \
 export CXXFLAGS=$CXXFLAGS" -I"$(pwd)"/../ ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
-../configure --disable-rpath  --enable-pythia8=/usr --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006   --enable-blackhat=$(blackhat-config --prefix)  --enable-mcfm=/usr  --enable-pyext   --enable-gzip  --enable-hztool=/usr --enable-hepevtsize=4000 --enable-hepmc3=/usr --enable-hepmc3root --prefix=$MPI_HOME --libdir=$MPI_HOME/%_lib  --datadir=%{_datadir}     --mandir=%{_mandir}     --infodir=%{_infodir} \
+../configure --disable-rpath  --enable-pythia8=/usr --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006   --enable-blackhat=$(blackhat-config --prefix)    --enable-pyext   --enable-gzip  --enable-hztool=/usr --enable-hepevtsize=4000 --enable-hepmc3=/usr --enable-hepmc3root --prefix=$MPI_HOME --libdir=$MPI_HOME/%_lib  --datadir=%{_datadir}     --mandir=%{_mandir}     --infodir=%{_infodir} \
   --program-suffix=$MPI_SUFFIX  --enable-mpi --enable-recola=/usr   --enable-fastjet=/usr   --enable-analysis --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
 make -C Manual  ;\
 make %{?_smp_mflags} ; \
@@ -236,7 +245,7 @@ source /etc/profile.d/mpi-selector.sh
 mkdir openmpi3; \
 cd openmpi3; \
 export CXXFLAGS=$CXXFLAGS" -I"$(pwd)"/../   -Wno-error=return-type   ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
-../configure --disable-rpath --enable-pythia8=/usr --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006   --enable-blackhat=$(blackhat-config --prefix) --enable-mcfm=/usr  --enable-pyext   --enable-gzip  --enable-hztool=/usr --enable-hepevtsize=4000 --enable-hepmc3=/usr --disable-hepmc3root --prefix=$MPI_HOME --libdir=$MPI_HOME/%_lib  --datadir=%{_datadir}     --mandir=%{_mandir}     --infodir=%{_infodir} \
+../configure --disable-rpath --enable-pythia8=/usr --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006   --enable-blackhat=$(blackhat-config --prefix)   --enable-pyext   --enable-gzip  --enable-hztool=/usr --enable-hepevtsize=4000 --enable-hepmc3=/usr --disable-hepmc3root --prefix=$MPI_HOME --libdir=$MPI_HOME/%_lib  --datadir=%{_datadir}     --mandir=%{_mandir}     --infodir=%{_infodir} \
   --program-suffix=$MPI_SUFFIX  --enable-mpi --enable-recola=/usr   --enable-fastjet=/usr   --enable-analysis --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root=/usr  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
 make -C Manual  ;\
 make %{?_smp_mflags} ; \
@@ -327,11 +336,11 @@ export QA_RPATHS=3
 
 %files -n %{sharename}
 /usr/share/SHERPA-MC/*
-/usr/share/man/man1/*
+#/usr/share/man/man1/*
 /usr/share/doc/*
-/usr/share/info/Sherpa.info.gz
-/usr/share/info/Sherpa.info-1.gz
-/usr/share/info/Sherpa.info-2.gz
+#/usr/share/info/Sherpa.info.gz
+#/usr/share/info/Sherpa.info-1.gz
+#/usr/share/info/Sherpa.info-2.gz
 
 %files -n %{libnamedev}
 %{_includedir}/SHERPA-MC/*

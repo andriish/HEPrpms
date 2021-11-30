@@ -1,6 +1,6 @@
 diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
---- ORIG/CMakeLists.txt	2021-04-22 14:32:17.969044020 +0200
-+++ PATCHED/CMakeLists.txt	2021-04-22 14:32:17.969044020 +0200
+--- ORIG/CMakeLists.txt	2021-09-15 09:50:57.450449419 +0200
++++ PATCHED/CMakeLists.txt	2021-09-15 09:50:57.450449419 +0200
 @@ -1,28 +1,28 @@
 -cmake_minimum_required (VERSION 3.13)
 +cmake_minimum_required (VERSION 3.11)
@@ -135,8 +135,8 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
 +install(TARGETS mcfmmain DESTINATION ${CMAKE_INSTALL_BINDIR})
  
 diff -Naur ORIG/src/Need/CMakeLists.txt PATCHED/src/Need/CMakeLists.txt
---- ORIG/src/Need/CMakeLists.txt	2021-04-22 14:32:17.969044020 +0200
-+++ PATCHED/src/Need/CMakeLists.txt	2021-04-22 14:32:17.969044020 +0200
+--- ORIG/src/Need/CMakeLists.txt	2021-09-15 09:50:57.450449419 +0200
++++ PATCHED/src/Need/CMakeLists.txt	2021-09-15 09:50:57.450449419 +0200
 @@ -55,7 +55,7 @@
  mathfun.f
  mcfm_exit.f
