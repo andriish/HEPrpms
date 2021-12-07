@@ -1,2 +1,2 @@
 #!/bin/bash
-diff -Naur  ORIG/Makefile PATCHED/Makefile > patch-PHOTOS-1.txt
+diff -Naur  ORIG/ PATCHED/ > patch-PHOTOS-0.txt

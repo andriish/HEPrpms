@@ -12,7 +12,6 @@ License:        Unknown
 Url:            http://photospp.web.cern.ch/photospp
 Source0:        http://photospp.web.cern.ch/photospp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
 Patch0:         patch-PHOTOS-0.txt
-Patch1:         patch-PHOTOS-1.txt
 Summary:        PHOTOS Monte Carlo for bremsstrahlung in the decay of particles and resonances
 Requires:       HepMC libgfortran
 BuildRequires:  HepMC HepMC-devel autoconf automake libtool 
@@ -37,18 +36,17 @@ The library documentation is available on header files.
 
 %prep
 %setup -qn %{name}
-%patch0 -p0
-%patch1 -p0
+%patch0 -p1
 
 %build
 sed -i 's/AC_FUNC_MALLOC/#AC_FUNC_MALLOC/g' configure.in
 autoreconf
 %configure  --with-hepmc=/usr
-make 
+make  LIBDIR=/usr/%_lib
 
 
 %install
-%make_install
+%make_install  LIBDIR=/usr/%_lib
 %files 
 %doc AUTHORS README COPYING
 %files -n %{libname}

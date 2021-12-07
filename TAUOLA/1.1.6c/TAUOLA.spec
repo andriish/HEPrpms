@@ -12,7 +12,6 @@ License:        Unknown
 Url:            http://tauolapp.web.cern.ch/tauolapp
 Source0:        http://tauolapp.web.cern.ch/tauolapp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
 Patch0:         patch-TAUOLA-0.txt
-Patch1:         patch-TAUOLA-1.txt
 Summary:        Tau lepton decay Monte Carlo
 BuildRequires:  gcc-gfortran gcc-c++ HepMC-devel autoconf automake libtool 
 Requires:       HepMC libgfortran
@@ -42,8 +41,7 @@ The library documentation is available on header files.
 
 %prep
 %setup -qn %{name}
-%patch0 -p0
-%patch1 -p0
+%patch0 -p1
 
 %build
 sed -i 's/AC_FUNC_MALLOC/#NOAC_FUNC_MALLOC/g' configure.in

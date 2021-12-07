@@ -43,7 +43,7 @@ The library documentation is available on header files.
 
 %prep
 %setup -q -n EvtGen/R01-07-00
-%patch0 -p0
+%patch0 -p1
 
 %build
 mkdir -p $(pwd)/tmp/usr

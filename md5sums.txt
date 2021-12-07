@@ -120,3 +120,6 @@ ace5eb65cc52ef962a1e1f202e5793e8  EvtGen/2.1.1/rpmbuild/SOURCES/EvtGen-02.01.01.
 e5b49a450d1bdfe5953be6d0e86deccc  SHERPA-MC/3.0.0alpha1/rpmbuild/SOURCES/SHERPA-MC-3.0.0alpha1.tar.gz
 563b7204f1be6184687e6b741a9c1743  SHERPA-MC/2.2.12/rpmbuild/SOURCES/SHERPA-MC-2.2.12.tar.gz
 c548d580e958b5652bf7bf12fad7c1d0  binder/1.2.0/rpmbuild/SOURCES/v1.2.0.tar.gz
+7f6d01f46997fdc486f2de16b2aeb3f9  EvtGen/1.7.0/rpmbuild/SOURCES/EvtGen-01.07.00.tar.gz
+39c30c16560e2440985a912c9263047c  TAUOLA/1.1.6c/rpmbuild/SOURCES/TAUOLA.1.1.6c.tar.gz
+636bc834cb6eb2560808da57807ccf46  PHOTOS/3.61/rpmbuild/SOURCES/PHOTOS.3.61.tar.gz
