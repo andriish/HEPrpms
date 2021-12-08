@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-binder:1.2.0
+fjcontrib:1.048
+#binder:1.2.0
 #SHERPA-MC:2.2.12
 #SHERPA-MC:3.0.0alpha1
 #qcdnum:17.01.83
