@@ -5,8 +5,8 @@ export PATH=$PATH:$(pwd)
 set -x 
 declare -a BUILDLIST=(
 TAUOLA:1.1.6c
-EvtGen:1.7.0
-PHOTOS:3.61
+#EvtGen:1.7.0
+#PHOTOS:3.61
 #binder:1.2.0
 #SHERPA-MC:2.2.12
 #SHERPA-MC:3.0.0alpha1
