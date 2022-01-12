@@ -72,8 +72,7 @@ This package provides the Python 3 bindings for %{name}
 
 
 %prep
-%setup -q -n DD4hep-01-18
-#patch0 -p1
+%setup -q -n DD4hep-01-19
 
 %build
 #TBB should be fixed
