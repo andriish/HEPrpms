@@ -127,3 +127,4 @@ ffa3c60131067a3865bf4c45b8465f99  ginac/1.8.2/rpmbuild/SOURCES/ginac-1.8.2.tar.b
 c439da43813ecf3d417d9edc2cfb605b  DD4hep/01.19.00/rpmbuild/SOURCES/v01-19.tar.gz
 97637c32eb329c96c620d9f1f2e8203c  YODA/1.9.4/rpmbuild/SOURCES/YODA-1.9.4.tar.gz
 78262a78a30b19fe70fd5904fb48cf94  SHERPA-MC/2.2.12/rpmbuild/SOURCES/SHERPA-MC-2.2.12.tar.gz
+417d20e1aca5a9da132546e34283c6b8  tmdlib/2.2.05/rpmbuild/SOURCES/tmdlib-2.2.05.tar.gz
