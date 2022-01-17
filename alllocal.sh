@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-YODA:1.9.4
+rapgap:3.308
+#YODA:1.9.4
 #ginac:1.8.2
 #DD4hep:01.19.00
 #Rivet:3.1.5
