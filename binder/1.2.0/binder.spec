@@ -60,7 +60,7 @@ make
 %{_bindir}/*
 
 %changelog
-* Wed Jan 19  Andrii Verbytskyi 
+* Wed Jan 19 2022  Andrii Verbytskyi 
 + Patch for more includes 
 * Tue Dec 7 2021  Andrii Verbytskyi 
 + Version bump
