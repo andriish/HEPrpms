@@ -18,9 +18,9 @@ cascade_SOURCES =  casmain.F  drn.F  upevnt.F upinit.F pydata.F
 #cascade_FFLAGS = -I$(top_srcdir)/include -I$(PYTHIA_SOURCE) $(MYFFLAGS) 
 #cascade_FFLAGS = -I$(top_srcdir)/include -I$(PYTHIA_SOURCE) $(MYFFLAGS) 
 
-conv_source=convhepmc-helpers.F  Pythia6ToHepMC2.cc  Pythia6ToHepMC3.cc RivetInterface.cc
+conv_source=convhepmc-helpers.F  Pythia6ToHepMC.cc  RivetInterface.cc
 if NO_HEPMC2
-AM_CPPFLAGS+=-DDUMMYPYTHIA6TOHEPMC2
+  AM_CPPFLAGS+=-DDUMMYPYTHIA6TOHEPMC2
 else
   AM_CPPFLAGS+= -I$(HEPMC2)/include
 endif
@@ -87,6 +87,6 @@ cascade_SOURCES += $(conv_source)  $(pythia8_source)  fjfort.cc fjcore.cc gzstuf
 
 cascade_LDADD =  ./libcascade3.la ../bases51/libcascadebases.la ../pythia6428/libcascadepythia.la \
                 $(FLIBS) $(HEPMC2LIB) $(HEPMC3LIB) $(RIVETLIB) $(TMDLIB) $(PDFLIB) $(GSL_LIB) $(PYTHIA8LIB) $(ZLIB_LIBS) ../misc/libcascademycern.la -lm 
-                
-#cascade_LDADD += $(HEPMC3LIB)
 	
+#cascade_LDADD += $(HEPMC3LIB)
+

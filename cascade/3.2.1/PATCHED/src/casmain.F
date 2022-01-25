@@ -61,7 +61,7 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #include "Pythia6ToHepMC.inc"
       INTEGER OID, HMSTATUS
 include "RivetInterface.inc"
-      INTEGER OID, STATUS, rvtHM, RIVETSTATUS
+      INTEGER  rvtHM, RIVETSTATUS
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       
       sumOfWeights = 0d0
@@ -255,9 +255,9 @@ C Set here some physicl TM scale. Is meaningfull only in HepMC3
 C-- This is for Rivet
          if (rvtOUT) then
          if (I.EQ.1) then 
-         RIVETSTATUS=rivet_init_first_event(OID3)
+         RIVETSTATUS=rivet_init_first_event(OID)
          end if
-         RIVETSTATUS=rivet_run(OID3)
+         RIVETSTATUS=rivet_run(OID)
          end if
 
           HMSTATUS=HepMC_clear_event(OID)  
