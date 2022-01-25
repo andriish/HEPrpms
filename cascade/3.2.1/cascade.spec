@@ -73,6 +73,8 @@ find %{buildroot} -name '*.la' -delete
 %{_datadir}/*
 
 %changelog
+* Tue Jan 25 2022 Andrii verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 3.2.1
+- Bump to 3.2.1
 * Mon May 31 2021 Andrii Verbytskyi 3.1.01
 + Cleanup of dependencies
 * Fri Nov 29 2019 Andrii Verbytskyi 3.0.01
