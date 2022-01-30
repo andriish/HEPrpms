@@ -6,7 +6,7 @@
 
 Name:           TAUOLA
 Version:        1.1.8
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        Unknown
 Url:            http://tauolapp.web.cern.ch/tauolapp
 Source0:        http://tauolapp.web.cern.ch/tauolapp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
@@ -107,6 +107,8 @@ install -m 644 documentation/doxy_documentation/html/*   %{buildroot}/%{_docdir}
 
 
 %changelog
+* Sun Jan 30 2022 Andrii Verbytskyi 1.1.8
++ Fix HepMC3 interfaces.
 * Wed Feb 19 2020 Andrii Verbytskyi 1.1.8
 + New version Prerelease.
 * Thu Jan 23 2020 Andrii Verbytskyi 1.1.7
