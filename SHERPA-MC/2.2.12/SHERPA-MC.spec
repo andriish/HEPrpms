@@ -13,11 +13,12 @@
 
 Name:           SHERPA-MC
 Version:        2.2.12
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://sherpa.hepforge.org/downloads/%{name}-%{version}.tar.gz
 Summary:          Multipurpose Monte Carlo Event Generator for High Energy physics
+Patch0:           patch-SHERPA-MC-0.txt
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} 
 BuildRequires:    gcc-gfortran gcc-c++ root pythia8-devel pythia8   Rivet Rivet-devel hztool
@@ -169,7 +170,7 @@ This package provides the Python 3 bindings for %{name}-openmpi
 
 %prep
 %setup -q
-
+%patch0 -p 1
 
 %build
 # Build serial version, dummy arguments
