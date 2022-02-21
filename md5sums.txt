@@ -132,3 +132,4 @@ af1e03403ac2bd820d5e6d2caab28788  rapgap/3.308/rpmbuild/SOURCES/rapgap-3.308.tar
 e8866f16b7eb1c5a327d788472f87925  whizard/3.0.2/rpmbuild/SOURCES/whizard-3.0.2.tar.gz
 0f8c2951eceb962781f944f8f194b27e  cascade/3.2.1/rpmbuild/SOURCES/cascade-3.2.1.tar.gz
 f386c5b17b59320a25c5a9f6064db05f  rapgap/3.310/rpmbuild/SOURCES/rapgap-3.310.tar.gz
+d3079a7ffcc926b34c5ad2868ed6d8f0  HepMC3/3.2.5/rpmbuild/SOURCES/HepMC3-3.2.5.tar.gz
