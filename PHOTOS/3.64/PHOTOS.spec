@@ -6,7 +6,7 @@
 
 Name:           PHOTOS
 Version:        3.64
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        Unknown
 Url:            http://photospp.web.cern.ch/photospp
 Source0:        http://photospp.web.cern.ch/photospp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
