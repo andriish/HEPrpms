@@ -2,7 +2,7 @@
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.0.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
@@ -41,8 +41,8 @@ BuildRequires: chrpath
 
 
 %if 0%{?suse_version}
-Requires: fastjet hoppet libHepMC3-1  gosam openloops ocaml  gosam recola libpythia8 LCIO  libLHAPDF TAUOLA hdf5
-BuildRequires: fastjet hoppet libHepMC3-1 gosam openloops ocaml  libLHAPDF LHAPDF-devel
+Requires: fastjet hoppet libHepMC3-3  gosam openloops ocaml  gosam recola libpythia8 LCIO  libLHAPDF TAUOLA hdf5
+BuildRequires: fastjet hoppet libHepMC3-3 gosam openloops ocaml  libLHAPDF LHAPDF-devel
 BuildRequires: fastjet-devel HepMC3-devel recola LHAPDF-devel  autoconf automake libtool
 BuildRequires: libpythia8 pythia-devel   lhapdf-sets-whizard
 BuildRequires: root6 root6-libs root6-devel   python3-devel  openmpi openmpi-devel noweb LCIO LCIO-devel TAUOLA TAUOLA-devel hdf5 hdf5-devel
