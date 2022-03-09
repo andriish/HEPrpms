@@ -6,7 +6,7 @@
 
 Name:           TAUOLA
 Version:        1.1.8
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        Unknown
 Url:            http://tauolapp.web.cern.ch/tauolapp
 Source0:        http://tauolapp.web.cern.ch/tauolapp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
@@ -21,9 +21,9 @@ BuildRequires:  lhapdf lhapdf-devel
 %endif
 %if 0%{?suse_version}
 BuildRequires:  tex(eurosym.sty)
-BuildRequires:  gcc-fortran libpythia8 pythia-devel  HepMC3-devel HepMC2-devel libHepMC4 libHepMC3-1 
+BuildRequires:  gcc-fortran libpythia8 pythia-devel  HepMC3-devel HepMC2-devel libHepMC4 libHepMC3-3
 BuildRequires:  libLHAPDF LHAPDF-devel 
-Requires:       libHepMC4 libHepMC3-1 gcc-fortran libpythia8
+Requires:       libHepMC4 libHepMC3-3 gcc-fortran libpythia8
 %endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
