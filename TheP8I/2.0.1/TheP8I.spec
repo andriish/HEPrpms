@@ -47,4 +47,3 @@ export QA_RPATHS=3
 
 * Thu Jan 17 2019 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 1.0.0
 + test
-
