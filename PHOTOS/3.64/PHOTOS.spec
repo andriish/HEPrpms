@@ -18,7 +18,7 @@ BuildRequires:  gcc-gfortran  pythia8 pythia8-devel HepMC-devel HepMC3-devel Hep
 Requires:       HepMC HepMC3 libgfortran pythia8
 %endif
 %if 0%{?suse_version}
-BuildRequires:  gcc-fortran   libpythia8 pythia-devel HepMC2-devel HepMC3-devel libHepMC4 libHepMC3-1 tex(eurosym.sty) tex(booktabs.sty)
+BuildRequires:  gcc-fortran   libpythia8 pythia-devel HepMC2-devel HepMC3-devel libHepMC4 libHepMC3-3 tex(eurosym.sty) tex(booktabs.sty)
 Requires:       libHepMC4 libHepMC3-1 gcc-fortran  libpythia8
 %endif
 BuildRequires:  TAUOLA >= 1.1.7
