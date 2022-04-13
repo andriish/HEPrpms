@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-TheP8I:2.0.2
+ginac:1.8.3
+#TheP8I:2.0.2
 #geant4:11.0.0
 #binder:1.2.0
 #SHERPA-MC:2.2.12

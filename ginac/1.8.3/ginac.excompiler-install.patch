@@ -1,0 +1,10 @@
+diff --color -ur ginac-1.7.9/tools/CMakeLists.txt ginac-1.7.9.excompiler-install.patch/tools/CMakeLists.txt
+--- ginac-1.7.9/tools/CMakeLists.txt	2020-04-08 17:38:00.000000000 +0200
++++ ginac-1.7.9.excompiler-install.patch/tools/CMakeLists.txt	2020-10-25 11:40:10.388559215 +0100
+@@ -12,5 +12,5 @@
+           "${CMAKE_CURRENT_BINARY_DIR}/ginac-excompiler"
+ 	)
+ 
+-	install(PROGRAMS ginac-excompiler DESTINATION "${LIBEXECDIR}")
++install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/ginac-excompiler" DESTINATION "${LIBEXECDIR}")
+ endif (CMAKE_COMPILER_IS_GNUCC)
