@@ -25,16 +25,18 @@ Install this package to develop software based on CLHEP.
 %setup -q -n  %{version}/CLHEP
 
 %build
-%if 0%{?rhel} || 0%{?fedora}
+%if 0%{?fedora}
+%cmake  
+%cmake_build %{?_smp_mflags} 
+%endif
+
+%if 0%{?rhel} 
 mkdir -p build
 cd build 
 %cmake  ../
-%if %{?fedora}%{!?fedora:0} 
-%cmake_build %{?_smp_mflags} 
-%else
 make %{?_smp_mflags} 
 %endif
-%endif
+
 %if 0%{?suse_version}
 %cmake
 make
