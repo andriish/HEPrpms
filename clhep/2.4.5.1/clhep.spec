@@ -44,14 +44,15 @@ make
 
 
 %install
-%if 0%{?rhel} || 0%{?fedora}
-cd build 
 %if %{?fedora}%{!?fedora:0} 
 %cmake_install 
-%else
+%endif
+
+%if 0%{?rhel} 
+cd build 
 %make_install 
 %endif
-%endif
+
 %if 0%{?suse_version}
 %cmake_install 
 %endif
