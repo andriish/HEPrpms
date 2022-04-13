@@ -37,7 +37,7 @@ Lund hadronisation for Herwig. Part of earlier ThePEG codes.
 
 %files
 %{_libdir}/ThePEG/libTheP8I*
-%_datadir/*in
+%_datadir/TheP8I/*in
 
 %changelog
 * Tue Apr 06 2022 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
