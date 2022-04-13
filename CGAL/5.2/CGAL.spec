@@ -1,4 +1,4 @@
-# CGAL-5.0 is now a header-only library, with dependencies. It no
+# CGAL-5.x is now a header-only library, with dependencies. It no
 # longer has any binary to build, but cannot be noarch because of
 # arch-specific dependencies
 %global debug_package %{nil}
@@ -21,14 +21,12 @@ License:        LGPLv3+ and GPLv3+ and Boost
 URL:            http://www.cgal.org/
 Source0:        https://github.com/CGAL/cgal/releases/download/v%{fullversion}/%{name}-%{fullversion}.tar.xz
 
-
 # Required devel packages.
 BuildRequires: cmake >= %{cmake_version}
 BuildRequires: gcc-c++
 BuildRequires: gmp-devel
 BuildRequires: boost-devel >= %{boost_version}
 BuildRequires: mpfr-devel
-BuildRequires: make
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires: qt5-qtbase-devel >= %{qt_version}
 BuildRequires: qt5-qtsvg-devel >= %{qt_version}
@@ -41,10 +39,7 @@ BuildRequires:  cmake(Qt5OpenGL) >= 5.3
 BuildRequires:  cmake(Qt5Svg) >= 5.3
 BuildRequires:  cmake(Qt5Xml) >= 5.3
 %endif
-
-
-
-
+BuildRequires: make
 
 %description
 Libraries for CGAL applications.
@@ -83,9 +78,6 @@ develop applications using CGAL.
 
 %package qt5-devel
 Summary:        Development files and tools for CGAL applications using CGAL_Qt5
-
-
-
 Requires:       %{name}-devel = %{version}-%{release}
 %if 0%{?rhel} || 0%{?fedora}
 Requires:       qt5-qtbase-devel%{?_isa} >= %{qt_version}
@@ -93,15 +85,12 @@ Requires:       qt5-qtsvg-devel%{?_isa} >= %{qt_version}
 Requires:       qt5-qtscript-devel%{?_isa} >= %{qt_version}
 Requires:       qt5-qttools-devel%{?_isa} >= %{qt_version}
 %endif
-
 %if 0%{?suse_version}
 Requires:  cmake(Qt5) >= 5.3
 Requires:  cmake(Qt5OpenGL) >= 5.3
 Requires:  cmake(Qt5Svg) >= 5.3
 Requires:  cmake(Qt5Xml) >= 5.3
 %endif
-
-
 %description qt5-devel
 The %{name}-qt5-devel package provides the headers files and tools you
 may need to develop applications using the CGAL_Qt5 component of CGAL.
@@ -145,8 +134,6 @@ EOF
 
 %build
 
-
-
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 mkdir build
 pushd build
@@ -162,7 +149,6 @@ popd
 
 
 %install
-
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 pushd build
@@ -189,7 +175,6 @@ cmake -L "-DCMAKE_PREFIX_PATH=%{buildroot}/usr" %{buildroot}%{_datadir}/CGAL/exa
 make constrained_plus
 ldd ./constrained_plus
 ./constrained_plus
-
 
 %files devel
 %license AUTHORS LICENSE LICENSE.BSL LICENSE.RFL LICENSE.LGPL LICENSE.GPL
