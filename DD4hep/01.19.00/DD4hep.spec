@@ -142,7 +142,7 @@ pathfix.py -pn -i %{__python3} $RPM_BUILD_ROOT/usr/bin/*
 %endif
 
 %changelog
-* Wed Jan 12 2021 Andrii Verbytskyi 1.19
+* Wed Jan 12 2022 Andrii Verbytskyi 1.19
 - Bump to 1.19
 * Mon Nov 15 2021 Andrii Verbytskyi 1.18
 - Bump to 1.18
