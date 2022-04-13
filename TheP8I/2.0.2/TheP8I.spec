@@ -28,7 +28,7 @@ Lund hadronisation for Herwig. Part of earlier ThePEG codes.
 
 
 %build
-%cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir}/ThePEG
+%cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir}/ThePEG -DTHEP8I_ENABLE_TEST=OFF
 %cmake_build
 
 %install
