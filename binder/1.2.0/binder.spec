@@ -37,7 +37,7 @@ that it handles special features new in C++11.
 
 %build
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
-%if %{?fedora} > 36
+%if %{?fedora}%{!?fedora:0} > 36
 %cmake  -DBINDER_ENABLE_TEST=OFF
 %else
 %cmake . -DBINDER_ENABLE_TEST=OFF
