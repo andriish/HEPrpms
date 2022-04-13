@@ -15,6 +15,7 @@ Requires:       lhapdf libgfortran root root-core gsl
 %endif
 %if 0%{?suse_version}
 BuildRequires: texlive-palatino texlive-helvetic texlive-courier tex(latex) tex(sectsty.sty) tex(listings.sty) tex(cite.sty) gcc-c++  gcc-fortran gsl gsl-devel autoconf automake libtool libLHAPDF LHAPDF-devel root6 root6-libs root6-devel boost-devel
+BuildRequires: tex(lineno.sty)
 Requires:       libLHAPDF libgfortran5 root6 root6-libs gsl
 %endif
 
