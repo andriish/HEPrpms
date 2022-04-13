@@ -135,3 +135,4 @@ f386c5b17b59320a25c5a9f6064db05f  rapgap/3.310/rpmbuild/SOURCES/rapgap-3.310.tar
 a442e284fe272d6b648c9c0a65a58d53  TheP8I/2.0.2/rpmbuild/SOURCES/TheP8I-2.0.2.tar.gz
 014d1cfc57169fed85ef1cb75caf7da2  LoopTools/2.16/rpmbuild/SOURCES/LoopTools-2.16.tar.gz
 9b5063a7d7c3b287199c9d7046bd8728  ginac/1.8.3/rpmbuild/SOURCES/ginac-1.8.3.tar.bz2
+084fe053673a741ffb04c4b67dbc9748  whizard/3.0.3/rpmbuild/SOURCES/whizard-3.0.3.tar.gz
