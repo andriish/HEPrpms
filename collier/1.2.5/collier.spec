@@ -35,6 +35,7 @@ BuildRequires: gcc-fortran
 %prep 
 %setup -q -n  COLLIER-%{version}
 %if 0%{?fedora} > 35
+export LDFLAGS=' '
 %cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON  -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/
 %else
 %cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON  -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  .
