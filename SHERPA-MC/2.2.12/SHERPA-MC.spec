@@ -172,7 +172,10 @@ This package provides the Python 3 bindings for %{name}-openmpi
 %setup -q
 %patch0 -p1
 
+
 %build
+autoreconf -fisv
+
 # Build serial version, dummy arguments
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
