@@ -136,3 +136,5 @@ a442e284fe272d6b648c9c0a65a58d53  TheP8I/2.0.2/rpmbuild/SOURCES/TheP8I-2.0.2.tar
 014d1cfc57169fed85ef1cb75caf7da2  LoopTools/2.16/rpmbuild/SOURCES/LoopTools-2.16.tar.gz
 9b5063a7d7c3b287199c9d7046bd8728  ginac/1.8.3/rpmbuild/SOURCES/ginac-1.8.3.tar.bz2
 084fe053673a741ffb04c4b67dbc9748  whizard/3.0.3/rpmbuild/SOURCES/whizard-3.0.3.tar.gz
+2c179a8987ec13db356d07a66b590f47  Rivet/3.1.6/rpmbuild/SOURCES/Rivet-3.1.6.tar.gz
+14548fc60623c17bae60f42ceb4b2d0c  YODA/1.9.5/rpmbuild/SOURCES/YODA-1.9.5.tar.gz

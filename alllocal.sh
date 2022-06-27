@@ -4,12 +4,14 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+Rivet:3.1.6
+#YODA:1.9.5
 #whizard:3.0.3
 #ginac:1.8.3
 #TheP8I:2.0.2
 #geant4:11.0.0
 #binder:1.2.0
-SHERPA-MC:2.2.12
+#SHERPA-MC:2.2.12
 #SHERPA-MC:3.0.0alpha1
 #qcdnum:17.01.83
 #MCFM:10.0.1
