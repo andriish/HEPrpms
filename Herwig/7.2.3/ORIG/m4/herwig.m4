@@ -351,10 +351,30 @@ AS_IF([test "x$with_njet" != "xno" -a "x$have_njet" = "xno" ],
       ${with_njet}/lib/libnjet2.dylib,
       [have_njet=lib], [have_njet=no])])
 
+AS_IF([test "x$with_njet" != "xno" -a "x$have_njet" = "xno" ],
+      [AC_CHECK_FILES(
+      ${with_njet}/lib/libnjet3.so,
+      [have_njet=lib], [have_njet=no])])
+
+AS_IF([test "x$with_njet" != "xno" -a "x$have_njet" = "xno" ],
+      [AC_CHECK_FILES(
+      ${with_njet}/lib64/libnjet3.so,
+      [have_njet=lib], [have_njet=no])])
+
+AS_IF([test "x$with_njet" != "xno" -a "x$have_njet" = "xno" ],
+      [AC_CHECK_FILES(
+      ${with_njet}/lib/libnjet3.dylib,
+      [have_njet=lib], [have_njet=no])])
+
+AS_IF([test "x$with_njet" != "xno" ],
+      [AC_CHECK_FILES(
+      ${with_njet}/include/njet.h,
+      [njet_include=include], [njet_include=include/njet])])
+
 AS_IF([test "x$have_njet" = "xlib"],
       [NJETLIBPATH=${with_njet}/lib
       AC_SUBST(NJETLIBPATH)
-      NJETINCLUDEPATH=${with_njet}/include
+      NJETINCLUDEPATH=${with_njet}/$njet_include
       AC_SUBST(NJETINCLUDEPATH)
       NJETPREFIX=${with_njet}
       AC_SUBST(NJETPREFIX)
@@ -363,7 +383,7 @@ AS_IF([test "x$have_njet" = "xlib"],
 AS_IF([test "x$have_njet" = "xlib64"],
       [NJETLIBPATH=${with_njet}/lib64
       AC_SUBST(NJETLIBPATH)
-      NJETINCLUDEPATH=${with_njet}/include
+      NJETINCLUDEPATH=${with_njet}/$njet_include
       AC_SUBST(NJETINCLUDEPATH)
       NJETPREFIX=${with_njet}
       AC_SUBST(NJETPREFIX)

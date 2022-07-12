@@ -27,7 +27,7 @@ if HAVE_VBFNLO
 pkglib_LTLIBRARIES += HwMatchboxVBFNLO.la
 endif
 
-HwMatchboxVBFNLO_la_LDFLAGS = $(AM_LDFLAGS) -module -version-info 5:0:0
+HwMatchboxVBFNLO_la_LDFLAGS = $(AM_LDFLAGS) -module -version-info 6:0:0
 HwMatchboxVBFNLO_la_CPPFLAGS = $(AM_CPPFLAGS)
 HwMatchboxVBFNLO_la_CPPFLAGS += -I$(VBFNLOINCLUDE)
 HwMatchboxVBFNLO_la_CPPFLAGS += -DVBFNLOLIB=$(VBFNLOLIB)
