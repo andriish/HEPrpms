@@ -25,7 +25,7 @@ Install this package to develop software based on CLHEP.
 %setup -q -n  %{version}
 
 %build
-%if %{!?rhel:0} || %{!?fedora:0}
+%if %{?rhel}%{!?rhel:0} || %{?fedora}%{!?fedora:0}
 mkdir -p build
 cd build 
 %cmake  ../CLHEP
@@ -39,7 +39,7 @@ make
 %endif
 
 %install
-%if 0%{?rhel} || 0%{?fedora}
+%if %{?rhel}%{!?rhel:0} || %{?fedora}%{!?fedora:0}
 cd build 
 %make_install 
 %endif
