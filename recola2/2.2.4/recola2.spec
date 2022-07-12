@@ -46,8 +46,9 @@ cd SM_2.2.3
 %make_build 
 %endif
 %if 0%{?suse_version}
-%cmake -S . -B    -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
-%make_build .
+%cmake   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
+%make_build 
+%make_install
 %endif
 
 cd ..
@@ -63,8 +64,10 @@ cd ..
 %make_build 
 %endif
 %if 0%{?suse_version}
-%cmake .   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/ -Dmodelfile_path=$(pwd)/SM_2.2.3 -Dwith_python3=On
-%make_build -C build
+cd ..
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:%{buildroot}/usr/lib64:%{buildroot}/usr/lib
+%cmake  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/ -Dmodelfile_path=%{buildroot}/usr/share/cmake   -Dwith_python3=On
+%make_build
 %endif
 
 %install
@@ -78,7 +81,9 @@ cd SM_2.2.3
 %endif
 %endif
 %if 0%{?suse_version}
-%make_install -C build
+cd build
+#make_install
+cd ..
 %endif
 
 cd ..
