@@ -13,7 +13,7 @@
 
 Name:           SHERPA-MC
 Version:        2.2.11
-Release:        6%{?dist}
+Release:        7%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://sherpa.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -42,6 +42,7 @@ BuildRequires:    swig  recola libqd0 qd-devel openssl-devel openssl
 Requires:         blackhat blackhat-data libgfortran5
 BuildRequires:    blackhat-devel blackhat
 BuildRequires:    texinfo git
+BuildRequires:    python3-distutils
 %endif
 
 %if %{?rhel}%{!?rhel:0} == 7
@@ -361,6 +362,8 @@ export QA_RPATHS=3
 %endif
 
 %changelog
+* Tue Jul 12 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+  - Distutils
 * Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
   - RPATH
 * Wed May 26 2021 Andrii Verbytskyi 2.2.11

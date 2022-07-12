@@ -138,3 +138,6 @@ a442e284fe272d6b648c9c0a65a58d53  TheP8I/2.0.2/rpmbuild/SOURCES/TheP8I-2.0.2.tar
 084fe053673a741ffb04c4b67dbc9748  whizard/3.0.3/rpmbuild/SOURCES/whizard-3.0.3.tar.gz
 2c179a8987ec13db356d07a66b590f47  Rivet/3.1.6/rpmbuild/SOURCES/Rivet-3.1.6.tar.gz
 14548fc60623c17bae60f42ceb4b2d0c  YODA/1.9.5/rpmbuild/SOURCES/YODA-1.9.5.tar.gz
+c33ce92d877c6e9ca7b7c4ed874bc30b  ThePEG/2.2.3/rpmbuild/SOURCES/ThePEG-2.2.3.tar.bz2
+a475649e9a6ab71e5f1076fd9c4aea62  LCIO/02.17.01/rpmbuild/SOURCES/v02-17.tar.gz
+e7665e17dc08665f2925b9740552231a  Herwig/7.2.3/rpmbuild/SOURCES/Herwig-7.2.3.tar.bz2
