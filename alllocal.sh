@@ -5,7 +5,7 @@ export PATH=$PATH:$(pwd)
 set -x 
 declare -a BUILDLIST=(
 #clhep:2.4.5.3
-recola2:2.2.4
+#recola2:2.2.4
 #Herwig:7.2.3
 #LCIO:02.17.01
 #ThePEG:2.2.3
@@ -16,7 +16,7 @@ recola2:2.2.4
 #TheP8I:2.0.2
 #geant4:11.0.0
 #binder:1.2.0
-#SHERPA-MC:2.2.12
+SHERPA-MC:2.2.11
 #SHERPA-MC:3.0.0alpha1
 #qcdnum:17.01.83
 #MCFM:10.0.1
