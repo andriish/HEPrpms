@@ -144,3 +144,4 @@ e7665e17dc08665f2925b9740552231a  Herwig/7.2.3/rpmbuild/SOURCES/Herwig-7.2.3.tar
 a521d942f39efa029c77255c10b1e57c  recola2/2.2.4/rpmbuild/SOURCES/recola2-2.2.4.tar.gz
 b80c8e533d1b34ad496e2e554431435f  recola2/2.2.4/rpmbuild/SOURCES/SM_2.2.3.tar.gz
 879ca0fee9b163eb4368d886d0715d3c  clhep/2.4.5.3/rpmbuild/SOURCES/clhep-2.4.5.3.tgz
+b80c8e533d1b34ad496e2e554431435f  recola2-SM/2.2.3/rpmbuild/SOURCES/SM_2.2.3.tar.gz
