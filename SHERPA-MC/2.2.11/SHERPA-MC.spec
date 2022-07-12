@@ -42,7 +42,7 @@ BuildRequires:    swig  recola libqd0 qd-devel openssl-devel openssl
 Requires:         blackhat blackhat-data libgfortran5
 BuildRequires:    blackhat-devel blackhat
 BuildRequires:    texinfo git
-BuildRequires:    python3-distutils
+BuildRequires:    python-distutils-extra
 %endif
 
 %if %{?rhel}%{!?rhel:0} == 7

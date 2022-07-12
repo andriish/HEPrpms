@@ -100,7 +100,7 @@ The library documentation is available on header files.
 
 %prep
 %setup -q 
-#patch0 -p 1
+%patch0 -p 1
 
 %build
 
