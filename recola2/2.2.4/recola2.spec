@@ -46,8 +46,8 @@ cd SM_2.2.3
 %make_build 
 %endif
 %if 0%{?suse_version}
-%cmake .   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
-%make_build -C build
+%cmake -S . -B    -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
+%make_build .
 %endif
 
 cd ..
