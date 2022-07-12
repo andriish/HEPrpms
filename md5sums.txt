@@ -141,3 +141,6 @@ a442e284fe272d6b648c9c0a65a58d53  TheP8I/2.0.2/rpmbuild/SOURCES/TheP8I-2.0.2.tar
 c33ce92d877c6e9ca7b7c4ed874bc30b  ThePEG/2.2.3/rpmbuild/SOURCES/ThePEG-2.2.3.tar.bz2
 a475649e9a6ab71e5f1076fd9c4aea62  LCIO/02.17.01/rpmbuild/SOURCES/v02-17.tar.gz
 e7665e17dc08665f2925b9740552231a  Herwig/7.2.3/rpmbuild/SOURCES/Herwig-7.2.3.tar.bz2
+a521d942f39efa029c77255c10b1e57c  recola2/2.2.4/rpmbuild/SOURCES/recola2-2.2.4.tar.gz
+b80c8e533d1b34ad496e2e554431435f  recola2/2.2.4/rpmbuild/SOURCES/SM_2.2.3.tar.gz
+879ca0fee9b163eb4368d886d0715d3c  clhep/2.4.5.3/rpmbuild/SOURCES/clhep-2.4.5.3.tgz
