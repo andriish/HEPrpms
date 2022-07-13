@@ -4,6 +4,7 @@ Release:        1%{?dist}
 License:        GPL
 Url:            https://gitlab.cern.ch/TheP8I/TheP8I
 Source0:        https://gitlab.cern.ch/TheP8I/TheP8I/-/archive/%{version}/%{name}-%{version}.tar.gz
+Patch0:         patch-TheP8I-0.txt
 Prefix:         %{_prefix}
 Summary:        Lund hadronisation for Herwig
 %if 0%{?rhel} || 0%{?fedora}
@@ -25,9 +26,10 @@ Lund hadronisation for Herwig. Part of earlier ThePEG codes.
 
 %prep
 %setup -qn TheP8I-%{version}
-
+%patch0 -p1
 
 %build
+export LDFLAGS=" "
 %if 0%{?suse_version}
 %cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir}/ThePEG -DTHEP8I_ENABLE_TEST=OFF -DTHEP8I_CXX_STANDARD=17
 %else
@@ -44,6 +46,8 @@ Lund hadronisation for Herwig. Part of earlier ThePEG codes.
 %_datadir/TheP8I/*in
 
 %changelog
+* Tue Jul 12 2022 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+  - Deal with comp. failures
 * Tue Apr 06 2022 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
   - Bump to 2.0.2 
 * Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de

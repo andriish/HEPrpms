@@ -73,13 +73,16 @@ obtained by alternative methods (e.g., including loop corrections) may be interf
 autoreconf --force --install --verbose .
 %if %{?fedora}%{!?fedora:0} >=34
 export CXXFLAGS="%{optflags} -Wno-error -std=c++1z -Wno-error=format-security "
+export FFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
+export FCLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
 %else
 export CXXFLAGS="%{optflags} -Wno-error -std=c++1y -Wno-error=format-security "
+export FFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
+export FCLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
 %endif
 
 export CFLAGS="%{optflags} -Wno-error -Wno-error=format-security"
-export FFLAGS="%{optflags} -Wno-error "
-export FCLAGS="%{optflags} -Wno-error "
+
 
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --enable-recola     --with-recola=/usr/%_lib \
@@ -103,9 +106,9 @@ export FCLAGS="%{optflags} -Wno-error "
 %if 0%{?suse_version}
 autoreconf --force --install --verbose .
 export CXXFLAGS="%{optflags} -Wno-error -std=c++1y -Wno-error=format-security "
-export CFLAGS="%{optflags} -Wno-error -Wno-error=format-security"
-export FFLAGS="%{optflags} -Wno-error "
-export FCLAGS="%{optflags} -Wno-error "
+export CFLAGS="%{optflags} -Wno-error -Wno-error=format-security "
+export FFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
+export FCLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
 
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --enable-recola     --with-recola=/usr/%_lib \
