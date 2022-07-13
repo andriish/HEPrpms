@@ -154,3 +154,4 @@ e5e06380bc71377c4b40b0417d54df49  python-uproot4/4.3.3/rpmbuild/SOURCES/4.3.3.ta
 b7281e64361616275cbb65cde6a1fa71  applgrid/1.6.27/rpmbuild/SOURCES/applgrid-1.6.27.tgz
 21482539a19d9d2b8fa487fc685e1757  qcdloop/2.0.9/rpmbuild/SOURCES/2.0.9.tar.gz
 62c76ca5e4fa3aea570ac18833f7353e  collier/1.2.5/rpmbuild/SOURCES/collier-1.2.5.tar.gz
+bab5f1b9d5b053365c07a8ccc1787f77  MG5_aMC/2.9.11/rpmbuild/SOURCES/MG5_aMC_v2.9.11.tar.gz
