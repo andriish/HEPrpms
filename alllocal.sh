@@ -4,9 +4,13 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+tmdlib:2.2.06
+#fjcontrib:1.049
+#EvtGen:2.2.0
+#cuba:4.2.2
 #clhep:2.4.5.3
 #recola2-SM:2.2.3
-recola2:2.2.4
+#recola2:2.2.4
 #Herwig:7.2.3
 #LCIO:02.17.01
 #ThePEG:2.2.3
