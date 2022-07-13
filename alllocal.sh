@@ -4,7 +4,10 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-tmdlib:2.2.06
+applgrid:1.6.27
+#python-uproot4:4.3.3
+#FeynHiggs:2.18.1
+#tmdlib:2.2.06
 #fjcontrib:1.049
 #EvtGen:2.2.0
 #cuba:4.2.2
