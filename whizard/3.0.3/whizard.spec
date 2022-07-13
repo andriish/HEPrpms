@@ -78,7 +78,7 @@ export FCLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
 %else
 export CXXFLAGS="%{optflags} -Wno-error -std=c++1y -Wno-error=format-security "
 export FFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
-export FCLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
+export FCFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
 %endif
 
 export CFLAGS="%{optflags} -Wno-error -Wno-error=format-security"
@@ -108,7 +108,7 @@ autoreconf --force --install --verbose .
 export CXXFLAGS="%{optflags} -Wno-error -std=c++1y -Wno-error=format-security "
 export CFLAGS="%{optflags} -Wno-error -Wno-error=format-security "
 export FFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
-export FCLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
+export FCFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
 
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --enable-recola     --with-recola=/usr/%_lib \
