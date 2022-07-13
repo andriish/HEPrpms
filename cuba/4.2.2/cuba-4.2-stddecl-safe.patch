@@ -1,0 +1,21 @@
+--- Cuba-4.2/src/common/stddecl.h.orig	2017-05-08 19:35:49.899825338 +0200
++++ Cuba-4.2/src/common/stddecl.h	2017-05-08 19:36:22.360463090 +0200
+@@ -120,7 +120,7 @@
+ #define POW2(n) ldexp(1., -n)
+ #endif
+ 
+-#define NOTZERO POW2(104)
++#define NOTZERO POW2(250)
+ 
+ #define ABORT -999
+ 
+@@ -214,7 +214,8 @@
+   who##Alloc(t); \
+   if( t->shmid != -1 ) { \
+     t->frame = shmat(t->shmid, NULL, 0); \
+-    if( t->frame == (void *)-1 ) Abort("shmat"); \
++    shmctl(t->shmid, IPC_RMID, NULL); \
++    if( t->frame == (void *)-1 ) Abort("shmat");	\
+   }
+ 
+ #undef ShmFree
