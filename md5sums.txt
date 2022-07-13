@@ -152,3 +152,4 @@ ec702fc130e30d1a45c08885b02532f5  tmdlib/2.2.06/rpmbuild/SOURCES/tmdlib-2.2.06.t
 f2e87b79f4a360d48c84c39534e144c2  FeynHiggs/2.18.1/rpmbuild/SOURCES/FeynHiggs-2.18.1.tar.gz
 e5e06380bc71377c4b40b0417d54df49  python-uproot4/4.3.3/rpmbuild/SOURCES/4.3.3.tar.gz
 b7281e64361616275cbb65cde6a1fa71  applgrid/1.6.27/rpmbuild/SOURCES/applgrid-1.6.27.tgz
+21482539a19d9d2b8fa487fc685e1757  qcdloop/2.0.9/rpmbuild/SOURCES/2.0.9.tar.gz
