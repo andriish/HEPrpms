@@ -31,7 +31,7 @@ Lund hadronisation for Herwig. Part of earlier ThePEG codes.
 %build
 export LDFLAGS=" "
 %if 0%{?suse_version}
-%cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir}/ThePEG -DTHEP8I_ENABLE_TEST=OFF -DTHEP8I_CXX_STANDARD=17
+%cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir}/ThePEG -DTHEP8I_ENABLE_TEST=OFF -DTHEP8I_CXX_STANDARD=17 -DCMAKE_MODULE_LINKER_FLAGS=" "  -DCMAKE_SHARED_LINKER_FLAGS=" "
 %else
 %cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir}/ThePEG -DTHEP8I_ENABLE_TEST=OFF
 %endif
@@ -48,8 +48,6 @@ export LDFLAGS=" "
 %changelog
 * Tue Jul 12 2022 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
   - Deal with comp. failures
-* Tue Apr 06 2022 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
-  - Bump to 2.0.2 
 * Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
   - RPATH
 * Thu Mar 12 2020 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 2.0.0
