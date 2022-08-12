@@ -41,7 +41,7 @@ BuildRequires:  root6 root6-libs root6-devel root6-config  root6-utils
 %endif
 
 
-%if %{?rhel}%{!?rhel:0} == 8 || %{?fedora}%{!?fedora:0} >= 31
+%if %{?rhel}%{!?rhel:0} >= 8 || %{?fedora}%{!?fedora:0} >= 31
 BuildRequires: ghostscript-tools-dvipdf
 %endif
 
@@ -92,7 +92,7 @@ Provides:       %{name}-doc = %{version}-%{release}
 %build
 mkdir -p build
 
-%if %{?rhel}%{!?rhel:0} == 8 || %{?fedora}%{!?fedora:0}
+%if %{?rhel}%{!?rhel:0} >= 8 || %{?fedora}%{!?fedora:0}
 export CXXFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export CFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export LDFLAGS=" "
