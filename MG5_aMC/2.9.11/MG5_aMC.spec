@@ -5,7 +5,7 @@
 
 Name:          MG5_aMC
 Version:       2.9.11
-Release:       2%{?dist}
+Release:       3%{?dist}
 Patch0:        patch-MG5_aMC-0.txt
 
 Summary:       MG5_aMC is a multi-purpose particle physics event generator.
@@ -64,6 +64,7 @@ http://amcatnlo.web.cern.ch/amcatnlo/list_refs.htm
 %prep
 %setup -q  -n MG5_aMC_v2_9_11
 %patch0 -p 1
+find . -name '._*' -type f -delete
 
 %build
 

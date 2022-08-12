@@ -6,7 +6,7 @@
 
 Name:           openloops
 Version:        2.1.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
 Source0:        https://www.hepforge.org/archive/openloops/OpenLoops-%{version}.tar.gz
@@ -23,7 +23,7 @@ BuildRequires:  gcc-fortran
 Requires: python3
 BuildRequires: python3 python3-devel scons
 %endif
-%if %{?rhel}%{!?rhel:0} == 8
+%if %{?rhel}%{!?rhel:0} >= 8
 Requires: python3
 BuildRequires: python3 python3-devel   platform-python-devel python3-scons
 %endif
