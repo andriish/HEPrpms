@@ -1,6 +1,6 @@
 Name: fastnlo
 Version: 2.5.0.2826
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Prefix: %{_prefix}
 Summary: Fast pQCD calculations for PDF fits.
@@ -23,7 +23,7 @@ Requires:      YODA qcdnum fastjet
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-BuildRequires: python2 python2-devel
+BuildRequires: python3 python3-devel
 %endif
 %if 0%{?suse_version}
 BuildRequires: python python-devel
@@ -41,12 +41,12 @@ The library documentation is available on header files.
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-%package  -n python2-%{name}
+%package  -n python-%{name}
 Summary:        python bindings for %{name}
-Provides:       python2-%{name} = %{version}-%{release}
+Provides:       python3-%{name} = %{version}-%{release}
 
-%description -n python2-%{name}
-python2-%{name} contains python bindings for %{name}.
+%description -n python-%{name}
+python-%{name} contains python bindings for %{name}.
 %endif
 %if 0%{?suse_version}
 %package  -n python-%{name}
@@ -54,7 +54,7 @@ Summary:        python bindings for %{name}
 Provides:       python3-%{name} = %{version}-%{release}
 
 %description -n python-%{name}
-python2-%{name} contains python bindings for %{name}.
+python-%{name} contains python bindings for %{name}.
 %endif
 
 
@@ -70,26 +70,26 @@ for observables in hadron-induced processes.
 %build 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-export PYTHON=%{_bindir}/python2
-export PYTHON_VERSION=PYTHON_VERSION=2.7
+#export PYTHON={_bindir}/python2
+#export PYTHON_VERSION=2.7
 %endif
 %if 0%{?suse_version}
-export PYTHON=%{_bindir}/python
-export PYTHON_VERSION=2.7
+#export PYTHON={_bindir}/python
+#export PYTHON_VERSION=2.7
 %endif
 sed -i 's|\#\$(DEPDIR)/fastnlo_wrap.Plo:|\$(DEPDIR)/fastnlo_wrap.Plo:|g' pyext/Makefile.in
-%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root --with-yoda --with-fastjet --with-qcdnum --enable-pyext 
+%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root --with-yoda --with-fastjet --with-qcdnum --enable-pyext3 
 make %{?_smp_mflags}
 
 %install 
 %make_install
 %if 0%{?rhel} || 0%{?fedora}
-mkdir -p %{buildroot}/%{python2_sitearch}/
-mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python2_sitearch}/
+mkdir -p %{buildroot}/%{python3_sitearch}/
+mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch}/
 %endif
 
 %if 0%{?suse_version}
-mv %{buildroot}/usr/lib/python2.7/site-packages/*  %{buildroot}/usr/%_lib/python2.7/site-packages/
+mv %{buildroot}/usr/lib/python3.10/site-packages/*  %{buildroot}/usr/%_lib/python3.10/site-packages/
 %endif
 
 
@@ -104,13 +104,13 @@ mv %{buildroot}/usr/lib/python2.7/site-packages/*  %{buildroot}/usr/%_lib/python
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-%files -n python2-%{name}
-%{python2_sitearch}/*
+%files -n python-%{name}
+%{python3_sitearch}/*
 %endif
 
 %if 0%{?suse_version}
 %files -n python-%{name}
-/usr/%_lib/python2.7/site-packages/*
+/usr/%_lib/python3.*/site-packages/*
 %endif
 
 
@@ -119,6 +119,8 @@ mv %{buildroot}/usr/lib/python2.7/site-packages/*  %{buildroot}/usr/%_lib/python
 ldconfig 
 
 %changelog
+* Fri Aug 12 2022 Andrii Verbytskyi 2.5.0
+- Use Python3
 * Mon Nov 15 2021 Andrii Verbytskyi 2.5.0
 - Bump to 2.5.0
 * Sun Feb 21 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
