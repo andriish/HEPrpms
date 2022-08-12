@@ -1,9 +1,9 @@
 Summary: A  keyword-driven  interface  designed  to  produce physics  graphs  with  minimal specifications
 Name: topdrawer
 Version: 1.4e
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: Free
-Source: ftp://ftp.riken.jp/iris/topdrawer/topdrawer.tar.gz
+Source: https://ftp.riken.jp/iris/topdrawer/topdrawer.tar.gz
 URL:    https://ribf.riken.jp/comp/doc/topdrawer/
 #Patch: ugs-24bit-color.patch
 Patch:  topdrawer_OSX_fix.patch

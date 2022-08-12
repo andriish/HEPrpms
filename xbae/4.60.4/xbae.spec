@@ -1,11 +1,11 @@
 Name:           xbae
 Version:        4.60.4
-Release:        28%{?dist}
+Release:        29%{?dist}
 Summary:        Motif matrix, caption and text input widgets
 # all the files are covered by the MIT license, except DebugUtil.c LGPLv2+
 License:        LGPLv2+
 URL:            http://xbae.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/xbae/xbae-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/xbae/xbae-%{version}.tar.gz
 # this fixes the link of the example using Wcl, it shouldn't be of use
 # now that Wcl isn't buildrequired, but it is still better.
 Patch0:         xbae-link_Mri_with_lXmp.diff

@@ -216,7 +216,8 @@ sub retrieve {
 		}
 		# Note: -k/--insecure is intentionally not here; add it to
 		#       $CURLRC if you want it.
-		my @cmd = (qw (curl --fail --remote-time --location
+		# Sorry, added here. AV
+		my @cmd = (qw (curl -k --fail --remote-time --location
 			       --output), $path,
 			   '--user-agent', "spectool/$VERSION");
 		push(@cmd, '--config', $CURLRC) if (-e $CURLRC);

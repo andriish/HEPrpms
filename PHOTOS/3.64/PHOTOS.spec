@@ -6,10 +6,10 @@
 
 Name:           PHOTOS
 Version:        3.64
-Release:        4%{?dist}
-License:        Unknown
+Release:        5%{?dist}
+License:        MIT
 Url:            http://photospp.web.cern.ch/photospp
-Source0:        http://photospp.web.cern.ch/photospp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
+Source0:        https://photospp.web.cern.ch/photospp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
 Patch0:         patch-PHOTOS-0.txt
 Summary:        Monte Carlo program for bremsstrahlung in the decay of particles and resonances
 BuildRequires:  gcc-c++ autoconf automake libtool  tex(latex) tex(fmtcount.sty) ghostscript doxygen

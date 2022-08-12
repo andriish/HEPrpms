@@ -3,12 +3,12 @@
 %endif
 Name:		HepPDT
 Version:	3.04.01
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Helpers for HEP Monte Carlo Generators
 
 License:	GPLv2+
 URL:		http://hepmc.web.cern.ch/hepmc/
-Source0:	http://hepmc.web.cern.ch/hepmc/releases/%{name}-%{version}.tar.gz
+Source0:	https://hepmc.web.cern.ch/hepmc/releases/%{name}-%{version}.tar.gz
 
 BuildRequires:	gcc-c++
 
