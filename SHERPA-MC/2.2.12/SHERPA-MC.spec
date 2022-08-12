@@ -13,7 +13,7 @@
 
 Name:           SHERPA-MC
 Version:        2.2.12
-Release:        6%{?dist}
+Release:        7%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://sherpa.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -45,17 +45,10 @@ BuildRequires:    blackhat-devel blackhat
 BuildRequires:    texinfo git
 %endif
 
-%if %{?rhel}%{!?rhel:0} == 7
-BuildRequires:    python python-devel
-Requires:         python
-Requires:         cernlib cernlib-devel cernlib-static
-BuildRequires:    cernlib cernlib-devel cernlib-static
-Requires:  MCFM
-BuildRequires: MCFM
-%endif
+
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-BuildRequires:    python2 python2-devel
-Requires:         python2
+BuildRequires:    python3 python3-devel
+Requires:         python3
 Requires:         cernlib cernlib-devel cernlib-static
 BuildRequires:    cernlib cernlib-devel cernlib-static
 Requires:  MCFM
@@ -127,22 +120,22 @@ The library documentation is available on header files.
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
-%package -n python2-%{name}
-Summary:   %{name}  Python 2 bindings
-%{?python_provide:%python_provide python2-%{name}}
-%description -n python2-%{name}
-This package provides the Python 2 bindings for %{name}
+%package -n python3-%{name}
+Summary:   %{name}  Python 3 bindings
+%{?python_provide:%python_provide python3-%{name}}
+%description -n python3-%{name}
+This package provides the Python 3 bindings for %{name}
 
 
-%package -n python2-%{name}-openmpi
-Summary:   %{name}  Python 2 bindings
-%description -n python2-%{name}-openmpi
+%package -n python3-%{name}-openmpi
+Summary:   %{name}  Python 3 bindings
+%description -n python3-%{name}-openmpi
 This package provides the Python 2 bindings for %{name}-openmpi
 %endif
 
 %if 0%{?suse_version}
 %package -n python3-%{name}
-Summary:   %{name}  Python 2 bindings
+Summary:   %{name}  Python 3 bindings
 %{?python_provide:%python_provide python3-%{name}}
 %description -n python3-%{name}
 This package provides the Python 3 bindings for %{name}
@@ -178,6 +171,7 @@ This package provides the Python 3 bindings for %{name}-openmpi
 # Build serial version, dummy arguments
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+export PYTHON=%{_bindir}/python3
 mkdir serial; \
 cd serial; \
 export CXXFLAGS=$CXXFLAGS;  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
@@ -256,7 +250,7 @@ make -C serial install DESTDIR=%{buildroot} INSTALL="install -p" CPPROG="cp -p"
 # Install OpenMPI version
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} 
 mkdir -p %{buildroot}/usr/%{_lib}/python%{python2_version}/
-mv %{buildroot}/usr/lib/python%{python2_version}/site-packages    %{buildroot}/%{python2_sitearch}
+mv %{buildroot}/usr/lib/python%{python3_version}/site-packages    %{buildroot}/%{python3_sitearch}
 %{_openmpi_load}
 make -C $MPI_COMPILER install DESTDIR=%{buildroot} INSTALL="install -p" CPPROG="cp -p"
 %{_openmpi_unload}
@@ -288,24 +282,24 @@ export QA_RPATHS=3
 %{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
-%files  -n python2-%{name}
-%{python2_sitearch}/Sherpa.py
-%{python2_sitearch}/Sherpa.pyc
-%{python2_sitearch}/Sherpa.pyo
-%{python2_sitearch}/_Sherpa.la
-%{python2_sitearch}/_Sherpa.so
-%{python2_sitearch}/_Sherpa.so.0
-%{python2_sitearch}/_Sherpa.so.0.0.0
+%files  -n python3-%{name}
+%{python3_sitearch}/Sherpa.py
+%{python3_sitearch}/Sherpa.pyc
+%{python3_sitearch}/Sherpa.pyo
+%{python3_sitearch}/_Sherpa.la
+%{python3_sitearch}/_Sherpa.so
+%{python3_sitearch}/_Sherpa.so.0
+%{python3_sitearch}/_Sherpa.so.0.0.0
 
 
-%files  -n python2-%{name}-openmpi
-/usr/%_lib/openmpi/lib/python%{python2_version}/site-packages/Sherpa.py
-/usr/%_lib/openmpi/lib/python%{python2_version}/site-packages/Sherpa.pyc
-/usr/%_lib/openmpi/lib/python%{python2_version}/site-packages/Sherpa.pyo
-/usr/%_lib/openmpi/lib/python%{python2_version}/site-packages/_Sherpa.la
-/usr/%_lib/openmpi/lib/python%{python2_version}/site-packages/_Sherpa.so
-/usr/%_lib/openmpi/lib/python%{python2_version}/site-packages/_Sherpa.so.0
-/usr/%_lib/openmpi/lib/python%{python2_version}/site-packages/_Sherpa.so.0.0.0
+%files  -n python3-%{name}-openmpi
+/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/Sherpa.py
+/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/Sherpa.pyc
+/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/Sherpa.pyo
+/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/_Sherpa.la
+/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/_Sherpa.so
+/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/_Sherpa.so.0
+/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/_Sherpa.so.0.0.0
 %endif
 
 %if 0%{?suse_version}
