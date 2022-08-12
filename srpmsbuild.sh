@@ -6,6 +6,7 @@ TOPDIR=$(pwd)
 touch $TOPDIR/md5sums.txt.rej
 export PATH=$PATH:/usr/bin:$TOPDIR
 SPECTOOL=spectool
+which -a spectool
 rm -rf $TOPDIR/$PACKAGE/$VERSION/rpmbuild/{SOURCES,SPECS,SRPMS} 
 mkdir -p $TOPDIR/$PACKAGE/$VERSION/rpmbuild/{SOURCES,SPECS,RPMS,SRPMS} 
 for a in $($SPECTOOL $TOPDIR/$PACKAGE/$VERSION/$PACKAGE.spec | tr -s ' '| cut -f 2 -d' ' | grep '://' ); do

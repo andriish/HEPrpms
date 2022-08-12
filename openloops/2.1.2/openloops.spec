@@ -6,10 +6,10 @@
 
 Name:           openloops
 Version:        2.1.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
-Source0:        http://www.hepforge.org/archive/openloops/OpenLoops-%{version}.tar.gz
+Source0:        https://www.hepforge.org/archive/openloops/OpenLoops-%{version}.tar.gz
 Prefix:         %{_prefix}
 Summary:        Automated calculation of one-loop amplitudes 
 BuildRequires:  autoconf
