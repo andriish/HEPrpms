@@ -6,9 +6,14 @@ TOPDIR=$(pwd)
 touch $TOPDIR/md5sums.txt.rej
 export PATH=$PATH:/usr/bin:$TOPDIR
 export CURL_HOME=$TOPDIR
-echo 'insecure' > $CURL_HOME/.curlrc
+echo '--insecure' > $CURL_HOME/.curlrc
 SPECTOOL=spectool
 which -a spectool
+if [ -f /etc/rpmdevtools/curlrc ]; 
+then
+
+cat /etc/rpmdevtools/curlrc
+fi
 rm -rf $TOPDIR/$PACKAGE/$VERSION/rpmbuild/{SOURCES,SPECS,SRPMS} 
 mkdir -p $TOPDIR/$PACKAGE/$VERSION/rpmbuild/{SOURCES,SPECS,RPMS,SRPMS} 
 for a in $($SPECTOOL $TOPDIR/$PACKAGE/$VERSION/$PACKAGE.spec | tr -s ' '| cut -f 2 -d' ' | grep '://' ); do
