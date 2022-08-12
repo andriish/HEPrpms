@@ -1,12 +1,12 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 Name:       Delphes
 Version:    3.5.0
-Release:    3%{?dist}
+Release:    4%{?dist}
 Summary:    Delphes is a C++ framework, performing a fast multipurpose detector response simulation. 
 
 License:    GPLv3
 URL:        https://cp3.irmp.ucl.ac.be/projects/delphes
-Source0:    http://github.com/delphes/delphes/archive/%{version}.tar.gz
+Source0:    https://github.com/delphes/delphes/archive/%{version}.tar.gz
 
 #The ROOT cmake file used by this project requires cmake 3.4.3
 BuildRequires:    cmake >= 3.4.3

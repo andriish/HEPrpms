@@ -5,6 +5,8 @@ VERSION=$2
 TOPDIR=$(pwd)
 touch $TOPDIR/md5sums.txt.rej
 export PATH=$PATH:/usr/bin:$TOPDIR
+export CURL_HOME=$TOPDIR
+echo 'insecure' > $CURL_HOME/.curlrc
 SPECTOOL=spectool
 which -a spectool
 rm -rf $TOPDIR/$PACKAGE/$VERSION/rpmbuild/{SOURCES,SPECS,SRPMS} 
