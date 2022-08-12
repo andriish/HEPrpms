@@ -18,7 +18,7 @@
 %global debug_package %{nil}
 Name:           qcdloop
 Version:        2.0.9
-Release:        1
+Release:        2
 Summary:        An object-oriented one-loop scalar Feynman integrals framework
 License:        GPL-3.0-only
 URL:            https://qcdloop.web.cern.ch/qcdloop/
@@ -59,14 +59,14 @@ sed -i "1{s|#! %{_bindir}/env bash|#! /bin/bash|}"  src/qcdloop-config.in
   -DENABLE_EXAMPLES:BOOL=ON \
   -DENABLE_FORTRAN_WRAPPER:BOOL=ON
 
-%if %{?fedora}%{!?fedora:0} 
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8
 %cmake_build 
 %else
 %make_build 
 %endif
 
 %install
-%if %{?fedora}%{!?fedora:0} 
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8
 %cmake_install 
 %endif
 %if %{?rhel}%{!?rhel:0} 
