@@ -5,12 +5,12 @@
 
 Name:          MG5_aMC
 Version:       2.9.11
-Release:       1%{?dist}
+Release:       2%{?dist}
 Patch0:        patch-MG5_aMC-0.txt
 
 Summary:       MG5_aMC is a multi-purpose particle physics event generator.
 License:       http://www.opensource.org/licenses/UoI-NCSA.php
-Source0:       http://madgraph.physics.illinois.edu/Downloads/%{name}_v%{version}.tar.gz
+Source0:       https://madgraph.physics.illinois.edu/Downloads/%{name}_v%{version}.tar.gz
 Url:           http://amcatnlo.web.cern.ch/amcatnlo/list_refs.htm
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-c++ 
@@ -102,6 +102,8 @@ cp Template/LO/Source/.make_opts $RPM_BUILD_ROOT/%{python_sitearch}/Template/LO/
 %endif
 
 %changelog
+* Fri Aug 12 2021 Andrii Verbytskyi 2.9.11
+- Added https
 * Fri Sep 17 2021 Andrii Verbytskyi 2.9.4
 - Update to 2.9.4 and lower the python3 version requirement to 3.6
 * Wed May 26 2021 Andrii Verbytskyi 2.9.3

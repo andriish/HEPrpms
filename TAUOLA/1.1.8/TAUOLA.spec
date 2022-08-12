@@ -6,10 +6,10 @@
 
 Name:           TAUOLA
 Version:        1.1.8
-Release:        4%{?dist}
+Release:        5%{?dist}
 License:        Unknown
 Url:            http://tauolapp.web.cern.ch/tauolapp
-Source0:        http://tauolapp.web.cern.ch/tauolapp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
+Source0:        https://tauolapp.web.cern.ch/tauolapp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
 Patch0:         patch-TAUOLA-0.txt
 Summary:        Tau lepton decay Monte Carlo
 BuildRequires:  gcc-c++ autoconf automake libtool  

@@ -1,10 +1,10 @@
 Name:           applgrid
 Version:        1.6.27
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL
 Prefix:         %{_prefix}
 Summary:        A fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution 
-Source:         http://www.hepforge.org/archive/applgrid/applgrid-%{version}.tgz
+Source:         https://www.hepforge.org/archive/applgrid/applgrid-%{version}.tgz
 Patch0:         patch-applgrid-0.txt
 URL:            https://applgrid.hepforge.org/
 %if 0%{?rhel} || 0%{?fedora}
