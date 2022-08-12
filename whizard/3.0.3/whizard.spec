@@ -2,7 +2,7 @@
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.0.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
@@ -71,7 +71,7 @@ obtained by alternative methods (e.g., including loop corrections) may be interf
 %build 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 autoreconf --force --install --verbose .
-%if %{?fedora}%{!?fedora:0} >=34
+%if %{?fedora}%{!?fedora:0} >=34 || %{?rhel}%{!?rhel:0} > 8
 export CXXFLAGS="%{optflags} -Wno-error -std=c++1z -Wno-error=format-security "
 export FFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
 export FCLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
