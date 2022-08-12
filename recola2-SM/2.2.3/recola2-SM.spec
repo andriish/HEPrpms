@@ -2,7 +2,7 @@
 Summary:  A model for recola2
 Name: recola2-SM
 Version: 2.2.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 #Source0: https://www.hepforge.org/archive/recola/recola2-%{version}.tar.gz
@@ -54,7 +54,7 @@ next-to-leading order.
 %install
 
 %if 0%{?rhel} || 0%{?fedora}
-%if %{?fedora}%{!?fedora:0}
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8
 %cmake_install
 %else
 %make_install

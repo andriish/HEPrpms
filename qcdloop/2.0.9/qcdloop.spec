@@ -69,7 +69,7 @@ sed -i "1{s|#! %{_bindir}/env bash|#! /bin/bash|}"  src/qcdloop-config.in
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8
 %cmake_install 
 %endif
-%if %{?rhel}%{!?rhel:0} 
+%if %{?rhel}%{!?rhel:0} || %{?rhel}%{!?rhel:0} < 9
 %make_install 
 %endif
 %if 0%{?suse_version}
