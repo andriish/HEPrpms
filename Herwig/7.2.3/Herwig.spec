@@ -8,7 +8,7 @@
 
 Name:           Herwig
 Version:        7.2.3
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 
 Summary:        Herwig is a multi-purpose particle physics event generator.
 License:        GPLv3
@@ -44,7 +44,7 @@ BuildRequires: EvtGen-devel >= 2.0.0
 Requires:       VBFNLO 
 BuildRequires:  VBFNLO 
 %if  %{?rhel}%{!?rhel:0} >= 8
-BuildRequires: python2 platform-python-devel
+BuildRequires: python3 platform-python-devel
 %endif
 
 %if 0%{?suse_version}
@@ -52,7 +52,7 @@ BuildRequires: python3
 %endif
 
 %if %{?fedora}%{!?fedora:0} 
-BuildRequires: python2  python3-devel
+BuildRequires: python3 python3-devel
 %endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
@@ -105,7 +105,7 @@ The library documentation is available on header files.
 %build
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-pathfix.py -i /usr/bin/python2  -p -n  ./
+pathfix.py -i /usr/bin/python3  -p -n  ./
 pathfix.py -pn -i %{__python3}  MatrixElement/Matchbox/External/MadGraph
 autoreconf --force --install --verbose .
 automake -a --force
@@ -121,7 +121,7 @@ make %{?_smp_mflags}
 
 
 %if 0%{?suse_version}
-#pathfix.py -i /usr/bin/python2  -p -n  ./
+#pathfix.py -i /usr/bin/python3  -p -n  ./
 autoreconf --force --install --verbose .
 automake -a --force
 export LDFLAGS='-Wl,-z,lazy'
