@@ -5,7 +5,7 @@ Version: 2.2.3
 Release: 2%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
-#Source0: https://www.hepforge.org/archive/recola/recola2-%{version}.tar.gz
+#Source0: https://www.hepforge.org/archive/recola/recola2-{version}.tar.gz
 Source0: https://www.hepforge.org/archive/recola/SM_2.2.3.tar.gz
 URL:   https://recola.gitlab.io/recola2/
 BuildRequires:      collier gcc-c++ 
@@ -36,18 +36,19 @@ next-to-leading order.
 %build
 
 %if 0%{?rhel} || 0%{?fedora}
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-%cmake \
-%else
-%cmake3 \
-%endif
- .   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} == 8
+%cmake  .  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
 %make_build 
 %endif
+%if  %{?rhel}%{!?rhel:0} > 8
+%cmake  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
+%cmake_build 
+%endif
+%endif
+
 %if 0%{?suse_version}
 %cmake   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
 %make_build 
-%make_install
 %endif
 
 
@@ -63,7 +64,6 @@ next-to-leading order.
 %if 0%{?suse_version}
 cd build
 %make_install
-
 %endif
 
 

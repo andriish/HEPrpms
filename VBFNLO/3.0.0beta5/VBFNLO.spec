@@ -2,7 +2,7 @@
 Summary:  A parton level Monte Carlo for processes with electroweak bosons
 Name: VBFNLO
 Version: 3.0.0beta5
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2
 Source: https://github.com/vbfnlo/vbfnlo/archive/v%{version}.tar.gz
 URL:    https://www.itp.kit.edu/vbfnlo/wiki/doku.php
@@ -41,7 +41,7 @@ autoreconf --force --install --verbose "$srcdir"
 test -n "$NOCONFIGURE" || "$srcdir/configure" "$@"
 
 %if 0%{?rhel} || 0%{?fedora}
-%if %{?fedora}%{!?fedora:0} >= 31
+%if %{?fedora}%{!?fedora:0} >= 31 || %{?rhel}%{!?rhel:0} > 8
 export FLAGS='-std=legacy -fallow-argument-mismatch -fallow-invalid-boz -fno-var-tracking-assignments'
 export FFLAGS='-std=legacy -fallow-argument-mismatch -fallow-invalid-boz -fno-var-tracking-assignments'
 export FCFLAGS='-std=legacy -fallow-argument-mismatch -fallow-invalid-boz -fno-var-tracking-assignments' 
