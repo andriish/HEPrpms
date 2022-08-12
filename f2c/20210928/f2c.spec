@@ -7,11 +7,11 @@ Release:        1%{?dist}
 License:        MIT
 
 URL:            http://www.netlib.org/f2c/
-Source0:        http://www.netlib.org/f2c/src.tgz
-Source1:        http://www.netlib.org/f2c/libf2c.zip
-Source2:        http://www.netlib.org/f2c/f2c.pdf
-Source3:        http://www.netlib.org/f2c/f2c.ps
-Source4:        http://www.netlib.org/f2c/fc
+Source0:        https://www.netlib.org/f2c/src.tgz
+Source1:        https://www.netlib.org/f2c/libf2c.zip
+Source2:        https://www.netlib.org/f2c/f2c.pdf
+Source3:        https://www.netlib.org/f2c/f2c.ps
+Source4:        https://www.netlib.org/f2c/fc
 
 # Patch makefile to build a shared library
 Patch0:         f2c-20110801.patch
