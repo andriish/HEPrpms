@@ -39,7 +39,7 @@ xmkmf -a
 
 make clean
 %if 0%{?rhel} || 0%{?fedora}
-%if %{?fedora}%{!?fedora:0}  >= 31
+%if %{?fedora}%{!?fedora:0}  >= 31 || %{?rhel}%{!?rhel:0} > 8
 make FC='gfortran -std=legacy  -fallow-argument-mismatch -fallow-invalid-boz -g' UGS=/usr/%_lib/libugs.a
 %else
 make FC='gfortran -std=legacy  -g' UGS=/usr/%_lib/libugs.a

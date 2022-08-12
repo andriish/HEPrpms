@@ -15,7 +15,7 @@ Requires:       YODA
 BuildRequires:  YODA-devel eigen3-devel gcc-c++ 
 
 
-%if %{?rhel}%{!?rhel:0} == 8
+%if %{?rhel}%{!?rhel:0} >= 8
 Requires: python3 python3-numpy root-core
 BuildRequires: python3-numpy python3-devel platform-python-devel python3-Cython root-core
 %endif
