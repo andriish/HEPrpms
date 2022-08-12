@@ -5,7 +5,8 @@
 
 Name:          MG5_aMC
 Version:       2.9.4
-Release:       1%{?dist}
+Release:       5%{?dist}
+Patch0:        patch-MG5_aMC-0.txt
 
 Summary:       MG5_aMC is a multi-purpose particle physics event generator.
 License:       http://www.opensource.org/licenses/UoI-NCSA.php
@@ -62,6 +63,8 @@ http://amcatnlo.web.cern.ch/amcatnlo/list_refs.htm
 
 %prep
 %setup -q  -n MG5_aMC_v2_9_4
+%patch0 -p 1
+
 %build
 
 %install
@@ -77,6 +80,7 @@ cp -r aloha vendor madgraph input Template MadSpin  mg5decay  models $RPM_BUILD_
 cp VERSION $RPM_BUILD_ROOT/%_datadir/MG5_aMC/
 rm -rf $RPM_BUILD_ROOT/%{python3_sitearch}/madgraph/VERSION
 cp VERSION $RPM_BUILD_ROOT/%{python3_sitearch}/madgraph
+cp Template/LO/Source/.make_opts $RPM_BUILD_ROOT/%{python3_sitearch}/Template/LO/Source/make_opts
 %endif
 %if 0%{?suse_version}
 mkdir -p $RPM_BUILD_ROOT/%{python_sitearch}
@@ -84,6 +88,7 @@ cp bin/* $RPM_BUILD_ROOT/%_bindir
 cp -r aloha vendor madgraph input Template MadSpin  mg5decay  models $RPM_BUILD_ROOT/%{python_sitearch}
 rm -rf $RPM_BUILD_ROOT/%{python_sitearch}/madgraph/VERSION
 cp VERSION $RPM_BUILD_ROOT/%{python_sitearch}/madgraph
+cp Template/LO/Source/.make_opts $RPM_BUILD_ROOT/%{python_sitearch}/Template/LO/Source/make_opts
 %endif 
 
 %files -n %{libname}
@@ -97,6 +102,8 @@ cp VERSION $RPM_BUILD_ROOT/%{python_sitearch}/madgraph
 %endif
 
 %changelog
+* Fri Sep 17 2021 Andrii Verbytskyi 2.9.4
+- Update to 2.9.4 and lower the python3 version requirement to 3.6
 * Wed May 26 2021 Andrii Verbytskyi 2.9.3
 - Update to 2.9.3
 * Sat Mar 13 2021 Andrii Verbytskyi 2.9.2

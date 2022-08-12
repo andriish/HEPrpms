@@ -2,10 +2,10 @@
 Summary: Unified Grahics System
 Name: ugs
 Version: 2.10e
-Release: 4%{?dist}
+Release: 5%{?dist}
 #Copyright: Free <= obsolete keyword for rpm 4.x
 License: Free
-Source: http://ftp.riken.jp/iris/ugs/ugs.tar.gz
+Source: https://ftp.riken.jp/iris/ugs/ugs.tar.gz
 URL: http://ftp.riken.jp/iris/ugs
 #Patch: ugs-24bit-color.patch
 Patch0:  ugs_OSX_fix.patch

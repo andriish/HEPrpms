@@ -6,10 +6,10 @@
 
 Name:           PHOTOS
 Version:        3.64
-Release:        3%{?dist}
-License:        Unknown
+Release:        5%{?dist}
+License:        MIT
 Url:            http://photospp.web.cern.ch/photospp
-Source0:        http://photospp.web.cern.ch/photospp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
+Source0:        https://photospp.web.cern.ch/photospp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
 Patch0:         patch-PHOTOS-0.txt
 Summary:        Monte Carlo program for bremsstrahlung in the decay of particles and resonances
 BuildRequires:  gcc-c++ autoconf automake libtool  tex(latex) tex(fmtcount.sty) ghostscript doxygen
@@ -18,8 +18,8 @@ BuildRequires:  gcc-gfortran  pythia8 pythia8-devel HepMC-devel HepMC3-devel Hep
 Requires:       HepMC HepMC3 libgfortran pythia8
 %endif
 %if 0%{?suse_version}
-BuildRequires:  gcc-fortran   libpythia8 pythia-devel HepMC2-devel HepMC3-devel libHepMC4 libHepMC3-1 tex(eurosym.sty) tex(booktabs.sty)
-Requires:       libHepMC4 libHepMC3-1 gcc-fortran  libpythia8
+BuildRequires:  gcc-fortran   libpythia8 pythia-devel HepMC2-devel HepMC3-devel libHepMC4 libHepMC3-3 tex(eurosym.sty) tex(booktabs.sty)
+Requires:       libHepMC4 libHepMC3-3 gcc-fortran  libpythia8
 %endif
 BuildRequires:  TAUOLA >= 1.1.7
 BuildRequires:  TAUOLA-devel >= 1.1.7

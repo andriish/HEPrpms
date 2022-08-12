@@ -1,9 +1,9 @@
 Name:           chaplin
 Version:        1.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        Standard CPC licence
 Url:            http://chaplin.hepforge.org/
-Source0:        http://chaplin.hepforge.org/code/%{name}-%{version}.tar
+Source0:        https://chaplin.hepforge.org/code/%{name}-%{version}.tar
 Summary:        Complex Harmonic Polylogarithms in FORTRAN.
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran gcc-c++ hoppet 

@@ -3,10 +3,10 @@
 
 Name:           golem95
 Version:        1.3.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL
 Url:            http://www.hepforge.org/archive/golem/
-Source0:        http://www.hepforge.org/archive/golem/%{name}-%{version}.tar.gz
+Source0:        https://www.hepforge.org/archive/golem/%{name}-%{version}.tar.gz
 Summary:        A package for the numerical  evaluation of integrals
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran

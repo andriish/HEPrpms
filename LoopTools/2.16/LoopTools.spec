@@ -4,9 +4,10 @@
 Summary: A package for evaluation of scalar and tensor one-loop integrals based on the FF package by G.J. van Oldenborgh
 Name: LoopTools
 Version: 2.16
-Release: 2%{?dist}
+Release: 6%{?dist}
 License: LGPLv3
-Source: http://www.feynarts.de/looptools/LoopTools-%{version}.tar.gz
+#Source: https://www.feynarts.de/looptools/LoopTools-{version}.tar.gz
+Source:        https://github.com/andriish/HEPsources/raw/master/LoopTools-{version}.tar.gz
 Patch0:         patch-LoopTools-0.txt
 URL:    http://www.feynarts.de/looptools/
 Prefix: %{_prefix}

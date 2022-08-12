@@ -32,6 +32,7 @@ make %{?_smp_mflags}
 
 %install
 %make_install
+export QA_RPATHS=3
 
 
 %files
@@ -46,4 +47,3 @@ make %{?_smp_mflags}
 
 * Thu Jan 17 2019 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 1.0.0
 + test
-

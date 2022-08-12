@@ -6,7 +6,7 @@
 
 Name:           EvtGen
 Version:        2.0.0
-Release:        8%{?dist}
+Release:        10%{?dist}
 License:        GPLv3
 Url:            http://evtgen.warwick.ac.uk
 Source0:        https://evtgen.hepforge.org/downloads/EvtGen-02.00.00.tar.gz
@@ -36,8 +36,8 @@ BuildRequires:  root-tree
 
 %if 0%{?suse_version}
 BuildRequires:  pythia-devel HepMC2-devel HepMC3-devel 
-Requires:       libpythia8  libHepMC4 libHepMC3-1  root6-libs
-BuildRequires:  root6 root6-libs root6-devel root6-config
+Requires:       libpythia8  libHepMC4 libHepMC3-1  root6-libs  root6-utils
+BuildRequires:  root6 root6-libs root6-devel root6-config  root6-utils
 %endif
 
 

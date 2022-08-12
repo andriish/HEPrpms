@@ -9,10 +9,10 @@
 
 Name:           fastjet
 Version:        3.4.0
-Release:        1005%{?dist}
+Release:        1006%{?dist}
 License:        GPLv2+
 URL:            http://www.fastjet.fr
-Source0:        http://www.fastjet.fr/repo/%{name}-%{version}.tar.gz
+Source0:        https://www.fastjet.fr/repo/%{name}-%{version}.tar.gz
 Prefix:         %{_prefix}
 Summary:        Fast implementation of several recombination jet algorithms
 BuildRequires:  gcc-c++ 

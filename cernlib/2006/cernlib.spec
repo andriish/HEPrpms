@@ -1,6 +1,10 @@
-%if %{?rhel}%{!?rhel:0} >= 8
+%if %{?rhel}%{!?rhel:0} == 8
 %global optflags -std=legacy -DL_cuserid=512
 %endif
+%if %{?rhel}%{!?rhel:0} >= 8
+%global optflags -std=legacy -DL_cuserid=512 -fallow-argument-mismatch -fallow-invalid-boz -fcommon  
+%endif
+
 
 %if 0%{?suse_version}
 %global optflags -std=legacy -DL_cuserid=512 -fallow-argument-mismatch -fallow-invalid-boz -fcommon   -Ddgeqpf=dgeqp3 -Ddgeqpf_=dgeqp3_  -DDGEQPF=dgeqp3
@@ -90,7 +94,7 @@
 
 Name:          %{?compat}cernlib%{?compiler}
 Version:       2006
-Release:       43%{?dist}
+Release:       44%{?dist}
 Summary:       General purpose CERN library
 Group:         Development/Libraries
 # As explained in the cernlib on debian FAQ, cfortran can be considered LGPL.
@@ -845,7 +849,9 @@ sed -i 's/ArCmdBase clq/ArCmdBase cq/g'  src/config/Imake.tmpl
 %if %{?fedora}%{!?fedora:0} >= 34
 sed -i 's/char    \*prompt\;/const char    \*prompt\;/g' src/packlib/cspack/tcpaw/tcpaw.c
 %endif
-
+%if 0%{?suse_version}
+sed -i 's/char    \*prompt\;/const char    \*prompt\;/g' src/packlib/cspack/tcpaw/tcpaw.c
+%endif
 
 %build
 

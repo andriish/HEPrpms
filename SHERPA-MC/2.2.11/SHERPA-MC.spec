@@ -13,11 +13,12 @@
 
 Name:           SHERPA-MC
 Version:        2.2.11
-Release:        5%{?dist}
+Release:        7%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://sherpa.hepforge.org/downloads/%{name}-%{version}.tar.gz
 Summary:          Multipurpose Monte Carlo Event Generator for High Energy physics
+Patch0:           patch-SHERPA-MC-0.txt
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} 
 BuildRequires:    gcc-gfortran gcc-c++ root pythia8-devel pythia8   Rivet Rivet-devel hztool
@@ -42,6 +43,7 @@ BuildRequires:    swig  recola libqd0 qd-devel openssl-devel openssl
 Requires:         blackhat blackhat-data libgfortran5
 BuildRequires:    blackhat-devel blackhat
 BuildRequires:    texinfo git
+BuildRequires:    python3-distutils-extra
 %endif
 
 %if %{?rhel}%{!?rhel:0} == 7
@@ -169,10 +171,12 @@ This package provides the Python 3 bindings for %{name}-openmpi
 
 %prep
 %setup -q
+%patch0 -p1
 
 
 %build
 # Build serial version, dummy arguments
+autoreconf -fi
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 mkdir serial; \
@@ -272,6 +276,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
 echo %{_libdir}/%{name} >   %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 
 rm -rf $RPM_BUILD_ROOT/usr/share/info/dir
+export QA_RPATHS=3
 
 %post -p /sbin/ldconfig    
 %postun -p /sbin/ldconfig
@@ -360,6 +365,8 @@ rm -rf $RPM_BUILD_ROOT/usr/share/info/dir
 %endif
 
 %changelog
+* Tue Jul 12 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+  - Distutils
 * Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
   - RPATH
 * Wed May 26 2021 Andrii Verbytskyi 2.2.11

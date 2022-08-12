@@ -2,7 +2,7 @@
 Summary:  A parton level Monte Carlo for processes with electroweak bosons
 Name: VBFNLO
 Version: 3.0.0beta5
-Release: 1%{?dist}
+Release: 3%{?dist}
 License: GPLv2
 Source: https://github.com/vbfnlo/vbfnlo/archive/v%{version}.tar.gz
 URL:    https://www.itp.kit.edu/vbfnlo/wiki/doku.php

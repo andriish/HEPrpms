@@ -2,7 +2,7 @@
 Summary:  A Fortran library for the numerical evaluation of one-loop scalar and tensor integrals 
 Name: collier
 Version:  1.2.5
-Release:  1%{?dist}
+Release:  2%{?dist}
 License:  GPLv3
 Prefix: %{_prefix}
 URL:      https://collier.hepforge.org/
@@ -34,13 +34,18 @@ BuildRequires: gcc-fortran
  calculations 
 %prep 
 %setup -q -n  COLLIER-%{version}
+%if 0%{?fedora} > 35 || %{?rhel}%{!?rhel:0} >8 
+export LDFLAGS=' '
+%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON  -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/
+%else
 %cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON  -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  .
-
+%endif
 %build
 
 %if 0%{?rhel} || 0%{?fedora}
-%if %{?fedora}%{!?fedora:0} 
-make -C x86_64-redhat-linux-gnu
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >8 
+%cmake_build
+#make -C x86_64-redhat-linux-gnu
 %else
 make
 %endif
@@ -54,8 +59,9 @@ make -C build
 
 %install
 %if 0%{?rhel} || 0%{?fedora}
-%if %{?fedora}%{!?fedora:0} 
-make -C x86_64-redhat-linux-gnu install DESTDIR=%{buildroot}
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >8 
+%cmake_install
+#make -C x86_64-redhat-linux-gnu install DESTDIR=%{buildroot}
 %else
 make install DESTDIR=%{buildroot}
 %endif
