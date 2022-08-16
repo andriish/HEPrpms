@@ -94,6 +94,7 @@ option(lhapdf_include_path "LHAPDF include path" OFF)
 
 option(with_vvamp "Build with VVAmp for WW,WZ and ZZ processes" ON)
 
+include_directories(${CMAKE_BINARY_DIR}/local/include/qd ${CMAKE_BINARY_DIR}/local/include)
 string(ASCII 27 Esc)
 set(BoldRed "${Esc}[1;31m")
 set(ColorReset "${Esc}[m")
