@@ -33,7 +33,7 @@ more details, including a list of available processes, view the documentation (P
 
 %prep 
 %setup -q -n MCFM-%{version}
-#patch0 -p1
+%patch0 -p1
 
 #sed -i   '/^[^#]*\.f/  s/^[ \t]*//' src/*/*txt
 #sed -i   '/^[^#]*\.cpp/  s/^[ \t]*//' src/*/*txt
