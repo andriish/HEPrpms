@@ -9,11 +9,13 @@ Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
 URL:    https://whizard.hepforge.org/
 Patch0:         patch-whizard-0.txt
 
+Requires: recola
+BuildRequires: recola
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
-Requires: fastjet hoppet HepMC3 HepMC3-rootIO gosam openloops ocaml recola2 pythia8 LCIO TAUOLA hdf5
+Requires: fastjet hoppet HepMC3 HepMC3-rootIO gosam openloops ocaml  pythia8 LCIO TAUOLA hdf5
 BuildRequires: fastjet hoppet HepMC3 HepMC3-search HepMC3-rootIO openloops ocaml  lhapdf
-BuildRequires: fastjet-devel HepMC3-devel HepMC3-rootIO-devel HepMC3-search-devel gosam recola2 lhapdf-devel  autoconf automake libtool
+BuildRequires: fastjet-devel HepMC3-devel HepMC3-rootIO-devel HepMC3-search-devel gosam  lhapdf-devel  autoconf automake libtool
 BuildRequires: pythia8 pythia8-devel  libtirpc  libtirpc-devel lhapdf-sets-whizard
 BuildRequires: root  python3 python3-devel  openmpi openmpi-devel noweb LCIO LCIO-devel TAUOLA TAUOLA-devel hdf5 hdf5-devel
 
@@ -41,9 +43,9 @@ BuildRequires: chrpath
 
 
 %if 0%{?suse_version}
-Requires: fastjet hoppet libHepMC3-3  gosam openloops ocaml  gosam recola libpythia8 LCIO  libLHAPDF TAUOLA hdf5
+Requires: fastjet hoppet libHepMC3-3  gosam openloops ocaml  gosam  libpythia8 LCIO  libLHAPDF TAUOLA hdf5
 BuildRequires: fastjet hoppet libHepMC3-3 gosam openloops ocaml  libLHAPDF LHAPDF-devel
-BuildRequires: fastjet-devel HepMC3-devel recola LHAPDF-devel  autoconf automake libtool
+BuildRequires: fastjet-devel HepMC3-devel  LHAPDF-devel  autoconf automake libtool
 BuildRequires: libpythia8 pythia-devel   lhapdf-sets-whizard
 BuildRequires: root6 root6-libs root6-devel   python3-devel  openmpi openmpi-devel noweb LCIO LCIO-devel TAUOLA TAUOLA-devel hdf5 hdf5-devel
 Requires: LoopTools 
@@ -73,15 +75,20 @@ obtained by alternative methods (e.g., including loop corrections) may be interf
 autoreconf --force --install --verbose .
 %if %{?fedora}%{!?fedora:0} >=34 || %{?rhel}%{!?rhel:0} > 8
 export CXXFLAGS="%{optflags} -Wno-error -std=c++1z -Wno-error=format-security "
-export FFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
-export FCLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
+export FFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch "
+export FCLAGS="%{optflags} -Wno-error -fallow-argument-mismatch "
 %else
 export CXXFLAGS="%{optflags} -Wno-error -std=c++1y -Wno-error=format-security "
-export FFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
-export FCFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
+export FFLAGS="%{optflags} " 
+#-fallow-argument-mismatch "
+export FCFLAGS="%{optflags}  -Wno-error"
+# -fallow-argument-mismatch "
+#export LDFLAGS=' '
 %endif
+echo $FCFLAGS
+echo $FFFLAGS
 
-export CFLAGS="%{optflags} -Wno-error -Wno-error=format-security"
+export CFLAGS="%{optflags} -Wno-error -Wno-error=format-security "
 
 
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
