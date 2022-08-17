@@ -54,7 +54,7 @@ cmake --build BUILD
 
 
 %install 
-cmake --install BUILD
+%make_install -C BUILD
 
 %files
 %defattr(-,root,root)
