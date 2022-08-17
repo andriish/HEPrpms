@@ -72,26 +72,26 @@ obtained by alternative methods (e.g., including loop corrections) may be interf
 
 %build 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-autoreconf --force --install --verbose .
-FC_OPTFLAGS=`echo "%optflags" | sed -e 's/-mtune=[^ ]\+//'  -e 's@-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1@@g'  -e 's@-Werror=format-security@@g' `
+
+FC_OPTFLAGS=`echo "%optflags" | sed -e 's/-mtune=[^ ]\+//'  -e 's@-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1@@g' -e 's@-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1@@g'  -e 's@-Werror=format-security@@g' `
 
 %if %{?fedora}%{!?fedora:0} >=34 || %{?rhel}%{!?rhel:0} > 8
 export CXXFLAGS="%{optflags} -Wno-error -std=c++1z -Wno-error=format-security "
 export FFLAGS="$FC_OPTFLAGS -Wno-error -fallow-argument-mismatch "
 export FCLAGS="$FC_OPTFLAGS -Wno-error -fallow-argument-mismatch "
 %else
-export CXXFLAGS="%{optflags} -Wno-error -std=c++1y -Wno-error=format-security "
+export CXXFLAGS="$FC_OPTFLAGS -Wno-error -std=c++1y -Wno-error=format-security "
 export FFLAGS=$FC_OPTFLAGS 
 export FCFLAGS="$FC_OPTFLAGS   -Wno-error"
 %endif
 
 echo $FCFLAGS
-echo $FCFLAGS
+echo $FFFLAGS
 echo $FC_OPTFLAGS
 
-export CFLAGS="%{optflags} -Wno-error -Wno-error=format-security "
+export CFLAGS="$FC_OPTFLAGS -Wno-error -Wno-error=format-security "
 
-
+autoreconf --force --install --verbose .
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --enable-recola     --with-recola=/usr/%_lib \
     --enable-gosam      --with-gosam=/usr  --with-golem=/usr  --with-ninja=/usr --with-samurai=/usr \
