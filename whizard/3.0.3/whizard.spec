@@ -83,6 +83,7 @@ export FCLAGS="$FC_OPTFLAGS -Wno-error -fallow-argument-mismatch "
 export CXXFLAGS="$FC_OPTFLAGS -Wno-error -std=c++1y -Wno-error=format-security "
 export FFLAGS=$FC_OPTFLAGS 
 export FCFLAGS="$FC_OPTFLAGS   -Wno-error"
+export LDFLAGS=" "
 %endif
 
 echo $FCFLAGS
