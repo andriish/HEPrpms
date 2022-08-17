@@ -76,9 +76,10 @@ obtained by alternative methods (e.g., including loop corrections) may be interf
 FC_OPTFLAGS=`echo "%optflags" | sed -e 's/-mtune=[^ ]\+//'  -e 's@-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1@@g' -e 's@-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1@@g'  -e 's@-Werror=format-security@@g' `
 
 %if %{?fedora}%{!?fedora:0} >=34 || %{?rhel}%{!?rhel:0} > 8
-export CXXFLAGS="%{optflags} -Wno-error -std=c++1z -Wno-error=format-security "
+export CXXFLAGS="$FC_OPTFLAGS -Wno-error -std=c++1z -Wno-error=format-security "
 export FFLAGS="$FC_OPTFLAGS -Wno-error -fallow-argument-mismatch "
 export FCLAGS="$FC_OPTFLAGS -Wno-error -fallow-argument-mismatch "
+export LDFLAGS=" "
 %else
 export CXXFLAGS="$FC_OPTFLAGS -Wno-error -std=c++1y -Wno-error=format-security "
 export FFLAGS=$FC_OPTFLAGS 
