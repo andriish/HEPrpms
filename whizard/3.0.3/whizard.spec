@@ -78,7 +78,7 @@ export CXXFLAGS="%{optflags} -Wno-error -std=c++1z -Wno-error=format-security "
 export FFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch "
 export FCLAGS="%{optflags} -Wno-error -fallow-argument-mismatch "
 %else
-FC_OPTFLAGS=`echo "%optflags" | sed -e 's/-mtune=[^ ]\+//'  -e 's/-specs=[^ ]\+/'`
+FC_OPTFLAGS=`echo "%optflags" | sed -e 's/-mtune=[^ ]\+//'  -e 's/-specs=[^ ]\+/'  -e 's@-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1@@g'`
 export CXXFLAGS="%{optflags} -Wno-error -std=c++1y -Wno-error=format-security "
 export FFLAGS=$FC_OPTFLAGS 
 #-fallow-argument-mismatch "
