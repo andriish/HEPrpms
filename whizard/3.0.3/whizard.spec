@@ -78,7 +78,7 @@ FC_OPTFLAGS=`echo "%optflags" | sed -e 's/-mtune=[^ ]\+//'  -e 's@-specs=/usr/li
 %if %{?fedora}%{!?fedora:0} >=34 || %{?rhel}%{!?rhel:0} > 8
 export CXXFLAGS="$FC_OPTFLAGS -Wno-error -std=c++1z -Wno-error=format-security "
 export FFLAGS="$FC_OPTFLAGS -Wno-error -fallow-argument-mismatch "
-export FCLAGS="$FC_OPTFLAGS -Wno-error -fallow-argument-mismatch "
+export FCFLAGS="$FC_OPTFLAGS -Wno-error -fallow-argument-mismatch "
 export LDFLAGS=" "
 %else
 export CXXFLAGS="$FC_OPTFLAGS -Wno-error -std=c++1y -Wno-error=format-security "
