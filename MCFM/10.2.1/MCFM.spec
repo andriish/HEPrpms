@@ -35,32 +35,18 @@ more details, including a list of available processes, view the documentation (P
 %setup -q -n MCFM-%{version}
 %patch0 -p1
 
-#sed -i   '/^[^#]*\.f/  s/^[ \t]*//' src/*/*txt
-#sed -i   '/^[^#]*\.cpp/  s/^[ \t]*//' src/*/*txt
-#sed -i   '/^[^#]*\.f/ s/^/\$\{CMAKE_CURRENT_SOURCE_DIR}\//'  src/*/*txt
-#sed -i   '/^[^#]*\.cpp/ s/^/\$\{CMAKE_CURRENT_SOURCE_DIR}\//'  src/*/*txt
-
-#sed -i   '/^[^#]*\.f/  s/^[ \t]*//' TensorReduction/*/*txt
-#sed -i   '/^[^#]*\.cpp/  s/^[ \t]*//' TensorReduction/*/*txt
-#sed -i   '/^[^#]*\.f/ s/^/\$\{CMAKE_CURRENT_SOURCE_DIR}\//'  TensorReduction/*/*txt
-#sed -i   '/^[^#]*\.cpp/ s/^/\$\{CMAKE_CURRENT_SOURCE_DIR}\//'  TensorReduction/*/*txt
-
-#sed -i   '/^[^#]*\.f/  s/^[ \t]*//' TensorReduction/*/*/*txt
-#sed -i   '/^[^#]*\.cpp/  s/^[ \t]*//' TensorReduction/*/*/*txt
-#sed -i   '/^[^#]*\.f/ s/^/\$\{CMAKE_CURRENT_SOURCE_DIR}\//'  TensorReduction/*/*/*txt
-#sed -i   '/^[^#]*\.cpp/ s/^/\$\{CMAKE_CURRENT_SOURCE_DIR}\//'  TensorReduction/*/*/*txt
-
-
 %build 
+
+%if 0%{?fedora} || %{?rhel}%{!?rhel:0} >= 8 
+export FFLAGS=" -g -I$(lhapdf-config --incdir) -fPIC -fno-var-tracking-assignments  "
+export FCFLAGS=" -g -fPIC -fno-var-tracking-assignments "
+export CXXFLAGS="%{optflags}  -fPIC"
+export LDFLAGS=" "
+%else
 export FFLAGS="%{optflags} -I$(lhapdf-config --incdir) -fPIC -fno-var-tracking-assignments  "
 export FCFLAGS="%{optflags}  -fPIC -fno-var-tracking-assignments "
 export CFLAGS="%{optflags}  -fPIC"
 export CXXFLAGS="%{optflags}  -fPIC"
-
-%if 0%{?fedora}
-export FFLAGS=" -g -I$(lhapdf-config --incdir) -fPIC -fno-var-tracking-assignments  "
-export FCFLAGS=" -g -fPIC -fno-var-tracking-assignments "
-export LDFLAGS=" "
 %endif
 
 %cmake -Duse_external_lhapdf:BOOL=ON -Duse_internal_lhapdf:BOOL=OFF -Dwith_library:BOOL=ON -S. -BBUILD
@@ -73,7 +59,7 @@ cmake --install BUILD
 %files
 %defattr(-,root,root)
 %{_bindir}/*
-%{_libdir}/libMCFM.a
+%{_libdir}/lib*
 
 %clean
 rm -rf %{buildroot}

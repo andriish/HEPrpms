@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.13)
 enable_language(Fortran)
 project (mcfm C CXX Fortran)
-
+include("GNUInstallDirs")
 if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -cpp -finit-local-zero -ffixed-line-length-none -ffree-line-length-512 -fopenmp")
 elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
@@ -163,6 +163,7 @@ if(${with_library})
        target_include_directories(mltest2 PRIVATE src/Inc)
        target_compile_definitions(mltest2 PUBLIC LIB_SUFFIX="${CMAKE_SHARED_LIBRARY_SUFFIX}")
     endif()
+    install(TARGETS libmcfm DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()
 
 add_subdirectory(src)
@@ -328,10 +329,13 @@ set(CMAKE_INSTALL_RPATH "${CMAKE_BINARY_DIR}/local/lib")
 
 ## Installation
 
+install(TARGETS mcfm DESTINATION "${CMAKE_BINARY_DIR}")
 install(FILES "${CMAKE_SOURCE_DIR}/Bin/process.DAT" DESTINATION "${CMAKE_BINARY_DIR}")
 install(FILES "${CMAKE_SOURCE_DIR}/Bin/br.sm1" DESTINATION "${CMAKE_BINARY_DIR}")
 install(FILES "${CMAKE_SOURCE_DIR}/Bin/br.sm2" DESTINATION "${CMAKE_BINARY_DIR}")
-install(DIRECTORY "${CMAKE_SOURCE_DIR}/Bin/PDFs" DESTINATION "${CMAKE_BINARY_DIR}")
+if(use_internal_lhapdf)
+  install(DIRECTORY "${CMAKE_SOURCE_DIR}/Bin/PDFs" DESTINATION "${CMAKE_BINARY_DIR}")
+endif()
 
 if(${with_library})
     if ((DEFINED OLDIR) OR (DEFINED RCLDIR) OR (DEFINED MLDIR))
