@@ -283,23 +283,23 @@ export QA_RPATHS=3
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
 %files  -n python3-%{name}
-%{python3_sitearch}/Sherpa.py
-%{python3_sitearch}/Sherpa.pyc
-%{python3_sitearch}/Sherpa.pyo
-%{python3_sitearch}/_Sherpa.la
-%{python3_sitearch}/_Sherpa.so
-%{python3_sitearch}/_Sherpa.so.0
-%{python3_sitearch}/_Sherpa.so.0.0.0
+%{python3_sitearch}/*Sherpa*
+#{python3_sitearch}/Sherpa.pyc
+#{python3_sitearch}/Sherpa.pyo
+#{python3_sitearch}/_Sherpa.la
+#{python3_sitearch}/_Sherpa.so
+#{python3_sitearch}/_Sherpa.so.0
+#{python3_sitearch}/_Sherpa.so.0.0.0
 
 
 %files  -n python3-%{name}-openmpi
-/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/Sherpa.py
-/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/Sherpa.pyc
-/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/Sherpa.pyo
-/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/_Sherpa.la
-/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/_Sherpa.so
-/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/_Sherpa.so.0
-/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/_Sherpa.so.0.0.0
+#/usr/_lib/openmpi/lib/python{python3_version}/site-packages/Sherpa.py
+#/usr/_lib/openmpi/lib/python{python3_version}/site-packages/Sherpa.pyc
+#/usr/_lib/openmpi/lib/python{python3_version}/site-packages/Sherpa.pyo
+#/usr/_lib/openmpi/lib/python{python3_version}/site-packages/_Sherpa.la
+#/usr/_lib/openmpi/lib/python{python3_version}/site-packages/_Sherpa.so
+#/usr/_lib/openmpi/lib/python{python3_version}/site-packages/_Sherpa.so.0
+/usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/*herpa*
 %endif
 
 %if 0%{?suse_version}
