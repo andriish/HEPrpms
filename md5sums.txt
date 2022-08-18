@@ -165,3 +165,4 @@ dcdf6afbd96204662bf10594b744cb44  f2c/20210928/rpmbuild/SOURCES/fc
 c34cb1e0f435a709099fef2f0c86c7fd  MCFM/10.2.1/rpmbuild/SOURCES/MCFM-10.2.1.tar.gz
 e43306265a56675f0f58727685b806ca  MG5_aMC/3.4.0/rpmbuild/SOURCES/MG5_aMC_v3.4.0.tar.gz
 ea165d618640dbdecb42ae4491337965  gengetopt/2.23/rpmbuild/SOURCES/gengetopt-2.23.tar.xz
+b334134734b3b703934236f94ddf1d24  YODA/1.9.6/rpmbuild/SOURCES/YODA-1.9.6.tar.gz
