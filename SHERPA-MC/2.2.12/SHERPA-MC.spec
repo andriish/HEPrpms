@@ -249,7 +249,7 @@ make -C serial install DESTDIR=%{buildroot} INSTALL="install -p" CPPROG="cp -p"
 
 # Install OpenMPI version
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} 
-mkdir -p %{buildroot}/usr/%{_lib}/python%{python2_version}/
+mkdir -p %{buildroot}/usr/%{_lib}/python%{python3_version}/
 mv %{buildroot}/usr/lib/python%{python3_version}/site-packages    %{buildroot}/%{python3_sitearch}
 %{_openmpi_load}
 make -C $MPI_COMPILER install DESTDIR=%{buildroot} INSTALL="install -p" CPPROG="cp -p"
