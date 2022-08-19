@@ -170,7 +170,7 @@ This package provides the Python 3 bindings for %{name}-openmpi
 
 
 %build
-
+autoreconf --force --install --verbose .
 # Build serial version, dummy arguments
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
