@@ -1,6 +1,6 @@
 Name:           DD4hep
 Version:        01.20.00
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        DD4hep (Detector Description for High Energy Physics)
 Group:          Development/Tools
 License:        Custom
@@ -81,15 +81,15 @@ This package provides the Python 3 bindings for %{name}
 %build
 #TBB should be fixed
 %if  %{?rhel}%{!?rhel:0} == 8
-%cmake  -DBUILD_TESTING:BOOL=OFF  -H. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=OFF -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
+%cmake  -DBUILD_TESTING:BOOL=OFF  -DDD4HEP_RELAX_PYVER::BOOL=OFF -H. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=OFF -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
 make %{?_smp_mflags}
 %endif
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8
-%cmake  -DBUILD_TESTING:BOOL=OFF -DCMAKE_SKIP_RPATH=ON -S. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
+%cmake  -DBUILD_TESTING:BOOL=OFF -DDD4HEP_RELAX_PYVER::BOOL=OFF -DCMAKE_SKIP_RPATH=ON -S. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
 make %{?_smp_mflags}
 %endif 
 %if 0%{?suse_version}
-%cmake  -DBUILD_TESTING:BOOL=OFF         -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
+%cmake  -DBUILD_TESTING:BOOL=OFF  -DDD4HEP_RELAX_PYVER::BOOL=OFF       -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
 %cmake_build
 %endif
 
