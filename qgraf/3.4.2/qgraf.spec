@@ -34,6 +34,7 @@ touch ./ChangeLog
 
 %build
 autoreconf -fisv
+rm -rf ./COPYING
 %configure  
 make %{?_smp_mflags}
 
@@ -43,7 +44,7 @@ make %{?_smp_mflags}
 
 %files
 %_bindir/*
-%doc AUTHORS README COPYING
+%doc AUTHORS README 
 
 %changelog
 * Sun Feb 21 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
