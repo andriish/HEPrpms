@@ -1,7 +1,7 @@
 %if %{?rhel}%{!?rhel:0} == 8
 %global optflags -std=legacy -DL_cuserid=512
 %endif
-%if %{?rhel}%{!?rhel:0} >= 8
+%if %{?rhel}%{!?rhel:0} > 8
 %global optflags -std=legacy -DL_cuserid=512 -fallow-argument-mismatch -fallow-invalid-boz -fcommon  
 %endif
 

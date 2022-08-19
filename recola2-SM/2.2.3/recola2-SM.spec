@@ -36,11 +36,11 @@ next-to-leading order.
 %build
 
 %if 0%{?rhel} || 0%{?fedora}
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} == 8
+%if %{?rhel}%{!?rhel:0} == 8
 %cmake  .  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
 %make_build 
 %endif
-%if  %{?rhel}%{!?rhel:0} > 8
+%if   %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8
 %cmake  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
 %cmake_build 
 %endif

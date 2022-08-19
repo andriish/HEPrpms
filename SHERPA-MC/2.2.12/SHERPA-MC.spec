@@ -46,8 +46,11 @@ BuildRequires:    texinfo git
 %endif
 
 
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} == 8
+BuildRequires: python3-distutils-extra
+%endif
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-BuildRequires:    python3 python3-devel
+BuildRequires:    python3 python3-devel 
 Requires:         python3
 Requires:         cernlib cernlib-devel cernlib-static
 BuildRequires:    cernlib cernlib-devel cernlib-static
