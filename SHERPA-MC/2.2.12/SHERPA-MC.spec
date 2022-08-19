@@ -177,7 +177,7 @@ autoreconf --force --install --verbose .
 export PYTHON=%{_bindir}/python3
 mkdir serial; \
 cd serial; \
-export CXXFLAGS=$CXXFLAGS" -I../ ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
+export CXXFLAGS=$CXXFLAGS" -I../  -I../../ ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
 ../configure --disable-rpath  --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006  --enable-blackhat=$(blackhat-config --prefix)   --enable-pyext   --enable-gzip --enable-recola=/usr  --enable-hztool=/usr   --enable-hepevtsize=4000    --enable-hepmc3=/usr --enable-hepmc3root   --prefix=%{_prefix} --libdir=%{_libdir}  --enable-fastjet=/usr    --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
 make -C Manual  ;\
 make %{?_smp_mflags} ; \
@@ -189,7 +189,7 @@ cd ..
 export PYTHON=%{_bindir}/python3
 mkdir serial; \
 cd serial; \
-export CXXFLAGS=$CXXFLAGS" -I../ ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
+export CXXFLAGS=$CXXFLAGS" -I../  -I../../ ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
 ../configure --disable-rpath  --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006  --enable-blackhat=$(blackhat-config --prefix)   --enable-pyext   --enable-gzip --enable-recola=/usr  --enable-hztool=/usr   --enable-hepevtsize=4000    --enable-hepmc3=/usr --disable-hepmc3root   --prefix=%{_prefix} --libdir=%{_libdir}  --enable-fastjet=/usr    --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root=/usr  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
 make -C Manual  ;\
 make %{?_smp_mflags} ; \
@@ -211,7 +211,7 @@ export F77=mpif77
 
 mkdir $MPI_COMPILER; \
 cd $MPI_COMPILER; \
-export CXXFLAGS=$CXXFLAGS" -I../ ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
+export CXXFLAGS=$CXXFLAGS" -I../  -I../../ ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
 ../configure --disable-rpath  --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006   --enable-blackhat=$(blackhat-config --prefix)    --enable-pyext   --enable-gzip  --enable-hztool=/usr --enable-hepevtsize=4000 --enable-hepmc3=/usr --enable-hepmc3root --prefix=$MPI_HOME --libdir=$MPI_HOME/%_lib  --datadir=%{_datadir}     --mandir=%{_mandir}     --infodir=%{_infodir} \
   --program-suffix=$MPI_SUFFIX  --enable-mpi --enable-recola=/usr   --enable-fastjet=/usr    --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
 make -C Manual  ;\
@@ -235,7 +235,7 @@ mpi-selector --set openmpi3
 source /etc/profile.d/mpi-selector.sh
 mkdir openmpi3; \
 cd openmpi3; \
-export CXXFLAGS=$CXXFLAGS" -I../ ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
+export CXXFLAGS=$CXXFLAGS" -I../  -I../../ ";  export LDFLAGS=$LDFLAGS" -L/usr/%_lib/root ";\
 ../configure --disable-rpath  --enable-rivet=/usr  --enable-cernlib=/usr/%_lib/cernlib/2006   --enable-blackhat=$(blackhat-config --prefix)  --enable-pyext   --enable-gzip  --enable-hztool=/usr --enable-hepevtsize=4000 --enable-hepmc3=/usr --disable-hepmc3root --prefix=$MPI_HOME --libdir=$MPI_HOME/%_lib  --datadir=%{_datadir}     --mandir=%{_mandir}     --infodir=%{_infodir} \
   --program-suffix=$MPI_SUFFIX  --enable-mpi --enable-recola=/usr   --enable-fastjet=/usr    --enable-openloops=/usr/%_lib/openloops --enable-hepmc2=/usr  --enable-root=/usr  --enable-binreloc   --enable-pythia --enable-lhole --enable-lhapdf=/usr;\
 make -C Manual  ;\
