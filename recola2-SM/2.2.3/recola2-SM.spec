@@ -13,6 +13,9 @@ Requires:      collier
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:      gcc-gfortran
 BuildRequires:      python3-devel
+%if %{?fedora}%{!?fedora:0}
+BuildRequires:      chrpath
+%endif
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 BuildRequires:      cmake >= 3.4.3
 %else
@@ -59,6 +62,9 @@ next-to-leading order.
 %cmake_install
 %else
 %make_install
+%endif
+%if %{?fedora}%{!?fedora:0}
+chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libmodelfile.so
 %endif
 %endif
 %if 0%{?suse_version}
