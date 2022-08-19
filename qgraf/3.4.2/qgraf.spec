@@ -40,6 +40,7 @@ make %{?_smp_mflags}
 %install
 %make_install 
 
+%clean
 
 %files
 %_bindir/*
