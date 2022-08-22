@@ -48,14 +48,15 @@
       Double Precision ScaleFactorFinalShower,ScaleFactorMatchingScale
       Double Precision MaxFactor
       character *512 TMDDensityPath,lheInput
+      LOGICAL RivetOUT
+      character *132 RivetFile,RivetAnalyses(50), RivetRun
       
 C
 #include "HepMCSteering.inc"
       LOGICAL HepMCOUTPUT
       character *132 HepMCFile  
       integer HepMCFormat   
-      character *132 RivetFile,RivetAnalyses(50), RivetRun
-      LOGICAL  RivetOUT
+C
       namelist/CASCADE_input/
      & NrEvents,Process_Id,Hadronisation,
      & SpaceShower,SpaceShowerOrderAlphas,TimeLikeSplittingInSpaceShower,
@@ -68,10 +69,10 @@ C
      & ScaleFactorMatchingScale,MaxFactor,
      & pythia6,
      & TMDDensityPath,lheInput,Uncertainty_TMD,fNLO,UsePrivateSetting,
-     & HepMCFile,  RivetFile,
-     & HepMCOUT,RivetOUT,
+     & HepMCFile,
+     & HepMCOUTPUT,
      & HepMCFormat,
-     & RivetAnalyses, RivetRun
+     & RivetOUT, RivetAnalyses, RivetRun
       
       Double precision rclus, etclus, etaclmax
       Integer iexcl,iMLM, LHE_tmd

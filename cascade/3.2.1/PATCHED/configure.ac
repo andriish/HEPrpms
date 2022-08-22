@@ -184,6 +184,19 @@ AC_MSG_RESULT([Using $ZLIB_LIBS ])
 #AC_SUBST(ZLIB_LIBS) 
 #
 
+AC_MSG_CHECKING([for Rivet installation])
+AC_ARG_WITH([rivet],
+   [AS_HELP_STRING([--with-rivet], [path to RIVET installation])],[:],[with_rivet=${RIVET}])
+AS_IF([test "x$with_rivet" != "xno" && [ test "x`ls $with_rivet/lib/libRivet.*`" != "x" ||  test "x`ls $with_rivet/lib64/libRivet.*`" != "x" ] ], [AC_SUBST(RIVET,[$with_rivet])],
+        AC_MSG_RESULT([Cannot find $with_rivet/lib/libRivet.* or $with_rivet/lib64/libRivet.* libraries. 
+        Specify correct path to RIVET installation: --with-rivet=/path/to/rivet]) ; AC_MSG_RESULT([Building RAPGAP without Rivet]); AC_SUBST([no_rivet], [1]))
+if test x$no_rivet == x; then     
+  AC_SUBST([RIVETLIB], ["-L$with_rivet/lib -L$with_rivet/lib64 -lRivet"])
+  CXXFLAGS="${CXXFLAGS} -std=c++1y -g"
+  AC_MSG_RESULT([Building RAPGAP with Rivet: $RIVETLIB])
+fi  
+AM_CONDITIONAL([NO_RIVET],test $no_rivet)     
+
 AC_MSG_CHECKING([for HEPMC3 installation])
 AC_ARG_WITH([hepmc3],
    [AS_HELP_STRING([--with-hepmc3], [path to HEPMC3 installation])],[],[with_hepmc3=check])
@@ -197,21 +210,6 @@ if test "x$no_hepmc3" = "x"; then
 fi  
 AM_CONDITIONAL([NO_HEPMC3],test $no_hepmc3)     
   
-
-
-
-AC_MSG_CHECKING([for Rivet installation])
-AC_ARG_WITH([rivet],
-   [AS_HELP_STRING([--with-rivet], [path to RIVET installation])],[:],[with_rivet=${HEPMC}])
-AS_IF([test "x$with_rivet" != "xno" && [ test "x`ls $with_rivet/lib/libRivet.*`" != "x" ||  test "x`ls $with_rivet/lib64/libRivet.*`" != "x" ] ], [AC_SUBST(RIVET,[$with_rivet])],
-        AC_MSG_RESULT([Cannot find $with_rivet/lib/libRivet.* or $with_rivet/lib64/libRivet.* libraries. 
-        Specify correct path to RIVET installation: --with-rivet=/path/to/rivet]) ; AC_MSG_RESULT([Building RAPGAP without Rivet]); AC_SUBST([no_rivet], [1]))
-if test x$no_rivet == x; then     
-  AC_SUBST([RIVETLIB], ["-L$with_rivet/lib -L$with_rivet/lib64 -lRivet"])
-  CXXFLAGS="${CXXFLAGS} -std=c++1y -g"
-  AC_MSG_RESULT([Building RAPGAP with Rivet: $RIVETLIB])
-fi  
-AM_CONDITIONAL([NO_RIVET],test $no_rivet)     
      
 if test "x$F77" = "xg77"; then
   AC_SUBST([MYFFLAGS], ["-fno-automatic -finit-local-zero -fno-backslash -fno-globals -ff90 -fpic -ffixed-line-length-132"])

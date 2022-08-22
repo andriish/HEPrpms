@@ -1,6 +1,6 @@
 Name:       cascade
 Version:    3.2.1
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy physics
 
 License:    GPLv2
@@ -8,6 +8,7 @@ URL:        https://cascade.hepforge.org/
 Source0:    https://gitlab.cern.ch/jung/cascade/-/archive/%{version}/cascade-%{version}.tar.gz
 Patch0:     patch-cascade-0.txt
 
+BuildRequires: cmake
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  autoconf automake libtool gcc-gfortran HepMC HepMC-devel lhapdf lhapdf-devel 
 BuildRequires:  HepMC3  HepMC3-search HepMC3-devel HepMC3-search-devel Rivet-devel Rivet YODA YODA-devel
@@ -51,14 +52,13 @@ now accessed via TMDlib.
 %patch0 -p1
 
 %build
-autoreconf -fisv
-%configure --with-hepmc3=/usr --with-tmdlib=/usr --with-lhapdf=/usr --with-pythia8=/usr --with-gsl=/usr --with-zlib=/usr
+#autoreconf -fisv
+#configure --with-hepmc3=/usr --with-tmdlib=/usr --with-lhapdf=/usr --with-pythia8=/usr --with-gsl=/usr --with-zlib=/usr
+%cmake
+%cmake_build
 
 %install
-make  
-
-%make_install 
-find %{buildroot} -name '*.la' -delete
+%cmake_install
 
 %post -p /sbin/ldconfig
 
@@ -68,8 +68,7 @@ find %{buildroot} -name '*.la' -delete
 %files
 %{_bindir}/*
 %{_libdir}/*.so*
-%{_libdir}/*.a
-%{_includedir}/*
+%{_includedir}/cascade/*
 %{_datadir}/*
 
 %changelog

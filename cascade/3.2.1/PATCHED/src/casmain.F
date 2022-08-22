@@ -55,13 +55,13 @@ c	Integer N1,N2
       Integer IMultiJetMerge,MinJets_CAS,MaxJets_CAS,Nqmax_CAS,iMLM,iLHE_tmd
       Common/Merge/IMultiJetMerge,MinJets_CAS,MaxJets_CAS,Nqmax_CAS,iMLM,iLHE_tmd
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#include "RivetInterface.inc"
+      INTEGER rvtHM, RIVETSTATUS
       character *512 temp_wname
       Integer jpdf, jscale, wid
 #include "HepMCSteering.inc"
 #include "Pythia6ToHepMC.inc"
       INTEGER OID, HMSTATUS
-include "RivetInterface.inc"
-      INTEGER  rvtHM, RIVETSTATUS
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       
       sumOfWeights = 0d0
@@ -177,7 +177,7 @@ c         write(6,*) ' casmain ',  normhepmc,weight
 c        call convhepmc(iev, isub, weighthepmc, xsec, xsece, idP1,idP2,xidP1,xidP2,scale_process,pdf1,pdf2 )
 
 C-- This is for HepMC interface
-         if (hmOUT .OR. rvtOUT) then
+         if (hmOUT .OR. (rvtHM.EQ.2 .OR. rvtHM.EQ.3 .AND. rvtOUT)) then
           NEVHEP=IEV
           call pyhepc(1)
           HMSTATUS=HepMC_version()
@@ -239,6 +239,9 @@ C         but indicating that it is the TMDlib numbering
              HMSTATUS=HepMC_set_cross_section(OID,
      & sumOfWeights/dble(Iev)*dabs(avgi)*1000.0D0, sumOfWeights/dble(Iev)*dabs(sd)* 1000.0D0, iev,iev)
            endif 
+          else
+             HMSTATUS=HepMC_set_cross_section(OID,
+     & dabs(avgi)*1000.0D0, dabs(sd)* 1000.0D0, iev,iev)         
           endif
           HMSTATUS=HepMC_set_pdf_info(OID,idP1,idP2,dble(xidP1),dble(xidP2),dble(scale_process),dble(xidP1),dble(xidP2),pdf1,pdf2)
           HMSTATUS=HepMC_set_attribute_int(OID,-1,'mpi'//char(0))
@@ -252,14 +255,13 @@ C Set here some physicl TM scale. Is meaningfull only in HepMC3
           if (hmOUT) then
           HMSTATUS=HepMC_write_event(OID)
           endif
-C-- This is for Rivet
-         if (rvtOUT) then
-         if (I.EQ.1) then 
-         RIVETSTATUS=rivet_init_first_event(OID)
-         end if
-         RIVETSTATUS=rivet_run(OID)
-         end if
-
+C-- This is for Rivet 
+          if ( rvtHM .EQ. 2 .OR. rvtHM .EQ. 3 .AND.rvtOUT) then
+           if (I.EQ.1) then 
+             RIVETSTATUS=rivet_init_first_event(OID)
+           end if
+           RIVETSTATUS=rivet_run(OID)
+          endif
           HMSTATUS=HepMC_clear_event(OID)  
          endif
 C-- End HepMC  interface
@@ -294,7 +296,7 @@ c      call convhepmc(iev, isub, weighthepmc, xsec, xsece, idP1,idP2,xidP1,xidP2
 CAV      call convhepmc(iev, isub, weighthepmc, xsec, xsece, idP1,idP2,xidP1,xidP2,scale_process,pdf1,pdf2 )
       if (hmOUT) HMSTATUS=HepMC_delete_writer(OID)
       if (rvtOUT) then
-      RIVETSTATUS=rivet_done(trim(rvtfilnam)//char(0))
+        RIVETSTATUS=rivet_done(trim(rvtfilnam)//char(0))
       endif
       CALL CAEND(20)
 c
