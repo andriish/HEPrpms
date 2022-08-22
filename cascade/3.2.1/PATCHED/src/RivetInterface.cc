@@ -8,7 +8,7 @@ extern "C" {
     {
         return 0;
     }
-    int rivet_initfirst_event_()
+    int rivet_init_first_event_()
     {
         return 0;
     }

@@ -3,8 +3,9 @@ casgki.inc    casludat1.inc  casluparm.inc  caspara.inc   casprkt.inc casvalues.
 casglu.inc    casludat2.inc  casmult.inc    casparam.inc  dateqq.inc \
 casherup.inc  casludat3.inc  caspara1.inc   casparas.inc  casscal.inc timeqq.inc casvers.inc \
 caspsipol.inc caspar.inc caslhe.inc casevent.inc qcdnum.inc  PythiaHelper.h \
+RivetInterface.inc \
 HepMCSteering.inc Pythia6ToHepMC3.inc Pythia6ToHepMC2.inc Pythia6ToHepMC.inc \
-casMLM.inc casMERGING.inc casMEMAIN.inc fjcore.hh casiglu.inc casfNLO.inc RivetInterface.inc
+casMLM.inc casMERGING.inc casMEMAIN.inc fjcore.hh casiglu.inc casfNLO.inc
 
 all-local: test
 
