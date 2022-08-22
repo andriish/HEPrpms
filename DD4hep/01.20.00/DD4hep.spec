@@ -35,9 +35,9 @@ BuildRequires:    geant4-devel
 BuildRequires:    root root-core root-graf3d-eve  root-genvector root-geom root-gui root-mathcore root-mathmore root-tree root-physics root-gdml root-graf3d root-tpython  
 BuildRequires:    HepMC3-devel  HepMC3  python3  python3-devel boost-devel boost-filesystem tbb-devel expat-devel xerces-c-devel
 
-#if #{?rhel}#{!?rhel:0} == 8
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8
 BuildRequires: root-graf3d-eve7 	root-gui-browserv7
-#endif
+%endif
 %endif
 
 Prefix: %{_prefix}

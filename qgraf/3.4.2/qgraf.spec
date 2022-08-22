@@ -1,6 +1,6 @@
 Name:           qgraf
 Version:        3.4.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        Unknown
 Url:            http://cfif.ist.utl.pt/~paulo/qgraf.html
 Source0:        https://github.com/andriish/HEPsources/raw/master/%{name}-%{version}.tgz
@@ -23,14 +23,15 @@ calculations, in the context of Quantum Field Theory.
 
 %define __arch_install_post %(/bin/true)
 
-%prep 
-%setup -q -D -n . 
+%prep
+mkdir -p qgraf
+%setup -q -D -n qgraf
 tar -xf %SOURCE1
 touch ./NEWS
 touch ./README
 touch ./AUTHORS
 touch ./ChangeLog
-
+mv ../array.sty  ../form.sty  ../phi3  ../qcd  ../qed ../qgraf-3.0.pdf  ../qgraf-3.4.2.f  ../qgraf-3.4.2.pdf  ../qgraf.dat  ../sum.sty .
 
 %build
 autoreconf -fisv
