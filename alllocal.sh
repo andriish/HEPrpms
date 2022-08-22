@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-iminuit:2.16.0
+Herwig:7.2.3
+#iminuit:2.16.0
 #cascade:3.2.1
 #qgraf:3.4.2
 #YODA:1.9.6

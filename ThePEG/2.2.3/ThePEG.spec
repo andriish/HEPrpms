@@ -4,7 +4,7 @@
 
 Name:           ThePEG
 Version:        2.2.3
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 License:        GPLv3
 Url:            http://www.hepforge.org/archive/thepeg
 Source0:        https://thepeg.hepforge.org/downloads/%{name}-%{version}.tar.bz2
@@ -94,12 +94,23 @@ make %{?_smp_mflags}
 %install
 %make_install 
 export QA_RPATHS=3
+mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
+%if %{?fedora}%{!?fedora:0}
+echo %{_libdir}/%{name} >  %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
+%endif
+
 
 %files 
 %doc AUTHORS README COPYING
 %_bindir/*
 %_datadir/ThePEG/*
 %_libdir/ThePEG/*
+%if %{?fedora}%{!?fedora:0}
+%config(noreplace) %{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
+%endif
+
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
 
 
 %files -n %{libnamedev}

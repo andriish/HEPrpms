@@ -279,8 +279,9 @@ export QA_RPATHS=3
 
 %files -n %{libname}
 %doc AUTHORS README COPYING
-%{_libdir}/SHERPA-MC/*.so*
-%{_libdir}/SHERPA-MC/*a
+#{_libdir}/SHERPA-MC/*.so*
+#{_libdir}/SHERPA-MC/*a
+%{_libdir}/SHERPA-MC/*
 %{_bindir}/*
 %{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 
