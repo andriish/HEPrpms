@@ -1,6 +1,6 @@
 Name:       cascade
 Version:    3.2.1
-Release:    2%{?dist}
+Release:    4%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy physics
 
 License:    GPLv2
@@ -9,6 +9,9 @@ Source0:    https://gitlab.cern.ch/jung/cascade/-/archive/%{version}/cascade-%{v
 Patch0:     patch-cascade-0.txt
 
 BuildRequires: cmake
+%if 0%{?fedora}
+BuildRequires: chrpath
+%endif
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  autoconf automake libtool gcc-gfortran HepMC HepMC-devel lhapdf lhapdf-devel 
 BuildRequires:  HepMC3  HepMC3-search HepMC3-devel HepMC3-search-devel Rivet-devel Rivet YODA YODA-devel
@@ -52,13 +55,23 @@ now accessed via TMDlib.
 %patch0 -p1
 
 %build
-#autoreconf -fisv
-#configure --with-hepmc3=/usr --with-tmdlib=/usr --with-lhapdf=/usr --with-pythia8=/usr --with-gsl=/usr --with-zlib=/usr
+%if %{?fedora}%{!?fedora:0} >= 37
+%cmake -DCASCADE_BUILD_DOCS:BOOL=OFF
+%else
 %cmake
+%endif
+
 %cmake_build
 
 %install
 %cmake_install
+%if 0%{?fedora}
+chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cascade
+chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcascademycern.so
+chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcascadebases.so
+chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcascadepythia.so
+chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcascade3.so
+%endif
 
 %post -p /sbin/ldconfig
 
