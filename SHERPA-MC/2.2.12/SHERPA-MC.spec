@@ -340,8 +340,9 @@ export QA_RPATHS=3
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
 %files  -n %{openmpiname} 
-/usr/%_lib/openmpi/%_lib/SHERPA-MC/*.so*
-/usr/%_lib/openmpi/%_lib/SHERPA-MC/*a
+#/usr/_lib/openmpi/_lib/SHERPA-MC/*.so*
+#/usr/_lib/openmpi/_lib/SHERPA-MC/*a
+/usr/%_lib/openmpi/%_lib/SHERPA-MC/*
 /usr/%_lib/openmpi/bin/*
 
 %files -n %{openmpiname}-devel
