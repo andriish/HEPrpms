@@ -1,0 +1,672 @@
+diff -Naur ORIG/cmake/Modules/FindRivet.cmake PATCHED/cmake/Modules/FindRivet.cmake
+--- ORIG/cmake/Modules/FindRivet.cmake	1970-01-01 01:00:00.000000000 +0100
++++ PATCHED/cmake/Modules/FindRivet.cmake	2022-10-06 13:02:00.258950116 +0200
+@@ -0,0 +1,56 @@
++# - Try to find RIVET
++# Defines:
++#
++#  RIVET_FOUND
++#  RIVET_INCLUDE_DIR
++#  RIVET_INCLUDE_DIRS (not cached)
++#  RIVET_LIBRARY
++#  RIVET_LIBRARIES (not cached)
++#  RIVET_LIBRARY_DIRS (not cached)
++
++if (RIVET_ROOT_DIR OR RIVET_DIR OR (DEFINED ENV{RIVET_ROOT_DIR}) OR (DEFINED ENV{RIVET_DIR}) )
++  set(RIVET_SEARCH_DIRS "" CACHE STRING "" FORCE)
++  if (RIVET_ROOT_DIR)
++    list (APPEND RIVET_SEARCH_DIRS "${RIVET_ROOT_DIR}" )
++  endif()
++  if (RIVET_DIR)
++    list (APPEND RIVET_SEARCH_DIRS "${RIVET_DIR}" )
++  endif()
++  if (DEFINED EVN{RIVET_ROOT_DIR})
++    list (APPEND RIVET_SEARCH_DIRS "$ENV{RIVET_ROOT_DIR}" )
++  endif()
++  if (DEFINED ENV{RIVET_DIR})
++    list (APPEND RIVET_SEARCH_DIRS "ENV{RIVET_DIR}" )
++  endif()
++endif()
++if (RIVET_SEARCH_DIRS)
++  find_path(RIVET_INCLUDE_DIR Rivet/Rivet.hh PATHS ${RIVET_SEARCH_DIRS} PATH_SUFFIXES include NO_DEFAULT_PATH)
++  find_library(RIVET_LIBRARY NAMES Rivet PATHS ${RIVET_SEARCH_DIRS}  PATH_SUFFIXES lib lib64 NO_DEFAULT_PATH)
++else()
++  find_path(RIVET_INCLUDE_DIR Rivet/Rivet.hh PATH_SUFFIXES include)
++  find_library(RIVET_LIBRARY NAMES Rivet PATHS_SUFFIXES lib lib64)
++endif()
++set(RIVET_VERSION 0.0.0)
++if (RIVET_INCLUDE_DIR)
++  if (EXISTS ${RIVET_INCLUDE_DIR}/Rivet/Config/RivetConfig.hh)
++    file(STRINGS ${RIVET_INCLUDE_DIR}/Rivet/Config/RivetConfig.hh RIVET_VERSION_STRING_CONTENT REGEX "^#define[ ]+RIVET_VERSION[ ]+\"" )
++    if (RIVET_VERSION_STRING_CONTENT)
++      string(REGEX MATCH "[1234567890\.]+[a-zA-Z]*" RIVET_VERSION ${RIVET_VERSION_STRING_CONTENT})
++    endif()
++  endif()
++endif()
++
++
++mark_as_advanced(RIVET_INCLUDE_DIR RIVET_LIBRARY)
++
++# handle the QUIETLY and REQUIRED arguments and set RIVET_FOUND to TRUE if
++# all listed variables are TRUE
++include(FindPackageHandleStandardArgs)
++FIND_PACKAGE_HANDLE_STANDARD_ARGS(Rivet DEFAULT_MSG RIVET_INCLUDE_DIR RIVET_LIBRARY)
++
++set(RIVET_LIBRARIES ${RIVET_LIBRARY})
++get_filename_component(RIVET_LIBRARY_DIRS ${RIVET_LIBRARY} PATH)
++
++set(RIVET_INCLUDE_DIRS ${RIVET_INCLUDE_DIR})
++
++mark_as_advanced(RIVET_FOUND)
+diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
+--- ORIG/CMakeLists.txt	2022-10-06 14:52:09.905914626 +0200
++++ PATCHED/CMakeLists.txt	2022-10-06 15:00:09.702611170 +0200
+@@ -18,6 +18,7 @@
+ option(CASCADE_PYTHIA8              "Enables Pythia8 routines" ON)
+ option(CASCADE_HEPMC2               "Enables HepMC2 routines" OFF)
+ option(CASCADE_HEPMC3               "Enables HepMC3 routines" ON)
++option(CASCADE_RIVET                "Enables RIVET routines" ON)
+ option(CASCADE_TMDLIB               "Enables TMDLIB routines" ON)
+ option(CASCADE_TMDLIB_EW            "Enables TMDLIB_EW routines" ON)
+ message(STATUS "CASCADE: CASCADE_BUILD_DOCS            ${CASCADE_BUILD_DOCS}")
+@@ -25,9 +26,16 @@
+ message(STATUS "CASCADE: CASCADE_PYTHIA8               ${CASCADE_PYTHIA8}")
+ message(STATUS "CASCADE: CASCADE_HEPMC2                ${CASCADE_HEPMC2}")
+ message(STATUS "CASCADE: CASCADE_HEPMC3                ${CASCADE_HEPMC3}")
++message(STATUS "CASCADE: CASCADE_RIVET                 ${CASCADE_RIVET}")
+ message(STATUS "CASCADE: CASCADE_TMDLIB                ${CASCADE_TMDLIB}")
+ message(STATUS "CASCADE: CASCADE_TMDLIB_EW             ${CASCADE_TMDLIB_EW}")
+ 
++if(CMAKE_SYSTEM_NAME MATCHES Darwin)
++  if (NOT CMAKE_MACOSX_RPATH) 
++    set(CMAKE_MACOSX_RPATH 1)
++  endif()
++  message(STATUS "RAPGAP: CMAKE_MACOSX_RPATH            ${CMAKE_MACOSX_RPATH}. Set by default to 1. Set to 0 to disable RPATH in the build executables.")
++endif()
+ #### Modules ###########################################################
+ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
+ 
+@@ -61,6 +69,7 @@
+ set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++1y")
+ if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+   set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} -fno-automatic -fno-backslash -ffixed-line-length-132 -std=legacy")
++#-g -fno-align-commons ?  
+ elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
+   set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS}  -save -extend-source 132")
+ elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "PGI")
+@@ -92,7 +101,16 @@
+   message(STATUS "CASCADE: Both options CASCADE_HEPMC2 and CASCADE_HEPMC3 were requsted. Only CASCADE_HEPMC3 will be used. To use HEPMC2 library set -DCASCADE_HEPMC3=OFF -DCASCADE_HEPMC2=ON in the command line")
+   set(CASCADE_HEPMC2 OFF)
+ endif()
+-set ( conv_source ${PROJECT_SOURCE_DIR}/src/convhepmc-helpers.F  ${PROJECT_SOURCE_DIR}/src/Pythia6ToHepMC.cc)
++set ( conv_source ${PROJECT_SOURCE_DIR}/src/convhepmc-helpers.F  ${PROJECT_SOURCE_DIR}/src/Pythia6ToHepMC.cc ${PROJECT_SOURCE_DIR}/src/RivetInterface.cc)
++
++if (CASCADE_RIVET)
++  find_package(Rivet)
++  message(STATUS "CASCADE: RIVET_VERSION=${RIVET_VERSION} RIVET_LIBRARIES=${RIVET_LIBRARIES} RIVET_INCLUDE_DIRS=${RIVET_INCLUDE_DIRS}")
++endif()
++
++if (NOT CASCADE_RIVET OR NOT RIVET_FOUND) 
++  add_definitions(-DDUMMYRIVETINTERFACE)
++endif()
+ 
+ if (CASCADE_HEPMC2)
+   find_package(HepMC2 COMPONENTS FIO)
+@@ -289,6 +307,12 @@
+   target_compile_features(cascade PUBLIC cxx_std_11)
+ endif()
+ 
++if (CASCADE_RIVET AND RIVET_FOUND)
++  target_include_directories(cascade PRIVATE  ${RIVET_INCLUDE_DIR}) 
++  target_link_libraries(cascade PRIVATE ${RIVET_LIBRARIES})
++  target_compile_features(cascade PUBLIC cxx_std_14)
++endif()
++
+ if (CASCADE_PYTHIA8 AND Pythia8_FOUND)
+   target_include_directories(cascade PRIVATE  ${PYTHIA8_INCLUDE_DIR}) 
+   target_link_libraries(cascade PRIVATE ${PYTHIA8_LIBRARIES})
+@@ -432,6 +456,7 @@
+ ${PROJECT_SOURCE_DIR}/include/Pythia6ToHepMC.inc
+ ${PROJECT_SOURCE_DIR}/include/PythiaHelper.h
+ ${PROJECT_SOURCE_DIR}/include/qcdnum.inc
++${PROJECT_SOURCE_DIR}/include/RivetInterface.inc
+ ${PROJECT_SOURCE_DIR}/include/timeqq.inc
+ )
+ install(FILES  ${cascadeincludes} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cascade/ COMPONENT devel) 
+diff -Naur ORIG/configure.ac PATCHED/configure.ac
+--- ORIG/configure.ac	2022-10-06 13:02:00.254950067 +0200
++++ PATCHED/configure.ac	2022-10-06 13:02:00.257950103 +0200
+@@ -184,6 +184,19 @@
+ #AC_SUBST(ZLIB_LIBS) 
+ #
+ 
++AC_MSG_CHECKING([for Rivet installation])
++AC_ARG_WITH([rivet],
++   [AS_HELP_STRING([--with-rivet], [path to RIVET installation])],[:],[with_rivet=${RIVET}])
++AS_IF([test "x$with_rivet" != "xno" && [ test "x`ls $with_rivet/lib/libRivet.*`" != "x" ||  test "x`ls $with_rivet/lib64/libRivet.*`" != "x" ] ], [AC_SUBST(RIVET,[$with_rivet])],
++        AC_MSG_RESULT([Cannot find $with_rivet/lib/libRivet.* or $with_rivet/lib64/libRivet.* libraries. 
++        Specify correct path to RIVET installation: --with-rivet=/path/to/rivet]) ; AC_MSG_RESULT([Building RAPGAP without Rivet]); AC_SUBST([no_rivet], [1]))
++if test x$no_rivet == x; then     
++  AC_SUBST([RIVETLIB], ["-L$with_rivet/lib -L$with_rivet/lib64 -lRivet"])
++  CXXFLAGS="${CXXFLAGS} -std=c++1y -g"
++  AC_MSG_RESULT([Building RAPGAP with Rivet: $RIVETLIB])
++fi  
++AM_CONDITIONAL([NO_RIVET],test $no_rivet)     
++
+ AC_MSG_CHECKING([for HEPMC3 installation])
+ AC_ARG_WITH([hepmc3],
+    [AS_HELP_STRING([--with-hepmc3], [path to HEPMC3 installation])],[],[with_hepmc3=check])
+diff -Naur ORIG/data/steering-DY-PH-rivethepmc23.txt PATCHED/data/steering-DY-PH-rivethepmc23.txt
+--- ORIG/data/steering-DY-PH-rivethepmc23.txt	1970-01-01 01:00:00.000000000 +0100
++++ PATCHED/data/steering-DY-PH-rivethepmc23.txt	2022-10-06 13:02:00.255950079 +0200
+@@ -0,0 +1,49 @@
++&CASCADE_input
++NrEvents = 50                              ! Nr of events to process
++Process_Id = -1                            ! Read LHE file
++Hadronisation = 1                          ! Hadronisation on (=1)
++SpaceShower = 1                            ! Space-like Parton Shower
++SpaceShowerOrderAlphas=2                   ! Order alphas in Space Shower
++TimeShower = 1                             ! Time-like Parton Shower
++ScaleTimeShower = 4                        ! Scale choice for Time-like Shower
++!                                            1: 2(m^2_1t+m^2_2t)    
++!                                            2: shat     
++!                                            3: 2(m^2_1+m^2_2)     
++!                                            4: 2*scalup (from lhe file)     
++!ScaleFactorFinalShower = 1.               ! scale factor for 
++!                                            Final State Parton Shower  
++PartonEvolution = 2                        ! type of parton evolution 
++!                                            in Space-like Shower
++!                                            1: CCFM
++!                                            2: full all flavor TMD evolution
++! EnergyShareRemnant = 4                   ! energy sharing in proton remnant
++!                                            1: (a+1)(1-z)**a <z>=1/(a+2)=1/3
++!                                            2: (a+1)(1-z)**a
++!                                                <z>=1/(a+2)=mq/(mq+mQ
++!                                            3: N/(z(1-1/z-c/(1-z))**2)
++!                                               c=(mq/mQ)**2
++!                                            4: PYZDIS: KFL1=1                   
++PartonDensity = 102200                     ! use TMDlib: PB-TMDNLO-set2
++! PartonDensity = 101201                   ! use TMDlib: PB-TMDNLO-set1
++! TMDDensityPath= './share'                ! Path to TMD density 
++!                                            for internal files
++lheInput = 'POWHEG-example.lhe'
++lheHasOnShellPartons = 1                   ! = 0 LHE file has 
++!                                              off-shell parton configuration
++lheReweightTMD = 0                         ! Reweight with new TMD 
++!                                            given in PartonDensity
++lheScale = 0                               ! Scale defintion for TMD
++!                                            0: use scalup
++!                                            1: use shat
++! lheWeightId = 0                          ! use weight Id = ... 
++!                                            as weight for LHE file
++HepMC2OUT = TRUE
++HepMC3OUT = TRUE
++RivetOUT = TRUE
++RivetRun = 'somerun'
++HepMC3Format = 1
++HepMC2File = 'output.hepmc2'
++HepMC3File = 'output.hepmc3'
++RivetFile = 'output.yoda'
++RivetAnalyses='MC_XS','MC_PDFS'
++&End 
+diff -Naur ORIG/include/HepMCSteering.inc PATCHED/include/HepMCSteering.inc
+--- ORIG/include/HepMCSteering.inc	2022-10-06 13:02:00.255950079 +0200
++++ PATCHED/include/HepMCSteering.inc	2022-10-06 13:02:00.256950091 +0200
+@@ -4,3 +4,11 @@
+         Common/steerhm/hmfilnam,hmfilfor
+       LOGICAL         hmOUT
+       COMMON /QhmLO/ hmOUT
++C...Rivet
++      character *132 rvtfilnam
++      character *132 rvtrun
++      character *132 rvtana
++      Integer Nrvtana
++      Common/steerrvt/Nrvtana,rvtfilnam,rvtrun,rvtana(50)
++      LOGICAL         rvtOUT
++      COMMON /QrvtLO/ rvtOUT
+diff -Naur ORIG/include/Makefile.am PATCHED/include/Makefile.am
+--- ORIG/include/Makefile.am	2022-10-06 13:02:00.255950079 +0200
++++ PATCHED/include/Makefile.am	2022-10-06 13:02:00.256950091 +0200
+@@ -3,6 +3,7 @@
+ casglu.inc    casludat2.inc  casmult.inc    casparam.inc  dateqq.inc \
+ casherup.inc  casludat3.inc  caspara1.inc   casparas.inc  casscal.inc timeqq.inc casvers.inc \
+ caspsipol.inc caspar.inc caslhe.inc casevent.inc qcdnum.inc  PythiaHelper.h \
++RivetInterface.inc \
+ HepMCSteering.inc Pythia6ToHepMC3.inc Pythia6ToHepMC2.inc Pythia6ToHepMC.inc \
+ casMLM.inc casMERGING.inc casMEMAIN.inc fjcore.hh casiglu.inc casfNLO.inc
+ 
+diff -Naur ORIG/include/RivetInterface.inc PATCHED/include/RivetInterface.inc
+--- ORIG/include/RivetInterface.inc	1970-01-01 01:00:00.000000000 +0100
++++ PATCHED/include/RivetInterface.inc	2022-10-06 13:02:00.256950091 +0200
+@@ -0,0 +1,6 @@
++      INTEGER rivet_init,rivet_done,rivet_add_analysis
++      INTEGER rivet_init_first_event,rivet_run
++      INTEGER rivet_interface_version
++      EXTERNAL rivet_init,rivet_done,rivet_add_analysis
++      EXTERNAL rivet_init_first_event,rivet_run
++      EXTERNAL rivet_interface_version
+diff -Naur ORIG/Makefile.am PATCHED/Makefile.am
+--- ORIG/Makefile.am	2022-10-06 14:52:16.424936290 +0200
++++ PATCHED/Makefile.am	2022-10-06 14:58:35.910287195 +0200
+@@ -13,6 +13,7 @@
+ 
+ #dist_doc_DATA = README
+ EXTRA_DIST = README.md README README-lhefile CASCADE-bootstrap NEWS.md ChangeLog CMakeLists.txt \
++   cmake/Modules/FindRivet.cmake \
+   cmake/Modules/FindLHAPDF.cmake cmake/Modules/FindPythia8.cmake cmake/Modules/FindHepMC2.cmake cmake/Modules/FindTMDLIB.cmake
+ 
+ 
+diff -Naur ORIG/src/casmain.F PATCHED/src/casmain.F
+--- ORIG/src/casmain.F	2022-10-06 14:50:51.354653578 +0200
++++ PATCHED/src/casmain.F	2022-10-06 14:58:13.335209227 +0200
+@@ -16,6 +16,8 @@
+ #include "casevent.inc"
+       double precision neg_weight,neg_event
+       common/lheweight/neg_weight,neg_event
++      Integer hepmc_convert_eventp8
++      external hepmc_convert_eventp8
+       
+ 
+       integer iev,isub,nev
+@@ -55,6 +57,8 @@
+       Integer IMultiJetMerge,MinJets_CAS,MaxJets_CAS,Nqmax_CAS,iMLM,iLHE_tmd
+       Common/Merge/IMultiJetMerge,MinJets_CAS,MaxJets_CAS,Nqmax_CAS,iMLM,iLHE_tmd
+ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
++#include "RivetInterface.inc"
++      INTEGER rvtHM, RIVETSTATUS
+       character *512 temp_wname
+       Integer jpdf, jscale, wid
+ #include "HepMCSteering.inc"
+@@ -86,13 +90,25 @@
+       endif
+ C-- Init HepMC
+ 
+-      if (hmOUT.and.p6frag.eq.1) then
++      if (hmOUT .OR. (rvtHM.EQ.2 .OR. rvtHM.EQ.3 .AND. rvtOUT)) then
+         if (hmfilfor.EQ.0) hmfilfor=2
+         OID=HepMC_new_writer(0,hmfilfor,trim(hmfilnam)//char(0))
+         NEVHEP=-123456
+         HMSTATUS=HepMC_set_hepevt_address(NEVHEPL)
+         write(6,*) ' hepmcout ',trim(hmfilnam),hmfilfor,OID
+-      endif   
++      endif
++C-- Init Rivet
++      if (rvtOUT) then
++      rvtHM=rivet_interface_version()
++      do i=1,Nrvtana
++      write(6,*)'rvtana(i)= ',i,'->',trim(rvtana(i)),'<-'
++      if (len(trim(rvtana(i))) .EQ. 0 ) continue
++      RIVETSTATUS=rivet_add_analysis(trim(rvtana(i))//char(0))
++      end do
++      if (len(rvtrun).GT. 0) then
++      RIVETSTATUS=rivet_init(trim(rvtrun)//char(0))
++      end if
++      endif      
+       
+       
+       CALL GETENV("CASEED", caseed)
+@@ -161,17 +177,18 @@
+         endif
+         
+ 
+-        if(hmOUT.and.p6frag.eq.0) then 
++C        if(hmOUT .OR. (rvtHM.EQ.2 .OR. rvtHM.EQ.3 .AND. rvtOUT).and.p6frag.eq.0) then 
+ c            write(6,*) 'after event generated ' 
+ 
+ c            do  jscale = 1, nw_scale
+ c              wid = id_scale(jscale)
+ c              write(6,*) ' before ', wid,w_scale(jscale), jscale
+ c            enddo
+-            call convhepmcP8(iev, isub, weighthepmc, xsec, xsece, idP1,idP2,xidP1,xidP2,scale_process,pdf1,pdf2 )
+-          elseif (hmOUT.and.p6frag.eq.1) then 
++C            call convhepmcP8(iev, isub, weighthepmc, xsec, xsece, idP1,idP2,xidP1,xidP2,scale_process,pdf1,pdf2 )
++C        endif
++        if (hmOUT .OR. (rvtHM.EQ.2 .OR. rvtHM.EQ.3 .AND. rvtOUT)) then 
+ C-- This is for HepMC interface
+-         
++          if (p6frag.eq.1) then
+           NEVHEP=IEV
+           call pyhepc(1)
+           HMSTATUS=HepMC_version()
+@@ -197,6 +214,10 @@
+            END DO
+           END IF
+           HMSTATUS=HepMC_convert_event(OID)
++          endif
++          if (p6frag.eq.1) then
++          HMSTATUS=hepmc_convert_eventp8(OID)
++          endif
+           HMSTATUS=HepMC_set_event_number(OID,IEV)
+           HMSTATUS=HepMC_set_weight_by_name(OID,dble(weighthepmc),'Default'//char(0))
+           if (nw_scale .GT. 0) THEN 
+@@ -251,8 +272,19 @@
+           HMSTATUS=HepMC_set_attribute_double(OID,dble(scale_process),'event_scale'//char(0))
+ C Set here some physicl TM scale. Is meaningfull only in HepMC3
+           HMSTATUS=HepMC_set_attribute_double(OID,-1.0D0,'tmd_scale'//char(0))
++          if (hmOUT) then
+           HMSTATUS=HepMC_write_event(OID)
+-          HMSTATUS=HepMC_clear_event(OID)  
++          endif
++C-- This is for Rivet 
++          if ( rvtHM .EQ. 2 .OR. rvtHM .EQ. 3 .AND.rvtOUT) then
++           if (I.EQ.1) then 
++             RIVETSTATUS=rivet_init_first_event(OID)
++           endif
++           RIVETSTATUS=rivet_run(OID,p6frag)
++         endif
++         if (hmOUT) then
++         HMSTATUS=HepMC_clear_event(OID)  
++         endif
+          endif
+ C-- End HepMC  interface
+ 
+@@ -285,9 +317,13 @@
+       if(hmOUT.and.p6frag.eq.0) then 
+          call convhepmcP8(iev, isub, weighthepmc, xsec, xsece, idP1,idP2,xidP1,xidP2,scale_process,pdf1,pdf2 )
+ CAV   call convhepmc(iev, isub, weighthepmc, xsec, xsece, idP1,idP2,xidP1,xidP2,scale_process,pdf1,pdf2 )
+-         elseif (hmOUT.and.p6frag.eq.1) then
++      endif
++      if (hmOUT.and.p6frag.eq.1) then
+          HMSTATUS=HepMC_delete_writer(OID)
+       endif
++      if (rvtOUT.and.p6frag.eq.1) then
++         RIVETSTATUS=rivet_done(trim(rvtfilnam)//char(0))
++      endif
+       CALL CAEND(20)
+ c
+ 10000 FORMAT('  final x-sections: sigma  = ',G10.3,' pb   +/- ',G10.3)
+diff -Naur ORIG/src/Makefile.am PATCHED/src/Makefile.am
+--- ORIG/src/Makefile.am	2022-10-06 14:50:08.594511474 +0200
++++ PATCHED/src/Makefile.am	2022-10-06 14:57:35.727084128 +0200
+@@ -19,7 +19,12 @@
+ #cascade_FFLAGS = -I$(top_srcdir)/include -I$(PYTHIA_SOURCE) $(MYFFLAGS) 
+ #cascade_FFLAGS = -I$(top_srcdir)/include -I$(PYTHIA_SOURCE) $(MYFFLAGS) 
+ 
+-conv_source=convhepmc-helpers.F  Pythia6ToHepMC.cc 
++conv_source=convhepmc-helpers.F  Pythia6ToHepMC.cc  RivetInterface.cc
++if NO_RIVET
++  AM_CPPFLAGS+=-DDUMMYRIVETINTERFACE
++else
++  AM_CPPFLAGS+= -I$(RIVET)/include  
++endif
+ if NO_HEPMC2
+   AM_CPPFLAGS+=-DDUMMYPYTHIA6TOHEPMC2
+ else
+@@ -84,6 +89,7 @@
+ cascade_SOURCES += $(conv_source)  $(pythia8_source)  fjfort.cc fjcore.cc gzstuff.cc 
+ 
+ cascade_LDADD =  ./libcascade3.la ../bases51/libcascadebases.la ../pythia6428/libcascadepythia.la $(PYTHIA8LIB) \
++                $(RIVETLIB) \
+                 $(HEPMC2LIB) $(HEPMC3LIB) $(TMDLIB) $(PDFLIB) $(GSL_LIB)  $(ZLIB_LIBS) ../misc/libcascademycern.la -lm $(FLIBS)
+ 
+ #cascade_LDADD += $(HEPMC3LIB)
+diff -Naur ORIG/src/Pythia6ToHepMC2.cc PATCHED/src/Pythia6ToHepMC2.cc
+--- ORIG/src/Pythia6ToHepMC2.cc	2022-10-06 14:48:35.710204961 +0200
++++ PATCHED/src/Pythia6ToHepMC2.cc	2022-10-06 14:53:40.319215094 +0200
+@@ -87,6 +87,10 @@
+ {
+     return    hepmc2_gWriters[position].second;
+ }
++void hepmc2_gWriters_set_event(const int & position, GenEvent* e )
++{
++    hepmc2_gWriters[position].second=e;
++}
+ using namespace HepMC;
+ extern "C" {
+     int getorig_(int &a);
+diff -Naur ORIG/src/Pythia6ToHepMC3.cc PATCHED/src/Pythia6ToHepMC3.cc
+--- ORIG/src/Pythia6ToHepMC3.cc	2022-10-06 14:48:35.710204961 +0200
++++ PATCHED/src/Pythia6ToHepMC3.cc	2022-10-06 14:53:40.319215094 +0200
+@@ -99,6 +99,10 @@
+     }
+     return    hepmc3_gWriters[position].second;
+ }
++void hepmc3_gWriters_set_event(const int & position, GenEvent* e )
++{
++    hepmc3_gWriters[position].second=e;
++}
+ /** Interfaces for C/Fortran */
+ extern "C" {
+ 
+diff -Naur ORIG/src/pythia8frag.cc PATCHED/src/pythia8frag.cc
+--- ORIG/src/pythia8frag.cc	2022-10-06 14:48:35.711204964 +0200
++++ PATCHED/src/pythia8frag.cc	2022-10-06 14:53:40.320215097 +0200
+@@ -13,7 +13,9 @@
+ //#include "boost/algorithm/string/trim.hpp"
+ //#include "HepMC/WeightContainer.h"
+ #include "Pythia8Plugins/HepMC2.h"
++extern void hepmc2_gWriters_set_event(const int & position, HepMC::GenEvent* e );
+ #else
++
+ // PYTHIA Common Block Declarations
+ 
+ const int pyjets_maxn =4000;
+@@ -27,6 +29,7 @@
+ #include "HepMC3/GenEvent.h"
+ #include "PythiaHelper.h"
+ #include "Pythia8Plugins/HepMC3.h"
++extern void hepmc3_gWriters_set_event(const int & position, HepMC3::GenEvent* e );
+ #endif
+ 
+ 
+@@ -198,6 +201,15 @@
+    }
+    
+ #ifdef PYTHIA6_USE_HEPMC2
++int hepmc_convert_eventp8_(const int & position)
++{
++      HepMC::GenEvent* hepmcevt = new HepMC::GenEvent();
++      ToHepMC.fill_next_event( pythia, hepmcevt );
++      hepmcevt->use_units(HepMC::Units::GEV, HepMC::Units::MM);
++      hepmc2_gWriters_set_event(position,hepmcevt);
++      return 0;
++}
++
+ void convhepmcp8_(int & ievent, int & iproc, double & weight, double & xsec, double & xsece, int & id1pdf, int & id2pdf, double & x1pdf, double & x2pdf, double & QFac, double & pdf1, double & pdf2 ){
+       
+        string scale[]={"scale_variation1","scale_variation2","scale_variation3","scale_variation4","scale_variation5","scale_variation6","scale_variation7","scale_variation8","scale_variation9","scale_variation10"};
+@@ -285,7 +297,17 @@
+    
+ #else
+ #include "HepMC3/Print.h"
+-using namespace HepMC3;      
++using namespace HepMC3;  
++
++int hepmc_convert_eventp8_(const int & position)
++{
++      shared_ptr<HepMC3::GenRunInfo> genRunInfo;
++      genRunInfo = make_shared<HepMC3::GenRunInfo>();
++      HepMC3::GenEvent* hepmcevt = new  HepMC3::GenEvent(genRunInfo);
++      toHepMC.fill_next_event( pythia, hepmcevt );
++      hepmc3_gWriters_set_event(position,hepmcevt);
++      return 0;
++}    
+ void convhepmcp8_(int & ievent, int & iproc, double & weight, double & xsec, double & xsece, int & id1pdf, int & id2pdf, double & x1pdf, double & x2pdf, double & QFac, double & pdf1, double & pdf2 ){
+ //       string scale[]={"scale1","scale2","scale3","scale4","scale5","scale6","scale7","scale8","scale9","scale10"};
+        string scale[]={"scale_variation1","scale_variation2","scale_variation3","scale_variation4","scale_variation5","scale_variation6","scale_variation7","scale_variation8","scale_variation9","scale_variation10"};
+diff -Naur ORIG/src/pythia8frag-dummy.cc PATCHED/src/pythia8frag-dummy.cc
+--- ORIG/src/pythia8frag-dummy.cc	2022-10-06 14:48:35.710204961 +0200
++++ PATCHED/src/pythia8frag-dummy.cc	2022-10-06 14:53:40.320215097 +0200
+@@ -8,6 +8,12 @@
+ 
+ extern "C" {   
+ 
++int hepmc_convert_eventp8_(const int & position) {
++    
++   cout << " pythia8frag dummy " << endl;
++      
++
++   }
+ int ncountp8 =0 ;
+ 
+ void pythia8frag_(){
+diff -Naur ORIG/src/RivetInterface.cc PATCHED/src/RivetInterface.cc
+--- ORIG/src/RivetInterface.cc	1970-01-01 01:00:00.000000000 +0100
++++ PATCHED/src/RivetInterface.cc	2022-10-06 14:58:00.150165369 +0200
+@@ -0,0 +1,127 @@
++#ifdef  DUMMYRIVETINTERFACE
++extern "C" {
++    int rivet_interface_version_()
++    {
++        return 0;
++    }
++    int rivet_init_(char* rname1)
++    {
++        return 0;
++    }
++    int rivet_init_first_event_()
++    {
++        return 0;
++    }
++    int rivet_run_()
++    {
++        return 0;
++    }
++    int rivet_add_analysis_(char* ana)
++    {
++        return   0;
++    }
++    int rivet_done_(char* filename1)
++    {
++        return 0;
++    }
++}
++#else
++#include <iostream>
++#include <set>
++#include <vector>
++#include <string>
++#include "Rivet/Rivet.hh"
++#include "Rivet/Config/RivetConfig.hh"
++#ifdef RIVET_ENABLE_HEPMC_3
++#include "HepMC3/GenEvent.h"
++#else
++#include "HepMC/GenEvent.h"
++#endif
++#ifdef RIVET_ENABLE_HEPMC_3
++#define   RIVET_HEPMC_VERSION   3
++/**  HepMC3 event to reads from*/
++HepMC3::GenEvent* rivetevent=NULL;
++extern HepMC3::GenEvent* hepmc3_gWriters_get_event(const int & position);
++#else
++#define   RIVET_HEPMC_VERSION    2
++/**  HepMC event to reads from*/
++HepMC::GenEvent* rivetevent=NULL;
++extern HepMC::GenEvent* hepmc2_gWriters_get_event(const int & position);
++#endif
++
++extern "C" {
++    int rivet_interface_version_()
++    {
++        return RIVET_HEPMC_VERSION;
++    }
++
++    /**The name of the file where the histograms are dumped.*/
++    std::string filename;
++    /** Analyses with optional analysis parameters.*/
++    std::set<std::string> analyses;
++    /**The Rivet object.*/
++    Rivet::AnalysisHandler * rivet=NULL;
++    /** Run name*/
++    std::string rname;
++    /**Ignore beams flag.*/
++    bool igBeam=true;
++
++    int rivet_init_(char* rname1) {
++        if ( rivet ) return 0;
++        rname=std::string(rname1);
++        rivet = new Rivet::AnalysisHandler(rname);
++        rivet->setIgnoreBeams(igBeam);
++        Rivet::addAnalysisLibPath(".");
++        for (std::set<std::string>::iterator it = analyses.begin();
++                it != analyses.end(); ++it) {
++            rivet->addAnalysis(*it);
++        }
++        return 0;
++    }
++    int rivet_init_first_event_(const int &  id)
++    {
++        
++#ifdef RIVET_ENABLE_HEPMC_3
++        rivetevent=hepmc3_gWriters_get_event(id);
++        if (!rivetevent) { puts("Something is wrong with the first event!"); return 1;}
++        rivet->init(*rivetevent);
++#else
++        rivetevent=hepmc2_gWriters_get_event(id);
++        if (!rivetevent) { puts("Something is wrong with the first event!"); return 1;}
++        rivet->init(*rivetevent);
++#endif
++
++        return 0;
++    }
++    int rivet_run_(const int &  id) {
++#ifdef RIVET_ENABLE_HEPMC_3
++        rivetevent=hepmc3_gWriters_get_event(id);
++        if (!rivetevent) { puts("Something is wrong with event!"); return 1;}
++        if (!rivetevent->particles().size()) { printf("Something is wrong with particles!   %i\n",id); return 2;}
++#else
++        rivetevent=hepmc2_gWriters_get_event(id);
++        if (!rivetevent) { puts("Something is wrong with event!"); return 1;}
++        if (!rivetevent->particles_size()) { printf("Something is wrong with particles!   %i\n",id); return 2;}
++#endif
++        if (!rivetevent->cross_section()) { puts("Something is wrong with cross-section!"); return 3;}
++        rivet->analyze(*rivetevent);
++        return 0;
++    }
++    int rivet_add_analysis_(char* ana)
++    {
++        if (!ana) return analyses.size();
++        std::string z(ana);
++        if (z.length()>0) analyses.insert(z);
++        return   analyses.size();
++    }
++    int rivet_done_(char* filename1) {
++        if ( !rivet ) return 0;
++        filename=std::string(filename1);
++        rivet->finalize();
++        rivet->writeData(filename);
++        delete rivet;
++        rivet = NULL;
++        return 0;
++    }
++}
++#endif
+diff -Naur ORIG/src/steer_new.F PATCHED/src/steer_new.F
+--- ORIG/src/steer_new.F	2022-10-06 14:51:28.528777118 +0200
++++ PATCHED/src/steer_new.F	2022-10-06 15:00:38.524710727 +0200
+@@ -49,13 +49,14 @@
+       Double Precision ScaleFactorFinalShower,ScaleFactorMatchingScale
+       Double Precision MaxFactor,ktmin
+       character *512 TMDDensityPath,lheInput
++      LOGICAL RivetOUT
++      character *132 RivetFile,RivetAnalyses(50), RivetRun
+       
+ C
+ #include "HepMCSteering.inc"
+       LOGICAL HepMCOUTPUT
+       character *132 HepMCFile  
+       integer HepMCFormat   
+-C
+       namelist/CASCADE_input/
+      & NrEvents,Process_Id,Hadronisation,
+      & SpaceShower,SpaceShowerOrderAlphas,TimeLikeSplittingInSpaceShower,
+@@ -71,6 +72,7 @@
+      & HepMCFile,
+      & HepMCOUTPUT,
+      & HepMCFormat,
++     & RivetOUT, RivetAnalyses, RivetRun,
+      & IPSForDis
+       
+       Double precision rclus, etclus, etaclmax
+@@ -124,6 +126,11 @@
+        hmOUT=HepMCOUTPUT
+        hmfilnam=HepMCFile
+        hmfilfor=HepMCFormat
++       rvtana=RivetAnalyses
++       rvtrun=RivetRun
++       rvtOUT=RivetOUT
++       rvtfilnam=RivetFile
++       Nrvtana=size(rvtana)
+       
+       Nevent = NrEvents
+       EVENT_NPRIN = Nevent_print

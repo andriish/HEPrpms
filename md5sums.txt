@@ -171,3 +171,4 @@ c6a1d202b11e72a58cb840219d8b7adb  iminuit/2.16.0/rpmbuild/SOURCES/914c06fb252b6c
 cd50e0abe8424ae2a0e8042fee604b27  iminuit/2.16.0/rpmbuild/SOURCES/d0b406db5e678a2eed8eee0de3ddfdee746ea568.zip
 c5bc336d3caa3f357db484536c10dbc8  YODA/1.9.7/rpmbuild/SOURCES/YODA-1.9.7.tar.gz
 328b371eb644fe616b1e2b03b2cf99d3  Rivet/3.1.7/rpmbuild/SOURCES/Rivet-3.1.7.tar.gz
+9b628bd82bd52cd4a8da734f8c55e6ed  cascade/3.2.4/rpmbuild/SOURCES/cascade-v3.2.4.tar.gz
