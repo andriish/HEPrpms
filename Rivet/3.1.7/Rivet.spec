@@ -1,11 +1,11 @@
 %define libname     Rivet
 %define libnamedev  Rivet-devel
-%global debug_package %{nil}
+#global debug_package {nil}
 %global __spec_install_post   /usr/lib/rpm/check-buildroot 
 
 Name:           Rivet
 Version:        3.1.7
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
