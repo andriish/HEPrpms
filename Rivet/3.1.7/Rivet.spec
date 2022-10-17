@@ -1,6 +1,6 @@
 %define libname     Rivet
 %define libnamedev  Rivet-devel
-%global debug_package %{nil}
+#global debug_package {nil}
 %global __spec_install_post   /usr/lib/rpm/check-buildroot 
 
 Name:           Rivet
