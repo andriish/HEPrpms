@@ -1,6 +1,6 @@
 Name:       tmdlib
 Version:    2.2.06
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Library and plotting tools for Transverse Momentum Dependent parton distributions 
 Prefix:     %{_prefix}
 License:    GPLv3
@@ -11,12 +11,12 @@ Patch0:     patch-tmdlib-0.txt
 
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires: tex(latex) tex(sectsty.sty) gcc-c++  gcc-gfortran gsl-devel autoconf automake libtool lhapdf-devel root root-core boost boost-devel
-Requires:       lhapdf libgfortran root root-core gsl
+Requires:       lhapdf libgfortran root root-core gsl wget
 %endif
 %if 0%{?suse_version}
 BuildRequires: texlive-palatino texlive-helvetic texlive-courier tex(latex) tex(sectsty.sty) tex(listings.sty) tex(cite.sty) gcc-c++  gcc-fortran gsl gsl-devel autoconf automake libtool libLHAPDF LHAPDF-devel root6 root6-libs root6-devel boost-devel
 BuildRequires: tex(lineno.sty)
-Requires:       libLHAPDF libgfortran5 root6 root6-libs gsl
+Requires:       libLHAPDF libgfortran5 root6 root6-libs gsl wget
 %endif
 
 %description
