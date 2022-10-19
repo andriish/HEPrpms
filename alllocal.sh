@@ -5,13 +5,13 @@ export PATH=$PATH:$(pwd)
 set -x 
 declare -a BUILDLIST=(
 #lhapdf:6.5.3
-cascade:3.3.0
+#cascade:3.3.0
 #Rivet:3.1.7
 #Herwig:7.2.3
 #iminuit:2.16.0
 #cascade:3.2.1
 #qgraf:3.4.2
-#YODA:1.9.7
+YODA:1.9.7
 #whizard:3.0.3
 #MG5_aMC:3.4.0
 #MCFM:10.2.1
