@@ -4,7 +4,7 @@
 
 Name:           YODA
 Version:        1.9.7
-Release:        1002
+Release:        1003
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
 Source0:        https://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
@@ -28,6 +28,7 @@ BuildRequires:  gcc-c++ python3-devel python3-Cython pkgconfig(zlib) python3-set
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 BuildRequires:   python3  python3-devel python3-libs python3-setuptools
+BuildRequires: root-tpython
 %endif
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: platform-python-devel
@@ -104,8 +105,9 @@ pathfix.py -pn -i %{__python3}  ./
 pathfix.py -pn -i %{__python3}  bin/flat2yoda
 pathfix.py -pn -i %{__python3}  bin/yoda*
 pathfix.py -pn -i %{__python3}  bin/aida*
+pathfix.py -pn -i %{__python3}  bin/root*
 autoreconf -fi
-%configure  --disable-root
+%configure
 %make_build %{?_smp_mflags}
 %endif
 
@@ -113,7 +115,7 @@ autoreconf -fi
 export PYTHON_VERSION=%{py3_ver}
 export CXXFLAGS="%{optflags} -Wformat -Wno-error -g"
 autoreconf -fi
-%configure  --disable-root
+%configure
 mkdir -p %{buildroot}/usr/%_lib/python3.8/site-packages/
 %make_build %{?_smp_mflags}
 %endif
@@ -157,6 +159,8 @@ rm -fr %{buildroot}/%_libdir/python*/site-packages/site.py
 
 
 %changelog
+* Wed Oct 19 2022 Andrii Verbytskyi 1.9.7
+- add back root
 * Fri Sep 30 2022 Andrii Verbytskyi 1.9.7
 - Bump to 1.9.7
 * Mon Jul 27 2022 Andrii Verbytskyi 1.9.5
