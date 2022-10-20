@@ -249,9 +249,15 @@ void TMD::TMDinfo(const std::string name ) {
         docstr += line + "\n";
     }
     TMDLIB_YAML::Node doc = TMDLIB_YAML::Load(docstr);
-    for (TMDLIB_YAML::const_iterator it = doc.begin(); it != doc.end(); ++it) {
-        const std::string key = it->first.as<std::string>();
-        const TMDLIB_YAML::Node& val = it->second;
+      TMDLIB_YAML::const_iterator it = doc.begin();
+      std::size_t nProperty = doc.size();
+      for (std::size_t iProperty = 0; iProperty < nProperty; ++iProperty) {
+    std::string key = it->first.as<std::string>();
+    TMDLIB_YAML::Node val = it->second;
+
+//    for (TMDLIB_YAML::const_iterator it = doc.begin(); it != doc.end(); ++it) {
+//        const std::string key = it->first.as<std::string>();
+//        const TMDLIB_YAML::Node& val = it->second;
         if (val.IsScalar()) {
             //  Scalar value
             // cout << key<< ": " <<val.as<string>() << endl;
@@ -264,6 +270,7 @@ void TMD::TMDinfo(const std::string name ) {
             TMDdict[key] = seqstr;
             // cout << key << ":  " <<  seqstr << endl;
         }
+       ++it;
     }
     /*
         const std::string SearchKey = "SetDesc";
