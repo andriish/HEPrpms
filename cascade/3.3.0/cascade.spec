@@ -1,6 +1,6 @@
 Name:       cascade
 Version:    3.3.0
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy physics
 
 License:    GPLv2

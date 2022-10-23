@@ -4,9 +4,9 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-tmdlib:2.2.07
+#tmdlib:2.2.07
 #lhapdf:6.5.3
-#cascade:3.3.0
+cascade:3.3.0
 #Rivet:3.1.7
 #Herwig:7.2.3
 #iminuit:2.16.0
