@@ -1,0 +1,42 @@
+diff -ur LHAPDF-6.3.0.orig/src/Makefile.am LHAPDF-6.3.0/src/Makefile.am
+--- LHAPDF-6.3.0.orig/src/Makefile.am	2020-07-01 16:34:05.000000000 +0200
++++ LHAPDF-6.3.0/src/Makefile.am	2020-07-17 14:22:47.194614043 +0200
+@@ -26,6 +26,7 @@
+ libLHAPDFPaths_la_CPPFLAGS = $(AM_CPPFLAGS) -DLHAPDF_INSTALL_PREFIX=\"$(prefix)\" -DLHAPDF_DATA_PREFIX=\"$(datadir)\"
+ 
+ libLHAPDF_la_LIBADD = libLHAPDFInfo.la libLHAPDFPaths.la
++libLHAPDF_la_LDFLAGS = -release ${PACKAGE_VERSION}
+ 
+ if ENABLE_LHAGLUE
+   noinst_LTLIBRARIES += libLHAPDFGlue.la
+Endast i LHAPDF-6.3.0/src/: Makefile.am~
+diff -ur LHAPDF-6.3.0.orig/src/Makefile.in LHAPDF-6.3.0/src/Makefile.in
+--- LHAPDF-6.3.0.orig/src/Makefile.in	2020-07-17 14:26:10.714078898 +0200
++++ LHAPDF-6.3.0/src/Makefile.in	2020-07-17 14:23:06.041656793 +0200
+@@ -150,6 +150,9 @@
+ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+ am__v_lt_0 = --silent
+ am__v_lt_1 = 
++libLHAPDF_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
++	$(CXXFLAGS) $(libLHAPDF_la_LDFLAGS) $(LDFLAGS) -o $@
+ libLHAPDFGlue_la_LIBADD =
+ am__libLHAPDFGlue_la_SOURCES_DIST = LHAGlue.cc
+ @ENABLE_LHAGLUE_TRUE@am_libLHAPDFGlue_la_OBJECTS =  \
+@@ -448,6 +451,7 @@
+ libLHAPDFPaths_la_CPPFLAGS = $(AM_CPPFLAGS) -DLHAPDF_INSTALL_PREFIX=\"$(prefix)\" -DLHAPDF_DATA_PREFIX=\"$(datadir)\"
+ libLHAPDF_la_LIBADD = libLHAPDFInfo.la libLHAPDFPaths.la \
+ 	$(am__append_3)
++libLHAPDF_la_LDFLAGS = -release ${PACKAGE_VERSION}
+ @ENABLE_LHAGLUE_TRUE@libLHAPDFGlue_la_SOURCES = LHAGlue.cc
+ @ENABLE_LHAGLUE_TRUE@libLHAPDFGlue_la_CPPFLAGS = $(AM_CPPFLAGS) -DENABLE_LHAGLUE_CXX
+ all: all-recursive
+@@ -531,7 +535,7 @@
+ 	}
+ 
+ libLHAPDF.la: $(libLHAPDF_la_OBJECTS) $(libLHAPDF_la_DEPENDENCIES) $(EXTRA_libLHAPDF_la_DEPENDENCIES) 
+-	$(AM_V_CXXLD)$(CXXLINK) -rpath $(libdir) $(libLHAPDF_la_OBJECTS) $(libLHAPDF_la_LIBADD) $(LIBS)
++	$(AM_V_CXXLD)$(libLHAPDF_la_LINK) -rpath $(libdir) $(libLHAPDF_la_OBJECTS) $(libLHAPDF_la_LIBADD) $(LIBS)
+ 
+ libLHAPDFGlue.la: $(libLHAPDFGlue_la_OBJECTS) $(libLHAPDFGlue_la_DEPENDENCIES) $(EXTRA_libLHAPDFGlue_la_DEPENDENCIES) 
+ 	$(AM_V_CXXLD)$(CXXLINK) $(am_libLHAPDFGlue_la_rpath) $(libLHAPDFGlue_la_OBJECTS) $(libLHAPDFGlue_la_LIBADD) $(LIBS)
