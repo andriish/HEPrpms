@@ -59,7 +59,7 @@ cmake --build BUILD
 %files
 %defattr(-,root,root)
 %{_bindir}/*
-%{_incdir}/MCFM/*
+%{_includedir}/MCFM/*
 %{_libdir}/lib*
 
 %clean
