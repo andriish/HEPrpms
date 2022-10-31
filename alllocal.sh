@@ -4,9 +4,10 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+MCFM:10.2.1
 #tmdlib:2.2.07
 #lhapdf:6.5.3
-rapgap:3.4.0
+#rapgap:3.4.0
 #cascade:3.3.0
 #Rivet:3.1.7
 #Herwig:7.2.3
