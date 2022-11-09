@@ -54,6 +54,7 @@ BuildRequires: openssl-libs openssl-devel  lapack-devel blas-devel lapack blas
 
 %if 0%{?suse_version}
 BuildRequires: lapacke-devel
+BuildRequires: cmake
 %endif
 
 %if %{?rhel}%{!?rhel:0} == 4 
@@ -80,6 +81,8 @@ BuildRequires: cmake
 %if %{?rhel}%{!?rhel:0} == 7
 BuildRequires: cmake3
 %endif
+
+
 
 
 %if %{?fedora}%{!?fedora:0} >=28 || %{?rhel}%{!?rhel:0} >= 8
