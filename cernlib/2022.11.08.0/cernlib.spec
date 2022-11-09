@@ -46,7 +46,7 @@ URL:           http://cernlib.web.cern.ch/cernlib/
 Patch0:         patch-cernlib-0.txt
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 7
-BuildRequires: openssl-libs openssl-devel
+BuildRequires: openssl-libs openssl-devel  lapack-devel blas-devel lapack blas
 %endif
 
 %if 0%{?suse_version}
