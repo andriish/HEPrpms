@@ -235,7 +235,7 @@ Library.
 According to the responsible of the cernlib debian package, some
 of these utilities may have security flaws.
 
-%package -n patchy%{?compiler_string}
+%package -n patchy%{?compiler_strinusr/lib64/cernlibg}
 Group: Applications/Archiving
 Summary: The patchy utilities
 
@@ -347,7 +347,7 @@ chrpath --delete $RPM_BUILD_ROOT%{_bindir}/ytobin%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/ytoceta%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/zftp%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/zserv%{?compiler_string}
-chrpath --delete $RPM_BUILD_ROOT%{_libdir}/cernlib/%{version}/lib/lib*so.*20*
+chrpath --delete $RPM_BUILD_ROOT%{_libdir}/cernlib/%{verdir}/lib/lib*so.*20*
 %endif
 %check
 %if 0%{?fedora} || %{?rhel}%{!?rhel:0} >= 7
