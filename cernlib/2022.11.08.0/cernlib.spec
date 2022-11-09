@@ -1,6 +1,7 @@
 # Please note that this .spec file was designed to work in the CI  with 
 # specific versions of RHEL/Fedora and, probably,  will need some 
 # adjustements to work properly with all distributions
+
 %if %{?rhel}%{!?rhel:0} == 4 || %{?rhel}%{!?rhel:0} == 5 || %{?rhel}%{!?rhel:0} == 6 
 %global cmake   /usr/bin/cmake 
 %global cmake_install make install DESTDIR=${RPM_BUILD_ROOT}
@@ -8,11 +9,13 @@
 %global __cmake_builddir .
 %global cmakeB %__cmake  --build %{__cmake_builddir} -- %{?_smp_mflags} 
 %endif
+
 %if %{?fedora}%{!?fedora:0} == 30
 %global __cmake_builddir .
 %global cmakeB %__cmake  --build %{__cmake_builddir}  %{?_smp_mflags} 
 %global cmake_install make install DESTDIR=${RPM_BUILD_ROOT}
 %endif
+
 %if %{?rhel}%{!?rhel:0} > 6 || %{?fedora}%{!?fedora:0} > 30
 %global cmakeB %__cmake  --build %{__cmake_builddir}  %{?_smp_mflags} 
 %endif
@@ -291,10 +294,19 @@ export FC=gfortran
 %endif
 cmake  -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF  -DCMAKE_Fortran_COMPILER=${FC} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %cmakeB
-%else
+%endif
+%if 0%{?fedora} || %{?rhel}%{!?rhel:0} >= 7
+export FC=gfortran
 %cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %cmakeB
 %endif
+
+%if 0%{?suse_version}
+export FC=gfortran
+%cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+%cmake_build
+%endif
+
 %install
 %cmake_install
 %{__install} -d -m755 %{buildroot}/etc/ld.so.conf.d
