@@ -235,7 +235,7 @@ Library.
 According to the responsible of the cernlib debian package, some
 of these utilities may have security flaws.
 
-%package -n patchy%{?compiler_strinusr/lib64/cernlibg}
+%package -n patchy%{?compiler_string}
 Group: Applications/Archiving
 Summary: The patchy utilities
 
