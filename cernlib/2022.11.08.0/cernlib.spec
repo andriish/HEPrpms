@@ -36,7 +36,7 @@
 
 # data files should be the same and therefore parallel installable
 
-Name:          cernlib%{?compiler}
+Name:          cernlib
 Version:       2022.11.08.0
 Release:       1%{?dist}
 Summary:       General purpose CERN library
