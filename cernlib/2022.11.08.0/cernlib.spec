@@ -282,7 +282,7 @@ Utilities for extracting sources from patchy cards and cradles.
 
 
 %prep
-%setup -q -c  
+%setup -q -c 
 %patch0 -p1
 
 

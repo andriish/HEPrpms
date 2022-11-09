@@ -890,6 +890,9 @@ if (CERNLIB_USE_INTERNAL_LAPACK)
 else()
   find_package(BLAS REQUIRED)
   find_package(LAPACK REQUIRED)
+#One should hanlde the deprecated codes here
+#Lapack >= 3.7.0 needs the flag below
+  set(LAPACK_COMPILE_DEFINITIONS -DDGEQPF=DGEQP3 -Ddgeqpf=dgeqp3)
 endif()
 
 find_package(Freetype REQUIRED)
