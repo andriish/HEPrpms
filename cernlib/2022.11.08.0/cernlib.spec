@@ -45,6 +45,10 @@ License:       GPL+ and LGPLv2+
 URL:           http://cernlib.web.cern.ch/cernlib/
 Patch0:         patch-cernlib-0.txt
 
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 7
+BuildRequires: openssl-libs openssl-devel
+%endif
+
 %if 0%{?suse_version}
 BuildRequires: lapacke-devel
 %endif
