@@ -55,6 +55,7 @@ BuildRequires: openssl-libs openssl-devel  lapack-devel blas-devel lapack blas
 %if 0%{?suse_version}
 BuildRequires: lapacke-devel
 BuildRequires: cmake
+BuildRequires: openssl libopenssl-devel lapack-devel blas-devel
 %endif
 
 %if %{?rhel}%{!?rhel:0} == 4 
