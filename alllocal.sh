@@ -7,6 +7,7 @@ declare -a BUILDLIST=(
 f90cache:0.99c
 #tmdlib:2.2.07
 #lhapdf:6.5.3
+#rapgap:3.4.0
 #cascade:3.3.0
 #Rivet:3.1.7
 #Herwig:7.2.3
