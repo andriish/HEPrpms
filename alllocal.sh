@@ -4,9 +4,9 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+f90cache:0.99c
 #tmdlib:2.2.07
 #lhapdf:6.5.3
-cernlib:2022.11.08.0
 #rapgap:3.4.0
 #cascade:3.3.0
 #Rivet:3.1.7

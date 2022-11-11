@@ -175,5 +175,6 @@ c5bc336d3caa3f357db484536c10dbc8  YODA/1.9.7/rpmbuild/SOURCES/YODA-1.9.7.tar.gz
 b3b26a1dc31d42f6b744b44b548769bb  lhapdf/6.5.3/rpmbuild/SOURCES/LHAPDF-6.5.3.tar.gz
 9b99dd811dcb53506ebc034932997f06  cascade/3.3.0/rpmbuild/SOURCES/cascade-v3.3.0.tar.gz
 11f012317f19c7ad160afb1973ff6a15  tmdlib/2.2.07/rpmbuild/SOURCES/tmdlib-2.2.07.tar.gz
+f470c7be0db95573d2a430de972e5840  f90cache/0.99c/rpmbuild/SOURCES/f90cache-0.99c.tar.gz
 74d8e994f800d0e46559a5cc3fa4e17b  rapgap/3.4.0/rpmbuild/SOURCES/rapgap-v3.4.0.tar.gz
 c127179b4d62b6e99f01102a222a06a7  cernlib/2022.11.08.0/rpmbuild/SOURCES/cernlib-2022.11.08.0-free.tar.gz
