@@ -15,7 +15,7 @@ BuildRequires:	libtool
 Fortran ccache
 
 %prep
-%autosetup -p0
+%autosetup -p1
 
 
 %build
