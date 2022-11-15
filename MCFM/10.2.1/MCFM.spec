@@ -49,12 +49,20 @@ export CFLAGS="%{optflags}  -fPIC"
 export CXXFLAGS="%{optflags}  -fPIC"
 %endif
 
+%if 0%{?fedora} || %{?rhel}%{!?rhel:0}
 %cmake -Duse_external_lhapdf:BOOL=ON -Duse_internal_lhapdf:BOOL=OFF -Dwith_library:BOOL=ON -S. -BBUILD
 cmake --build BUILD
-
+%else
+%cmake -Duse_external_lhapdf:BOOL=ON -Duse_internal_lhapdf:BOOL=OFF -Dwith_library:BOOL=ON  -BBUILD
+cmake --build BUILD
+%endif
 
 %install 
+%if 0%{?fedora} || %{?rhel}%{!?rhel:0}
 %make_install -C BUILD
+%else
+%make_install -C BUILD
+%endif
 
 %files
 %defattr(-,root,root)
