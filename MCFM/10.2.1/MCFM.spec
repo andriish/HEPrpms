@@ -61,7 +61,7 @@ cmake --build BUILD
 %if 0%{?fedora} || %{?rhel}%{!?rhel:0}
 %make_install -C BUILD
 %else
-%make_install -C BUILD
+%make_install -C build/BUILD
 %endif
 
 %files
