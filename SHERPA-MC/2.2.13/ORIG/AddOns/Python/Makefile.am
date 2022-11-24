@@ -17,7 +17,7 @@ Sherpa_wrap.cxx: $(noinst_HEADERS)
 python_LTLIBRARIES = _Sherpa.la
 
 nodist__Sherpa_la_SOURCES = Sherpa_wrap.cxx
-_Sherpa_la_CPPFLAGS= @PYTHON_CPPFLAGS@
+_Sherpa_la_CPPFLAGS= @PYTHON_CPPFLAGS@ -I$(top_srcdir)
 _Sherpa_la_LDFLAGS = -module
 _Sherpa_la_LIBADD  = -L@SHERPABUILDDIR@/Main -lSherpaMain -lMEProcess\
 		$(HZTOOLLIBS) $(PGSLIBS) @ATOOLSLIBS@

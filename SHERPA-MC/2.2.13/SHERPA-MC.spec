@@ -166,7 +166,7 @@ This package provides the Python 3 bindings for %{name}-openmpi
 
 %prep
 %setup -q
-#patch0 -p1
+%patch0 -p1
 
 
 %build
