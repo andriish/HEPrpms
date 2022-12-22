@@ -5,7 +5,7 @@
 
 Name:           blackhat
 Version:        0.9.9
-Release:        5%{?dist}
+Release:        6%{?dist}
 License:        Unknown
 Url:            http://www.blackhat.hepforge.org
 Source0:        https://www.hepforge.org/archive/blackhat/%{name}-%{version}.tar.gz
@@ -69,6 +69,7 @@ the %{name} library
 
 %build
 autoreconf --force --install --verbose 
+export CXXFLAGS="%{optflags} -std=c++98"
 %configure --enable-dependency-tracking   --disable-rpath
 
 make %{?_smp_mflags}
