@@ -1,5 +1,5 @@
---- src/cut_Darren.h.orig	2021-03-06 20:11:25.884626966 +0100
-+++ src/cut_Darren.h	2021-03-06 20:11:25.884626966 +0100
+--- ORIG/src/cut_Darren.h	2022-12-07 07:06:23.716826673 +0100
++++ PATCHED/src/cut_Darren.h	2022-12-07 07:06:23.719826713 +0100
 @@ -344,14 +344,14 @@
          virtual CHP get_sub_terms(momentum_configuration<dd_real>& mc, const std::vector<int>& ind, coeffparam<RHP,TriangleSpecs::CPOINTS>& tp){return CHP(0,0);}
          virtual CVHP get_sub_terms(momentum_configuration<qd_real>& mc, const std::vector<int>& ind, coeffparam<RVHP,TriangleSpecs::CPOINTS>& tp){return CVHP(0,0);}
@@ -19,8 +19,8 @@
  
  #endif
          //Used for setting and checking whether this has already been computed
---- src/cached_OLHA.cpp.orig	2021-03-06 20:11:25.884626966 +0100
-+++ src/cached_OLHA.cpp	2021-03-06 20:11:25.884626966 +0100
+--- ORIG/src/cached_OLHA.cpp	2022-12-07 07:06:23.716826673 +0100
++++ PATCHED/src/cached_OLHA.cpp	2022-12-07 07:06:23.718826700 +0100
 @@ -331,10 +331,10 @@
  		Cached_OLHA* new_COLHA = new Cached_OLHA(new_OLHAb);
  		d_amplitudes.insert(pair<pro_cs,Cached_OLHA*>(pc,new_COLHA));
