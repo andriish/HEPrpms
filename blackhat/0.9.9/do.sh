@@ -14,7 +14,10 @@ diff -Naur  ORIG/src/assembly.h       PATCHED/src/assembly.h >>                 
 diff -Naur  ORIG/src/from_file.h      PATCHED/src/from_file.h >>                patch-blackhat-2.txt
 diff -Naur  ORIG/configure.ac         PATCHED/configure.ac  >>             patch-blackhat-2.txt
 diff -Naur  ORIG/dataInstall.in       PATCHED/dataInstall.in  >>           patch-blackhat-2.txt
+diff -Naur  ORIG/src/Interface/BH_interface.cpp       PATCHED/src/Interface/BH_interface.cpp >>                 patch-blackhat-2.txt
+diff -Naur  ORIG/src/partial_amplitude.cpp       PATCHED/src/partial_amplitude.cpp >>                 patch-blackhat-2.txt
+diff -Naur  ORIG/src/util.cc  PATCHED/src/util.cc >>              patch-blackhat-2.txt
+
 
 diff -Naur  ORIG/src/tree2.cc  PATCHED/src/tree2.cc >               patch-blackhat-3.txt
 diff -Naur  ORIG/src/tree3.cc  PATCHED/src/tree3.cc >>              patch-blackhat-3.txt
-

@@ -291,3 +291,63 @@
  mkdir -p $DIR
 -tar -xzf $1 -C $DIR > /dev/null 
 +tar --overwrite -xzf  $1 -C $2$DIR > /dev/null 
+--- ORIG/src/Interface/BH_interface.cpp	2012-11-21 12:41:56.000000000 +0100
++++ PATCHED/src/Interface/BH_interface.cpp	2022-12-23 01:32:17.757714605 +0100
+@@ -75,16 +75,16 @@
+ 
+ 
+ bool BH_interface::set(const std::string& name,double value){
+-	d_impl->set(name,value);
++	d_impl->set<double>(name,value);
+ }
+ bool BH_interface::set(const std::string& name,int value){
+-	d_impl->set(name,value);
++	d_impl->set<int>(name,value);
+ }
+ bool BH_interface::set(const std::string& name,std::string value){
+-	d_impl->set(name,value);
++	d_impl->set<std::string>(name,value);
+ }
+ bool BH_interface::set(const std::string& name,bool value){
+-	d_impl->set(name,value);
++	d_impl->set<bool>(name,value);
+ }
+ 
+ void BH_interface::print_settings(std::ostream& os){
+@@ -2067,11 +2067,11 @@
+ 	delete d_impl;
+ }
+ 
+-
++/*
+ template void BH_interface_impl::set(const std::string& name,double value);
+ template void BH_interface_impl::set(const std::string& name,int value);
+ template void BH_interface_impl::set(const std::string& name,bool value);
+-
++*/
+ 
+ 
+ }
+--- ORIG/src/partial_amplitude.cpp	2022-12-23 03:09:01.515125218 +0100
++++ PATCHED/src/partial_amplitude.cpp	2022-12-23 19:32:26.900637965 +0100
+@@ -160,6 +160,10 @@
+ 		d_ampls[i]->dry_run();
+ 	}
+ }
+-}
+ 
++
++template  SeriesC<qd_real> partial_amplitude_cached::eval_fn(momentum_configuration<qd_real>& mc, const vector<int>& ind,int mu_index);
++template  SeriesC<dd_real> partial_amplitude_cached::eval_fn(momentum_configuration<dd_real>& mc, const vector<int>& ind,int mu_index);
++template  SeriesC<double> partial_amplitude_cached::eval_fn(momentum_configuration<double>& mc, const vector<int>& ind,int mu_index);
++}
+ }
+--- ORIG/src/util.cc	2022-12-26 11:41:21.891140170 +0100
++++ PATCHED/src/util.cc	2022-12-26 14:58:02.982766614 +0100
+@@ -538,3 +538,6 @@
+ }
+ 
+ }
++
++template <> BH::momentum<std::complex<double> > BH::Tree::GenerateMomentum<double>(  double const &  dummy) { return GenerateMomentum<double>(dummy); }
++template <> BH::momentum<std::complex<dd_real> > BH::Tree::GenerateMomentum<dd_real>( dd_real const &  dummy) { return GenerateMomentum<dd_real>(dummy); }
