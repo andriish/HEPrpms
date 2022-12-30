@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        3.1.7
-Release:        1002%{?dist}
+Release:        1003%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -46,7 +46,7 @@ Requires:      python3-YODA
 BuildRequires: python-setuptools
 %endif
 BuildRequires:   Cython python3 python3-devel python3-libs 
-Requires:        python3-YODA
+Requires:        python3-YODA python3-matplotlib
 %endif
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: gcc-c++ gcc-gfortran
