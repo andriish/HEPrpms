@@ -1,6 +1,6 @@
 Name:		lhapdf
 Version:	6.4.0
-Release:	5%{?dist}
+Release:	1005%{?dist}
 Summary:	Les Houches Accord PDF Interface
 
 License:	GPLv3+
