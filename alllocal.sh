@@ -4,9 +4,9 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-blackhat:0.9.9
+#blackhat:0.9.9
 #binder:1.3.0
-#SHERPA-MC:2.2.13
+SHERPA-MC:2.2.14
 #FeynHiggs:2.19.0
 #f90cache:0.99c
 #tmdlib:2.2.07
