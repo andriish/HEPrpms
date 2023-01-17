@@ -3,9 +3,9 @@
 #
 # ggvvamp package
 
-ifeq ($(PREFIX),)
-    PREFIX := /usr/local
-endif
+#ifeq ($(PREFIX),)
+#    PREFIX := /usr/local
+#endif
 
 #CXX=g++
 
@@ -17,13 +17,16 @@ endif
 
 # possible extra flags: -Os -s -O3
 # -Wl,-soname,libggvvamp.so.1 -o libggvvamp.so.1.0.1
-LDFLAGS=$LDFLAGS" -Wl,-rpath=.  -lginac -lcln"
-SOFLAGS=-shared  -lginac -lcln
+LDFLAGS+= -Wl,-rpath=.  -lginac -lquadmath
+#-lcln
+SOFLAGS=-shared  -lginac
+# -lcln
 
 
 
 OBJ= ggvvamp.o ggvvampprec.o \
-p0001.o p0002.o p0003.o p0004.o p0005.o p0006.o p0007.o p0008.o p0009.o p0010.o \
+p0001.o p0002.o p0003.o p0004.o p0005.o
+XX =  p0006.o p0007.o p0008.o p0009.o p0010.o \
 p0011.o p0012.o p0013.o p0014.o p0015.o p0016.o p0017.o p0018.o p0019.o p0020.o \
 p0021.o p0022.o p0023.o p0024.o p0025.o p0026.o p0027.o p0028.o p0029.o p0030.o \
 p0031.o p0032.o p0033.o p0034.o p0035.o p0036.o p0037.o p0038.o p0039.o p0040.o \
@@ -287,7 +290,7 @@ evalcmdlinegg-static: evalcmdlinegg.o libggvvamp.a
 	$(CXX) -o $@ $+ $(LDFLAGS) 
 
 %.o: %.cpp 
-	$(CXX) -c -o $@ $< $(CXXFLAGS) 
+	$(CXX)  -fPIC -c -o $@ $< $(CXXFLAGS) 
 
 clean:
 	rm -f libggvvamp.so libggvvamp.a evalcmdlinegg evalcmdlinegg-static *.o *~
@@ -298,4 +301,4 @@ install: libggvvamp.so libggvvamp.a
 		install -d $(DESTDIR)$(LIBDIR)/
 		install -m 644 libggvvamp.so libggvvamp.a $(DESTDIR)$(LIBDIR)
 		install -d $(DESTDIR)$(PREFIX)/include/ggvvamp
-		install -m 644 *.h $(DESTDIR)$(PREFIX)/include/ggvvamp
+		install -m 644 *.xi *.xh *.h $(DESTDIR)$(PREFIX)/include/ggvvamp
