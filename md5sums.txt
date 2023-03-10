@@ -195,3 +195,4 @@ fe2cc810e234af64d0365cc9b2e811f4  whizard/3.1.0/rpmbuild/SOURCES/whizard-3.1.0.t
 39b98db2495ad3573ed1d4ec59ba33db  MCFM/10.3/rpmbuild/SOURCES/MCFM-10.3.tar.gz
 72d928520677cf8d40f1efe1ac2ce650  geant4/11.1.1/rpmbuild/SOURCES/geant4-v11.1.1.tar.gz
 344eb99f1c9cee8a4c3e2261bbb97b16  cascade/3.3.1/rpmbuild/SOURCES/cascade-3.3.1.tar.gz
+012965e6f00402dc6911299726db8009  collier/1.2.7/rpmbuild/SOURCES/collier-1.2.7.tar.gz
