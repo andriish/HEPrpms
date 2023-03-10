@@ -30,7 +30,7 @@ The library documentation is available on header files.
 
 
 %prep 
-%setup -q -n qcdnum-17-00-00
+%setup -q -n qcdnum-18-00-00
 %build 
 %if %{?fedora}%{!?fedora:0} >= 31
 export FFLAGS="%{optflags} -std=legacy  -fallow-argument-mismatch -Iinc"
