@@ -86,7 +86,9 @@ export CTEST_OUTPUT_ON_FAILURE=1
 
 %files devel
 %doc AUTHORS NEWS README
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8 
 %doc %{_vpath_builddir}/doc/tutorial/ginac.html
+%endif
 %{_includedir}/ginac/
 %{_infodir}/*.info*
 %{_libdir}/*.so
