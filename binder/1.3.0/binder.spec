@@ -11,7 +11,7 @@ BuildRequires:    clang clang-devel llvm-devel
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
 BuildRequires:    clang-libs
 Requires:         clang-libs
-BuildRequires:    pybind11-devel
+BuildRequires:    pybind11-devel >= 2.7
 Requires:         pybind11-devel
 %endif
 
@@ -64,6 +64,9 @@ make
 %{_bindir}/*
 
 %changelog
+%changelog
+* Fri Mar 10 2023 Andrii Verbytskyi 
+- Try to build on epel
 * Wed Jan 19 2022  Andrii Verbytskyi 
 + Patch for more includes 
 * Tue Dec 7 2021  Andrii Verbytskyi 
