@@ -197,3 +197,4 @@ fe2cc810e234af64d0365cc9b2e811f4  whizard/3.1.0/rpmbuild/SOURCES/whizard-3.1.0.t
 344eb99f1c9cee8a4c3e2261bbb97b16  cascade/3.3.1/rpmbuild/SOURCES/cascade-3.3.1.tar.gz
 012965e6f00402dc6911299726db8009  collier/1.2.7/rpmbuild/SOURCES/collier-1.2.7.tar.gz
 b3253139611d3ff3fd5f118df6b85d8a  njet/3.1.1/rpmbuild/SOURCES/d63d1068374296ba13a1d81877983e4a37c8fc44.tar.gz
+c5994b9822452ccefd03dcb4bd36b3b6  HEJ/2.1.3/rpmbuild/SOURCES/HEJ_2.1.3.tar.gz

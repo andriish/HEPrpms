@@ -2,8 +2,14 @@ cmake_minimum_required (VERSION 3.13)
 enable_language(Fortran)
 project (mcfm C CXX Fortran)
 include("GNUInstallDirs")
+
 if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -cpp -finit-local-zero -ffixed-line-length-none -ffree-line-length-512 -fopenmp")
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -cpp -finit-local-zero -ffixed-line-length-none -ffree-line-length-512 -fopenmp -ffpe-summary=none")
+
+    if (CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "10.0")
+        set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
+    endif()
+
 elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fpp -qopenmp -stand f08 -traceback -132 -diag-disable 1622,5268,6916,6919,7416,7343,7373,7346,7713,1789,7355,7356,7026,6243")
     message( FATAL_ERROR "Intel compiler is not supported, use at your own risk!" )
@@ -53,9 +59,9 @@ ExternalProject_Add(qd
 )
 
 ExternalProject_Add(qcdloop
-    DOWNLOAD_COMMAND mkdir -p ${CMAKE_BINARY_DIR}/lib && cp -r ${CMAKE_SOURCE_DIR}/lib/qcdloop-2.0.5 ${CMAKE_BINARY_DIR}/lib
-    PREFIX ${CMAKE_BINARY_DIR}/lib/qcdloop-2.0.5
-    SOURCE_DIR ${CMAKE_BINARY_DIR}/lib/qcdloop-2.0.5
+    DOWNLOAD_COMMAND mkdir -p ${CMAKE_BINARY_DIR}/lib && cp -r ${CMAKE_SOURCE_DIR}/lib/qcdloop-2.0.9 ${CMAKE_BINARY_DIR}/lib
+    PREFIX ${CMAKE_BINARY_DIR}/lib/qcdloop-2.0.9
+    SOURCE_DIR ${CMAKE_BINARY_DIR}/lib/qcdloop-2.0.9
     BUILD_IN_SOURCE ON
     PATCH_COMMAND mkdir -p ${CMAKE_BINARY_DIR}/local
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DENABLE_FORTRAN_WRAPPER=ON -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/local -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_INSTALL_LIBDIR=lib
@@ -170,6 +176,7 @@ add_subdirectory(src)
 add_subdirectory(lib/TensorReduction)
 add_subdirectory(lib/SpecialFunctions)
 add_subdirectory(lib/AMOS)
+add_subdirectory(lib/Chaplin-1.2)
 
 add_dependencies(objlib qd qcdloop liboneloop handyg)
 
@@ -269,8 +276,8 @@ add_dependencies(objlib handyg_lib_static)
 
 if(use_internal_lhapdf)
     ExternalProject_Add(lhapdf
-        URL ${CMAKE_SOURCE_DIR}/lib/LHAPDF-6.2.3.tar.gz
-        SOURCE_DIR ${CMAKE_BINARY_DIR}/LHAPDF-6.2.3
+        URL ${CMAKE_SOURCE_DIR}/lib/LHAPDF-6.5.1.tar.gz
+        SOURCE_DIR ${CMAKE_BINARY_DIR}/LHAPDF-6.5.1
         PATCH_COMMAND mkdir -p ${CMAKE_BINARY_DIR}/local
         BUILD_IN_SOURCE ON
         CONFIGURE_COMMAND ./configure --with-pic --disable-lhaglue --disable-lhaglue-cxx --disable-python --prefix=${CMAKE_BINARY_DIR}/local CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER}
@@ -292,8 +299,9 @@ if(use_internal_lhapdf)
 elseif(use_external_lhapdf)
     find_library(lhapdf_lib NAMES LHAPDF REQUIRED)
     target_link_libraries(mcfm ${lhapdf_lib})
-    if (${lhapdf_include_path})
-        target_include_directories(objlib PRIVATE "${LHAPDF_INCLUDE_PATH}" "${CMAKE_BINARY_DIR}/local/include" "${CMAKE_BINARY_DIR}/local/include/qd")
+    target_include_directories(objlib PRIVATE "${CMAKE_BINARY_DIR}/local/include" "${CMAKE_BINARY_DIR}/local/include/qd")
+    if (EXISTS "${lhapdf_include_path}")
+        target_include_directories(objlib PRIVATE "${lhapdf_include_path}")
     endif()
 endif()
 

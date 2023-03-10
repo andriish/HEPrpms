@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-njet:3.1.1
+HEJ:2.1.3
+#njet:3.1.1
 #collier:1.2.7
 #cascade:3.3.1
 #MCFM:10.3

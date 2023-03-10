@@ -59,9 +59,9 @@ rm -f  $RPM_BUILD_ROOT/%{_bindir}/fcc
 
 
 %files 
-# This is a duplicate of LopTools {_bindir}/fcc
-%{_bindir}/FeynHiggs
-%{_bindir}/table
+# This is a duplicate of LoopTools {_bindir}/fcc
+%{_bindir}/*
+#{_bindir}/table
 
 
 %files devel
