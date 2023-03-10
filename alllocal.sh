@@ -4,7 +4,7 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-
+gosam:2.1.1
 #qd:2.3.23
 #recola2:2.2.4
 #geant4:11.1.1
@@ -45,7 +45,7 @@ declare -a BUILDLIST=(
 #MG5_aMC:2.9.11
 #qcdloop:2.0.9
 #TheP8I:2.0.2
-applgrid:1.6.27
+#applgrid:1.6.27
 #python-uproot4:4.3.3
 #FeynHiggs:2.18.1
 #tmdlib:2.2.06
