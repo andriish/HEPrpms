@@ -8,11 +8,15 @@ Source0:    https://github.com/RosettaCommons/binder/archive/v%{version}.tar.gz
 Patch0:         patch-binder-0.txt
 
 BuildRequires:    clang clang-devel llvm-devel 
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 9
 BuildRequires:    clang-libs
 Requires:         clang-libs
-BuildRequires:    pybind11-devel >= 2.7
+BuildRequires:    pybind11-devel
 Requires:         pybind11-devel
+%endif
+%if  %{?rhel}%{!?rhel:0} == 8
+BuildRequires:    pybind11-devel < 2.5
+Requires:         pybind11-devel < 2.5
 %endif
 
 %if 0%{?suse_version}
@@ -37,7 +41,7 @@ that it handles special features new in C++11.
 
 %build
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
-%if %{?fedora}%{!?fedora:0} > 36
+%if %{?fedora}%{!?fedora:0} > 36 || %{?rhel}%{!?rhel:0} == 8
 %cmake  -DBINDER_ENABLE_TEST=OFF
 %else
 %cmake . -DBINDER_ENABLE_TEST=OFF
