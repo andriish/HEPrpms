@@ -1,4 +1,4 @@
-! WHIZARD 3.0.3 Apr 06 2022
+! WHIZARD 3.1.0 Dec 14 2022
 !
 ! Copyright (C) 1999-2022 by
 !     Wolfgang Kilian <kilian@physik.uni-siegen.de>
