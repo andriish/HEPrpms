@@ -24,7 +24,10 @@ extended precision arithmetic.
 
 %prep
 %setup -q
-sed -i 's@python@python3@1'  blha/njet.py
+sed -i "s:^#\!/usr/bin/env\s\+python:#!%{__python3}:"  blha/njet.py 
+sed -i "s:^#\!/usr/bin/env\s\+python:#!%{__python3}:" fix-pc.py
+sed -i "s:^#\!/usr/bin/env\s\+python:#!%{__python3}:" tools/analyze.py
+
 
 %build
 export FFLAGS="%{optflags} -std=legacy"
