@@ -6,14 +6,14 @@
 
 Name:           TAUOLA
 Version:        1.1.8
-Release:        5%{?dist}
+Release:        6%{?dist}
 License:        Unknown
 Url:            http://tauolapp.web.cern.ch/tauolapp
 Source0:        https://tauolapp.web.cern.ch/tauolapp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
 Patch0:         patch-TAUOLA-0.txt
 Summary:        Tau lepton decay Monte Carlo
 BuildRequires:  gcc-c++ autoconf automake libtool  
-BuildRequires:  tex(latex) tex(fmtcount.sty) ghostscript doxygen
+BuildRequires:  tex(latex) tex(fmtcount.sty) ghostscript doxygen tex(eurosym.sty)
 %if 0%{?rhel} || 0%{?fedora}
 Requires:       HepMC HepMC3 libgfortran pythia8
 BuildRequires:  gcc-gfortran pythia8 pythia8-devel  HepMC-devel HepMC3-devel HepMC HepMC3 
