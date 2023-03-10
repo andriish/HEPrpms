@@ -4,6 +4,7 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+qd:2.3.23
 #recola2:2.2.4
 #geant4:11.1.1
 #HEJ:2.1.3
@@ -18,7 +19,7 @@ declare -a BUILDLIST=(
 #FeynHiggs:2.19.0
 #f90cache:0.99c
 #tmdlib:2.2.08
-whizard:3.1.0
+#whizard:3.1.0
 #geant4:11.1.1
 #fjcontrib:1.051
 #form:4.3.0
