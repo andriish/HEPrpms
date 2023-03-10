@@ -99,7 +99,7 @@ sed -i 's|python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}|python${PYTHON_VE
 %files
 %{_bindir}/geant4*
 %{_libdir}/lib*.so*
-%{_datadir}/Geant4-%{version}/geant4make
+%{_datadir}/Geant4/geant4make
 %{_libdir}/Geant4-%{version}
 
 
