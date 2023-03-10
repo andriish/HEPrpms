@@ -93,8 +93,8 @@ This package provides HepMC manuals and examples.
 
 
 %files doc
-%{_datadir}/Geant4-%{version}/examples
-%license %{_datadir}/Geant4-%{version}/tools.license
+%{_datadir}/Geant4/examples
+%license %{_datadir}/Geant4/tools.license
 
 %files data
 %{_datadir}/Geant4-%{version}/data
