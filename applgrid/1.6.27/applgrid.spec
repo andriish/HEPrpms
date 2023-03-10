@@ -1,6 +1,6 @@
 Name:           applgrid
 Version:        1.6.27
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPL
 Prefix:         %{_prefix}
 Summary:        A fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution 
