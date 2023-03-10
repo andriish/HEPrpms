@@ -19,10 +19,6 @@ BuildRequires: fastjet-devel HepMC3-devel HepMC3-rootIO-devel HepMC3-search-deve
 BuildRequires: pythia8 pythia8-devel  libtirpc  libtirpc-devel lhapdf-sets-whizard
 BuildRequires: root  python3 python3-devel  openmpi openmpi-devel noweb LCIO LCIO-devel TAUOLA TAUOLA-devel hdf5 hdf5-devel
 
-%if %{?rhel}%{!?rhel:0}  == 8
-BuildRequires: rpm-build
-%endif
-
 #Fails for RH
 %if %{?fedora}%{!?fedora:0}
 BuildRequires:  hevea 
@@ -36,7 +32,7 @@ BuildRequires: python3-lhapdf gcc-gfortran gcc-c++
 BuildRequires: chrpath
 %endif
 
-%if %{?rhel}%{!?rhel:0} || %{?fedora}%{!?fedora:0} <= 31
+%if %{?rhel}%{!?rhel:0} == 8 || %{?fedora}%{!?fedora:0} <= 31
 %global _use_internal_dependency_generator 0
 %global __find_provides /usr/lib/rpm/ocaml-find-provides.sh
 %global __find_requires /usr/lib/rpm/ocaml-find-requires.sh
