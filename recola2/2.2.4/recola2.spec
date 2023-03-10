@@ -37,12 +37,7 @@ next-to-leading order.
 
 
 %if 0%{?rhel} || 0%{?fedora}
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-%cmake \
-%else
-%cmake3 \
-%endif
- .   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/  -Dmodelfile_path=/usr/share/cmake  -Dwith_python3=On
+%cmake   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/  -Dmodelfile_path=/usr/share/cmake  -Dwith_python3=On
 %make_build 
 %endif
 %if 0%{?suse_version}
@@ -56,11 +51,7 @@ next-to-leading order.
 
 
 %if 0%{?rhel} || 0%{?fedora}
-%if %{?fedora}%{!?fedora:0}
 %cmake_install
-%else
-%make_install
-%endif
 %endif
 %if 0%{?suse_version}
 %make_install -C build
