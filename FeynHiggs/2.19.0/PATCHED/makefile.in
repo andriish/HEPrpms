@@ -3,9 +3,9 @@ FHVERSION = 2.19.0
 BLD = build$(QUADSUFFIX)
 VERSION = $(BLD)/version.h
 
-#LIBDIR = $(PREFIX)/lib$(LIBDIRSUFFIX)
-#INCLUDEDIR = $(PREFIX)/include
-#BINDIR = $(PREFIX)/bin
+LIBDIR = $(PREFIX)/lib64
+INCLUDEDIR = $(PREFIX)/include
+BINDIR = $(PREFIX)/bin
 
 ARGS = $(PARALLEL) \
   GM2FULL="$(GM2FULL)" \
