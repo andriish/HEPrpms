@@ -4,7 +4,7 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-MCFM:10.3
+#MCFM:10.3
 #clhep:2.4.6.4
 #blackhat:0.9.9
 #binder:1.3.0
@@ -13,7 +13,8 @@ MCFM:10.3
 #f90cache:0.99c
 #tmdlib:2.2.08
 #whizard:3.1.0
-fjcontrib:1.051
+geant4:11.1.1
+#fjcontrib:1.051
 #form:4.3.0
 #ginac:1.8.6
 #LCIO:02.19.01
