@@ -11,11 +11,12 @@ declare -a BUILDLIST=(
 #FeynHiggs:2.19.0
 #f90cache:0.99c
 #tmdlib:2.2.08
+whizard:3.1.0
 #fjcontrib:1.051
 #form:4.3.0
 #ginac:1.8.6
 #LCIO:02.19.01
-PTL:2.3.3
+#PTL:2.3.3
 #qcdnum:18.00.00
 #lhapdf:6.5.3
 #rapgap:3.4.0

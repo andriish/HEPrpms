@@ -191,3 +191,4 @@ cdc91001416cdbbd1ede938967a8c4f8  clhep/2.4.6.4/rpmbuild/SOURCES/clhep-2.4.6.4.t
 1a4fb3e0d50349dbd12cedeb1b5979d8  ginac/1.8.6/rpmbuild/SOURCES/ginac-1.8.6.tar.bz2
 8a7cca92e98d4b025e03d0e4cf89820e  LCIO/02.19.01/rpmbuild/SOURCES/v02-19.tar.gz
 c1810ac9ae482e5d971135b68981aac0  PTL/2.3.3/rpmbuild/SOURCES/v2.3.3.tar.gz
+fe2cc810e234af64d0365cc9b2e811f4  whizard/3.1.0/rpmbuild/SOURCES/whizard-3.1.0.tar.gz
