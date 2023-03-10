@@ -6,7 +6,7 @@ Summary:        LCIO (Linear Collider I/O) is a persistency framework and event 
 Group:          Development/Tools
 License:        BSD 3-Clause
 URL:            http://lcio.desy.de/
-Source0:        https://github.com/iLCSoft/LCIO/archive/v02-17.tar.gz
+Source0:        https://github.com/iLCSoft/LCIO/archive/v02-19.tar.gz
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 Requires: root 

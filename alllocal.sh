@@ -4,13 +4,19 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-clhep:2.4.6.4
+#clhep:2.4.6.4
 #blackhat:0.9.9
 #binder:1.3.0
 #SHERPA-MC:2.2.14
 #FeynHiggs:2.19.0
 #f90cache:0.99c
-#tmdlib:2.2.07
+#tmdlib:2.2.08
+#fjcontrib:1.051
+#form:4.3.0
+#ginac:1.8.6
+#LCIO:02.19.01
+PTL:2.3.3
+#qcdnum:18.00.00
 #lhapdf:6.5.3
 #rapgap:3.4.0
 #cascade:3.3.0
