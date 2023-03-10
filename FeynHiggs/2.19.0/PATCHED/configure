@@ -439,7 +439,7 @@ cat - "$CONF_DIR/makefile.in" > makefile << _EOF_
 
 SRC = $CONF_DIR/src
 QUADSUFFIX = ${CONF_QUAD:+-quad}
-PREFIX = 
+PREFIX = /usr
 LIBDIRSUFFIX = $CONF_LIBDIRSUFFIX
 
 EXE = $CONF_EXE
