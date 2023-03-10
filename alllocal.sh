@@ -13,7 +13,7 @@ MCFM:10.3
 #f90cache:0.99c
 #tmdlib:2.2.08
 #whizard:3.1.0
-#fjcontrib:1.051
+fjcontrib:1.051
 #form:4.3.0
 #ginac:1.8.6
 #LCIO:02.19.01
