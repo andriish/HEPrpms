@@ -97,9 +97,8 @@ This package provides HepMC manuals and examples.
 %license %{_datadir}/Geant4/tools.license
 
 %files data
-%{_datadir}/Geant4-%{version}/data
+%{_datadir}/Geant4/data
 
-%changelog
 %changelog
 * Fri Mar 10 2023 Andrii Verbytskyi 11.1.1
 - Update to 11.1.1
