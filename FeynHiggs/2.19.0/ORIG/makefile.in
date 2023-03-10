@@ -1,4 +1,4 @@
-FHVERSION = 2.18.0
+FHVERSION = 2.19.0
 
 BLD = build$(QUADSUFFIX)
 VERSION = $(BLD)/version.h
