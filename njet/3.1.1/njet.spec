@@ -29,7 +29,7 @@ sed -i 's@python@python3@1'  blha/njet.py
 %build
 export FFLAGS="%{optflags} -std=legacy"
 autoreconf -fi
-%configure --with-qd=/usr 
+%configure --with-qd=/usr --with-oneloop
 make  
 %install
 %make_install
