@@ -10,6 +10,9 @@ Source0: https://www.hepforge.org/archive/recola/recola2-%{version}.tar.gz
 URL:   https://recola.gitlab.io/recola2/
 BuildRequires:      collier gcc-c++ recola2-SM 
 Requires:      collier recola2-SM
+%if 0%{?fedora}
+BuildRequires: chrpath
+%endif
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:      gcc-gfortran
 BuildRequires:      python3-devel
@@ -38,7 +41,7 @@ next-to-leading order.
 
 %if 0%{?rhel} || 0%{?fedora}
 %cmake   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/  -Dmodelfile_path=/usr/share/cmake  -Dwith_python3=On
-%make_build 
+%cmake_build 
 %endif
 %if 0%{?suse_version}
 %cmake  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/ -Dmodelfile_path=/usr/share/cmake   -Dwith_python3=On
@@ -52,6 +55,10 @@ next-to-leading order.
 
 %if 0%{?rhel} || 0%{?fedora}
 %cmake_install
+%if 0%{?fedora}
+chrpath --delete $RPM_BUILD_ROOT%{_libdir}/librecola.so
+chrpath --delete $RPM_BUILD_ROOT/usr/lib/python3.*/site-packages/pyrecola.so
+%endif
 %endif
 %if 0%{?suse_version}
 %make_install -C build
