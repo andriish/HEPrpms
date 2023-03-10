@@ -36,8 +36,8 @@ FHBIN = $(BLD)/FeynHiggs$(EXE) $(BLD)/table$(EXE)
 MFHBIN = $(BLD)/MFeynHiggs$(EXE)
 
 install: default
-	-mkdir "$(DESTDIR)$(PREFIX)"
-	-mkdir "$(DESTDIR)$(LIBDIR)" "$(DESTDIR)$(INCLUDEDIR)" "$(DESTDIR)$(BINDIR)"
+	-mkdir -p "$(DESTDIR)$(PREFIX)"
+	-mkdir -p  "$(DESTDIR)$(LIBDIR)" "$(DESTDIR)$(INCLUDEDIR)" "$(DESTDIR)$(BINDIR)"
 	cp -p $(BLD)/libFH.a "$(DESTDIR)$(LIBDIR)"
 	cp -p $(BLD)/CFeynHiggs.h $(BLD)/CSLHA.h $(BLD)/FHCouplings.h \
 	  $(BLD)/FHRecord.h $(BLD)/SLHA.h $(BLD)/SLHADefs.h \
