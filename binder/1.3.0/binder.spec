@@ -14,10 +14,6 @@ Requires:         clang-libs
 BuildRequires:    pybind11-devel
 Requires:         pybind11-devel
 %endif
-%if  %{?rhel}%{!?rhel:0} == 8
-BuildRequires:    pybind11-devel < 2.5
-Requires:         pybind11-devel < 2.5
-%endif
 
 %if 0%{?suse_version}
 BuildRequires:    libclang11
