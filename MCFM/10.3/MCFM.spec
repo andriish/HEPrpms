@@ -1,7 +1,7 @@
 Summary:  A parton-level Monte Carlo event generator
 Name: MCFM
 Version: 10.3
-Release: 2%{?dist}
+Release: 1%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 URL:     https://mcfm.fnal.gov/
@@ -33,7 +33,7 @@ more details, including a list of available processes, view the documentation (P
 
 %prep 
 %setup -q -n MCFM-%{version}
-%patch0 -p1
+#patch0 -p1
 
 %build 
 
