@@ -98,4 +98,5 @@ export CTEST_OUTPUT_ON_FAILURE=1
 %{_bindir}/*
 
 %changelog
-%autochangelog
+* Fri Mar 10 2023 Andrii Verbytskyi 1.8.6
+- Update to 1.8.6

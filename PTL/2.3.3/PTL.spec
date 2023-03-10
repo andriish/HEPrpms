@@ -42,7 +42,8 @@ PTL Lightweight C++11 multithreading tasking system featuring thread-pool, task-
 %files  devel
 %defattr(-,root,root)
 %{_includedir}/PTL
-%{_libdir}/PTL
+%{_libdir}/cmake/*
+%{_libdir}/pkgconfig/*
 
 
 %clean

@@ -64,7 +64,7 @@ This package provides the Python 3 bindings for %{name}
 
 
 %prep
-%setup -q -n LCIO-02-17
+%setup -q -n LCIO-02-19
 #patch0 -p1
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
