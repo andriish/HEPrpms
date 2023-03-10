@@ -20,10 +20,10 @@ BuildRequires:   tex(ulem.sty)  tex(wasysym.sty) tex(float.sty)
 BuildRequires: tex(hanging.sty) tex(stackengine.sty)  tex(newunicodechar.sty) tex(etoc.sty) tex(fancyvrb.sty)  tex(enumitem.sty) tex(alphalph.sty)
 %endif
 %if  %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8 
-BuildRequires: tex(hanging.sty) tex(stackengine.sty)  tex(newunicodechar.sty) tex(etoc.sty) tex(ulem.sty) tex(wasy7.tfm)
+BuildRequires: tex(hanging.sty) tex(stackengine.sty)  tex(newunicodechar.sty) tex(etoc.sty) tex(ulem.sty) 
 %endif
 %if %{?rhel}%{!?rhel:0} >= 8 || %{?fedora}%{!?fedora:0} >= 31
-BuildRequires: ghostscript-tools-dvipdf
+BuildRequires: ghostscript-tools-dvipdf texlive-wasy
 %endif
 Prefix: %{_prefix}
 
