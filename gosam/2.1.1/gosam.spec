@@ -42,7 +42,7 @@ diagrams, can be reduced using either D-dimensionalintegrand-level
 
 %prep
 %setup -q -n gosam-2.1.1-4b98559
-sed -i 's/2.1.1-4b98559/2.1.1/1' PKG-INFO
+#sed -i 's/2.1.1-4b98559/2.1.1/1' PKG-INFO
 
 %build
 
