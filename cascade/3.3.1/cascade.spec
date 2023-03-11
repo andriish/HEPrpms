@@ -62,7 +62,6 @@ now accessed via TMDlib.
 #-Wl,--as-needed -Wl,--no-undefined -Wl,-z,now
 export LDFLAGS="-Wl,--allow-shlib-undefined -Wl,--no-as-needed "
 %endif
-rpm --eval %cmake
 %cmake
 %endif
 
