@@ -24,7 +24,7 @@ extended precision arithmetic.
 
 %prep
 %setup -q
-%patch0 -p1
+sed -i 's@python@python3@1'  blha/njet.py
 
 %build
 export FFLAGS="%{optflags} -std=legacy"
