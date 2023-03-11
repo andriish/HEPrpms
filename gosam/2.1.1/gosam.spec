@@ -11,6 +11,7 @@ Release:        2%{?dist}
 License:        GPLv3
 Url:            https://github.com/gudrunhe/gosam
 Source0:        https://github.com/gudrunhe/gosam/releases/download/2.1.1/gosam-2.1.1-4b98559.tar.gz
+Patch0:         patch-gosam-0.txt
 Summary:        Automated calculation of one-loop amplitudes 
 Requires:       gosam-contrib form qgraf
 BuildRequires:  autoconf automake libtool 
@@ -42,7 +43,7 @@ diagrams, can be reduced using either D-dimensionalintegrand-level
 
 %prep
 %setup -q -n gosam-2.1.1-4b98559
-#sed -i 's/2.1.1-4b98559/2.1.1/1' PKG-INFO
+%patch0 -p1
 
 %build
 
