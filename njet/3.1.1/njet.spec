@@ -8,7 +8,7 @@ Patch0:     patch-njet-0.txt
 Summary:        A library for multi-parton one-loop matrix elements
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran gcc-c++  autoconf automake libtool  qd qd-devel
-Requires:       python3 
+Requires:       python3 python3-devel
 %endif
 %if 0%{?suse_version}
 BuildRequires:  gcc-fortran gcc-c++  autoconf automake libtool  libqd0 qd-devel
@@ -26,12 +26,18 @@ extended precision arithmetic.
 %prep
 %setup -q -n njet-njet-d63d10683742
 #sed -i 's@python@python3@1'  blha/njet.py
-%patch0 -p1
-
+#patch0 -p1
 
 %build
 export FFLAGS="%{optflags} -std=legacy"
 autoreconf -fi
+
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+pathfix.py -pn -i %{__python3}  ./
+pathfix.py -pn -i %{__python3}  bin/rivet*
+pathfix.py -pn -i %{__python3}  bin/make-*
+%endif
+
 %configure --with-qd=/usr --with-oneloop
 make  
 %install
