@@ -58,6 +58,10 @@ now accessed via TMDlib.
 %if %{?fedora}%{!?fedora:0} >= 37
 %cmake -DCASCADE_BUILD_DOCS:BOOL=OFF
 %else
+%if 0%{?suse_version}
+#-Wl,--as-needed -Wl,--no-undefined -Wl,-z,now
+export LDFLAGS=" "
+%endif
 %cmake
 %endif
 
