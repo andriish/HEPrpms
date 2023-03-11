@@ -4,7 +4,7 @@
 
 Name:           ThePEG
 Version:        2.2.3
-Release:        1002%{?dist}
+Release:        1003%{?dist}
 License:        GPLv3
 Url:            http://www.hepforge.org/archive/thepeg
 Source0:        https://thepeg.hepforge.org/downloads/%{name}-%{version}.tar.bz2
