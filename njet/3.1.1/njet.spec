@@ -58,7 +58,6 @@ find %{buildroot} -name '*.la' -delete
 %_libdir/*.*
 %_bindir/*
 %_includedir/*
-/usr/share/*
 
 
 %changelog
