@@ -89,11 +89,13 @@ This package provides HepMC manuals and examples.
 
 %files devel
 %{_includedir}/Geant4/
+%{_libdir}/cmake/Geant4
 
 
 
 %files doc
 %{_datadir}/Geant4/examples
+%{_datadir}/Geant4/fonts
 %license %{_datadir}/Geant4/tools.license
 
 %files data
