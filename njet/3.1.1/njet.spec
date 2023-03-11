@@ -34,8 +34,8 @@ autoreconf -fi
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 pathfix.py -pn -i %{__python3}  ./
-pathfix.py -pn -i %{__python3}  bin/rivet*
-pathfix.py -pn -i %{__python3}  bin/make-*
+pathfix.py -pn -i %{__python3}  blha/*
+pathfix.py -pn -i %{__python3}  examples/*
 %endif
 
 %configure --with-qd=/usr --with-oneloop
