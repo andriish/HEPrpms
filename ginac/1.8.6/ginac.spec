@@ -100,9 +100,9 @@ export CTEST_OUTPUT_ON_FAILURE=1
 %doc AUTHORS NEWS README
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8 
 %doc %{_vpath_builddir}/doc/tutorial/ginac.html
+%{_infodir}/*.info*
 %endif
 %{_includedir}/ginac/
-%{_infodir}/*.info*
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/ginac.pc
 %dir %{_libdir}/cmake
