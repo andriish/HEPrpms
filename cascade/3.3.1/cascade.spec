@@ -60,8 +60,9 @@ now accessed via TMDlib.
 %else
 %if 0%{?suse_version}
 #-Wl,--as-needed -Wl,--no-undefined -Wl,-z,now
-export LDFLAGS=" "
+export LDFLAGS="-Wl,--allow-shlib-undefined -Wl,--no-as-needed "
 %endif
+rpm --eval %cmake
 %cmake
 %endif
 
