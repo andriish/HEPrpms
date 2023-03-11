@@ -32,7 +32,7 @@ BuildRequires: python3-lhapdf gcc-gfortran gcc-c++
 BuildRequires: chrpath
 %endif
 
-%if %{?rhel}%{!?rhel:0} == 8 || %{?fedora}%{!?fedora:0} <= 31
+%if %{?rhel}%{!?rhel:0} == 8 
 %global _use_internal_dependency_generator 0
 %global __find_provides /usr/lib/rpm/ocaml-find-provides.sh
 %global __find_requires /usr/lib/rpm/ocaml-find-requires.sh
