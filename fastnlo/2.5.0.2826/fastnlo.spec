@@ -1,6 +1,6 @@
 Name: fastnlo
 Version: 2.5.0.2826
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPL
 Prefix: %{_prefix}
 Summary: Fast pQCD calculations for PDF fits.
@@ -48,14 +48,14 @@ Provides:       python3-%{name} = %{version}-%{release}
 %description -n python-%{name}
 python-%{name} contains python bindings for %{name}.
 %endif
-%if 0%{?suse_version}
-%package  -n python-%{name}
-Summary:        python bindings for %{name}
-Provides:       python3-%{name} = %{version}-%{release}
+#if 0#{?suse_version}
+#package  -n python-#{name}
+#Summary:        python bindings for #{name}
+#Provides:       python3-#{name} = #{version}-#{release}
 
-%description -n python-%{name}
-python-%{name} contains python bindings for %{name}.
-%endif
+#description -n python-#{name}
+#python-#{name} contains python bindings for #{name}.
+#endif
 
 
 
@@ -69,16 +69,16 @@ for observables in hadron-induced processes.
 
 %build 
 
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-#export PYTHON={_bindir}/python2
-#export PYTHON_VERSION=2.7
-%endif
-%if 0%{?suse_version}
-#export PYTHON={_bindir}/python
-#export PYTHON_VERSION=2.7
-%endif
+
 sed -i 's|\#\$(DEPDIR)/fastnlo_wrap.Plo:|\$(DEPDIR)/fastnlo_wrap.Plo:|g' pyext/Makefile.in
+%if 0%{?rhel} || 0%{?fedora}
 %configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root --with-yoda --with-fastjet --with-qcdnum --enable-pyext3 
+%endif
+
+%if 0%{?suse_version}
+%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root --with-yoda --with-fastjet --with-qcdnum  
+%endif
+
 make %{?_smp_mflags}
 
 %install 
@@ -88,9 +88,9 @@ mkdir -p %{buildroot}/%{python3_sitearch}/
 mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch}/
 %endif
 
-%if 0%{?suse_version}
-mv %{buildroot}/usr/lib/python3.10/site-packages/*  %{buildroot}/usr/%_lib/python3.10/site-packages/
-%endif
+#if 0#{?suse_version}
+#mv #{buildroot}/usr/lib/python3.10/site-packages/*  #{buildroot}/usr/#_lib/python3.10/site-packages/
+#endif
 
 
 %files
@@ -108,10 +108,10 @@ mv %{buildroot}/usr/lib/python3.10/site-packages/*  %{buildroot}/usr/%_lib/pytho
 %{python3_sitearch}/*
 %endif
 
-%if 0%{?suse_version}
-%files -n python-%{name}
-/usr/%_lib/python3.*/site-packages/*
-%endif
+#if 0#{?suse_version}
+#files -n python-#{name}
+#/usr/#_lib/python3.*/site-packages/*
+#endif
 
 
 

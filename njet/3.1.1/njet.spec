@@ -14,8 +14,11 @@ Requires:       python3 python3-devel
 BuildRequires: platform-python-devel
 %endif
 
-%if  0%{?fedora}
+%if %{?fedora}%{!?fedora:0} 
 BuildRequires: python-rpm-macros
+%endif
+%if %{?fedora}%{!?fedora:0} >= 35
+BuildRequires: python-setuptools
 %endif
 
 %if 0%{?suse_version}
