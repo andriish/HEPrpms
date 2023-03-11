@@ -4,6 +4,7 @@ Release:        1%{?dist}
 License:        GPL
 Url:            https://bitbucket.org/njet
 Source0:        https://bitbucket.org/njet/njet/get/d63d1068374296ba13a1d81877983e4a37c8fc44.tar.gz
+Patch0:     patch-njet-0.txt
 Summary:        A library for multi-parton one-loop matrix elements
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran gcc-c++  autoconf automake libtool  qd qd-devel
