@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           form
 Version:        4.3.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPLv3
 Url:            https://github.com/vermaseren/form
 Source0:        https://github.com/vermaseren/form/releases/download/v%{version}/form-%{version}.tar.gz
@@ -11,7 +11,7 @@ BuildRequires:  autoconf automake libtool  gcc-c++ doxygen
 BuildRequires:  gcc-gfortran
 %endif
 %if 0%{?suse_version}
-BuildRequires:  gcc-fortran texlive-tex4ht texlive-helvetic texlive-wasy texlive-courier texlive-filesystem
+BuildRequires:  gcc-fortran texlive-tex4ht texlive-helvetic texlive-wasy texlive-courier texlive-filesystem texlive-changepage
 %endif
 BuildRequires:  tex(latex) ghostscript 
 BuildRequires:  tex(tabu.sty) tex(multirow.sty) tex(multicol.sty) tex(adjustbox.sty) tex(sectsty.sty) tex(tocloft.sty) 
