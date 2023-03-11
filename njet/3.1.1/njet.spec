@@ -10,6 +10,14 @@ Summary:        A library for multi-parton one-loop matrix elements
 BuildRequires:  gcc-gfortran gcc-c++  autoconf automake libtool  qd qd-devel
 Requires:       python3 python3-devel
 %endif
+%if  %{?rhel}%{!?rhel:0} >= 8
+BuildRequires: platform-python-devel
+%endif
+
+%if  0%{?fedora}
+BuildRequires: python-rpm-macros
+%endif
+
 %if 0%{?suse_version}
 BuildRequires:  gcc-fortran gcc-c++  autoconf automake libtool  libqd0 qd-devel
 Requires:       python 
