@@ -1,0 +1,61 @@
+APPLgrid
+--------
+
+./configure
+make clean
+make
+make install
+
+These are standard targets in the usual way, so the 
+library and headers will be installed in the usual place 
+(ie change location with 
+
+ ./configure --prefix=<my_installation_path>
+ 
+if you want it somewhere else.
+
+You may need the 
+
+ make clean 
+
+to remove the root Dictionary files
+
+make install installs a utility script 
+
+  applgrid-config
+
+in the 
+
+  bin
+
+directory of the installation directory specified by --prefix
+during ./configure
+
+This script is there to help with compilation and linking. The 
+user should ensure that this script is in the standard search 
+path for executables so that it can be used to aid with 
+compilation
+
+ applgrid-config --help
+
+displays useful information ...
+
+applgrid-config: configuration tool for the APPLgrid
+                 fast cross section convolution code
+                 http://projects.hepforge.org/applgrid/
+
+Usage: applgrid-config [[--help|-h] | [--prefix] | [...]]
+Options:
+  --help | -h    : this help
+
+  --prefix       : installation prefix (cf. autoconf)
+  --incdir       : path to the APPLgrid header directory
+  --libdir       : path to the APPLgrid library directory
+  --cxxflags     : compiler flags for the C preprocessor
+  --ldflags      : compiler flags for the linker including the fortan interface
+  --ldcflags     : compiler flags for the linker just for c code
+
+  --version      : release version number
+
+
+ 

@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-MG5_aMC:3.4.2
+applgrid:1.6.32
+#MG5_aMC:3.4.2
 #gosam:2.1.1
 #qd:2.3.23
 #recola2:2.2.4

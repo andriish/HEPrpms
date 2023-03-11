@@ -1,0 +1,60 @@
+#! /usr/bin/env bash
+
+# These variables need to exist
+prefix=/usr
+# datadir = /usr/share
+
+
+if [[ $# -eq 0 || -n $( echo $* | egrep -- "--help|-h" ) ]]; then
+    echo "applgrid-config: configuration tool for the APPLgrid"
+    echo "                 fast cross section convolution code"
+    echo "                 http://projects.hepforge.org/applgrid/"
+    echo
+    echo "Usage: applgrid-config [[--help|-h] | [--prefix] | [...]]"
+    echo "Options:"
+    echo "  --help | -h    : this help"
+    echo
+    echo "  --prefix       : installation prefix (cf. autoconf)"
+    echo "  --incdir       : path to the APPLgrid header directory"
+    echo "  --libdir       : path to the APPLgrid library directory"
+    echo "  --cxxflags     : compiler flags for the C preprocessor"
+    echo "  --ldflags      : compiler flags for the linker just for c code"
+    echo "  --ldfflags     : compiler flags for the linker including the fortan interface"
+    echo "  --share        : path to APPLgrid pdf conbination config files"
+    echo
+    echo "  --version      : release version number"
+fi
+
+OUT=""
+
+tmp=$( echo "$*" | egrep -- '--\<prefix\>')
+test -n "$tmp" && OUT="$OUT /usr"
+
+tmp=$( echo "$*" | egrep -- '--\<incdir\>')
+test -n "$tmp" && OUT="$OUT /usr/include"
+
+tmp=$( echo "$*" | egrep -- '--\<cxxflags\>')
+test -n "$tmp" && OUT="$OUT -I/usr/include  -pthread -std=c++17 -m64 -I/usr/include/root -I//usr/include  -I/opt/local/include -O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64  -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection  "
+
+tmp=$( echo "$*" | egrep -- '--\<libdir\>')
+test -n "$tmp" && OUT="$OUT /usr/usr/lib64"
+
+
+tmp=$( echo "$*" | egrep -- '--\<ldfflags\>')
+test -n "$tmp" && OUT="$OUT -L/usr/usr/lib64 -lfAPPLgrid -lAPPLgrid -lz  -m64 -L/usr/lib64/root -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lROOTVecOps -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -lROOTDataFrame -pthread -lm -ldl -rdynamic -L//usr/lib64 -lhoppet_v1  -L/usr/lib/gcc/x86_64-redhat-linux/12 -lgfortran " 
+
+tmp=$( echo "$*" | egrep -- '--\<ldcflags\>')
+test -n "$tmp" && OUT="$OUT -L/usr/usr/lib64 -lAPPLgrid -lz  -m64 -L/usr/lib64/root -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lROOTVecOps -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -lROOTDataFrame -pthread -lm -ldl -rdynamic -L//usr/lib64 -lhoppet_v1  -L/usr/lib/gcc/x86_64-redhat-linux/12 -lgfortran "
+
+tmp=$( echo "$*" | egrep -- '--\<ldflags\>')
+test -n "$tmp" && OUT="$OUT -L/usr/usr/lib64 -lAPPLgrid -lz  -m64 -L/usr/lib64/root -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lROOTVecOps -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -lROOTDataFrame -pthread -lm -ldl -rdynamic -L//usr/lib64 -lhoppet_v1  -L/usr/lib/gcc/x86_64-redhat-linux/12 -lgfortran "
+
+tmp=$( echo "$*" | egrep -- '--\<share\>')
+test -n "$tmp" && OUT="$OUT ${prefix}/share/applgrid"
+
+
+## Version
+tmp=$( echo "$*" | egrep -- '--\<version\>')
+test -n "$tmp" && OUT="$OUT 1.6.27"
+
+echo $OUT

@@ -1,0 +1,23 @@
+diff -Naur ORIG/appl_grid/serialise_base.h PATCHED/appl_grid/serialise_base.h
+--- ORIG/appl_grid/serialise_base.h	2023-03-11 17:01:50.714900836 +0100
++++ PATCHED/appl_grid/serialise_base.h	2023-03-11 17:01:50.714900836 +0100
+@@ -18,6 +18,7 @@
+ #include <string>
+ #include <iostream>
+ 
++#include <cstdint>
+ #include <zlib.h>
+ 
+ 
+diff -Naur ORIG/Makefile.am PATCHED/Makefile.am
+--- ORIG/Makefile.am	2023-03-11 17:01:50.714900836 +0100
++++ PATCHED/Makefile.am	2023-03-11 17:01:50.714900836 +0100
+@@ -10,7 +10,7 @@
+ 
+ if USE_ROOT
+ install-data-am:
+-	cp src/*.pcm ${libdir}
++	cp src/*.pcm $(DESTDIR)${libdir}
+ endif
+ 
+ clean-local:

@@ -1,0 +1,252 @@
+APPLgrid 1.6.15
+---------------
+
+Report bugs to sutt@cern.ch
+
+Contents
+--------
+
+1. Getting started - installation
+2. Using the code
+3. Useful utilities
+4. Renormalization and Factorization Scales
+5. Generating your own grids
+6  Combining grids
+
+
+
+1. Getting started - installation
+---------------------------------
+
+To install ...
+
+ ./configure
+ make clean
+ make
+ make install
+
+These are standard targets in the usual way, so the 
+library and headers will be installed in the usual place 
+(ie change location with 
+
+ ./configure --prefix=<my_installation_path>
+ 
+if you want it somewhere else.
+
+You can use option 
+
+ --without-root
+
+to compile without support for the cern "root" histograming 
+package
+
+NB: if you use grid files ending in the ".root" extension it
+is assumed that the files are root files.
+
+By convention, the applgrid native file format uses extension
+.appl, although the user is essentially free to chose their own 
+exension, as long as it is not ".root"
+
+2. Using the code
+-----------------
+
+In APPLgrid, each cross section has its own grid, stored in it's 
+own grid file. For the convolution, you call the grid constructor, 
+specifying which file to use. 
+
+For instance, a set of jet measurements with 5 different differential 
+cross sections each corresponding to a different rapidity interval, 
+will have 5 separate grids - one for each rapidity interval.
+
+After installing the APPLgrid code itself, everything needed for 
+reproducing a particular cross section is encapsulated in the grid 
+itself - there is no need to download any additional code specific 
+to that cross section.
+
+As a result, since all information is encoded within the APPLgrid grids
+ themselves it is simply enough to link against the APPLgrid code and 
+call the convolute method for the appropriate grid,
+
+      // read the grid
+      appl::grid grid_eta1("atlas-incljets06-eta1.appl");
+      
+      // perform the convolution
+      std::vector< double > xsec_eta1 = grid_eta1.vconvolute( evolvepdf_, alphasqcd_ );
+    
+
+The convolution will use whichever PDF and alphas routines are passed 
+into it. 
+
+If you have multiple PDFs set up, no additional code modification 
+is required. For multiple grids, simply create new instances, specifying 
+the appropriate grid file in the constructor. For example
+
+      /// load the grids
+      appl::grid grid_eta1("atlas-incljets06-eta1.appl");
+      appl::grid grid_eta2("atlas-incljets06-eta2.appl");
+      
+      /// perform the convolutions
+      std::vector< double > xsec_eta1 = grid_eta1.vconvolute( evolvepdf_, alphasqcd_ );
+      std::vector< double > xsec_eta2 = grid_eta2.vconvolute( evolvepdf_, alphasqcd_ );
+    
+
+These latest downloadable grids require no additional scaling and in 
+addition, include the non-perturbative (or additional) bin-by-bin corrections 
+discussed in the relevant papers.
+
+By default, the convolution will return just the NLO cross section without 
+application of the additional bin-by-bin. In order to obtain the complete cross 
+section including the bin-by-bin corrections the class method, eg. for grid 
+grid_eta1 then
+
+  grid_eta1.setApplyCorrections(true);
+
+should be called before performing the convolution. All subsequent convolutions 
+will also apply the corrections. To disable this for grid grid_eta1 call
+
+  grid_eta1.setApplyCorrections(false);
+
+and subsequent convolutions will not apply the corrections. 
+
+
+
+3. Useful utilities
+-------------------
+There is the useful
+
+      applgrid-config
+
+utility which provides locations of the installation directory, useful include 
+and linking flags etc, eg
+
+      % applgrid-config --help
+      applgrid-config: configuration tool for the APPLgrid
+      fast cross section convolution code
+      http://projects.hepforge.org/applgrid/
+      
+      Usage: applgrid-config [[--help|-h] | [--prefix] | [...]]
+      Options:
+      --help | -h    : this help
+      
+      --prefix       : installation prefix (cf. autoconf)
+      --incdir       : path to the APPLgrid header directory
+      --libdir       : path to the APPLgrid library directory
+      --cxxflags     : compiler flags for the C preprocessor
+      --ldflags      : compiler flags for the linker just for c code
+      --ldfflags     : compiler flags for the linker including the fortan interface
+      --share        : path to APPLgrid pdf conbination config files
+
+      --version      : release version number
+      
+    
+
+For general compilation and linkage with the users own code, the header and 
+library paths can be specifed to the compiler and linker using the 
+
+  applgrid-config 
+
+utility as follows
+
+      % applgrid-config --ldflags
+      -L/usr/local/lib -lAPPLgrid ...  -L/user/local/lib -lhoppet_
+      
+      % applgrid-config --cxxflags
+      -I/usr/local/include -pthread -m64 -I/cern/root/include
+    
+In addition there is 
+
+  applgrid-convert
+
+which can convert bewteen "root" and "appl" grid file formats.
+
+4. Renormalization and Factorization Scales
+-------------------------------------------
+For grids cross sections up to NLO, all cross sections can be computed with and 
+different scale factors for the renormalisation scales, ie muR, 2muR, 4muR etc. 
+
+Any, arbitrary numerical scaling factor can be specified by the user, although 
+changes to use a different scale, ie pT, rather than \hat{s} etc are not 
+currently possible. 
+
+For changes to the factorisation scale, again any arbitrary numerical factor 
+can be specified by the user, although in this case, APPLgrid uses the hoppet 
+package, so this needs to be installed before APPLgrid.
+
+
+5. Generating your own grids
+----------------------------
+This is not for the faint of heart. It is important to remember that generating 
+a grid using a calculation will be no less trivial that running the calculation 
+itself. 
+
+Installing and running a typical NLO calculation is often far from trivial, so 
+while still not completely trivial, we have tried to take some of the pain out
+of installing, and it some casses, we believe it is often easier to install and 
+use the applgrid versions of the calcualtion code than the standard versions.
+
+Having said this, for any significant issues, we can be contacted viw email at 
+the applgrid web site applgrid.hepforge.org
+
+In principle, the technique for generating a grid is to run the applgrid 
+enabled calculation twice:
+
+The first time is used purely to fill the phase space so that it can be optimised.
+
+]This means that enough weights much be generated to provide a good coverage of 
+the phase space, but not as many as would be needed for a full calculation.
+
+Following this, simply run the calcualtion again, with the full statistics. At 
+the start of the second run, the grid will be read in, and the phase space optimised, 
+then filled during the calculation.
+
+Following this, the grid can be used in the fact convolution.
+
+6. Combining grids
+------------------
+Should you prefer to divide your full statistics run into many different jobs, 
+running simultaneously, the grids can be added using the 
+
+  applgrid-combine 
+
+utility, which is simple to use, with some basic instructions available ... 
+
+  % applgrid-combine --help
+  Usage: applgrid-combine [OPTIONS] -o output_grid.appl  input_grid.appl [input_grid1.appl ... input_gridN.appl]
+
+    APPLgrid 'applgrid-combine' adds APPLgrid 1.4.28 grid files together into a single grid
+
+  Configuration: 
+      -o filename   	name of output grid (filename required)
+
+  Options: 
+      -s, --scale value	scale output grid by value, 
+          --verbose 	display grid documentation during add
+      -v, --version 	displays the APPLgrid version
+      -h, --help    	display this help
+
+  See http://applgrid.hepforge.org for more details
+
+  Report bugs to <sutt@cern.ch>
+
+
+If you wich to add grids together in this way - as when adding histograms 
+together - it is importnat that the ranges, and bin limits for the internal 
+structures are the same.
+
+To ensure this, all the jobs to produce the grids that will be added, must 
+start with the *same* grid, so that the optimised grid will be identical 
+ineach case.
+
+This means the approach is 
+
+ - run the calculation *once* to fill the phase space
+ - duplicate the resulting grid
+
+ - use the copies of this grid as input for any number of 
+   full statistics runs
+
+ - add the resulting grids from the full statistics runs together 
+   using the applgrid-combine utility
+
+MS 
+   
