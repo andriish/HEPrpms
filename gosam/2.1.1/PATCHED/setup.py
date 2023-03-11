@@ -50,7 +50,7 @@ TAR_VERSION = "%s-%s" % (VERSION,GIT_REVISION)
 
 INFO = {
 		'name': 'gosam',
-		'version': TAR_VERSION,
+		'version': VERSION,
 		'author': 'The GoSam (Golem and Samurai) Collaboration',
 		'author_email': 'gosam@hepforge.org',
 		'maintainer': 'The GoSam Collaboration',
