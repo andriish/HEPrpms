@@ -2,7 +2,7 @@
 
 Name:             ginac
 Version:          1.8.6
-Release:          1
+Release:          2
 Summary:          C++ library for symbolic calculations
 License:          GPLv2+
 URL:              https://www.ginac.de/
@@ -16,11 +16,18 @@ BuildRequires:    flex
 BuildRequires:    doxygen
 BuildRequires:    python3-devel
 BuildRequires:    readline-devel
+
+%if 0%{?rhel} || 0%{?fedora}
 BuildRequires:    tex(dvips)
 BuildRequires:    tex(latex)
 BuildRequires:    tex(latex-base)
 BuildRequires:    texinfo
 BuildRequires:    texinfo-tex
+%endif
+%if 0%{?suse_version}
+BuildRequires:    tex(latex) texlive-filesystem
+%endif
+
 BuildRequires:    transfig
 Obsoletes:        GiNaC < 1.3.2-999
 Provides:         GiNaC = %{version}-%{release}
@@ -61,7 +68,10 @@ sed -i 's| @GINACLIB_RPATH@||' ginac.pc.{in,cmake}
 %build
 %cmake -DCMAKE_INSTALL_RPATH="" -DLIBEXECDIR=%{_libexecdir}
 %cmake_build
+
+%if %{?fedora}%{!?fedora:0}
 %cmake_build --target ginac_html
+%endif
 
 %install
 %cmake_install
@@ -75,8 +85,10 @@ for f in $(find %{buildroot} -name "*.py") ; do
 done
 
 %check
+%if %{?fedora}%{!?fedora:0}
 export CTEST_OUTPUT_ON_FAILURE=1
 %cmake_build --target check
+%endif
 
 %files
 %license COPYING
