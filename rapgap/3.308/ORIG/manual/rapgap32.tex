@@ -1,0 +1,3568 @@
+\documentclass[10pt]{article} \usepackage{dina4}
+\usepackage{epsfig,amsmath} \usepackage{graphics}
+\usepackage{cite,mcite}
+ 
+%
+% Use always these additional commands:
+% ------------------------------------
+\parskip 2mm plus 2mm minus 1mm     % Add space between paragraphs
+\renewcommand{\topfraction}{1.0}    % These three commands assure that floats
+\renewcommand{\bottomfraction}{1.0} %  (figures, tables) can cover a whole page
+\renewcommand{\textfraction}{0.0}   %  and no text is required
+\newcommand{\gap}{\stackrel{>}{\sim}}
+\newcommand{\lap}{\stackrel{<}{\sim}}
+\newcommand{\fem}{$F_2^{em}$}
+\newcommand{\alps}{\alpha_s}
+\newcommand{\sqrts}{$\sqrt{s}$}
+\newcommand{\PT}{p_{\perp}}
+\newcommand{\JP}{J/\psi}
+\newcommand{\GP}{\gamma p  \rightarrow }
+\newcommand{\Gg}{\gamma g  \rightarrow }
+\newcommand{\sh}{\hat{s}}
+\renewcommand{\th}{\hat{t}}
+\newcommand{\uh}{\hat{u}}
+\newcommand{\MP}{m_{J/\psi}}
+\newcommand{\PO}{\ensuremath{ I\! \! P} }
+\newcommand{\pom}{I\!\!P}
+\newcommand{\xpom}{x_{\pom}}
+\newcommand{\RE}{\em I\! \! R }
+\newcommand{\CO}{\em \Pi}
+\newcommand{\SMALLXC}{SMALLXa,SMALLXb}
+\newcommand{\CCFM}{CCFMa,CCFMb,CCFMc,CCFMd}
+\newcommand{\BFKL}{BFKLa,BFKLb,BFKLc}
+\newcommand{\LDC}{LDCa,LDCb,LDCc,LDCd}
+\newcommand{\alphasb}{\bar{\alpha}_s}
+\newcommand{\LHAPDFLIB}{Whalley:2005nh}
+%\newcommand{\JETSET}{Jetseta,Jetsetb,Jetsetc}
+\newcommand{\JETSETMC}{\PYTHIAMC}
+\newcommand{\LEPTOMC}{Ingelman_LEPTO65}
+\newcommand{\PYTHIAMC}{pythia64}
+\newcommand{\RAPGAPMC}{RAPGAP32}
+\newcommand{\DGLAP}{DGLAPa,DGLAPb,DGLAPc,DGLAPd}
+\def\CASCADE{{\sc Cascade}}
+\def\SMALLX{{\sc Smallx}}
+\def\RAPGAP{{\sc Rapgap}}
+\def\LEPTO{{\sc Lepto}}
+\def\PYTHIA{{\sc Pythia}}
+\def\JETSET{{\sc Jetset}}
+\def\HERWIG{{\sc Herwig}}
+\def\HZTOOL{{\sc HZtool}}
+
+% macro for new list environment; defl
+  \newcommand{\deflab}[1]{#1\hfil}%
+  \newenvironment{defl}[1]%
+  {\begin{list}{}{\settowidth{\labelwidth}{#1}%
+  \setlength{\leftmargin}{\labelwidth}%
+  \addtolength{\leftmargin}{\labelsep}%
+  \setlength{\itemsep}{0pt plus 1pt}
+  \setlength{\parsep}{0pt plus 1pt}
+  \setlength{\topsep}{0pt plus 1pt}
+  \setlength{\partopsep}{0pt plus 1pt}
+  \setlength{\parskip}{2mm plus 1mm minus 1mm}
+  \let\makelabel\deflab}}%
+  {\end{list}}
+
+
+
+\makeindex
+\begin{document}
+
+%\pagestyle{empty}   % for proceedings
+\thispagestyle{empty}   % to suppress the page number on the first page
+%\noindent
+%DESY 93--182         \hfill ISSN 0418--8993 \\
+\title{ \begin{center}
+{\bf  The \RAPGAP\ Monte Carlo  }\\
+       version 3.2  
+   \end{center}}
+\author{H. Jung\\
+    \vspace{0.5cm} DESY, Notkestr.85, 22603 Hamburg, FRG}
+\date{\today}
+\maketitle
+\begin{abstract}
+The physics behind the Monte Carlo event generator RAPGAP are
+discussed, which includes
+deep inelastic scattering, non - diffraction, diffraction and 
+$\pi$ - exchange as well as resolved virtual processes.
+\par
+A detailed program description is given, with emphasis on parameters
+the user wants to change and common block variables which 
+completely specify the generated events. Subroutines for initial state parton
+showers, remnant treatment and structure functions developed for \LEPTO\ and
+\PYTHIA\ have been copied and modified for the use in RAPGAP.
+\end{abstract}
+\section{Tabular Summary}
+\begin{tabular}{l l}
+ program name & RAPGAP \\
+ version      & 3.20/beta    \\
+ date of latest version& Sept 2009 \\
+ author      &  Hannes Jung (Hannes.Jung@desy.de)\\
+ program size & $\sim$ 12000 lines of code\\
+ input files needed & none          \\
+ computer types & any with standard Fortran 77, tested on 
+                 SGI, HP-UX, SUN, PC\\
+ operating systems & Unix, Linux\\
+ applicability & Deep Inelastic $ep$ Scattering \\
+               & Deep Inelastic $ep$ Scattering with resolved photons\\
+               & Deep Inelastic Diffractive $ep$ Scattering \\
+               & Deep Inelastic $ep$ Scattering with $\pi$ exchange\\
+               & Photo-production in $ep$ Scattering \\
+               & Diffractive photo-production in $ep$ Scattering \\
+               & Photo-production in $ep$ Scattering with $\pi$ exchange\\
+               & hard scattering in $pp$ processes:  diffractive and
+		   non-diffractive\\
+  hard sub-processes included
+  &  $  e q \rightarrow  e' q' $\\
+  &  $  e q \rightarrow  e' q g $\\
+  &  $  e g \rightarrow  e' q \bar{q} $\\
+  &  $  e g \rightarrow  e' c \bar{c} $\\
+  &  $  e g \rightarrow  e' b \bar{b} $\\
+  &  $  \gamma q \rightarrow  q g $\\
+  &  $  \gamma q \rightarrow  q \gamma $\\
+  &  $  \gamma g \rightarrow  q \bar{q} $\\
+  &  $  \gamma g \rightarrow  c \bar{c} $\\
+  &  $ g g \rightarrow gg $ \\
+  &  $ q g \rightarrow q g $\\
+  &  $ q \bar{q} \rightarrow g g $\\
+  &  $ q \bar{q} \rightarrow q \bar{q} $\\
+  &  $ q q \rightarrow q q $\\
+  &  $ q g \rightarrow q \gamma $\\
+  & $ q \bar{q} \rightarrow \gamma g $\\
+ QCD cascade & initial and final state parton shower or   \\
+             & ARIADNE \\
+ initial QED radiation & via HERACLES \\
+ fragmentation model & LUND string \\
+ other programs called & HERACLES 4.6.6\\
+				& SOPHIA \\
+                       & \PYTHIA\ 6.4 or higher \\
+                       & ARIADNE 4.12  \\
+                       & BASES 5.1 \\
+			     & LHAPDF lib \\
+availability  & \verb+http://www.desy.de/~jung/rapgap.html+ \\
+\end{tabular}
+\newpage
+
+\section{Introduction}
+ 
+In high energy physics Monte Carlo Event Generators are heavily used to
+compare experimental  data with theoretical predictions. 
+For example in QCD the interaction between 
+quarks and gluons can be calculated in leading - or next-to-leading
+order in the strong coupling constant $\alpha_s$.
+In experiments only 
+stable particles are measured, but 
+not partons (quarks or gluons), which
+cannot be described by perturbation theory, because the coupling constant
+$\alpha_s$ becomes large at scales of the order of the mass of hadrons. 
+Thus the hadronization has to be described by phenomenological procedures,
+for example with the hadronization packages 
+\JETSET\ ~\cite{\PYTHIAMC} 
+or \HERWIG\ ~\cite{Herwig}.
+\par
+A typical Monte Carlo Event Generator usually starts by generating the
+momenta of the partons involved in the interaction according to
+a theoretical prescription. Such a typical event record could look like
+the following (from the \PYTHIA event record):
+{\small \begin{verbatim}
+
+                           Event listing (summary)
+
+   I  particle/jet KS     KF orig    p_x      p_y      p_z       E        m
+
+   1  !e-!         21     11    0    0.000    0.000  156.843  156.843    0.001
+   2  !p+!         21   2212    0    0.000    0.000 -156.843  156.846    0.938
+   3  !gamma!      21     22    1    1.819   18.493    4.371    3.243  -18.812
+   4  e-            1     11    1   -1.819  -18.493  152.472  153.601    0.001
+   5  !u!          21      2    2    0.000    0.000  -23.242   23.242    0.000
+   6  u         A   2      2    5    1.820   18.496  -18.874   26.488    0.006
+   7  ud_0      V   1   2101    2    0.000   -0.003 -133.599  133.600    0.579
+                  sum:  0.00         0.000    0.000    0.000  313.689  313.689
+
+\end{verbatim} }
+The process described by this event record is deep inelastic electron proton
+scattering in the electron proton center of mass frame. The first two lines
+show the beam particles. A status code KS indicates whether the 
+particle (or parton) is kept only for documentation (\verb+KS = 21+) or 
+ whether it is
+a final state particle (parton) (\texttt{KS = 1}).
+ The flavor code KF identifies 
+uniquely the particle/parton. The row \verb+orig+ shows the line number of 
+mother particle/parton. The third line in this example gives the 
+exchanged virtual photon  
+ and the fourth line  the scattered electron.
+ In line 5 the parton of the proton struck by
+the virtual photon is given. Line 6 
+describes the scattered quark and in line 7
+the remnant of the proton is given.
+\par
+The partons in line 6 and 7 hadronize into visible particles. Of course 
+the incoming parton (line 5) could be a result of QCD radiation 
+from another parton with larger energy. Also the scattered parton (line 6)
+could radiate further partons before the actual hadronization takes place.
+Such an example is shown in the following, where both the initial and 
+scattered partons are the result of further QCD radiation.
+\newpage
+{\small \begin{verbatim}
+
+                           Event listing (summary)
+
+   I  particle/jet KS     KF orig    p_x      p_y      p_z       E        m
+
+   1  !e-!         21     11    0    0.000    0.000 -156.843  156.843    0.001
+   2  !p+!         21   2212    0    0.000    0.000  156.843  156.846    0.938
+   3  !gamma!      21     22    1    1.819   18.493   -4.371    3.243  -18.812
+   4  e-            1     11    1   -1.819  -18.493 -152.472  153.601    0.001
+   5  !u!          21      2    2   -0.358    0.403   81.763   81.764    0.000
+   6  !u!          21      2    5   -0.069    0.246   28.064   27.754   -4.167
+   7  !u!          21      2    4    1.797   19.188   21.113   28.585    0.006
+   8  u         A   2      2    0   -1.648    8.569    8.978   12.520    0.006
+   9  g         I   2     21    0    1.795    7.372    8.854   11.660    0.000
+  10  g         I   2     21    0    0.220    1.524    2.027    2.545    0.000
+  11  g         I   2     21    0    1.383    1.273    3.833    4.269    0.000
+  12  g         I   2     21    0    0.506    0.921    1.696    1.995    0.000
+  13  g         I   2     21    0   -0.559   -0.917   51.687   51.699    0.000
+  14  ud_0      V   1   2101    2    0.122   -0.249   75.397   75.400    0.579
+                  sum:  0.00         0.000    0.000   -0.001  313.689  313.689
+\end{verbatim} }
+In this example the first 4 lines are the same as above, but line 5 now 
+shows the momentum of the parton originating 
+from the proton before any QCD radiation,
+and line 6 gives the parton struck by the virtual photon 
+(after initial state
+QCD radiation). Another difference to the first example is that  a small
+primordial transverse momentum has been  added 
+to the parton originating from the
+proton. In line 7  the scattered parton is shown before any
+final state QCD radiation, whereas in line 8 the final parton after 
+radiation is given. The partons radiated both from initial state and final
+ state are given in the lines following line 8.
+\par
+More details on how to generate events according to theoretical distributions,
+the basic physics processes and the way higher order QCD processes are
+simulated via parton shower cascades are given in the following sections.
+  
+
+\section{Basics for Monte Carlo Generators}
+
+In Monte Carlo Event Generators one usually wants to calculate the cross 
+section for various processes with the possibility to impose experimental
+cuts and to generate events according to theoretical distributions. These
+two subjects are closely related to each other.
+\par
+First let us consider the integration of a function $f(x)$ with a Monte Carlo
+method. Having two independent random numbers, say $R_1$ and $R_2$, 
+generated uniformly in the interval $(0,1)$, 
+then we can calculate $x_R$ with
+$x_R = x_{min} + R_1 \cdot (x_{max} - x_{min})$ and $f_R$ with 
+ $f_R =  R_1 \cdot f_{max}$. 
+The integral $\int _{x_{min}} ^{x_{max}} f(x) dx $
+can be approximated by the sum of $\sum f_R $ for which $f_R < f(x_R)$.
+However, if the function $f(x)$ is strongly peeked at some value of $x$,
+then this method becomes rather inefficient, because most of the
+time we will have $f_R > f(x_R)$ and thus the pair of random numbers
+has to be rejected.
+\par
+The efficiency will increase, if we can generate $x$ values according to
+some approximation of $f(x)$  
+ by another function $g(x)$ which is much
+simpler and analytically integrable. Now we generate $x$ values according 
+to the function $g(x)$. This is done by the following:
+$$
+ R_1 \int _ {x_{min}} ^{x_{max}} g(x) dx = 
+\int _ {x} ^{x_{max}} g(x) dx
+$$
+Thus if we can integrate $g(x)$ analytically 
+then the equation can be solved for $x$
+and we have then $x$ generated according to $g(x)$. Let us assume $f(x)$
+can be approximated by a function $g(x) = 1/x$. Then we have:
+$$ R_1 \int _ {x_{min}} ^{x_{max}} g(x) dx 
+= R_1 \log \frac{x_{max}}{x_{min}} 
+ = \log \frac{x_R}{x_{min}} $$
+Solving this equation 
+we obtain $x_R= x_{min} ( \frac{x_{max}}{x_{min}})^{R_1}$.
+In order to calculate the integral we proceed as follows:
+$$
+\int f(x) dx = \int \frac{f(x)}{g(x)} g(x) dx 
+\simeq \sum _i  \frac{f(x_{R_i})}{g(x_{R_i})} \int g(x) dx $$
+Because of the choice $f(x) \sim g(x)$, the ratio $\frac{f(x)}{g(x)}$ is
+more or less constant and independent of $x$. In the example with $g(x)=1/x$
+the integral is given by:
+\begin{equation}
+\int f(x) dx 
+\simeq \sum _i x_{R_i} f(x_{R_i}) \log \frac{x_{max}}{x_{min}} 
+\label{MCweight}
+\end{equation}
+which can be easily calculated. 
+\par
+Now to generate $x$ values according to $f(x)$ we use the same trick
+as above: first generate $x$ according to the simple function $g(x)$ 
+and then reject those values of $x$ for which $\frac{f(x)}{g(x)} > R_2$.
+With this procedure $x$ values are generated according to the function
+$f(x)$. Moreover this scheme is easily extended to the case of 
+more than one dimension: for each variable $x_1,x_2,\ldots,x_n$ the same
+procedure is applied.
+\par
+In \RAPGAP\ the BASES \cite{bases} integration package is used. 
+This package performs a Monte Carlo integration and according to a given 
+function $f(y_i)$, it generates the variables $y_i$ after internally 
+optimizing a grid. In \RAPGAP\ the random numbers $x_i$ are 
+generated with BASES but they are transformed to the variables $y_i$ 
+according to the procedure described above. Actually the variables 
+$y_i$ are the kinematic quantities $y$, $Q^2$, $x_g$, $\xpom$, $t$, $\ldots$ 
+given in the next section. In all cases the true distribution is 
+approximated by $g(y_i) = 1/y_i$ and the weighting factor 
+(eq.(\ref{MCweight})) is applied. This procedure has the 
+advantage of being very efficient, because BASES is used only to optimize
+the normally small difference between the approximated and the true 
+function. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Cross Section and Partonic Subprocesses}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Standard Deep Inelastic Scattering}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The inclusive cross section for $e\;p$ deep inelastic scattering is given
+in terms of the structure function $F_2^p(x,Q^2)$ and the 
+longitudinal structure function 
+$F_L^p(x,Q^2) = F_2^p(x,Q^2) - 2 x F_1^p(x,Q^2)$:
+\begin{equation}
+\frac{d \sigma (e p \to e' X)}{dy\,dQ^2}
+= \frac{4 \pi \alpha ^2}{y Q^4} 
+         \left(  \left( 1 -  y + \frac{y^2}{2} \right)  F_2^p(x,Q^2)
+                   -   \frac{y^2}{2} F_L^p(x,Q^2) \right)
+\end{equation}
+with $x$ defined as $x = Q^2/(2P.q)$, $y=(P.q)/(P.l)$ 
+and 
+$Q^2 = -q^2 = - (l - l')^2$ where $P$ is the initial proton
+four vector, $q = l - l'$ is the four vector of the virtual photon
+with $l$ ($l'$)  the four vectors of the initial 
+(scattered) electron.
+\par
+In the QCD improved  quark - parton model for
+deep inelastic scattering the structure function
+$F_2^p$ is given in terms of the corresponding parton distribution
+functions:
+\begin{equation}
+F_2^p(x,Q^2) = \sum_f e^2_f \left( xq_f(x,Q^2) + x\bar{q}_f(x,Q^2)
+                    \right)
+\end{equation}
+where the sum runs over all quark flavors and $q_f(x,Q^2)$
+($\bar{q}_f(x,Q^2)$) gives the
+probability of finding a quark (anti-quark) 
+of flavor $f$ with a momentum fraction $x$ 
+of the initial proton momentum.
+\par
+Different parameterization of the
+parton densities in the proton can be selected in \RAPGAP\ 
+(via \verb+MSTP(51)+) and the LHAPDFLIB~\cite{\LHAPDFLIB} can be accessed. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Deep Inelastic Diffractive Scattering and pion exchange}
+\label{sec:diff}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In diffractive scattering (or pion exchange scattering) the
+inclusive cross section is given by \cite{Ingelman_Prytz}:    
+\begin{equation}
+\frac{d^4 \sigma (e p \to e' X p')}{dy\,dQ^2\,dx_{\PO}\,dt}
+= \frac{4 \pi \alpha ^2}{y Q^4} 
+   \left(   \left( 1 -  y + \frac{y^2}{2} \right) 
+                F_2^{D(4)}(x,Q^2;x_{\PO},t)
+                   -   \frac{y^2}{2} F_L^{D(4)}(x,Q^2;x_{\PO},t) \right)
+\end{equation}
+where the diffractive structure functions $F_2^D(x,Q^2;\xpom,t)$ and
+$F_L^D(x,Q^2;\xpom,t)$ are introduced, depending now on four 
+variables, $x$, $Q^2$ defined as above and $\xpom=(q.p_{\PO})/
+(q.P)$ and $t=(P - P')$ with $P'$ being the four 
+momentum of the elastically scattered outgoing proton. In the case of
+pion exchange (instead of pomeron exchange) one simply has to 
+replace $F_{2;\,L}^D$
+ by the corresponding $F_{2;\,L}^{\pi}$ and $\xpom$ by $x_{\pi}$.
+\par
+The interpretation of the diffractive structure function $F_2^D$ in terms
+of parton distribution functions, in analogy  to the proton 
+structure function, is 
+not that clear and different approaches exist \cite{diff_ws_sum}:
+\begin{itemize}
+
+\item {\bf Resolved pomeron a la Ingelman and Schlein} 
+
+In the model of Ingelman and Schlein \cite{IS}
+diffractive scattering is described in terms of pomeron $\PO$ exchange, where
+the pomeron has a partonic structure. The structure function
+$F_2^D$ is then given as the product
+of the probability for finding a pomeron $f_{p\;\PO}$ and the
+structure function $F_2^{\PO}$ of the pomeron:
+\begin{equation}
+F_2^{D(4)}(\beta,Q^2;\xpom,t) = f_{p\;\PO}(\xpom,t)  F_2^{\PO}(\beta,Q^2)
+\label{F2Ddef}
+\end{equation}
+with $\beta=Q^2/(2q.p_{\PO})$. 
+In analogy to the quark - parton - model of the proton
+$\beta$ can be interpreted as the momentum fraction of the total
+pomeron momentum carried by the struck quark and
+$ F_2^{\PO}(\beta,Q^2)$  can be seen as the
+quark probabilities in the
+pomeron.
+Different parameterization of the 
+parton densities of the pomeron can be selected (\verb+NG+ with details
+given in the program description). 
+The probability for finding a pomeron in the 
+proton is available in three different parameterization.
+\par
+The parameterization of Streng and Berger et al. 
+\cite{Strenga,Strengb,Berger_Collins}
+ can be obtained with  \verb+NPOM=0+:
+\begin{eqnarray}
+f_{p\,\PO} (\xpom,t) & = & \frac{\beta^2_{p \, \PO} (0) }{16 \pi}
+ \xpom^{1 - 2 \alpha_{\PO} (t)} e^{-b_0 |t|} 
+\end{eqnarray}
+with $\beta^2 (0) = 58.74$ GeV$^2$  and 
+$\alpha_{\PO} =  \alpha_{\PO}(0) + \alpha'_{\PO} t$ and
+$\alpha_{\PO}(0) = 1 + \epsilon$ describing the pomeron trajectory 
+with $\epsilon=$\verb+EPSP+, $\alpha'_{\PO}=$\verb+ALPHP+
+and $b_0=$\verb+RN2+ being  free parameters.
+\par
+The parameterization of Ingelman and Bruni 
+\cite{Ingelman_Brunia,Ingelman_Brunib,Ingelman_Brunic}
+ is given (\verb+NPOM=1+):
+\begin{equation}
+f _{p\,\PO} (\xpom,t) = \frac{1}{2}\frac{1}{2.3}
+                             \frac{1}{\xpom}\left[6.38 e^{-8|t|}
+                                      + 0.424 e^{-3|t|} \right]
+\end{equation}
+\par
+Donnachie and Landshoff \cite{DL_84} 
+give the following (via \verb+NPOM=2+) :
+\begin{eqnarray}
+f _{p\,\PO} (\xpom,t) & = & \frac{9 \delta ^2}{4 \pi ^2} 
+       \left[F_1(t)\right]^2
+                   \xpom^{1 - 2 \alpha_{\PO}(t)}
+\end{eqnarray}
+with $\delta^2 = 3.26$ GeV$^2$ and the elastic form factor $F_1(t)$:
+\begin{equation}
+F(t) =        \frac{4 m_p ^2 - 2.8 t}{4 m_p ^2 - t}
+                   \frac{1}{(1 - t/0.7)^2}
+\end{equation}
+
+\item {\bf Resolved pomeron with a parameterization to
+H1 data} 
+
+In \cite{H1_F2D3_97} the H1 collaboration has given a parameterization of the
+diffractive structure function in terms of pomeron and meson trajectories. This 
+parameterization can be selected by \verb+NG=-10,-11,-12+
+for the NLO parameterizations and by \verb+NG=-13,-14,-15+
+for the LO ones, according to a 
+different ansatz for the parton distribution in the pomeron at the starting
+scale for the $Q^2$ evolution: \verb+NG=-10+ assumes only quarks at the starting
+scale $Q_0$, \verb+NG=-11+ has quarks and gluons, whereas in \verb+NG=-12+ 
+a gluon distribution peaked at large values $\xi$, the parton momentum
+fraction, is assumed.
+\par
+With \verb+NPOM=-10+  the predefined flux for pomeron exchange is selected,
+\verb+NPOM=-11+ gives the meson contribution only, and \verb+NPOM=-12+ gives the
+mix of pomeron and meson as obtained by the H1 collaboration \cite{H1_F2D3_97}.
+
+In \cite{H1_F2D3_06} a new set of diffractive pdfs was obtained in NLO in the
+$\bar{MS}$ scheme. They can be selected via \verb+NG=-30,-31+ for set A and set
+B (respectively). The flux can be selected for pomeron only \verb+NPOM=-30+,
+Reggeon (meson) only \verb+NPOM=-31+ and a combination \verb+NPOM=-32+. Please
+note that the pdfs contain only light partons (i.e. gluon, u-,d-, s-quark
+densities). For the contribution of heavy quarks (charm and beaty) the BGF
+process via  \verb+IPRO=14+ has to be run separatly and added to the light quark
+cross section.
+ 
+\item {\bf Two gluon exchange for diffraction} 
+
+This approach is mainly intended to describe exclusive high $p_t$
+jet production, but in the model of \cite{Wusthoff} estimates on the
+total inclusive diffractive cross section are given.
+The calculation of diffractive di-jet production can be
+performed using pQCD for large photon virtualities $Q^2$ and 
+high $p_t$ of the 
+$q (\bar{q})$ 
+jets~\cite{Wusthoff,Diehl1,Diehl2,Bartels_dijet_ws,Bartels_jets,Bartels_asym}.
+\par
+The process is mediated by two gluon exchange. Different
+assumptions on the nature of the exchanged gluons 
+can be
+made: in \cite{Diehl1,Diehl2} (\verb+NG=42+, \verb+NPOM=42+)
+the gluons are non perturbative, in \cite{Wusthoff} 
+(\verb+NG=40+, \verb+NPOM=40+) 
+they are a hybrid of
+non perturbative and perturbative ones and in 
+\cite{Bartels_jets,Bartels_asym}
+ (\verb+NG=41+ and \verb+NPOM=41+ or \verb+IPRO=21+,
+which is done technically different and is more efficient) 
+they are
+taken from a NLO parameterization of the proton structure 
+function \cite{GRVa,GRVb}.
+The cross section is essentially proportional to the  proton gluon density 
+squared: 
+$\sigma \sim \left[\xpom G_p\left(\xpom,\mu^2 \right)\right]^2 $
+with $\mu^2$ the scale explicitly given in the references.
+\par
+The perturbative calculation of $q\bar{q}$ (\verb+IPRO=21+) and 
+$q\bar{q} g$ (\verb+IPRO=20+) 
+(\cite{Bartels_jets,Bartels_qqga,Bartels_qqg-charm}) 
+can be used for light quark and heavy
+quark production. With \verb+Iqqg+ different levels of approximation 
+in the calculation for \verb+IPRO=20+ can be selected. However it is recommended to use the 
+full calcualtion with  \verb+Iqqg=0+.
+
+The un-integrated gluon density needed for 
+the calculation is
+selected via \verb+IGLU+. Different sets are available:
+ the CCFM unintegrated gluon {\bf set A}~\cite{jung-dis04}
+with \verb+IGLU=1+,
+a simple numerical derivative of a standard integrated gluon density
+$\frac{d xg(x,Q^2)}{dQ^2}$ taken
+from~\cite{GRV95}  (\verb+IGLU=2+), the one in the
+approach 
+of Bl\"umlein~\cite{Bluemlein} and coded 
+by~\cite{baranov_zotov_1999,baranov_zotov_2000} (\verb+IGLU=3+),
+the unintegrated gluon density of KMS\footnote{A. Stasto kindly
+provided the program code.}~\cite{martin_stasto} 
+(\verb+IGLU=4+, stored in \verb+kms.dat+), 
+the one of the saturation model by~\cite{wuesthoff_golec-biernat}
+ (\verb+IGLU=5+) and the one of KMR\footnote{M. Kimber kindly
+provided the program code .}~\cite{martin_kimber} (\verb+IGLU=6+, 
+stored in \verb+kmr.dat+).
+\par
+Due to the different gluon densities different $\xpom$ dependencies of
+the cross sections are expected and further discussed in
+\cite{Bartels_dijet_ws,Bartels_qqga,Bartels_qqg-charm}, 
+where also numerical estimates are presented.
+
+\item {\bf Semi-classical approach of Buchm\"uller, McDermott and Hebecker} 
+
+In \cite{Buchmuller_Hebecker_Mcdermott} Buchm\"uller et al.\ define an
+effective diffractive gluon density:
+\begin{equation}
+\xpom G^D(\xpom,\beta) = \frac{C_1}{\beta \cdot C_g - \beta + 1} 
+               \cdot  \frac{1}{\xpom}
+\end{equation}
+with $C_1$ and $C_g$ being free parameters. In addition the dipole form 
+factor for the $t$ dependence is applied. Note that with $C_g=1$ a
+constant gluon density is obtained. In that approach there is only 
+a $1/\xpom$ dependence in contrast to the other models, where at least 
+a $1/\xpom^{1+\epsilon}$ is present.
+
+
+\item {\bf Nikolaev Zakharov model for diffraction} 
+
+A parameterization of the diffractive structure function in the model of
+Nikolaev and Zakharov~\cite{NikZak} can be selected 
+(\verb+NG=30+, \verb+NPOM=30+). In the implementation in \RAPGAP\
+only QPM type events can be 
+generated, no higher order QCD processes like QCD-C or BGF
+are possible for \verb+NG=30+, \verb+NPOM=30+.
+
+\item {\bf Saturation Model (SATRAP)} 
+
+The saturation model SATRAP~\cite{satrap} is implemented to describe $q\bar{q}$  and 
+$q\bar{q} g$  final states (\verb+IPRO=30+).
+
+\item {\bf User defined model for diffraction} 
+
+ The user can freely define his preferred model for diffraction by supplying
+ an effective diffractive structure function 
+(\verb+SUBROUTINE USDIFFR+). 
+ Here no assumption about factorization is made.
+\par
+The basic partonic
+ subprocesses available are: $eq \rightarrow e' q'$ (QPM),
+                            $eq \rightarrow e' q g$ (QCD-C),
+ $eg \rightarrow e' q \bar{q}$ (BGF),
+  $eg \rightarrow e' c \bar{c}$ (BGF),
+ $eg \rightarrow e' b \bar{b}$ (BGF), which are discussed in more detail
+in the following sections.
+\end{itemize}
+In all cases there is the possibility to add primordial $p_T$ 
+(via switch \verb+IALMKT=1+) 
+according to $\exp{(-5.5 \cdot p_T^2)}$ to the
+partons when process $IPRO=12$ is selected.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Deep Inelastic Scattering including Diffraction and Pion exchange}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Inclusive deep inelastic scattering obviously includes diffraction and 
+$\pi$ exchange etc. The total cross section of DIS, $F_2$, can be 
+written as a sum of diffractive and non - diffractive contributions:
+\begin{equation}
+F_2(x,Q^2) = F_2^{non - diff}(x,Q^2) + F_2^{diff}(x,Q^2) + \ldots
+\end{equation}
+where the dots indicate that other exchanges like pion exchange etc. can
+be treated similarly.
+\par
+The diffractive contribution to $F_2$ is given by $F_2^{diff}$:
+\begin{equation}
+F_2^{diff}(x,Q^2) =\int F_2^{D(4)}(\xpom,t;\beta,Q^2)
+      \delta(\beta\xpom - x)\; d\xpom \;d\beta\;dt
+\end{equation}
+With the knowledge of $F_2$ and $F_2^{diff}$ the non - diffractive
+part can be calculated which is then used in the Monte Carlo to generate the
+proper mix of diffractive and non - diffractive processes 
+(\verb+IDISDIF=1+). Similarly non - diffraction, diffraction and 
+pion - exchange are selected with \verb+IDISDIF=2+.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{QED radiative corrections}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ Real photon emission from both the incoming and scattered electron
+can have large effects on the reconstruction of the DIS kinematic 
+variables $x$, $Q^2$, $y$. 
+These QED radiative effects are simulated with
+the HERACLES event generator \cite{HERACLESa,HERACLESb}. 
+HERACLES is used to generate the $e -  \gamma^* - e$ vertex including
+photon emission from the incoming and outgoing electron as well as 
+virtual corrections. The interface to HERACLES is switched 
+ on with \verb+IPRO=1200(1400)+ to generate QED radiative effects for 
+ processes \verb+IPRO=12(14)+.For very low masses $W$ an interface to the
+ SOPHIA~\cite{sophia} generator is used.
+\par
+Since QED radiative effects tend to lower the actual $Q^2$ of the 
+photon which is available for any subsequent process, one has to
+ensure that parton densities behave well at very small $Q^2$. 
+In the quark parton model the QPM process has to
+vanish for $Q^2 \rightarrow 0$. On the other hand parton densities
+are usually only parameterized down to a fixed value of $Q_0^2$. In
+order to ensure a well defined small $Q^2$ behavior, a exponential 
+suppression factor is applied: $1 - \exp(-$\verb+Q2SUPP+ $\cdot Q^2)$ 
+with \verb+Q2SUPP=3.37+ being the default from HERACLES.
+Values of \verb+Q2SUPP=5+ seems appropriate for parton densities 
+evolved down to $Q^2_0\sim 1$ GeV$^2$ and \verb+Q2SUPP=10+ for
+$Q^2_0 \sim 0.5 $ GeV$^2$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Order $\alpha_s$ matrix elements}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Order $\alpha_s$ matrix elements with $p_T$-cutoff}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+With the knowledge of $F_2$ the total cross section can be described in 
+terms of scattering a virtual photon 
+on a quark or anti-quark. However this quark may have
+been originated from another parton, usually described by the 
+$Q^2$ dependence of the parton densities resulting in a different 
+hadronic final state. The process where a initial parton 
+carrying a 
+momentum fraction $x_i$, splits into other partons which then 
+hard scatter with the photon, can be simulated in QCD parton showers 
+(selected via \verb+IFPS+) , 
+for incoming (\verb+IFPS = 1+), outgoing partons (\verb+IFPS=2+) and both 
+(via \verb+IFPS = 3+). These QCD parton showers are based on the 
+leading log DGLAP \cite{DGLAPa,DGLAPb,DGLAPc,DGLAPd} splitting functions
+in leading order $\alpha_s$. 
+\par
+A more detailed simulation of 
+leading order $\alpha_s$ processes like $\gamma^* g \to q \bar{q}$ 
+(BGF, Fig.~\ref{DISmc}c.)
+and $\gamma^* q \to q g$ (QCD - Compton, Fig.~\ref{DISmc}d.)
+ can be obtained when 
+the exact matrix elements for these processes are included.
+\par
+These 
+processes can be simulated separately with \verb+IPRO = 13+ for 
+BGF (light quarks), \verb+IPRO=14+ for BGF (heavy quarks)  
+and \verb+IPRO = 15+ for QCD-C.
+The prompt photon process $\gamma q \to \gamma q$ is simulated via
+\verb+IPRO = 16+.
+\par
+A full simulation including QPM - as well as 1st order $\alpha_s$ - processes
+is selected with \verb+IPRO=12+ (or \verb+IPRO =1200+ for
+ HERACLES) together 
+with \verb+IFULL=1+. The decision whether to generate a QPM or a 1st order 
+$\alpha_s$ event is based on the cross section for a particular process 
+at a given $x$ and $Q^2$. Therefore for each event the cross section
+for BGF light quarks, BGF heavy quarks and QCD - Compton has to be 
+obtained by numerical integration including the proper parton densities.
+If the scale chosen for $\alpha_s$ and the parton densities (\verb+IQ2+) 
+is $Q^2$ or $\hat{s}$, then the matrix elements are integrated 
+analytically over $z$ leaving only a one dimensional numerical integration.
+If, however, the scale is $p_T^2$ (or any function of it) then $\alpha_s$ and
+the parton densities cannot be factorized, and a time consuming 
+two dimensional numerical integration has to be performed.
+As an alternative the QCD probabilities are calculated once and stored in
+a grid (\verb+IGRID=1+).
+ This approach is faster but less accurate. This procedure is
+recommended the scale is chosen to be $p_T^2$ (\verb+IQ2=3+) or 
+$Q^2 + p_T^2$ (\verb+IQ2=5+).
+\par
+In order to avoid divergences in the matrix elements for massless quarks
+a cutoff in $p_T^2$  has to be specified 
+(\verb+PT2CUT+). The minimum $p_T^2$ is only restricted by the 
+requirement that the sum 
+of the order $\alpha_s$ processes is smaller or equal $F_2$. 
+\par
+ However care has 
+to be taken in the case of pomeron exchange, that $Q^2$ evolved 
+parton densities are used with the proper normalizations for quark and
+gluon densities, otherwise it can occur that the 
+probability for photon - gluon fusion exceeds the total cross section 
+calculated from $F_2^{\PO}$ with the quark densities even for 
+relatively large \verb+PT2CUT+.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{NLO and Order $\alpha_s$ matrix elements }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The problem using a $p_T^2$ cutoff, as described in the previous subsection
+can be overcome by a proper treatment of the NLO corrections to $F_2$. Such a
+scheme is described in detail in \cite{Collins-collfac,Collins-collfac2}.
+The LO ($\alpha_s^0$) and the NLO ($\alpha_s$) part are treated according the
+$\bar{MS}$ subtraction scheme, reformulated such that it properly can be used
+together with initial and final state parton showers, avoiding any double
+counting \cite{sschilling}.
+ When using this scheme, the NLO parton densities calculated 
+in the $\bar{MS}$ scheme should be selected. The program then transforms the
+parton densities from the $\bar{MS}$ to the $BS$ scheme.
+\footnote{The implementation of this scheme into RAPGAP was done by S.
+Schilling.}  
+However, at present only the BGF part is implemented. This scheme is switches on
+with \verb+IBS=1+.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Treatment of heavy flavor production}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Heavy flavors, like charm and bottom, are usually produced via boson - gluon
+fusion. However in the evolution of the parton densities, and similarly in the
+evolution of $F_2(x,Q^2)$, heavy quarks are often treated in the same way as
+light quarks, often not even respecting the production threshold properly.
+Thus when calculating 1st order $\alpha_s$  matrix elements there is
+a contribution of QCD-C from charm in the proton, together with BGF and
+eventually also QPM type events with charm. 
+Whether this is a consistent treatment, depends on the details of the $Q^2$
+evolution of the parton densities.
+\par
+GRV \cite{GRVa,GRVb}, for example, calculate $F_2^{charm}(x,Q^2)$ only via BGF.
+Thus in their approach the charm quark density is zero. However, for technical
+reasons for calculation of the total cross section, in the parameterization of
+the parton densities, as implemented in LHAPDFLIB \cite{\LHAPDFLIB}  a charm quark
+density is provided, which is calculated from the BGF process. This is correct
+as long as only the total cross section is considered, which is calculated via
+\begin{equation}
+\sigma ^{\gamma* \,p} (x,Q^2) = \frac{4 \pi^2 \alpha }{Q^2} \cdot F_2(x,Q^2) =
+  \frac{4 \pi^2 \alpha }{Q^2} \cdot \sum_{i=-6}^6 e_i^2 \cdot xq_i(x,Q^2) 
+\end{equation}
+For a proper description of the hadronic final state 
+using the GRV parton densities, only light quarks are
+allowed for QPM and QCD-C processes, and all heavy quarks are only produced via
+BGF. 
+\par
+Just from the parton density parameterization itself, it is nor possible to
+decide whether heavy quarks are produced only via BGF or not. Thus the user has
+to take care of this via \verb+NFLQCDC+, which is set by default to 
+\verb+NFLQCDC=3+. If heavy quarks are allowed to be produced also by QCD-C
+processes, then the user should set \verb+NFLQCDC=4+, or \verb+NFLQCDC=5+.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{QCD processes in hardon-hadron collisions}
+The hard subprocesses implemented  are:
+\begin{eqnarray}
+ gg \rightarrow q \bar{q} & \verb+IRPA=1+\\
+ g g \rightarrow gg& \verb+IRPB=1+ \\
+ q g \rightarrow q g & \verb+IRPC=1+\\ 
+ q \bar{q} \rightarrow g g & \verb+IRPD=1+\\
+ q \bar{q} \rightarrow q \bar{q}&\verb+IRPE=1+\\
+ q q \rightarrow q q & \verb+IRPF=1+\\
+% \\q q \rightarrow q q (BFKL)& \verb+IRPG=1+.
+q g \rightarrow q \gamma & \verb+IRPH=1+\\ 
+ q \bar{q} \rightarrow g \gamma & \verb+IRPI=1+.
+\end{eqnarray}
+The corresponding color configurations are given in \verb+ICOLORA+.
+\subsubsection{Hadron-hadron collisions} 
+In hadron hadron collisions non-diffractive (\verb+IDIR=1+) diffractive processes (\verb+IDIR=0+) with diffractive parton densities and processes with $\pi$-exchange (\verb+IDIR=0+, \verb+NG=20+) are available (for details on switches and PDFs see \ref{sec:diff}).
+
+\subsubsection{Resolved Photons in \boldmath$\gamma p$ and DIS}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Resolved photon processes play a important role 
+in high $p_T$ jet - production in photo-production. 
+Any internal
+structure in the proton as well as in the photon can be resolved as long
+as the scale of the hard subprocess, which is of the order of $p_T^2$,
+is larger than the inverse radius of the proton 
+$1/R^2_p \sim \Lambda_{QCD}^2$
+ and the photon 
+$1/R^2_{\gamma} \sim Q^2$.
+\par
+In DIS resolved photon processes \cite{Chyla_res_gamma}
+can play a role when the scale $\mu^2$
+ of the
+hard subprocess is larger than $Q^2$, the inverse size of the photon. 
+\par
+Resolved photon processes in DIS 
+are more complicated than in photo-production because one has treat properly
+the kinematics of the scattered electron. This is done with the
+Equivalent Photon Approximation, giving the flux of virtual transverse 
+polarized photons \cite{\RAPGAPMC}. The structure
+of the virtual photon is defined by parameterizations of the parton densities
+of the virtual photon, now depending on the scale $\mu^2$ and $Q^2$:
+$x_{\gamma} f_{\gamma}(x_{\gamma},\mu^2,Q^2)$ 
+\cite{GRS,Sasgam,Drees_Godbole}. Resolved photon processes can be selected via
+\verb+IPRO=18+ for real and virtual photons (depending on $Q^2_{min}$).
+\par
+Since this processes can only occur for $\mu^2 > Q^2$, large differences
+in the cross section are expected when choosing different scales $\mu^2$,
+ like
+$\mu^2=p_t^2$, or $\mu^2=\hat{s}$. 
+A part of this dependence is removed when
+next-to-leading order diagrams are considered. For example the process
+$qg \rightarrow qg$ also occurs in a NLO calculation for jet production
+in DIS \cite{Mirkes_nlo,catani_nlo,Kramer_res_gamma}. 
+However in resolved photon processes there is 
+also the evolution of the virtual photon parton densities from $Q^2$ to 
+the scale $\mu^2$, which is a re-summation to all orders. Therefore 
+differences between full NLO calculations and resolved photon processes
+are expected \cite{Kramer_res_gamma}. 
+\par
+From version 2.06/29 resolved photon processes are also 
+implemented for diffraction and $\pi$ exchange.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Scales, $\alpha_s$ and Parton Distribution Functions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In leading order $\alpha_s$ processes
+the renormalization scale $\mu_R$ ($\alpha_s (\mu_R^2)$) 
+and factorization scale $\mu_F$ ($xf(x,\mu_F^2)$) 
+are not well defined, and any choice of 
+$\mu_R^2 = \mu_F^2 =Q^2,\;p_t^2,\;4p_t^2,
+\;\hat{s},\; Q^2 + p_t^2$ is reasonable. 
+There are essentially two competitive effects:
+a larger scale gives smaller $\alpha_s(\mu^2)$ but
+a larger parton density $xf(x,\mu^2)$ at fixed $x$.
+The net effect depends on the
+details of the interaction and the parton density. 
+\par
+\RAPGAP\ offers different choices for the scales:
+$\mu^2 = m^2,\;\hat{s},\;m^2+p_t^2,\;Q^2,
+\; Q^2 + p_t^2$, selected with \verb+IQ2 = 1,...,5+ (\verb+IQ2=1+ only makes 
+sense for heavy quark production). A scale factor 
+\verb+SCALF+ can be chosen to study the effect of different scales:
+\verb+SCALF=4+ with \verb+IQ2=3+ will result in a scale $\mu^2 = 4 p_t^2 $
+ for $\alpha_s$ and the parton densities. 
+%%%%%%%%%%%%%%%%%%%%%
+% in version 2.06/02
+%%%%%%%%%%%%%%%%%%%%%
+In case of
+\verb+IQ2=5+ a scale factor \verb+SCALF=4+ will result in 
+$\mu^2 = Q^2 + 4 \cdot p_t^2 $.
+\par
+Considering the $O(\alpha_s)$ matrix element processes one could argue 
+that the scale corresponds to the propagator $t$ ($u$ for the crossed diagram)
+\cite{MEPS},
+which is 
+\begin{eqnarray}
+\mu^2& = & \max(|t,u|) \\
+     & = & \max(|-Q^2 - 2 q.p_{f\;1},-Q^2 - 2 q.p_{f\;2}|) \\
+     & = & \max(1-z,z) \cdot \left( \hat{s} + Q^2 \right)
+\label{scale}
+\end{eqnarray}
+with $ z = \frac{p_i.p_{f\;1}}{p_i.q}$ and $p_i$ ($p_f$) being the momentum
+of the initial (final) state parton. Expressing $p_T^2$ in terms of $z$ it is 
+easily seen that this choice of the scale 
+$\mu^2$ is always larger than $p_T^2=z(1-z) \hat{s}$.
+\par
+The strong coupling constant is calculated consistently in the one loop
+expression (using \verb+ULALPS+ from \PYTHIA
+\cite{Jetseta,Jetsetb,Jetsetc}):
+$$ \alpha_s(\mu^2) = 
+\frac{12 \pi}{(33-2n_f) \log(\mu^2/(\Lambda^{n_f}_{QCD})^2)} $$
+Often $\Lambda_{QCD}$ is just taken from
+the parameterization of the parton densities, but when using non - diffractive
+processes together with diffraction and pion exchange, it is not clear which
+$\Lambda_{QCD}$ to take, the one from the parameterization of the proton, or the
+pomeron or the pion. The same problem occurs when resolved photon processes are
+included. By default, the value for $\Lambda_{QCD}$ is taken from the parton density. Using \verb+ILAM+ it can be  specified separately by 
+via the switches of \PYTHIA: \verb+MSTU(112)+ giving the No. of flavors with
+respect to  $\Lambda_{QCD}$, \verb+PARU(112)+ giving the value of $\Lambda_{QCD}$.
+The default value is $\Lambda_{QCD}^5 = 0.25$ and \verb+MSTU(112)=5+.
+The number of actual open flavors $n_f$ depends
+on $\mu^2$, and $\alpha_s$ is required to be continuous at the flavor
+thresholds.
+\par
+Most recent parton density parameterizations of the proton and the pion can be
+accessed from the LHAPDFLIB \cite{\LHAPDFLIB} with 
+\verb+MSTP(51)=NSET+
+(example: \verb+MSTP(51)=10150 + gives CTEQ6L NLO structure function of the 
+proton). Technically \verb+PYSTFU+ from \PYTHIA\ \cite{\PYTHIAMC} has been
+modified to be used within \RAPGAP . 
+ If the user has no
+access to LHAPDFLIB internally coded  parameterizations can be used with 
+\verb+MSTP(51)<10+ with details given in the program description.
+\par
+The parton densities of the pion are accessed similarly with
+\verb+MSTP(52)+.
+\par
+The parton densities of the virtual photon are accessed with
+\verb+MSTP(56)+. In the program the parameterizations GRS \cite{GRS}
+(\verb+MSTP(56)=1+)
+and SaS~\cite{Sasgam} (\verb+MSTP(56)=2+) are available. 
+For \verb+MSTP(56)>10+ again LHAPDFLIB is used for real photons and the
+virtual photon suppression factor of Drees - Godbole \cite{Drees_Godbole}
+is applied.
+\par
+In the resolved photon case a factor \verb+SCALQ2+ can be specified, which
+regulates the phase space region, where resolved photon processes are
+possible: \verb+SCALQ2=1+ means $\mu^2 \geq 1 \cdot Q^2$, and 
+\verb+SCALQ2=10+ means $\mu^2 \geq 10 \cdot Q^2$ where $\mu^2$ is the
+scale specified by \verb+IQ2+.
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Exclusive Vector-meson Production}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Vector meson production is included naturally in diffractive scattering.
+This is easiest seen for $J/\psi$ production. Suppose we have a system of
+a $c \bar{c}$ quark, plus eventually additional gluons in the final state.
+If the invariant mass $m_x=(q + p_{\pom})^2 < 4 \cdot m^2_{D^0}$ 
+then only $J/\psi$'s can be produced ($\eta_c$ production is not possible
+because of spin constraints). 
+Technically this is done  in the fragmentation
+program \PYTHIA \cite{Jetseta,Jetsetb,Jetsetc}. 
+However the ratio of 
+spin 0 to spin 1 mesons has to be included by hand by 
+setting \verb+PARJ(13)=1+
+(for the light $u,d$ mesons \verb+PARJ(11)=1+, and for $s$ mesons 
+\verb+PARJ(12)=1+) for  \PYTHIA. 
+%The production of the
+%light vector-mesons $\rho$, $\omega$ and $\phi$ proceeds in a similar way to
+%that of the $J/\psi$, but the ratio $\rho:\omega=
+%9:1$ has been included by hand by G. Briskin \cite{Briskin_vm}
+%in a modified subroutine
+% \verb+LUKFDI+ of \PYTHIA.
+\par
+Exclusive vector meson production implies certain restrictions on the
+kinematic variables $\xpom$ and $\beta$:
+$$
+\xpom = \frac{q.p_{\pom}}{q.P}=
+        \frac{Q^2 + m_x ^2}{Q^2 + W^2} $$
+$$
+\beta = \frac{Q^2}{2\cdot q.p_{\pom}} =
+        \frac{Q^2}{Q^2 + m_x^2} $$
+Thus for $m_x=m_{VM}$ and  fixed $W$ 
+the variables $\xpom$ and $\beta$ depend only
+$Q^2$. Thus changing $Q^2$ means moving in the two dimensional
+$\xpom - \beta$ plane, which has consequences on the $Q^2$ dependence
+of the $\gamma ^* p \rightarrow \mbox{VM} p$ cross section.
+\par
+The cross section for vector meson production of course depends 
+crucially  on the underlying subprocess. Using the recent parameterization
+of $F_2^{D(3)}(\xpom,\beta,Q^2)$ of the H1 collaboration \cite{H1_F2D3_97}
+together with \verb+IPRO=12+ and \verb+IDIR=0+ (which is QPM on a
+parton in the pomeron) $J/\psi$ production as measured by the experiments
+H1 and ZEUS \cite{Jpsi_H1_dis,Jpsi_ZEUS} 
+can be well described as a function of $Q^2$ and also 
+$W$~\cite{Jung_Eilat}. 
+Surprisingly a $\sim 1/Q^4$ dependence of the photon proton cross section
+appears, which can be interpreted as a higher twist effect.  However in 
+the model described here this $Q^2$ dependence appears naturally from
+the $\beta$ dependence of the structure function $F_2^{D(3)}$, since as 
+shown above, changing $Q^2$ is equivalent with changing $\beta$ for 
+a given vector-meson.
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Remnant Treatment and Fragmentation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The fragmentation in \RAPGAP\ is done with the Lund - string model as 
+implemented in \PYTHIA/\PYTHIA\ \cite{\PYTHIAMC}.
+ For the treatment of the 
+remnant 
+and initial state parton showers, subroutines from the 
+programs \LEPTO\~6.1 \cite{MEPS} (\verb+LMEPS+, \verb+LPRIKT+, \verb+LREMH+)
+and \PYTHIA\ \cite{\PYTHIAMC} (\verb+PYREMN+, \verb+PYSPLI+, \verb+PYSSPA+) 
+have been copied 
+and 
+modified to be applicable here. The original structure of these subroutines
+is kept.
+\par
+ Optionally higher order QCD radiation
+can be simulated via leading log parton showers (\verb+IFPS=1+ for initial
+state parton shower, \verb+IFPS=2+ for final state PS,
+\verb+IFPS=3+ for
+initial and final state PS) or with the color dipole model 
+(as implemented in  ARIADNE~\cite{CDM} with \verb+IFPS=10+).
+%\subsection{Les Houches interface} 
+%Several authors of popular Monte
+%Carlo and matrix element 
+%programs attending the {\it Physics at TeV Colliders Workshop}
+%in Les Houches, 2001 have agreed on a generic format for the transfer
+%of parton level event configurations from matrix element event generators 
+%(MEG) to showering and hadronization event generators (SHG) 
+%\cite{LHA-generator}. With \verb+ILHA=1+ \RAPGAP\ writes the full parton level
+%events to the file \verb+rapgap.gen+, which can be read in directly by the
+%\PYTHIA\ and \HERWIG\ programs to perform the hadronisation. This option is best
+%suited to estimate the uncertainty coming from hadronsiation correction.
+%\par
+%Since \HERWIG\ requires a finite gluon mass $m_{gluon} \sim 0.7$~GeV,
+% \PYTHIA\ parameters need to be changed:
+% \verb+PMAS(21,1)=0.7+ for the gluon mass $m_{gluon}$ 
+% \verb+COMMON/PYDAT2/+ and 
+% \verb+PARJ(82)=1.2+ for the invariant mass cut-off of parton showers
+% (\verb+COMMON/PYDAT1/+).. 
+\subsection{Hadronic final state}
+In a standard inelastic scattering process
+a parton carrying color is removed from the 
+target (a proton and/or a photon in case of resolved photon processes)
+ and in general 
+ colored remnants are left. These remnants together with the
+colored partons of the hard interaction  must form  color
+singlet states (see Fig.~\ref{DISmc}).
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[bb=58 442 555 756,width=1\columnwidth]{dismc.epsi}}
+\end{center}
+\caption{Basic processes for inelastic lepton nucleon scattering.
+Indicated are the color strings and the proton remnant.
+$a$. shows the lowest order process for scattering on a valence quark.
+The remnant of the proton is just a di - quark-quark.
+$b$. shows the lowest order process for scattering on a sea quark.
+The remnant of the proton is the corresponding anti-quark , 
+a valence quark and a valence di-quark.
+ $c$. shows the
+$O(\alpha _{em}\alpha_s)$
+for gamma gluon fusion (the crossed diagram is not shown).
+ The proton remnant is the valence quark and
+valence di-quark.
+ $d$. shows the
+$O(\alpha _{em}\alpha_s)$
+for QCD Compton (the crossed diagram is not shown) on a valence quark.
+ The proton remnant is the same as in $a$.
+ $e$. shows the
+$O(\alpha _{em}\alpha_s)$
+for QCD Compton (the crossed diagram is not shown) on a sea quark.
+ The proton remnant is the same as in $b$.
+\label{DISmc}}
+\end{figure}
+ Color strings connect the colored partons with the remnants and these
+color strings
+generate  particle
+flows between the remnants and the partons of the hard
+scattering.
+\par 
+In the lowest order process ($\gamma^* q \to q'$) the remnant is 
+a $di-quark$ 
+when the scattering occurs on a valence quark of the proton
+(Fig.~\ref{DISmc}$a$.).
+If, however, the scattering occurs on a sea quark or a anti - quark,
+the remnant is treated as a valence quark and valence $di - quark$ plus
+the corresponding anti - quark from the sea. This ``new" 
+sea quark treatment was first developed and  
+implemented in \LEPTO\ 6.5 \cite{Ingelman_LEPTO65}
+(Fig.~\ref{DISmc}$b$.). 
+\par 
+In the case of BGF a color octet gluon is removed from the proton
+leaving a quark and a $di - quark$ behind. The quark from BGF 
+forms a color string with the $di - quark$ and the anti - quark from
+BGF is connected via another string 
+to the remnant valence quark (Fig.~\ref{DISmc}$c$.).
+\par 
+For QCD - Compton ($\gamma^* q_i \to q_f g_f$) the gluon $g_f$ acts as a kick 
+in the color string drawn from the quark $q_f$ to the remnant $di - quark$
+(Fig.~\ref{DISmc}$d$.).
+If the quark $q_i$ actually was a sea quark, then the remnant has 
+an additional anti-quark $\bar{q_i}$. This anti-quark 
+$\bar{q_i}$ forms a color singlet state with the left over 
+valence quark $q_v$ of the proton (Fig.~\ref{DISmc}$e$.). If the 
+scattering occurred on a anti quark, then the strings are just reversed.
+\par
+In rapidity gap events the proton stays intact or becomes a low
+mass diffractive state, here simply labeled with $p'$.
+ Because of the emission of the
+color neutral particle there is
+no color connection between  the outgoing scattered proton $p'$
+and the other particles.
+%\clearpage
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[bb=58 572 555 756,width=1\columnwidth]{difmc.epsi}}
+\end{center}
+\caption{Basic processes for inelastic diffractive 
+lepton nucleon scattering.
+Indicated are the color strings and the pomeron remnant.
+$a$. shows the lowest order process for scattering quark.
+$b$. shows the
+$O(\alpha _{em}\alpha_s)$
+for gamma gluon fusion (the crossed diagram is not shown).
+ The pomeron remnant is a color octet gluon
+ $c$. shows the
+$O(\alpha _{em}\alpha_s)$
+for QCD Compton (the crossed diagram is not shown) on a quark.
+ The pomeron remnant is the same as in $a$.
+\label{difmc}}
+\end{figure}
+When a quark (anti-quark) is removed from the  pomeron 
+a anti-quark (quark) of the same flavor but with the corresponding anti-color
+is left (Fig.~\ref{difmc}a). 
+ When a gluon is removed from the
+ pomeron $\PO$, a color octet remnant is left,  here
+treated as a
+single gluon. This pomeron remnant together with the $q\bar{q}$
+of the hard interaction forms the color singlet state
+(Fig.~\ref{difmc}b).
+\par
+Pion exchange is treated similarly to pomeron exchange with the 
+corresponding modifications for the outgoing particle $p'$
+which is a $p$, $n$ or $\Delta^{++}$  corresponding to 
+$\pi^0$, $\pi^+$ or $\pi^-$ exchange. The treatment of valence and sea 
+quarks follows the same principles as for inclusive $ep$ scattering described
+above.
+\par
+The color strings are much more complicated for resolved photon processes 
+because two remnants, one from the proton and one from the photon, have to
+be considered. Resolved photon processes are similar to $p\bar{p}$ 
+scattering and the relevant color connections are discussed in detail in
+\cite{PYTHIA_ppbar_color}.
+%Higher order gluon emission and subsequent gluon splitting
+%into $q\bar{q}$ is included
+%using the Color Dipole Model (ARIADNE) \cite{CDM}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Proton dissociation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Proton dissociation ala DIFFVM}
+Dissociation of the proton 
+according to the model in DIFFVM \cite{DIFFVM,DIFFVM2}
+can be included for diffractive events 
+via NFRAG=20. Additional parameters describe the dependence
+$$
+\frac{d \sigma }{dM_Y^2\,dt\,dx_{\PO}} \sim 
+\frac{1}{M_Y^{2(1+\epsilon_Y)}}
+\exp{\left(-B_{diss}|t|\right)} $$
+with \verb+PEPS=+$\epsilon_Y$ and \verb+PRN2=+$B_{diss}$.
+\subsubsection{Proton dissociation with a simple model}
+Dissociation of the proton can be included for diffractive events 
+via NFRAG=10.
+ In this case the proton is split into a quark $q_p$ and di-quark $di-q_p$
+system, whereas the pomeron is assumed to couple to a single quark 
+$q_p$ only, 
+and therefore the outgoing quark $q'_p$ carries 
+ all of the momentum transfer $t$ giving it a transverse momentum. 
+The quark to which the pomeron 
+couples carries a momentum fraction $\chi$ of the protons initial
+momentum. The momenta of the initial quark $q_p$ and the di-quark
+$di-q_p$ are given in the following:
+\begin{eqnarray}
+q_p & \simeq & \chi p \\
+di-q_p & \simeq & (1 - \chi) p \\
+q'_p & = & q_p - p_{\PO} \simeq  \chi p - p_{\PO}
+\end{eqnarray}
+where  
+$ \chi = \frac{q.q_p}{q.p}$ with
+$q$ ($q_p$, $p$) being the photon (quark, proton) momentum.
+ In addition the quark and
+di-quark get primordial $p_{\perp}$ according to a Gaussian 
+distribution. 
+\par
+The momentum fraction $\chi$ can be estimated within the 
+resolved pomeron model:
+\begin{equation}
+\chi = \frac{\xpom}{\beta'}
+\end{equation}
+with $\beta' = \frac{q.p_{\PO}}{q.q_p}$ 
+being the momentum fraction of the quark $q_p$ of the pomeron momentum,
+and  $x_{\PO} = \frac{q.p_{\PO}}{q.p}$.
+The value of $\xpom$ is already known from the interaction $\gamma \PO$
+and $\beta'$ can be generated according to quark density of the pomeron.
+\par
+ For  $\beta'$ different probability functions
+are available: 
+\begin{eqnarray}
+P(\beta')  = & 2 (1 - \beta') & (\verb+IREM=1+),\\ 
+P(\beta')  =  & (a+1) (1 - \beta')^a &(\verb+IREM=2+),\\
+P(\beta')  =  & \frac{N}{ \beta'\left(1 - \frac{1}{\beta'} - 
+          \frac{c}{(1 - \beta')}\right) ^2}& 
+                (\verb+IREM=3+)
+\end{eqnarray}
+ with $a$ chosen such that 
+$<\beta'> = 1/(a + 2)$ 
+and  $c$ determined by the ratio of masses of the
+remnant quark and di-quark system. The option \verb+IREM=1+ 
+corresponds to a hard quark density of the pomeron.
+Actually all the parameterizations are taken 
+from inclusive DIS scattering as implemented 
+\LEPTO\ 6.1~\cite{MEPS}.
+\par
+The  mass distribution $M_R$ of the $p$ - dissociative
+system follows in general a $1/M_R$ distribution for all the 
+parameterizations of $P(\beta')$ available \cite{Jung_Eilat}.
+\par
+Even with proton dissociation switched on, a proton will emerge after
+fragmentation when 
+the momentum transfer is small 
+and the mass of the $q$ - $ di-q$ system remains below
+the threshold for multi-particle production.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{QCD parton shower evolution}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Higher order QCD effects are taken into account using the leading log
+parton shower approach.
+\subsubsection{Initial state radiation}
+ Starting from the hard scattering process with
+$x$ being the fractional momentum  of the incoming quark
+ at a suitable scale $\mu ^2$,
+ a backward evolution according to the DGLAP evolution
+equations~\cite{DGLAPa,DGLAPb,DGLAPc,DGLAPd}
+ will lead to larger initial values of 
+$x_i$ and smaller $\mu ^2$.
+Especially at high center of mass  energies 
+initial state QCD radiation will
+become important and has to be taken into account to model properly the
+hadronic final state.
+\par
+The probabilities for a branching of a parton $a \to b c$
+to happen are given by the DGLAP
+evolution equations:
+\begin{equation}
+\frac{d\,f_a (x,t)}{d\,t} = \frac{\alpha_s (t)}{2 \pi}
+        \sum_a \int_x ^1 \frac{d\,x'}{x'} f_a (x',t)
+        P_{a \rightarrow b c} \left(\frac{x}{x'}\right)
+\end{equation}
+where $f_a (x',t)$ are the parton density functions, giving the
+probability of finding a parton $a$ carrying the fraction $x'$ of the
+momentum fraction $x$ probed at a  scale $t$. $P_{a \rightarrow b c} $
+are the DGLAP splitting functions:
+\begin{eqnarray}
+  P_{q \rightarrow q g} (z) & = &\frac{4}{3} \frac{1 + z^2}{1-z} \\
+  P_{g \rightarrow g g} (z) & = & 6 \frac{(1 - z(1-z))^2}{z(1-z)} \\
+  P_{g \rightarrow q \bar{q}} (z) & = &\frac{1}{2}(z^2 +(1-z)^2) 
+\end{eqnarray}
+Soft gluon emission causes problems, since the splitting functions 
+$P_{q \rightarrow q g},  P_{g \rightarrow g g}$ are divergent as
+$z \rightarrow 1$. Practically 
+in order to avoid divergences, a upper cutoff
+$z_{max}$ is introduced and the remaining soft gluon emission is
+treated as an effective shift in $z$ (for details
+see \cite{PYTHIAPSa,PYTHIAPSb}). 
+The actual value of $z_{max}=\frac{x+\epsilon}{x}$ plays a crucial role
+in properties of the hadronic final state, such as the transverse 
+energy flow in the proton direction. Using the standard value of \PYTHIA\ 
+for $\epsilon$, which is $\sqrt{s} \cdot \epsilon = 2 $ GeV, the
+transverse energy in the proton direction in DIS away from the current jet
+falls well below the data \cite{H1_energyflow}. Decreasing $\epsilon$ 
+increases the transverse energy flow, and the data are much better described.
+The value $z_{max}$ chosen in \RAPGAP\ corresponds to the kinematic limit
+of quark pair creation when the current masses of the quarks are taken into
+account.
+\par
+ Starting from the hard interaction process at a
+suitable scale $\mu ^2$ ($\mu ^2 = \hat{s},\PT ^2$)
+the partons are evolved backward. This backward evolution is quite
+complicated and is used in the Monte Carlo program for efficiency 
+reasons when optimizing the generation of the kinematic variables for
+the hard scattering process. In a forward evolution scheme the number of
+degrees of freedom for the generation would vary event by event and no 
+standard optimization procedure would be applicable.
+\par
+In $p\bar{p}$ collisions the ``$\hat{s}$ approach" is widely used
+(\PYTHIA\ \cite{PYTHIAPSa,PYTHIAPSb}) 
+whereas a different approach in lepto-production is
+adapted in \LEPTO\ \cite{LEPTOPS,MEPS}.
+The initiators of the parton shower cascade (partons inside the
+proton for example) are treated collinear with the original particle
+when effects from primordial $k_t$ are neglected and have negligible
+mass ($m^2 \leq 1$ GeV). When a branching occurs, $p_3
+\rightarrow p_1 + p_2$,
+the daughter partons $p_1$ and $p_2$ will have transverse momenta
+and virtualities greater than that of the initiator $p_3$. Thus
+after the QCD cascade the partons going into the hard interaction
+also have transverse momenta compared to the non parton shower case.
+\par
+In $\gamma p$ and $p\bar{p}$ collisions there is no problem
+associated with this treatment since the kinematics of the hard
+interaction usually cannot be determined by measuring the
+scattered beam-particles either because the beam-particle is
+totally absorbed (the photon in $\gamma p$) or because the
+beam-particle is insufficiently measured by experiment. However in
+lepto-production the kinematics are usually defined by the scattered
+lepton ($y, Q^2$ for example). In that case there will be mismatch
+between the generated $y,Q^2$ (before the parton cascade) and after
+QCD radiation has been added mainly because of the additional
+transverse momentum. For lepto-production a special approach has
+been developed ``\LEPTO\ approach" \cite{LEPTOPS,MEPS}) 
+in order to keep the scattered
+lepton and the (virtual) photon unchanged even with initial state
+parton shower. This approach is now consistently used in \RAPGAP\ within
+the subroutine \verb+PYSSPA+ which was taken from \PYTHIA\ and 
+\LEPTO\ ~\cite{Jetsetc,MEPS} with considerable modifications to be used
+also for low $Q^2$ processes, photo-production  and diffractive scattering.
+\par
+In DGLAP based parton showers the emitted partons are strongly 
+ordered in $p_T$, meaning that in a backward evolution the parton 
+with the largest $p_T$ is generated first and closest in rapidity to the hard 
+subprocess partons. The other partons generated must have smaller $p_T$.
+\par
+If the hard scattering was just the lowest order process 
+($\gamma q \rightarrow q$) then the (only available and) largest scale is
+$Q^2$ and the $p_T$ of the shower partons can go up to $\sqrt{Q^2}$. 
+The situation is different when $O(\alpha_s)$ matrix element processes are
+considered. The maximum scale could be $Q^2$, $\hat{s}$, $p_T^2$. Here we 
+choose the maximum scale to be:
+\begin{equation}
+\mu^2 = \max(|-Q^2 - 2q.p_{f\;1},-Q^2 - 2q.p_{f\;2}|)
+\end{equation}
+This choice \cite{MEPS} is motivated from the propagator of the matrix 
+elements and is of the order of $p_T^2$ as shown in eq.(~\ref{scale}).
+\par
+When $O(\alpha_s)$ processes are considered in addition to the 
+leading order process ($\gamma q \rightarrow q$) then the maximum scale
+for parton showers are calculated as follows: parton showers in the
+leading order process can go up to $\mu^2 = 4 \cdot p_{T\;cut}^2$ instead of
+$Q^2$ when no matrix elements are included (with $ p_{T\;cut}^2 =
+\verb+PT2CUT+$ being the divergency cut off in the matrix elements). 
+This choice can be understood since parton emissions with $p_T > p_{T\;cut}$
+are already included in the matrix element simulation \cite{MEPS}.
+Parton showers in the matrix element processes can go up to 
+virtualities defined in eq.(\ref{scale}).
+\par
+It is obvious that the initial state parton shower 
+approach can only be applied correctly
+when parton densities are available as a function of $Q^2$. Moreover this
+parton densities have to be obtained in a consistent way using the
+DGLAP evolution equations and consistent definition of $\alpha_s$.
+\par
+Now also even for diffractive scattering QCD analysis of $F_2^{D(3)}$
+ and parameterizations of the diffractive parton densities 
+obtained with DGLAP are available and can be used in initial state 
+parton showers.
+%\par
+% Since there is only small evolution from 
+%$Q^2$ of a highly virtual photon up to the scale of the hard subprocess,
+%initial state parton showers are not implemented for partons of the photon.
+\par
+Optionally QCD cascades can be simulated according to the 
+color dipole model as implemented in
+ARIADNE \cite{CDM}) (via \verb+IFPS=10+).
+\subsubsection{Final state parton showers}
+Final state parton showers are more easily simulated (\verb+PYSHOW+
+of \PYTHIA) since here a forward evolution scheme is used and no parton 
+densities enter the evolution. The maximum scale is either
+$\min (4 p_{T\;cut}^2,W^2)$ for the leading order processes or $\hat{s}$ for
+the $O(\alpha_s)$ matrix elements. Details can be found in 
+\cite{Jetsetc}.
+\section{Description of the program components}
+
+\subsection{Subroutines and functions}
+
+\begin{defl}{123456789012345}
+\item[{\tt RGMAIN }]
+                  main program
+\item[{\tt GRAINI }]
+                   initializes the program
+\item[{\tt RAPGAP }]
+    performs integration of the cross section. This routine has to be
+            called before event generation can start.
+\item[{\tt RAEND }]
+            prints cross section and the number of events.
+\item[{\tt EVENT }]
+         performs the event generation and the proper mixing of 
+         parton shower and matrix elements if selected via 
+         {\tt IFULL=1}.
+         Also the mixing of $standard$ $IS$, diffractive scattering
+         and pion exchange is done, if selected via \verb+IDISDIF=1+.
+\item[{\tt ANALYS }]
+         user analysis subroutine.
+\item[{\tt ALPHAS(RQ)}]
+          give $\alpha_s (\mu)$ with $\mu = $RQ.
+\item[{\tt PARTI }]
+          initial particle and parton momenta are given.
+\item[{\tt DFUN }]
+          interface to FXN1
+\item[{\tt FXN1 }]
+          calls routines for selected processes:
+          \verb+DIFFR1+, \verb+DIFFR2+, \verb+DIFFR3+, 
+          \verb+DIFFR4+, \verb+DIS1+, \verb+DIS2+, \verb+DIS3+,
+          \verb+DIS4+.
+\item[{\tt CUTG(IPRO) }]
+          cuts for process \verb+IPRO+=13 and \verb+IPRO+=15
+          ($\gamma g$ fusion and QCD - Compton)  
+          in integration and
+          event generation.
+\item[{\tt FRAG }]
+          generates color string connection for hadronization.
+\item[{\tt DIFFR1 }] for diffractive and pion exchange processes
+  $ \gamma g_{\PO} \rightarrow q \bar{q}$.
+          Calls kinematics and phase space routine \verb+PARTDF+
+          and matrix element \verb+ELEQQL+ and \verb+ELEQQB+.
+          Both for light and heavy quarks.
+          Using Equivalent Photon approximation and $\gamma g \to
+          q \bar{q}$ matrix element.
+\item[{\tt DIFFR2 }] for diffractive and pion exchange processes
+  $ e g_{\PO} \rightarrow e' q \bar{q}$.
+          Calls kinematics and phase space routine \verb+PARTDF+
+          and matrix element \verb+ELEQQF+. Both for light and heavy quarks.
+          Using full matrix element for $e g \to e'
+          q \bar{q}$.
+\item[{\tt DIFFR3 }] for diffractive and pion exchange processes
+        $e q (\bar{q}) \rightarrow e' q' (\bar{q}')$.
+          Calls kinematics and phase space routine \verb+PARTDF+.
+\item[{\tt DIFFR4 }] for diffractive and pion exchange processes
+  $ e q_{\PO} \rightarrow e' q g$.
+          Calls kinematics and phase space routine \verb+PARTDF+
+          and matrix element \verb+ELEQCDC+. 
+          Using full matrix element for $e q \to e'
+          q g$.
+\item[{\tt DIS1 }] for $standard$ inelastic scattering
+  $ \gamma g_{p} \rightarrow q \bar{q}$.
+          Calls kinematics and phase space routine \verb+PARTDI+
+          and matrix element \verb+ELEQQL+ and \verb+ELEQQB+.
+          Both for light and heavy quarks.
+          Using Equivalent Photon approximation and $\gamma g \to
+          q \bar{q}$ matrix element.
+\item[{\tt DIS2 }] for $standard$ inelastic scattering
+  $ e g_{p} \rightarrow e' q \bar{q}$.
+          Calls kinematics and phase space routine \verb+PARTDI+
+          and matrix element \verb+ELEQQF+. Both for light and heavy quarks.
+          Using full matrix element for $e g \to e'
+          q \bar{q}$.
+\item[{\tt DIS3 }] for $standard$ inelastic scattering
+        $e q (\bar{q}) \rightarrow e' q' (\bar{q}')$
+          Calls kinematics and phase space routine \verb+PARTDI+.
+\item[{\tt DIS4 }] for $standard$ inelastic scattering
+  $ e q_{\PO} \rightarrow e' q g$.
+          Calls kinematics and phase space routine \verb+PARTDI+
+          and matrix element \verb+ELEQCDC+. 
+          Using full matrix element for $e q \to e'
+          q g$.
+\item[{\tt ELEQQL }]
+          matrix element for $\gamma g \rightarrow
+          q \bar{q}$. $q$ stands for
+          light quark.
+\item[{\tt ELEQQB }]
+          matrix element for $\gamma g \rightarrow
+          Q \bar{Q}$ including masses. $Q$ stands for
+          heavy quark.
+\item[{\tt ELEQQF }]
+          matrix element for $e g \rightarrow e'
+          Q \bar{Q}$ including masses. $Q$ stands for light or
+          heavy quark. Masses of light quarks $m_q = 10$ MeV.
+\item[{\tt ELEQCDC }]
+          matrix element for $e q \rightarrow e'
+          q g$.  Masses of light quarks $m_q = 10$ MeV.
+\item[{\tt ELERES }]
+          matrix elements for resloved photon processes.
+\item[{\tt ELEQQ }]
+          matrix element for exlusive diffractive $q\bar{q}$ 
+	    production~\cite{Bartels_jets,Bartels_asym}.
+\item[{\tt ELEQQG }]
+          matrix elements for diffractive $q\bar{q}g$ 
+	    production~\cite{Bartels_qqg}.
+\item[{\tt DOT(A,B) }]
+         A.B four vector dot product
+\item[{\tt DOT1( I,J)}]
+          four vector dot product of vectors I and J in
+          \verb+LUJETS+ common.
+%\item[\verb+DVNOPT }]
+%         changing options for \verb+DIVON+.
+\item[{\tt RANUMS }]
+         vector of random numbers used in event generation.
+\item[{\tt PHASE }]
+         phase space and generation for momenta of final
+         partons in hard subprocess. $2 \rightarrow 2$ and
+         $2 \rightarrow 3$ processes.
+\item[{\tt PARTDF }]
+         phase space and event record for diffractive and pion exchange
+         processes.
+\item[{\tt PARTDI }]
+         phase space and event record for $standard$ inelastic scattering
+         processes.
+\item[{\tt PYSTFU(KF,X,SCALE,XPQ) }] parton density in particle \verb+KF+
+            (\verb+KF+ = 2212 for the proton).
+            \verb+XPQ+$ = xf_i(x,\mu^2)$ with \verb+X+$ = x$,
+           \verb+SCALE+$ = \mu^2$.
+            Copied from \LEPTO\ 6.1~\cite{MEPS} and updated to 
+            include partons of the pomeron (pion) inside the proton.  
+\item[{\tt RASTFU(KF,X,SCALE,XPQ) }] parton density in particle \verb+KF+
+            (\verb+KF+ = 100 for the pomeron, \verb+KF+ = 211 for the pion).
+            \verb+XPQ+$ = xf_i(x,\mu^2)$ with \verb+X+$ = x$,
+             \verb+SCALE+$ = \mu^2$.
+\item[{\tt RUNIGLU(KF,X,KT,P,XPQ) }]   
+      to extract the unintegrated gluon density 
+	$x {\cal A}(x,k_{t},\mu)$ for a proton with \verb+KF=2212+,
+	as a function of $x=$\verb+X+, $k_{t}^2=$\verb+KT+ and $\mu=$\verb+P+.
+      The gluon density is returned in \verb+XPQ(0)+, where \verb+XPQ+ is an 
+      array with \verb+XPQ(-6:6)+.
+\item[{\tt RAT2DI(KF,X,XMAX,TMIN,T,WTDIST) }]
+            \verb+T+$=t$ 
+            and \verb+X+$=r$ dependent probability distribution for
+            radiating a parton \verb+KF+ from the proton.
+            (\verb+KF+ = 100 for the pomeron, \verb+KF+ = 211 for the pion).
+\item[{\tt PYREMN(IPU1,IPU2) }]  routine for remnant treatment.
+            Copied from \LEPTO\ 6.1~\cite{MEPS} and updated for
+            the use in resolved photon, diffractive and 
+            pion exchange processes. 
+\item[{\tt PRODIFF }]  routine for proton dissociation.
+            The proton is treated as a quark di-quark system.
+\item[{\tt PYSPLI(KF,KPA,KFSP,KFCH) }]  
+            give the spectator \verb+KFSP+ and \verb+KFCH+
+            partons when a parton
+            \verb+KPA+ is removed from particle \verb+KF+.
+            Copied from \LEPTO\ 6.1~\cite{MEPS} and updated for
+            the use in resolved photon processes,
+            diffraction and pion exchange. 
+\item[{\tt LMEPS }]  routine for color flow in all
+            processes and preparation for initial and final state
+            parton showers.
+            Copied from \LEPTO\ 6.1~\cite{MEPS} and updated for
+            the use in low $Q^2$ processes, photo-production,
+            resolved photon processes, diffraction and pion exchange. 
+\item[{\tt PYSSPA(IPU1,IPU2) }]  routine for initial state radiation.
+            Calls LSCALE.
+            Copied from \LEPTO\ 6.1~\cite{MEPS} and updated for
+            the use in low $Q^2$ processes, photo-production,
+            resolved photon processes, diffraction and pion exchange. 
+\item[{\tt LSCALE }]  gives the maximum virtuality
+            to be used for initial state parton shower generation.
+            Copied from \LEPTO\ 6.1~\cite{MEPS} and updated for
+            the use for diffractive and pion exchange processes. 
+\item[{\tt GADAP }]  Gaussian integration routine for 1-dim and 
+            2-dim integration.
+            Copied from \LEPTO\ 6.1~\cite{MEPS}.
+\item[{\tt RALMKT }]  generate primordial $p_T$ according to the
+                       Aligned Jet Model.
+\item[{\tt RYSTGA }]  master routine for parton densities of the virtual 
+                       photon. Calls \verb+GRSPAR+ and \verb+SASGAM+.
+\item[{\tt GRSPAR }]  parameterization of Gluck, Reya, Stratman 
+                       \cite{GRS}.
+\item[{\tt SASGAM }]  parameterization of Schuler, Sj\"ostrand 
+                       \cite{Sasgam}.
+\item[{\tt F2DHW }] calculation of diffraction for \verb+NG=40+
+                     \cite{Wusthoff}.
+\item[{\tt F2BLW }] calculation of diffraction for \verb+NG=41+
+                     \cite{Bartels_jets,Bartels_asym}.
+\item[{\tt F2MD }] calculation of diffraction for \verb+NG=42+
+                     \cite{Diehl1,Diehl2}.
+\item[{\tt F2MCD }] calculation of diffraction for \verb+NG=45+
+                     \cite{Buchmuller_Hebecker_Mcdermott}.       
+\item[{\tt USDIFFR(BETA,SCALE,XPQ,X\_POM,T2) }]
+          user supplied effective diffractive parton density 
+          with the               
+          fractional momentum \verb+BETA+$=\xi_i$ of the pomeron momentum 
+          carried by the
+          parton $i$, the scale \verb+SCALE+=$\mu$
+          of the structure function \verb+XPQ(-6:6)+=$\xi q(\xi,\mu^2)$,
+          \verb+X_POM+$=\xpom$ and \verb+T2+$=t$ (all variables in 
+          \verb+SINGLE PRECISION+).
+\end{defl}
+
+
+\subsection{Parameter switches}
+\begin{defl}{123456789012345}
+\item[{\tt IINT:}] (D:=0) select integration procedure
+\item[]  =0 BASES/SPRING Integration procedure
+\item[]  =1 DIVON Integration procedure
+\item[{\tt NCAL:}] (D:=10000) Nr of calls per iteration for bases
+\item[{\tt ACC1:}] (D:=1)    relative precision (in \%) for grid optimisation
+\item[{\tt ACC2:}] (D:=0.5)  relative precision (in \%) for integration
+\end{defl}
+
+\subsubsection{Parameters for kinematics in lepton-hadron collisions}
+\begin{defl}{123456789012345}
+\item[{\tt PLEPIN:}]\index{PLEPIN}
+                        momentum $p$ [GeV/$c$]
+                        of incoming electron (D=$-30$) (\verb+/INPU/+)
+\item[{\tt PIN:}]\index{PIN}
+                        momentum $p$ [GeV/$c$]
+                        of incoming proton (D=$820$)(\verb+/INPU/+)
+\item[{\tt QMI:}]\index{QMI} 
+       (D: = 5.0) (\verb+/DIFFR/+)Minimum $Q^2$ to be generated 
+\item[{\tt QMA:}]\index{QMA}
+ (D: = $10^8$) (\verb+/DIFFR/+)Maximum $Q^2$ to be generated
+\item[{\tt YMI:}]\index{YMI} 
+(D: = 0.0)(\verb+/DIFFR/+) Minimum $y$ to be generated
+\item[{\tt YMA:}]\index{YMA}  
+(D: = 1.0) (\verb+/DIFFR/+)Maximum $y$ to be generated
+\item[{\tt THEMA,THEMI}]\index{THEMA,THEMI}
+  (D: \verb+THEMA+ = 180., \verb+THEMI+ = 0)
+                    maximum and minimum scattering angle $\theta$ of the 
+                    electron (\verb+/ELECT/+).
+\item[{\tt NFLAV}] \index{NFLAV}
+(D: = 5) number of active flavors, can be set by user.
+                    (\verb+/LUCO/+)
+\item[{\tt NFLQCDC}]\index{NFLQCDC} 
+(D: = 3) number of flavors allowed for 
+QCD Compton processes, can be set by user (\verb+/LUCO/+).
+
+
+\end{defl}
+\subsubsection{Parameters for kinematics in hadron-hadron collisions}
+\begin{defl}{123456789012345}
+\item[{\tt PLEPIN:}]\index{PLEPIN}
+                        momentum $p$ [GeV/$c$]
+                        of incoming hadron 1  (\verb+/INPU/+)
+\item[{\tt PIN:}]\index{PIN}
+                        momentum $p$ [GeV/$c$]
+                        of incoming hadron 2 (\verb+/INPU/+)
+\item[{\tt NFLAV}] \index{NFLAV}
+(D: = 5) number of active flavors, can be set by user.
+                    (\verb+/LUCO/+)
+\item[{\tt NFLQCDC}]\index{NFLQCDC} 
+(D: = 3) number of flavors allowed for 
+QCD Compton processes, can be set by user (\verb+/LUCO/+).
+
+
+\end{defl}
+
+
+\subsubsection{Parameters for hard subprocess selection}
+\begin{defl}{123456789012345}
+\item[{\tt IPRO:}]\index{IPRO} (D: = 12) (\verb+/RAPA/+)
+                    select hard subprocess to be generated. The 
+                    selection of pomeron, pion or $standard$ inelastic 
+                    scattering is done via 
+                    \verb+IDIR+, \verb+IDISDIF+, \verb+NG+, \verb+NPOM+
+                    described below. 
+\item[{\it         }]
+                 =10:   $\gamma g \rightarrow q \bar{q}$
+                        using EPA
+\item[{\it         }]
+                 =11:   $\gamma g \rightarrow c \bar{c}$
+                        using EPA
+\item[{\it         }]
+                 =12:   $e q \rightarrow e' q'$
+\item[{\it         }]
+                 =13:   $e g \rightarrow e' q \bar{q}$
+                        using full Matrix Element
+\item[{\it         }]
+                 =14:   $e  g \rightarrow e' c \bar{c}$
+                        using full Matrix Element
+\item[{\it         }]
+                 =15:   $e  q \rightarrow e' q g$
+                        using full Matrix Element
+\item[{\it         }]
+                 =16:   $e  q \rightarrow e' q \gamma$
+                        using EPA with $\gamma q \to \gamma q$.
+\item[{\it         }]
+                 =18:   resolved photon processes, selected via 
+                        using full Matrix Element
+\item[{\it         }]
+                 =20:   $\gamma^* p \to q \bar{q} g p$~\cite{Bartels_qqg}.
+\item[{\it         }]
+                 =21:   $\gamma^* p \to q \bar{q} p$
+		            \cite{Bartels_jets,Bartels_asym}.
+		            Exclusive diffractive
+		            dijet production, the same process as \verb+IPRO=12+
+				together with \verb+NG=41+ and \verb+NPOM=41+, but
+				technically calculated differently and more efficient. 
+				
+\item[{\it         }]
+                 =30: saturation model for   $\gamma^* p \to q \bar{q} p$
+		     $\gamma^* p \to q \bar{q} g p$~\cite{satrap}.
+\item[{\it         }]
+               =1200:   use HERACLES \cite{HERACLESa,HERACLESb} 
+                        (optional for 
+                        simulation of QED radiation) for 
+                        $e q \rightarrow e' q'$
+\item[{\it         }]
+               =1400:   use HERACLES \cite{HERACLESa,HERACLESb} 
+                        (optional for 
+                        simulation of QED radiation) for heavy quark production 
+				via boson gluon fusion: 
+                        $e g \rightarrow e' Q \bar{Q}$ 
+
+\item[{\tt Q2SUPP}]\index{Q2SUPP} (D=3.37)  exponential low $Q^2$ suppression 
+                      of the parton
+                      densities to be used with HERACLES:
+                      $1-\exp{(-\verb+Q2SUPP+\cdot Q^2}$, can be
+                     changed by user (\verb+/LOWQ2S/+).
+
+\item[{\tt IBS}]\index{IBS}  
+(D: = 0) select type order $alpha_s$ corrections. 
+\item[]                    = 0 using $p_t$ cutoff scheme
+\item[]                    = 1 using Collins scheme for NLO 
+             \cite{Collins-collfac,Collins-collfac2} 
+         .
+                 
+\item[{\tt IDIR}]\index{IDIR}  
+(D: = 0) select type of events to be generated.
+                 (\verb+/DISDIF/+) 
+\item[]                    = 1 $standard$ inelastic scattering 
+\item[]                    = 0 diffractive and pion exchange processes
+\item[{\tt IDISDIF}]\index{IDISDIF}
+  (D: = 0) choose mixing of $standard$ inelastic
+                    scattering, diffractive and pion exchange processes
+                    according to cross section(\verb+/DISDIF/+).
+\item[]                    = 0 generates only the processes selected
+                    by \verb+IDIR+. 
+                   If \verb+IDIR+ = 0 then pomeron or pion exchange 
+                    is selected via \verb+NG+ and \verb+NPOM+.  
+\item[]                    = 1 mixing of $standard$ inelastic and diffractive 
+                    processes.  
+\item[]                    = 2 mixing of $standard$ inelastic, diffractive and
+                    pion exchange processes.
+\item[{\tt IFULL}]\index{IFULL}
+                   (D: = 1) switch to select lowest order process
+                   (\verb+IFULL+ = 0) or quark parton model with 
+                   $O(\alpha_s)$  matrix elements (\verb+IFULL+ = 1)
+			 (\verb+/OALPINI/+).
+\item[{\tt IQCDGRID}]\index{IQCDGRID}
+                   (D: = 1) switch to select 
+                   generation of $O(\alpha_s)$ processes in a grid
+                   (\verb+/OALPINI/+). 
+
+
+\item[{\tt INTER:}]\index{INTER} (D: =0) interaction type(\verb+/INPU/+)
+\item[             ] = 0 neutral current photon interaction
+\item[             ] =2 charged current interaction
+\item[{\tt SIN2W}]\index{SIN2W} (D:=0.23) for electroweak processes 
+                   $\sin ^2_W$ (\verb+/EWEAK+). 
+\item[{\tt XMW2}]\index{XMW2}
+ (D:= $80 \cdot 80$ GeV$^2$) for electroweak processes  $m_W^2$ 
+                   (\verb+/EWEAK+).
+
+
+\item[{\tt ISEMIH:}]\index{ISEMIH} not used at present(\verb+/INPU/+)
+
+\item[{\tt PT2CUT(IPRO):}]\index{PT2CUT}
+ (D=5.0) minimum $\hat{p}^2 _{\perp}$ for
+                            process \verb+IPRO+ (\verb+/PTCUT/+).
+                            Must be used for generation of light quarks
+                            in processes \verb+IPRO=10,13,15,18+.
+                            
+
+\end{defl}
+\subsubsection{Parameters for parton shower and fragmentation}
+\begin{defl}{123456789012345}
+\item[{\tt NFRAG:}]\index{NFRAG} (D: = 1)
+                        switch for fragmentation(\verb+/INPU/+)
+\item[] = 0 off
+\item[] = 1 on 
+\item[] = 10 proton dissociation in simple model
+\item[] = 20 proton dissociation ala DIFFVM
+\item[{\tt IFPS:}]\index{IFPS} (D: = 3)
+                  switch  parton shower(\verb+/INPU/+)
+\item[] = 0 off
+\item[] = 1 initial state
+\item[] = 2 final state
+\item[] = 3 initial and final state  
+\item[] = 10 gluon radiation according to ARIADNE.
+
+\item[{\tt ILHA:}]\index{ILHA} (D: = 0) Les Houches accord interface     
+\item[] = 0 off
+\item[] = 1  use Les Houches accord interface to write parton level event on
+file \verb+rapgap.gen+
+
+
+\item[{\tt IORD:}]\index{IORD} (D: = 1) ordering for initial state P.S.
+\item[] =0 no ordring
+\item[] =1 $Q^2$ values at branches are strictly
+             ordered, increasing towards the hard
+             scattering strict ordered in $Q^2$
+\item[]=2 $Q^2$ and opening angles of emitted
+          (on shell or time like) partons
+           are both strictly ordered, increasing
+          towards the hard interaction as 1
+          but also strict ordered in angle
+\item[{\tt IALP:}]\index{IALP} (D: = 1)  
+\item[] =1 $\alpha_s$ first order with scale $Q^2$
+\item[]=2 $\alpha_s$ first order with scale
+           $k_t^2=(1-z) \cdot Q^2$
+\item[{\tt ITIM:}]\index{ITIM} (D: =1)
+\item[] =0 no shower of time like partons
+\item[] =1 time like partons may shower
+\item[{\tt ISOG:}]\index{ISOG} (D: =1) treatment of soft gluons
+\item[] =0 soft gluons are entirely neglected
+\item[] =1 soft gluons are resummed and included
+           together with the hard radiation
+           as an effective $z$ shift
+ 
+\item[{\tt KT1:}]\index{KT1} 
+(D:=0.7)  width of a gaussion for intrinsic $k_t$ for photon
+ 
+\item[{\tt KT2:}]\index{KT2} 
+ (D:=0.44) width of a gaussion for intrinsic $k_t$ for proton
+
+\end{defl}
+
+
+
+\subsubsection{Parameters for resolved photon processes}
+\begin{defl}{123456789012345}
+\item[]  process and color configuration for 
+                          resolved photon processes (\verb+ /COLCON/+)
+
+\item[IRPA ]\index{IRPA} =1(0) 
+(D:=1) process $gg \rightarrow q \bar{q}$ switched on(off)
+\item[IRPB ]\index{IRPB} =1(0)
+ (D:=1) process $ g g \rightarrow gg $  switched on(off)
+\item[IRPC ]\index{IRPC} =1(0) 
+(D:=1) process $ q g \rightarrow q g $ switched on(off)
+\item[IRPD ]\index{IRPD} =1(0)
+ (D:=1) process $ q \bar{q} \rightarrow g g $  switched on(off)
+\item[IRPE ]\index{IRPE} =1(0)
+ (D:=1) process $ q \bar{q} \rightarrow q \bar{q} $  switched on(off)
+\item[IRPF ]\index{IRPF} =1(0)
+ (D:=1) process $ q q \rightarrow q q $  switched on(off)
+\item[IRPG ]\index{IRPG} =1(0) 
+(D:=0) process $ q q \rightarrow q q $ (BFKL)  switched on(off)
+\item[IRPH ]\index{IRPH} =1(0) 
+(D:=1) process $ q g \rightarrow q \gamma $ switched on(off)
+\item[IRPI ]\index{IRPI} =1(0)
+ (D:=1) process $ q \bar{q} \rightarrow g \gamma $  switched on(off)
+
+ 
+\item[{\tt SCALQ2}]\index{SCALQ2} (D:=1.) specifies the cut on 
+$\frac{\mu^2}{Q^2}=\verb+SCALQ2+$ for resolved processes in DIS, can be
+                      changed by user (\verb+/RESGAM+).
+
+
+\item[{\tt OMEG2:}]\index{OMEG2}
+                   (D:=0.01)
+                   $\omega=\verb+OMEG2+$ suppression factor for 
+                   virtual resolved photons in the Dress - Godbole 
+                   model~\cite{Drees_Godbole}.
+
+
+
+\end{defl}
+
+\subsubsection{Parameters for structure functions $\alpha_s$ and scales}
+\begin{defl}{123456789012345}
+\item[{\tt IRUNAEM:}]\index{IRUNAEM} (D: = 0)
+                   select running of $\alpha _{em}(Q^2)$
+\item[]
+                        =0:  no running of $\alpha _{em}(Q^2)$
+\item[]
+                        =1:  running of $\alpha _{em}(Q^2)$
+
+
+\item[{\tt IRUNA:}]\index{IRUNA} (D: = 1)
+                        switch for running $\alpha _s$
+\item[]
+                        =0:  fixed $\alpha_s=0.3$ 
+\item[]
+                        =1: running $\alpha _s(\mu^2)$
+\item[{\tt IQ2:}]\index{IQ2} (D: = 5)
+                   select scale $\mu^2$ for $\alpha _s(\mu^2)$
+\item[]
+                        =1:  $\mu^2 = 4 \cdot m_{q} ^2$
+                             (use only for heavy quarks!)
+\item[]
+                        =2:  $\mu^2 = \hat{s} $
+                             (use only for heavy quarks!)
+\item[]
+                        =3:  $\mu^2 = 4 \cdot m^2 + p_{\perp} ^2$
+                             
+\item[]
+                        =4:  $\mu^2 = Q^2$
+                        
+\item[]
+                        =5:  $\mu^2 = Q^2 + p_{\perp} ^2$
+
+\item[{\tt SCALFA}]\index{SCALFA} (D=1) (\verb+/SCALF/+)
+                     factor which the scale $\mu^2$ used 
+                     in $\alpha_s$ and
+                     structure function evaluation 
+                     is multiplied with. For example 
+			   \verb+SCALFA=4+ and \verb+IQ2=3+ means:
+			   $\mu^2= 4\cdot m^2 + 4 \cdot p_{\perp} ^2$, whereas for 
+			   \verb+IQ2=5+ the meaning is 
+			   $\mu^2= Q^2 + 4 \cdot p_{\perp} ^2$.
+
+\item[{\tt MSTP(51):}]\index{MSTP(51)} \verb+MSTP(51)+, \verb+MSTP(51)+
+                         \verb+MSTP(56)+ is used to select
+                     structure function  parameterizations 
+				 (\verb+/PYPARS/+). With \verb+MSTP(51)+ $<10$ 
+                        the parameterization of $p$ structure function
+                         from PYSTFU are used:\\
+                         = 0: Simple scaling Function\\
+                         = 1: EHLQ set 1 \\
+                         = 2: EHLQ set 2 \\
+                         = 3: Duke-Owens set 1 \\
+                         = 4: Duke-Owens set 2 \\
+                         = 5: Morfin-Tung set 1 (S1) \\
+                         = 6: Morfin-Tung set 2 (B1) \\
+                         = 7: Morfin-Tung set 3 (B2) \\
+                         = 8: Morfin-Tung set 4 (E1) \\
+                         = 9: Gluck-Reya-Vogt LO set \\
+                         = 10: Gluck-Reya-Vogt HO set \\
+                         \verb+MSTP(51)+ $>10$
+                         parameterization from LHAPDFLIB 
+                         \cite{\LHAPDFLIB}
+                          is used \\
+                             example: 10150
+                             for CTEQ6L NLO proton parton density.  \\
+\item[{\tt MSTP(52):}]\index{MSTP(52)} \verb+MSTP(52)+ $<10$ 
+                        parameterization of $\pi$ structure function
+                         from \verb+PYSTFU+ (Owens set) is used\\
+                         \verb+MSTP(52)+ $>10$ 
+                         parameterization from LHAPDFLIB is used\\
+                            example: 211 for 
+                             for GRV LO \cite{GRVa,GRVb} 
+                             pion parton density.  
+\item[{\tt MSTP(56):}]\index{MSTP(56)} \verb+MSTP(56)+ $<10$ 
+                         inbuild parton densities are used:\\
+                         = 1: GRS \cite{GRS}\\
+				 = 2: SaS \cite{Sasgam}\\				 
+                        \verb+MSTP(56)+ $>10$ 
+				parameterization from LHAPDF is used\\
+                            example: Nset= 391
+                             for SaS \cite{Sasgam} 
+                             virtual photon parton density together with
+				     the Drees-Godbole $Q^2$ \cite{Drees_Godbole}
+				     suppression factor.  
+
+\end{defl}
+
+\subsubsection{Parameters for diffraction}
+
+\begin{defl}{123456789012345}
+\item[{\tt NG:}]\index{NG} (D: = -14) select pomeron structure 
+                        function
+                        $xf(x)$ (\verb+/DIFFR/+). 
+\item[]
+                        = 0:  $xf_0(x)= 6x(1-x)$ for gluons. For quarks 
+                        $xq(x) =\frac{1}{4} xf_0(x)$
+\item[]
+                        = n:  $xf_n(x)= (n+1)(1-x)^n$
+                              for $1 \leq n \leq 5$ for gluons. For quarks 
+                        $xq(x) =\frac{1}{4} xf_n(x)$
+\item[]                 = 10: $xf(x) = (0.18 + 5.46x)(1-x)$ only gluons.
+\item[]
+                        = 11:  $xq(x) = \frac{1}{3}C\pi x(1-x)$
+                             Donnachie Landshoff quark density in
+                             pomeron.
+\item[]
+                        = 12: Kniehl, Kohrs, Kramer parton density
+                             \cite{Kohrsa,Kohrsb} for
+                             pomeron including direct coupling. 
+\item[]
+                        = 20: parton density for $\pi ^{\pm}$.
+                              If \verb+MSTP(52)+ $ < 10 $ 
+                               Owens set from PYSTFU is used.
+                              IF \verb+MSTP(52)+ $ > 10 $ 
+                              parton density for pion used
+                              from LHAPDFLIB 
+                             \cite{\LHAPDFLIB} 
+\item[]
+                        = 21: parton density for $\pi ^0$.
+                              If \verb+MSTP(52)+ $ < 10 $ 
+                              Owens set from PYSTFU is used.
+                              IF \verb+MSTP(52)+ $ > 10 $ 
+                              parton density for pion used
+                              from LHAPDFLIB 
+\item[] = 30: Nikolaev, Zakharov model \cite{NikZak}.
+\item[] = 40: W\"usthoff model \cite{Wusthoff}.
+\item[] = 41: Bartels, Lotter, W\"usthoff model 
+                              \cite{Bartels_jets,Bartels_asym}.
+\item[] = 42: Diehl model \cite{Diehl1,Diehl2}.
+\item[] = 45: Buchm\"uller, Hebecker, McDermott model
+                              \cite{Buchmuller_Hebecker_Mcdermott}.
+\item[] = -10: H1 fit 1 (quarks only) (NLO)\cite{H1_F2D3_97}
+\item[] = -11: H1 fit 2 (quarks and gluons) (NLO)\cite{H1_F2D3_97} 
+\item[] = -12: H1 fit 3 (quarks and gluons peaked at $z \to 1$)
+                        (NLO)\cite{H1_F2D3_97} 
+\item[] = -13: H1 fit 1 (quarks only)(LO) \cite{H1_F2D3_97}
+\item[] = -14: H1 fit 2 (quarks and gluons) (LO)\cite{H1_F2D3_97} 
+\item[] = -15: H1 fit 3 (quarks and gluons peaked at $z \to 1$) 
+                        (LO)\cite{H1_F2D3_97} 
+\item[] = -30: H1 set A (NLO) \cite{H1_F2D3_06}
+\item[] = -31: H1 set B (NLO) \cite{H1_F2D3_06} 
+
+\item[] $<0$: user supplied structure function via 
+                           subroutine \\
+                           \verb+USDIFFR+.
+                           The parton density must be put in the
+                           array \verb+XPQ(-6:6)+
+                           with the gluon at position $0$,
+                           $u$, $d$, $s$, $c$, $b$, $t$ quarks at
+                           positions $1,2,3,4,5,6$ and the anti-quarks at 
+                           $-1,-2,-3,-4,-5,-6$.  
+\item[{\tt NPOM:}]\index{NPOM} (D: = -10) select pomeron distribution
+                    $f_{p/\PO}$ (\verb+/DIFFR/+)
+\item[] = 0: pomeron distribution $f^S_{p/\PO}$
+\item[] = 1: pomeron distribution $f^{IS}_{p/\PO}$
+\item[] = 2: pomeron distribution $f^{DL}_{p/\PO}$
+\item[] = 20: $\pi^-$  $t$ - distribution \cite{Holtmann}
+\item[] = 21: $\pi^0$ $t$ - distribution \cite{Holtmann}
+\item[] = 22: $\pi^+$  $t$ - distribution \cite{Holtmann}
+\item[] = 30: Nikolaev, Zakharov model \cite{NikZak}.
+\item[] = 40: W\"usthoff model \cite{Wusthoff}.
+\item[] = 41: Bartels, Lotter, W\"usthoff model 
+                              \cite{Bartels_jets,Bartels_asym}.
+\item[] = 42: Diehl model \cite{Diehl1,Diehl2}.
+\item[] = 45: Buchm\"uller, Hebecker, McDermott model
+                              \cite{Buchmuller_Hebecker_Mcdermott}.
+\item[] = -10: H1 fit pomeron only \cite{H1_F2D3_97} 
+\item[] = -11: H1 fit meson only \cite{H1_F2D3_97} 
+\item[] = -12: H1 fit pomeron and meson \cite{H1_F2D3_97} 
+\item[] = -30: H1 fit pomeron only \cite{H1_F2D3_06} 
+\item[] = -31: H1 fit meson only \cite{H1_F2D3_06} 
+\item[] = -32: H1 fit pomeron and meson \cite{H1_F2D3_06} 
+\item[] $<0$: user supplied pomeron distribution via 
+                           subroutine \verb+USDIFFR+.
+
+\item[ ] Parameters for the diffractive
+                           gluon density in the semi-classical approach of
+                            Buchm\"uller, Hebecker, McDermott
+                              \cite{Buchmuller_Hebecker_Mcdermott}.
+\item[{\tt C1:}]\index{C1} (D: = 1) $C_1=\verb+C1+$ (\verb+/BUCHMUE/+).
+\item[{\tt Cg:}]\index{Cg} (D: = 1) $C_g=\verb+Cg+$ (\verb+/BUCHMUE/+).
+
+\item[{\tt Iqqg}] \index{Iqqg} allows different levels of appriximation in the
+matrix element calcualtion of \verb+IPRO=20+. Iqqg=0 is the full matrix element,
+Iqqg=1,2 approximates the matrix element as described in \cite{Bartels_qqga}
+
+\item[{\tt IGLU:}] \index{IGLU} (D: = 1)
+			select unintegrated gluon density{\tt /GLUON/}).
+\item[]
+                        =1: CCFM set A0 \cite{jung-dis04}
+\item[]
+                        =2:  derivative of GRV~\cite{GRV95}
+				$\frac{d xg(x,Q^2)}{dQ^2}$.
+\item[]
+                        =3:  approach of Bl\"umlein~\cite{Bluemlein}.
+\item[]
+                        =4:  KMS~\cite{martin_stasto} (\verb+kms.dat+).
+\item[]
+                        =5:  saturation model~\cite{wuesthoff_golec-biernat}.
+\item[]
+                        =6:  KMR~\cite{martin_kimber} (\verb+kmr.dat+).
+
+
+
+
+\item[{\tt IREM:}]\index{IREM} (D: = 1) 
+                     select momentum distribution of proton
+                             dissociation (\verb+/PREMNANT/+).
+\item[     ] = 1: $P(\beta')  =  2 (1 - \beta') $
+\item[     ] = 2: $P(\beta')  =   (a+1) (1 - \beta')^a $
+\item[     ] = 3: $P(\beta')  =  
+           \frac{N}{ \beta'\left(1 - \frac{1}{\beta'} - 
+           \frac{c}{(1 - \beta')}\right) ^2}$
+
+\item[{\tt IVM:}]\index{IVM} (D: = 0) select exclusive vector
+meson production in diffractive scattering (\verb+/VMESON+).
+\item[] = 0: no special selection done.
+\item[] $>1$ and $< 443$ :production of light vector mesons
+\item[] $= 443$ :production of $J/\psi$ mesons.
+\item[] $= 553$ :production of $\Upsilon$ mesons.
+
+
+\item[{\tt IALMKT:}]\index{IALMKT} (D: =0)(\verb+/INPU/+)
+                   include primordial $k_t$ for diffractive processes
+                   according to the Aligned Jet Model:   
+                   $e^{-5.5 k_t}$ for \verb+IALMKT+=1 (\verb+/INPU/+).
+
+\item[{\tt T2MAX:}]\index{T2MAX} (D: = 5 ) 
+                        maximum $t$  [GeV$^2$/$c^2$] (\verb+/DIFFR/+).
+
+\item[{\tt XF:}]\index{XF}  (D: = 0.9)
+                        minimum \verb+XF+ $x_\pom=1-x_f=1-\frac{E_p'}{E_{p}}$ 
+				(\verb+/DIFFR/+).
+\item[Parameters for proton dissociation:] 	
+\item[{\tt PEPS:}]\index{PEPS} (D:=0.0) $\epsilon_Y$ for $M_Y^2$ spectrum
+\item[{\tt PRN2:}]\index{PRN2} (D:=4.0) $B_{diss}$ for $\exp(-B_{diss} |t|)$
+\item[Parameters for pomeron flux (only for {\tt NPOM=0,1,2)}:] 				
+\item[{\tt ALPHP:}]\index{ALPHP}
+ (D: = 0.25) $\alpha_{\PO}$ [GeV$^{-2}$] (\verb+/DIFFR/+).
+\item[{\tt RN2:}]\index{RN2} (D: = 4.7)
+                        \verb+RN2+$=b_0$ as defined above (\verb+/DIFFR/+).
+\item[{\tt EPSP:}]\index{EPSP}
+ (D: = 0.085) \verb+EPSP+$=\epsilon$ (\verb+/DIFFR/+). 
+
+
+                       
+\end{defl}
+
+\subsubsection{Accessing information}
+\begin{defl}{123456789012345}
+\item[ ]
+
+\item[{\tt AVGI}]\index{AVGI} integrated cross section (\verb+/EFFIC/+).
+\item[{\tt SD}]\index{SD} standard deviation of integrated cross section
+                 (\verb+/EFFIC/+).
+
+\item[ ]
+\item[{\tt SSS}]\index{SSS} 
+total center of mass energy  $s$ (\verb+/PARTON/+)
+
+\item[{\tt PBEAM}]\index{PBEAM} energy momentum vector of beam particles
+  (\verb+/BEAM/+)
+\item[{\tt KBEAM}]\index{KBEAM} flavor code of beam particles
+ (\verb+/BEAM/+)
+
+
+\item[{\tt Q2}]\index{Q2} in lepto-production: actual $Q^2$ of
+                         $\gamma$ (\verb+/PARAE/+).
+\item[{\tt YY}]\index{YY}
+                        energy fraction lost by incident electron
+				(\verb+/RAPGKI/+)
+\item[{\tt XEL}]\index{XEL}
+                        energy fraction of parton on electron side
+				(\verb+/RAPGKI/+)
+\item[{\tt XPR}]\index{XPR}
+                        energy fraction of parton on proton side
+				(\verb+/RAPGKI/+)
+\item[{\tt YMAX,YMIN}]\index{YMAX,YMIN} actual upper and lower limits for $y$ 
+                          (\verb+/PARAT/+).
+\item[{\tt Q2MAX,Q2MIN}]\index{Q2MAX,Q2MIN} actual upper and
+                        lower limits for $Q^2$ of $\gamma$ (\verb+/PARAT/+).
+\item[{\tt XMAX,XMIN}]\index{XMAX,XMIN} 
+upper and lower limits for $x$ (\verb+/PARAT/+).
+
+
+\item[{\tt PT2H}]\index{PT2H}
+                        $\hat{p}_{\perp} ^2$
+     [GeV$^2$/$c^2$]
+                      of parton in hard subprocess $cm$
+			     (\verb+/RAPGKI/+)
+system
+\item[{\tt SHH}]\index{SHH}
+                        invariant mass $\hat{s}$ [GeV$^2$]
+                     of hard subprocess (\verb+/RAPGKI/+)
+\item[{\tt T2GKI}]\index{T2GKI}
+                        for diffractive processes 
+                        \verb+T2GKI+ = $t$ [GeV$^2$] (\verb+/RAPGKI/+)
+\item[{\tt XFGKI}]\index{XFGKI}
+                        for diffractive processes 
+                        \verb+XFGKI+ = $x_{\PO}$ (\verb+/RAPGKI/+)
+                                                
+
+\item[ ] $O(\alpha_s)$ matrix element information
+                         (\verb+/MEINFO/+)
+\item[{\tt AM(18)}]\index{AM}
+ vector of masses of final state particles of hard
+                         interaction.
+\item[{\tt SHAT}]\index{SHAT} $\hat{s}$ of hard subprocess (\verb+/PARAT/+)
+\item[{\tt ZQGKI}]\index{ZQGKI} 
+                $z=\frac{p_i.p_f}{p_i.q}=\verb+ZQGKI+$ (\verb+/MEINFO/+)
+\item[{\tt XPGKI}]\index{XPGKI}
+              $x_p=\frac{Q^2}{2p_i.q}=\verb+XPGKI+$ (\verb+/MEINFO/+)
+\item[{\tt PHIGKI}]\index{PHIGKI}  $\phi=\verb+PHIGKI+$ azimuthal
+                     angle (\verb+/MEINFO/+)
+
+\item[{\tt NIA1,NIA2}]\index{NIA1,NIA2}
+ position of partons in hard interaction in
+                         \verb+LUJETS+ event record (\verb+/HARD/+)
+\item[{\tt NF1,NF2}]\index{NF1,NF2} first and last position final
+                         partons/particles of
+                         hard interaction in \verb+LUJETS+ (\verb+/HARD/+)
+\item[{\tt NFT}]\index{NFT} total number of final particles; for
+                         $2 \rightarrow 2$ process \verb+NFT+ =2
+                        
+
+\item[{\tt Q2Q}]\index{Q2Q} hard scattering scale $\mu ^2$ used in
+                         $\alpha_s$ and structure functions (\verb+/PARAE/+).
+\item[{\tt ALPHS}]\index{ALPHS} actual $\alpha_s$ (\verb+/PARAM/+).
+\item[{\tt PI}]\index{PI} $\pi$ (\verb+/PARAM/+).
+\item[{\tt ALPH}]\index{ALPH} $\alpha_{em}$ (\verb+/PARAM/+).
+\item[{\tt NIN}]\index{NIN} 
+number of trials for event generation (\verb+/EFFIC/+).
+\item[{\tt NOUT}]\index{NOUT} number of successful generated events (\verb+/EFFIC/+).
+\item[{\tt SCAL1,SCAL2}]\index{SCAL1,SCAL2}
+ scale for structure function on beam 1 and 2 
+                               respectively (\verb+/STRU/+).
+\item[{\tt XDP1,XPD2}]\index{XDP1,XPD2} 
+value of parton density on beam 1 and 2 
+                               respectively (\verb+/STRU/+).
+
+
+\end{defl}
+
+
+
+
+
+
+\subsection{List of COMMON blocks}
+
+\verb+COMMON/BEAM/PBEAM(2,5),KBEAM(2,5)+ \\
+\verb+COMMON/BUCHMUE/C1,Cg+\\
+\verb+COMMON/COLCON/ICOLORA,IRESPRO,IRPA,IRPB,IRPC,IRPD,IRPE,IRPF,IRPG+\\
+\verb+COMMON/DIFFR/T2MAX,XF,ALPHP,RN2,EPSP,QMI,YMI,QMA,YMA,NG,NPOM+\\
+\verb+COMMON/DISDIF/IDIR,IDISDIF+\\
+\verb+COMMON/EFFIC/AVGI,SD,NIN,NOUT+\\
+\verb+COMMON/ELECT/THEMA,THEMI+\\
+\verb+COMMON/EWEAK/SIN2W,XMW2+\\
+\verb+COMMON/F2INT/F2DIS,F2DIF,F2PI+
+\verb+COMMON/HARD/NIA1,NIR1,NIA2,NIR2,NF1,NF2,NFT+\\
+\verb+COMMON/INPU/PLEPIN,PPIN,NFRAG,ILEPTO,IFPS,IHF,IALMKT,INTER,ISEMIH+\\
+\verb+COMMON/LOWQ2S/Q2SUPP+\\
+\verb+COMMON/LUCO/KE,KP,KEB,KPH,KGL,KPA,NFLAV,NFLQCDC+\\
+\verb+COMMON/MEINFO/ZQGKI,XPGKI,PHIGKI+\\
+\verb+COMMON/OALPINI/IFULL,IQCDGRID+\\
+\verb+COMMON/PARAE/Q2,Q2Q,PCM(4,18)+\\
+\verb+COMMON/PARAM/ALPHS,PI,ALPH,IWEI+\\
+\verb+COMMON/PARAT/AM(18),SHAT,YMAX,YMIN,Q2MAX,Q2MIN,XMAX,XMIN+\\
+\verb+COMMON/PARTON/SSS,CM(4),DBCMS(4)+ \\
+\verb+COMMON/PREMNANT/IREM+\\
+\verb+COMMON/PTCUT/PT2CUT(100)+\\
+\verb+COMMON/PYPARS/MSTP(200),PARP(200)+ \\
+\verb+PARAMETER (NY=40,NQ=20)+ \\
+     \verb+COMMON/QCDGRI/QY(NY),QQ(NQ),+ \\
+     \verb+& QPMDF(NY,NQ),QQBDF(NY,NQ),QQBHDF(NY,NQ),QCDCDF(NY,NQ),+\\
+     \verb+& QPMPI(NY,NQ),QQBPI(NY,NQ),QQBHPI(NY,NQ),QCDCPI(NY,NQ),+\\
+     \verb+& QPM(NY,NQ),QQB(NY,NQ),QQBH(NY,NQ),QCDC(NY,NQ)+  \\
+\verb+PARAMETER (NBQ2=20,NBX=20)+\\
+     \verb+COMMON/RAHER/IHERPYS,XPQDIF(-6:6,NBX,NBQ2),+%
+     \verb+XPQPI(-6:6,NBX,NBQ2)+\\
+     \verb+COMMON/RGRIDF2/XX(NBX),Q2X(NBQ2)+\\
+     \verb+COMMON/F2VAL/F2_DIS(NBX,NBQ2),+%
+     \verb+F2_DIF(NBX,NBQ2),F2_PI(NBX,NBQ2)+\\ 
+\verb+COMMON/RAPA/IPRO,IRUNA,IQ2,IRUNAEM,Q2START,W_Q2,OMEG2+ \\
+\verb+COMMON/RAPGKI/YY,XEL,XPR,PT2H,SHH,T2GKI,XFGKI+ \\
+\verb+COMMON/RESGAM/SCALQ2+\\
+\verb+COMMON/SCALF/SCALFA+\\
+\verb+COMMON/STRU/SCAL1,XPD1,SCAL2,XPD2+\\
+\verb+COMMON/VMESON/IVM+\\
+
+\section{Example Program}
+\begin{verbatim}
+      PROGRAM RGMAIN
+	Implicit None
+#include "rgfull.inc"
+#include "rgdisdif.inc"
+#include "rgluco.inc"
+#include "rgludat1.inc"
+#include "rgpara.inc"
+#include "rgpypars.inc"
+#include "rgdiffr.inc"
+#include "rgscq2.inc"
+#include "rglq2.inc"
+#include "rghsunts.inc"
+#include "rghsoptn.inc"
+#include "rghscuts.inc"
+#include "rghsvglp.inc"
+	Integer Nevent
+	Common/steer1/Nevent
+      Integer N1,N2
+
+	real timeleft
+      Integer Minuts
+      External Minuts
+	External pydata
+
+      Integer I,ISEED
+C---initialise ARIADNE parameters, now done via block data
+C---initialise PYTHIA 6 parameters, via pythia block data 
+C     initialize random number generator
+      ISEED = 213123
+      ISEED = Iabs(MINUTS())
+      N1 = 0
+      N2 = 0
+      CALL RM48IN(ISEED,N1,N2)
+C---initialise RAPGAP parameters
+      CALL GRAINI
+C-- read in parameters from file 
+      Call Steer
+C-- change standard parameters of RAPGAP 	
+	Call rapcha
+C-- change standard parameters of HERACLES	
+	Call hercha
+C-- change standard parameters of \PYTHIA
+	Call pytcha
+C-- change standard parameters of ARIADNE
+	Call aricha
+	
+C Initialize ARIADNE
+      CALL ARINIT('RAPGAP')
+C-- change standard parameters of ARIADNE
+	Call aricha
+C--- CALCULATE X SECTION
+      CALL PTIME(' rapgap  ',1,0)
+      CALL RAPGAP
+C--- print x section
+      CALL RAEND(1)
+C--- event generation
+      DO 10 I=1,Nevent
+         CALL PTIME(' event  ',1,0)
+c	   call timel(timeleft)
+c	   if(timeleft.le.10.) then
+c	      write(6,*) ' *** time limit reached. time left = ',timeleft
+c            goto 123
+c	   endif
+         CALL EVENT
+C--- user analysis routine
+c         CALL ANALYS
+C--- user analysis routine (hztool)
+cc         CALL hzraana
+      CALL PTIME(' event  ',2,0)
+C---
+   10 CONTINUE
+123   Continue
+C---PRINT NR OF GENERATED EVENTS
+      CALL RAEND(20)	
+C--- user terminate routine (hztool)
+cc	CALL hzraend
+	
+      CALL PTIME(' rapgap  ',2,0)
+      CALL PTIME('        ',2,99)
+      STOP
+      END
+#include "../pythia-bkdata/pydata.f"
+\end{verbatim}
+
+In the distribution example programs are given also for the use with the 
+\HZTOOL\ ~\cite{hztool2006}.
+package. The source code is in directory {\tt examples} and the executable is
+stored in the {\tt bin} directory. To access different subroutines form 
+\HZTOOL\,
+the file {\tt hzxxxx.inc} has to be changed accoringly.
+
+The {\tt bin} directory contains also sample steering files, for different
+processes.
+
+To run \RAPGAP\ just type: \\
+{\tt rapgap32 < steer.charm }\\
+or using the \HZTOOL\ verison: \\
+{\tt rapgaphztool < steer.charm }
+
+\section{Installation Instructions}
+\begin{verbatim}
+Please note:
+RAPGAP 3.2 contains the source code of HERACLES 4.63 (from .. )
+RAPGAP 3.2 contains the source code of BASES/SPRING 5.1 (from ..)
+RAPGAP 3.2 contains explicitly the block data from pythia.
+           to change/update to newer version, please copy the block data
+           pydata.f from the latest PYTHIA version into the directory
+           rapgap-3.2/src/pythia-bkdata/pydata.f
+1) Get the source
+
+tar xvfz rapgap-3.2.tar.gz
+cd rapgap-3.2
+
+2) set environment variables for PYTHIA, CERNLIB and HZTOOL
+example (Please change to the proper path of the libraries):
+in csh: 
+setenv PYTHIA "/Users/jung/jung/cvs/pythia6410"
+setenv LHAPDF "/Users/jung/jung/cvs/lhapdf/lhapdf-5.7.0"
+
+If you want to use ARIADNE, you need:
+
+setenv ARIADNE "/Users/jung/jung/cvs/ariadne412"
+
+If the HZTOOL interfae is wanted, you need in addition:
+
+setenv CERN_LIBS "/sw/lib -lmathlib -lkernlib -lpacklib"
+setenv HZTOOL "/Users/jung/jung/cvs/hztool-4/hztool-4.2"
+
+
+in zsh:
+export PYTHIA="/Users/jung/jung/cvs/pythia6410"
+export LHAPDF="/Users/jung/jung/cvs/lhapdf/lhapdf-5.7.0"
+
+If you want to use ARIADNE, you need:
+
+export ARIADNE="/Users/jung/jung/cvs/ariadne412"
+
+If the HZTOOL interfae is wanted, you need in addition:
+
+export CERN_LIBS="/sw/lib -lmathlib -lkernlib -lpacklib"
+export HZTOOL="/Users/jung/jung/cvs/hztool-4/hztool-4.2"
+
+2) Generate the Makefiles
+./configure --disable-shared --prefix=install-path
+
+if you want to create an execuatble using HZTOOL 
+./configure --disable-shared --prefix=install-path hzexe=yes
+
+if you want to create an execuatble using ARIADNE
+./configure --disable-shared --prefix=install-path ariadne=yes
+
+3) Compile the binary and the documentation
+make
+  Install the program
+make install
+
+4) the execuatble is in "your-installation-directory"/bin
+run it with:
+install-path/bin/rapgap < install-path/share/steer_pp-bottom
+
+5.) the documentation is in
+install-path/share/rapgap32.pdf
+
+6.) 
+\end{verbatim}
+\section{Acknowledgment}
+I am grateful to T. Sj\"ostrand and G. Ingelman, the authors of \PYTHIA\ and 
+\LEPTO\ for their permission to copy and use subroutines from their programs.
+All the credit concerning initial state parton showers and remnant treatment
+belongs to them.
+\par
+I want to thank all those who continue-sly used and checked the program.
+Special thanks go to G.~Briskin, A.~Mehta and J.~Philipps. Without
+their ideas, suggestions and comments and heavily use of the program, it
+would not be like it is now.
+
+%
+%-----------------------------------------------------------------------
+%
+
+\section{Update History}
+\begin{verbatim}
+RAPGAP 3.2    
+*::>         Version 3.2007  (Nov 2011)
+*            prompt photon processes included
+*      
+*::>         Version 3.2006  (May 2011)
+*            xf description in manual corrected (Radek Zlebcik)
+*            eventpp: removed unnecessary boost to-from CM system (Radek Zlebcik)
+*::>         Version 3.2003  (Sept 2010)
+*            bug in heavy flavor selection in eleres corrected
+*            bug in h1qcd/qcd_2006  on limit of iz,iq2 corrected
+*            W/Z production included for pp
+*            Higgs production included for pp
+* 
+*::>         Version 3.2002
+*            bug in diffraction for pp causing energy momentum conservation problem corrected 
+*            pp works also with new remnant treatment
+*            Lambda_QCD now by default taken from PDF. Use ILAMQCD=0 to switch to steering 
+*		
+*::>         Version 3.2001
+*            release for hepforge with auto Tools installation
+*            For ep: HERACLES 4.6.6    
+*            CERNLIB lite included
+*            problem NFL_GAM in eleres > NFLAV...check and give proper return to program
+*________________________________________________________________________
+RAPGAP 3.1   
+*::>         Version 3.1035
+*            bug in lmeps for resloved diff scattering corrected
+*		
+*::>         Version 3.1034
+*            lower cut for pdfs in h1qcd2006 removed, important for charm
+*            f2c for diffraction:printout statements restricted
+*		
+*::>         Version 3.1033
+*		 bug in rgmain: arinit overwrote changed PYTHIA/JESTET parameters
+*
+RAPGAP 3.1   
+*::>         Version 3.1032
+*            mstp(56) changed to mstp(55) for consitency with PYTHIA using LHAPDF
+*            nhera mode changed to run with standard lhapdf
+*            changes made for proton,pion,photon pdfs
+*		
+*::>         Version 3.1031
+*            bug corrected in pion_xpq
+*            now also pion pdf from LHAPDF or pdflib (h1qcd2006,h1qcdfit)
+*            problem of very small scales and LHAPDF with HERACLES corrected (rystfu)
+*		
+*
+*::>         Version 3.1029
+*            new 2006 diff pdfs from H1 included
+*            eleres now also for IHFLA=5 working
+*		
+*
+*::>         Version 3.1027
+*            LHApdf interface for both proton and photon pdfs included
+*
+*::>         Version 3.1026
+*            bug of formula for ksi in eleqqf corrected: resulted in wrong
+*            xsection for CC heavy quark production via IPRO=14
+*
+*::>         Version 3.1025
+*            updated for heracles 
+*
+*::>         Version 3.1024
+*            for charged current, bug in QCDMIX corrected, to have
+*            proper flavor for heavy quarks for IFUL=1
+*
+*::>         Version 3.1023  
+*            for charged current, bug in HERACLES interface corrected, to have
+*            proper neutrino in final state
+*
+*::>         Version  3.1022
+*            order of changes of PYHTIA and RAPGAPO params in  
+*            h1 version changed .... to avoid overwritings ... grapga.F
+*            bug for pp version corrected
+*
+*::>         Version 3.1021
+*            Updated versions for UPINIT and UPEVNT 
+*
+*::>         Version 3.1019
+* 		 PYTHIA block data are now called via external statement
+*
+*::>         Version 3.1020
+*            steering files updated according to new frag. parameters
+*            Bug in steer corrected: Nmax = 1000
+*            Also RGUPINIT and RGUPEVNT added for LHA
+*
+*::>         Version 3.1014
+*            bug with splitted variables in rapgap.f corrected
+*            bug writing bspdf.dat instead of pdf.dat in rapgap.f corrected
+*
+*::>         Version 3.1013
+*            pdiss ala diffvm included also for IPRO=30
+*
+*::>         Version 3.1012
+*            pion exchange for neutrons added
+*            ARIADNE now for all IPRO available (also for IPRO=15,18)
+*
+*::>         Version 3.1011
+*            updated eleres for charm 
+*            bug for xb < 0 in PYSSPA corrected
+
+*::>         Version 3.1008
+*            Proton Dissociation included, with routines from DIFFVM (B.List)
+*            started by P. Thompson and Y. Coppens
+*            Updated treatement of p-diss system acc. to Leszek Adamczyk
+*            q-gluon-diq        
+*
+RAPGAP 3.0 (with PYTHIA6)
+*::>         Collins NLO (order alphas) for F2 implemented (S. Schilling)
+*
+*::>          
+RAPGAP 2.8 (with JETSET 7.4)
+*
+*::>          VERSION  2.08/19   01/08/2002 12.28.22
+*             Bug in initialisation of RM48 found by Thomas Kluge. Thanks.
+*
+*::>          VERSION  2.08/18   16/01/2002 18.27.20
+*             bug in rgsatrev corrected: PHIP missing
+*
+*::>          VERSION  2.08/17   24/10/2001 17.50.59
+*             upper scale for final state ps for IPRO 18 updated. Was shat
+*             before always !!!
+*
+*::>          VERSION  2.08/16   14/08/2001 08.27.06
+*             bug in eleqqg corrected: 2pi in gamma flux, 2 in l integral
+*             bug in partdh corrected: partons for qqg were mixed, caused frag
+*             crash in case of charm
+*             eleqq updated to use also unintegrated gluon
+*
+*::>          VERSION  2.08/15   25/06/2001 18.18.51
+*             ppbar for incl and diffraction included
+*
+*::>          VERSION  2.08/14   14/05/2001 13.53.48
+*             some double defined subroutines removed and ariadne common blocks
+*             and PYPARS updated.
+*
+*::>          VERSION  2.08/11   08/03/2001 11.00.31
+*             small bug in PARTDF corrected, for p* momentum with m ne mp
+*
+*::>          VERSION  2.08/10   07/02/2001 12.02.40
+*             DUDBRB changed to LUDBRB in AREXEC. Bug found by Taro Yamashita
+*
+*::>          VERSION  2.08/09   17/12/2000 17.00.34
+*             In partdi,partdf for heracles mode cut on q2min < q2max removed
+*             because events were rejected. Also in parti for HERACLES WEIGHT=1
+*             added, all by request from A. KAppes and K.Long.
+*             New version of h1qcdfit parameterisation: Redone charm such that
+*             charm pdf = BGF *gluon
+*             New double precision draprn (using RM48 of CERNLIB). Problems
+*             found by Taro in y distribution for IPRO=20. Now is ok.
+*
+*::>          VERSION  2.08/07   31/07/2000 16.58.11
+*             eleqqg (2 gluon exchange) updated for heavy quarks (A. Kyrieleis)
+*
+*             eleres charge for top corrected
+*
+*::>          VERSION  2.08/05   30/03/2000 17.28.20
+*
+*             rapgap and event changed because of a bug for ipro1200 and pi exchange
+*             SATRAP now includes also charm
+*
+*
+*::>          VERSION  2.08/03   10/12/99 12.21.44
+*             rgmain bug corrected
+*
+*::>          VERSION  2.08/02   04/11/99 16.39.29
+*             SATRAP (IPRO=30) now included (works also with HERACLES interface
+*             IPRO=3000).
+*             "Bug" in phi angle of scattered proton for diffraction corrected
+*
+*::>          VERSION  2.08/01   23/06/99 14.31.37
+*             new treatment for diffraction and me mixing...
+*
+*::>          VERSION  2.08/00   15/06/99 17.31.15
+*
+*             Bug for IPRO=1200,1400 in diffractive mode with IFULL=1 corrected
+*             eta distribution of partons from matrix elements were wrong
+*
+*             Bug in xpom distribution for diffraction with IFULL=1 corrected
+*
+*             improved calculation of ME contribution in diffraction, taken into account
+*             kinematic limits from pt2cut
+*
+*             Nr of flavours in structure function now also treated correctly for the
+*             HERACLES interface
+*
+*             test release for IPRO=30, diffraction ala saturation model of M. Wuesthoff
+*             coded by H. Kowalski
+*
+*________________________________________________________________________
+*
+*::>          VERSION  2.07/01   23/03/99 09.07.40
+*             heavy flavor excitation in res. photon processes added
+*             better treatment of ME mixing in diffr. processes
+*
+*::>          VERSION  2.07/00   22/01/99 09.30.01
+*             pi flux of Holtmann now default
+*
+*::>          VERSION  2.06/51   10/10/98 18.30.56
+*             LEPTOU changed to RAPTOU to avoid confusion with DJANGOH
+*
+*::>          VERSION  2.06/50   30/09/98 08.19.42
+*             some default settings updated
+*
+*::>          VERSION  2.06/49   29/09/98 18.46.00
+*             bug for heavy quarks in resolved photon processes corrected
+*
+*::>          VERSION  2.06/47   19/09/98 19.41.19
+*             heavy quark ME's for resolved photons inplemented
+*             bug for GADAP2 integration of ME corrected
+*
+*::>          VERSION  2.06/44   01/08/98 18.19.48
+*             heracles 4.5 and heracles 4.6 included via SEL=HERACLES46
+*
+*::>          VERSION  2.06/43   24/07/98 15.25.29
+*             bugs in dimensions for x() corrected
+*
+*::>          VERSION  2.06/42   23/07/98 15.39.31
+*             dimension for x() increased to 20 (necessary for qqg)
+*
+*::>          VERSION  2.06/41   22/07/98 10.23.45
+*             QCDGRID speede up by usage of grid for wmax
+*
+*::>          VERSION  2.06/38   15/07/98 22.50.21
+*             heracles fl included
+*
+*::>          VERSION  2.06/37   30/06/98 22.30.23
+*             Bug in intrinsic k_t for resolved photons corrected (PYREMN)
+*
+*::>          VERSION  2.06/36   26/06/98 08.36.26
+*             resolved photon BFKL qq -> qq added acc. Cox/Forshaw hep-ph9800506
+*
+*::>          VERSION  2.06/34   17/06/98 23.08.14
+*
+*             writing grid file for pdf's included --> faster when same param.
+*             processes IPRO=21 included qq 2gluon exchange
+*             processes IPRO=20 included qqg 2gluon exchange
+*
+*::>          VERSION  2.06/33   14/05/98 08.47.12
+*             bug when running 1200 with IGRID=1 corrected
+*
+*::>          VERSION  2.06/32   05/05/98 14.50.19
+*             clebsch/cordon coeff for pion exchange corrected in RAT2DI
+*
+*::>          VERSION  2.06/31   26/03/98 10.34.34
+*             2nd attempt for qqg a la Bartels/Wuesthoff
+*
+*::>          VERSION  2.06/30   18/03/98 13.30.56
+*             intrinsic pt for photon and proton changeable by user
+*             bug corrected for photon pdfs using pdflib
+*
+*::>          VERSION  2.06/29   16/03/98 10.08.13
+*             1st attempt to include res. gamma also for diffraction
+*
+*::>          VERSION  2.06/28   13/03/98 12.21.39
+*             NFQCDC added: select 3 or more flavours for QCDC
+*
+*::>          VERSION  2.06/27   09/02/98 11.56.04
+*             1st attempt for qqg a la Bartels/Wuesthoff
+*
+*::>          VERSION  2.06/26   24/01/98 17.15.29
+*             fixed problem in phi asym. for hard diffraction
+*
+*::>          VERSION  2.06/25   14/01/98 20.59.01
+*             KPF=KPA added for vm prod in partdf
+*
+*::>          VERSION  2.06/24   14/01/98 19.40.53
+*             wuesthoff new parametrisation included (ANL-HEP-PR 97-03)
+*             selected via NG=NPOM=40
+*
+*::>          VERSION  2.06/23   29/12/97 19.36.49
+*             podiff improved.....
+*
+*::>          VERSION  2.06/22   15/12/97 11.52.17
+*             weighting for diffr. with ng>0 improved
+*
+*::>          VERSION  2.06/21   09/12/97 16.58.25
+*             bug in arexec for diffractive events corrected
+*
+*::>          VERSION  2.06/20   26/11/97 16.23.35
+*             QCDMIX corrected when using grid
+*
+*::>          VERSION  2.06/19   24/11/97 15.40.20
+*             bug in lmeps for QED radiation fixed
+*
+*::>          VERSION  2.06/17   04/11/97 16.26.19
+*             Subroutine EVENT changed so that 1200(nrad) and 12 give same results
+*             for diffraction
+*
+*::>          VERSION  2.06/16   31/10/97 15.11.16
+*             lots of changes in PYSSPA for res. photons needed
+*             rearranged switches to be more transparent....
+*             included option for angluar ordering in PYSSPA
+*
+*::>          VERSION  2.06/13   20/10/97 12.22.59
+*             bug in small mass collapsing for charm in LMEPS corrected
+*
+*::>          VERSION  2.06/12   18/10/97 15.15.55
+*             2nd attempt to IPS in resolved photon
+*
+*::>          VERSION  2.06/11   18/10/97 00.46.47
+*             first attempt to IPS in resolved photon
+*
+*::>          VERSION  2.06/10   16/10/97 12.08.35
+*             NFLAV added to f2md
+*
+*::>          VERSION  2.06/09   11/10/97 14.09.07
+*             IPRO=15 PHIGKI changed to region 0 - 2pi
+*
+*::>          VERSION  2.06/08   10/10/97 17.17.42
+*             bug NIA1 used in AREXEC corrected
+*
+*::>          VERSION  2.06/07   10/10/97 12.23.08
+*             check on IDISDIF in rapgap improved....
+*
+*::>          VERSION  2.06/06   10/10/97 10.37.30
+*             bug corrected: mixing F2 and F2D for NG<0
+*
+*::>          VERSION  2.06/05   25/09/97 16.31.35
+*             initial particle code for res. gamma corrected
+*
+*::>          VERSION  2.06/04   23/09/97 10.14.00
+*             initial parton for resolved gamma in LMEPS corrected
+*
+*::>          VERSION  2.06/03   14/09/97 16.57.59
+*             mismatch in dimensions in XXI and Q2I in rapgap cured
+*
+*::>          VERSION  2.06/01   21/07/97 16.11.46
+*             angular cut for HERACLES included in hercl
+*             to be used together with HERCALES version 4401
+*
+*::>          VERSION  2.06/00   18/07/97 13.35.24
+*             RAPGAP for DIS and DIF including resolved photons for DIS
+*
+*::>          VERSION  2.05/28   16/07/97 10.42.54
+*             HERACL, XMAX=1-XF for diffraction introduced to avoid
+*             wispy y%q2 distribution....
+*
+*::>          VERSION  2.05/26   07/07/97 16.11.31
+*             bugs in LMEPS for small systems corrected
+*
+*::>          VERSION  2.05/23   30/06/97 12.08.49
+*             sasgam was not correctly included in car file
+*
+*::>          VERSION  2.05/22   29/06/97 13.02.39
+*
+*             PYSSPA: explicit lower limit for soft gluon rad. included
+*                     --> problem with energy momentum cons. solved
+*             Q2SUPP: parameter for HERACLES low Q2 suppression included
+*             SCALQ2: parameter for scale/Q2 for resolved photons in DIS incl.
+*             IHFLA : flavour code for heavy flavor (IPRO=14,1400) included
+*             SCALFA: factor for scale Q2Q included, to switch from
+*                     Q2Q --> SCALFA*Q2Q
+*             LMEPS:  changes from G. Briskin for low mass diff. included
+*             LUKFDI: changes from G.Briskin for low mass states included
+*
+*
+*::>          VERSION  2.05/20   16/06/97 16.13.21
+*             NPOM = -3 only pomeron
+*             NPOM = -4 only meson
+*
+*::>          VERSION  2.05/19   09/06/97 09.02.25
+*             scale pT**2 instead of 4*pt**2,
+*             lambda consistently set also for PS
+*             for HERACLES always fixed alpha_em
+*
+*::>          VERSION  2.05/16   08/06/97 19.34.46
+*             alphas for diffr. was 0 in version 2.05 , corrected
+*
+*::>          VERSION  2.05/15   05/06/97 15.59.54
+*             now QCDCOMPTON only for light quarks
+*             some pause statements removed....
+*
+*::>          VERSION  2.05/13   26/05/97 16.47.48
+*             ftncheked --> common mismatches removed
+*
+*::>          VERSION  2.05/12   16/05/97 16.28.40
+*             pt2 scale now 4*pt2 instead of pt2
+*
+*::>          VERSION  2.05/11   15/05/97 13.30.48
+*             w02 in partdi corrected
+*
+*::>          VERSION  2.05/09   12/05/97 09.38.57
+*             res gamma in DIS hopefully correctly implemented
+*
+*::>          VERSION  2.05/07   30/04/97 17.46.55
+*             parameters for alpha_s changed, MSTU(112) and PARU(112)
+*             set properly to                 N_flavours    lambda(N_flavours)
+*
+*::>          VERSION  2.05/06   23/04/97 07.13.59
+*             add virtual photon structure parametrisations
+*
+*::>          VERSION  2.05/05   29/03/97 13.47.29
+*             matrix elements for resolved checked
+*
+*::>          VERSION  2.05/04   10/03/97 10.47.35
+*             improved color flow for resolved gamma's
+*
+*::>          VERSION  2.05/02   06/03/97 20.32.47
+*             small bugs corrected, BGF part for heracles included via grid
+*
+*::>          VERSION  2.05/01   06/03/97 11.18.21
+*             bugs of color connection corrected
+*
+*::>          VERSION  2.05/00   05/03/97 08.10.38
+*             resolved photon for DIS included via IPRO = 18
+*
+*::>          VERSION  2.04/05   01/03/97 14.59.20
+*             BGF for bb_bar added and matrix element calculation
+*             for alpha_s with different scale than Q2 added
+*             --> change in pqcdi and pqcd added for scale pt**2
+*
+*::>          VERSION  2.04/04   24/01/97 10.47.35
+*             test version for charged current (INTER=2)
+*
+*::>          VERSION  2.04/03   20/01/97 08.45.34
+*             test version
+*
+*::>          VERSION  2.04/02   25/12/96 23.10.05
+*             bug corrected in partdi partdf for INTER= 2
+
+*________________________________________________________________________
+*
+*::>          VERSION  2.04/00   23/12/96 13.56.36
+*             charged current interactions (W exchange) included
+*________________________________________________________________________
+*
+*::>          VERSION  2.03/13   18/10/96 09.03.33
+*             IVM in partdf corrected
+*
+*::>          VERSION  2.03/12   14/10/96 14.44.28
+*             change in PYSSPA  to account for new sea treatment a la LEPTO 65
+*
+*::>          VERSION  2.03/11   11/10/96 12.46.04
+*             change in PYSSPA to ensure energy and momentum conservation
+*             for real particle
+*             change in RAPGAP to ensure original values of IPY(13) and IPY(14)
+*
+*::>          VERSION  2.03/10   04/10/96 17.25.26
+*             Weighing modified to weight as a function of electron
+*             method Q2. 
+*
+*::>          VERSION  2.03/08   03/10/96 20.24.10
+*             GRAWQ2 added for weighting in Q2.
+*             Directory H1QCD added for H1 QCD/Phenomenological
+*             parameterisations.
+*
+*::>          VERSION  2.03/07   27/09/96 09.42.02
+*             PYSSPA changed for xpq=0
+**
+*::>          VERSION  2.03/05   06/09/96 13.50.46
+*             debug statement in event implemented
+*
+*::>          VERSION  2.03/04   05/09/96 18.58.09
+*             Bugs for HERACLES with user defined parton density etc corrected
+*             HARD POM NG=40,41,42 should work now
+*::>          VERSION  2.03/03   22/08/96 20.17.55
+*             cosmetics
+*
+*::>          VERSION  2.03/02   18/08/96 17.46.10
+*             small bugs in hardpom corrected
+*
+*::>          VERSION  2.03/01   16/08/96 09.40.35
+*             Kt for ALM only for IPRO=12 and add error summary added
+*
+*::>          VERSION  2.03/00   14/08/96 14.36.32
+*             kt for ALM added via switch IALMKT=1
+*
+*::>          VERSION  2.02/04   14/08/96 14.32.24
+*             kt for ALM added via switch IALMKT=1 otherwise =0
+*
+*::>          VERSION  2.02/02   29/07/96 11.17.05
+*             NG = 21 NPOM =21 for pi0 exchange added
+*             IPRO = 1400 for cc_bar with HERACLES added
+*
+*::>          VERSION  2.00/30   01/01/96 17.16.30
+*             NIK ZAK included
+*             PARTDF corrected for correct treatment of beta,x_pom
+*             switch for p diss treatment included
+*             info for ME added in common/MEINFO/
+*
+*::>          VERSION  2.00/29   03/12/95 12.02.34
+*             Heracles - pion exchange bug corrected in RAPGAP: PIMAX missing
+*
+*::>          VERSION  2.00/27   22/11/95 16.35.16
+*             treatment of vm production in connection with ariadne corrected
+*
+*::>          VERSION  2.00/26   21/11/95 12.30.17
+*             HERACLES opt in PARTDF updated for initial state PS
+*
+*::>          VERSION  2.00/24   19/11/95 21.43.54
+*             IFULL=1,IQ2=4 and IPRO=12 now default.
+*             ARIADNE opt with same ev.record as MEPS option.
+*
+*::>          VERSION  2.00/22   09/11/95 13.39.40
+*             in lmeps corrected to run with final state PS
+*             mother of rad gamma included
+*             GTR bank filled for beam part. and rad gamma acc. H1 convention
+*
+*::>          VERSION  2.00/19   07/11/95 14.28.29
+*             bug for ariadne corrected.....
+*             bug for x section if IFUL=1 corrected
+*             new version for p-diss
+*
+*::>          VERSION  2.00/18   11/10/95 09.54.37
+*             multiple definition of common PYINT1; corrected
+*
+*::>          VERSION  2.00/17   10/10/95 14.23.58
+*             bugs fixed for HERACLES diffraction and ME option
+*
+*::>          VERSION  2.00/15   06/10/95 15.48.06
+*             bugs fixed for HERACLES diffraction and ME option
+*
+*::>          VERSION  2.00/14   04/10/95 09.57.56
+*             typing error for QCDC corrected  (thanks to Nils and Gunilla)
+*
+*::>          VERSION  2.00/12   20/09/95 08.45.47
+*             phi asymmetry corrected, wrong frame
+*
+*::>          VERSION  2.00/10   10/09/95 14.22.11
+*	        selection for light and heavy vectormesons included: IVM =0/1/443
+*
+*::>          VERSION  2.00/09   09/09/95 16.56.13
+*             prodiff changed: intrinsic pt added, pz_pom subtr.
+*
+*::>          VERSION  2.00/08   31/08/95 11.23.17
+*             bug for phi asymmetries in eleqqf and eleqcdc corrected
+*             bug corrected in partdf causing energy momentum nonconserv.
+*
+*::>          VERSION  2.00/07   28/07/95 15.36.31
+*             endless loop fixed in PYREMN
+*
+*::>          VERSION  2.00/06   26/07/95 15.18.07
+*             small bug for heracles with THEMIN corrected
+*
+*::>          VERSION  2.00/05   23/07/95 15.20.52
+*             no cut necessary: AM(1) was not defined in PARTDI and PARTDF
+*
+*::>          VERSION  2.00/04   20/07/95 10.10.11
+*             tried with a cut in eleqcdc introduced to avoid divergency zq-->1
+*
+*::>          VERSION  2.00/03   04/07/95 16.01.00
+*             full formula for QCD compton added including phi asymmetries
+*
+*::>          VERSION  2.00/02   16/06/95 08.51.03
+*             some printout reduced in partdf and pyremn
+*
+*::>          VERSION  2.00/01   11/05/95 11.20.53
+*             HERACLES interfaced for DIS and DIF
+*
+*
+*::>          VERSION  2.00/00   19/04/95 20.21.57
+*             new release
+*
+*::>          VERSION  1.04/03   23/03/95 14.44.49
+*             Heracles interface added
+*
+*::>          VERSION  1.04/00   19/01/95 19.53.53
+*
+*             initial and final state parton shower included
+*             a la LEPTO.
+*             mixing of lowest order and hgher order QCD possible
+*             also DIS and DIFF possible via IDIR=1 ==> DIS
+*                                            IDIR=0 ==> DIF
+
+*
+*::>          VERSION  1.04/03   23/03/95 14.44.49
+*             Heracles interface added
+*
+*::>          VERSION  1.04/00   19/01/95 19.53.53
+*
+*             initial and final state parton shower included
+*             a la LEPTO.
+*             mixing of lowest order and hgher order QCD possible
+*             also DIS and DIFF possible via IDIR=1 ==> DIS
+*                                            IDIR=0 ==> DIF
+*
+*::>          VERSION  1.03/04   31/10/94 10.16.50
+*             include process IPRO=100
+*             gamma + pomeron --> rho + pomeron
+*
+*             YMAX and Q2MAX cuts implemented
+*
+*::>          VERSION  1.03/02   21/04/94 11.36.23
+*             now also cut on Minimum scattering angle of electron
+*             THEMI included
+*
+*
+*::>          VERSION  1.03/01   03/04/94 16.46.19
+*             CMZ version of RAPGAP
+*
+
+
+\end{verbatim}
+
+\begin{theindex}
+
+  \item ALPH, 28
+  \item ALPHP, 27
+  \item ALPHS, 28
+  \item AM, 28
+  \item AVGI, 27
+
+  \indexspace
+
+  \item C1, 26
+  \item Cg, 26
+
+  \indexspace
+
+  \item EPSP, 27
+
+  \indexspace
+
+  \item IALMKT, 27
+  \item IALP, 24
+  \item IBS, 23
+  \item IDIR, 23
+  \item IDISDIF, 23
+  \item IFPS, 23
+  \item IFULL, 23
+  \item IGLU, 27
+%  \item ILHA, 24
+  \item INTER, 23
+  \item IORD, 24
+  \item IPRO, 22
+  \item IQ2, 25
+  \item IQCDGRID, 23
+  \item Iqqg, 26
+  \item IREM, 27
+  \item IRPA, 24
+  \item IRPB, 24
+  \item IRPC, 24
+  \item IRPD, 24
+  \item IRPE, 24
+  \item IRPF, 24
+  \item IRPG, 24
+  \item IRUNA, 24
+  \item IRUNAEM, 24
+  \item ISEMIH, 23
+  \item ISOG, 24
+  \item ITIM, 24
+  \item IVM, 27
+
+  \indexspace
+
+  \item KBEAM, 27
+  \item KT1, 24
+  \item KT2, 24
+
+  \indexspace
+
+  \item MSTP(51), 25
+  \item MSTP(52), 25
+  \item MSTP(56), 25
+
+  \indexspace
+
+  \item NF1,NF2, 28
+  \item NFLAV, 22
+  \item NFLQCDC, 22
+  \item NFRAG, 23
+  \item NFT, 28
+  \item NG, 25
+  \item NIA1,NIA2, 28
+  \item NIN, 28
+  \item NOUT, 28
+  \item NPOM, 26
+
+  \indexspace
+
+  \item OMEG2, 24
+
+  \indexspace
+
+  \item PBEAM, 27
+  \item PEPS, 27
+  \item PHIGKI, 28
+  \item PI, 28
+  \item PIN, 22
+  \item PLEPIN, 22
+  \item PRN2, 27
+  \item PT2CUT, 23
+  \item PT2H, 27
+
+  \indexspace
+
+  \item Q2, 27
+  \item Q2MAX,Q2MIN, 27
+  \item Q2Q, 28
+  \item Q2SUPP, 23
+  \item QMA, 22
+  \item QMI, 22
+
+  \indexspace
+
+  \item RN2, 27
+
+  \indexspace
+
+  \item SCAL1,SCAL2, 28
+  \item SCALFA, 25
+  \item SCALQ2, 24
+  \item SD, 27
+  \item SHAT, 28
+  \item SHH, 28
+  \item SIN2W, 23
+  \item SSS, 27
+
+  \indexspace
+
+  \item T2GKI, 28
+  \item T2MAX, 27
+  \item THEMA,THEMI, 22
+
+  \indexspace
+
+  \item XDP1,XPD2, 28
+  \item XEL, 27
+  \item XF, 27
+  \item XFGKI, 28
+  \item XMAX,XMIN, 27
+  \item XMW2, 23
+  \item XPGKI, 28
+  \item XPR, 27
+
+  \indexspace
+
+  \item YMA, 22
+  \item YMAX,YMIN, 27
+  \item YMI, 22
+  \item YY, 27
+
+  \indexspace
+
+  \item ZQGKI, 28
+
+\end{theindex}
+
+\providecommand{\etal}{et al.\xspace}
+\providecommand{\href}[2]{#2}
+\providecommand{\coll}{Coll.}
+\catcode`\@=11
+\def\@bibitem#1{%
+\ifmc@bstsupport
+  \mc@iftail{#1}%
+    {;\newline\ignorespaces}%
+    {\ifmc@first\else.\fi\orig@bibitem{#1}}
+  \mc@firstfalse
+\else
+  \mc@iftail{#1}%
+    {\ignorespaces}%
+    {\orig@bibitem{#1}}%
+\fi}%
+\catcode`\@=12
+\begin{mcbibliography}{10}
+
+\bibitem{pythia64}
+T.~Sjostrand, S.~Mrenna, and P.~Skands,
+\newblock JHEP{} {\bf 05},~026~(2006).
+\newblock \href{http://www.arXiv.org/abs/hep-ph/0603175}{{\tt
+  hep-ph/0603175}}\relax
+\relax
+\bibitem{Herwig}
+G.~Marchesini, B.~Webber, G.~Abbiendi, I.~Knowles, M.~Seymour, and L.~Stanco,
+\newblock Comp. Phys. Comm.{} {\bf 76},~465~(1992).
+\newblock Hep-ph/9912396\relax
+\relax
+\bibitem{bases}
+S.~Kawabata,
+\newblock Comp. Phys. Comm.{} {\bf 88},~309~(1995)\relax
+\relax
+\bibitem{Whalley:2005nh}
+M.~R. Whalley, D.~Bourilkov, and R.~C. Group~(2005).
+\newblock \href{http://www.arXiv.org/abs/hep-ph/0508110}{{\tt
+  hep-ph/0508110}}\relax
+\relax
+\bibitem{Ingelman_Prytz}
+G.~Ingelman and K.~Prytz,
+\newblock Z. Phys.{} {\bf C58},~285~(1993)\relax
+\relax
+\bibitem{diff_ws_sum}
+H.~Abramowicz, J.~Bartels, L.~Frankfurt, and H.~Jung,
+\newblock {\em {D}iffractive {H}ard {S}cattering. {S}ummary report of the
+  working group},
+\newblock in {\em Proc. of the Workshop on Future Physics at HERA},
+  eds.~A.~\mbox{De Roeck}, G.~Ingelman, and R.~Klanner, p. 635.
+\newblock \mbox{DESY}, Hamburg, 1996\relax
+\relax
+\bibitem{IS}
+G.~Ingelman and P.~Schlein,
+\newblock Phys. Lett. {\bf B}{} {\bf 152},~256~(1985)\relax
+\relax
+\bibitem{Strenga}
+K.~Streng,
+\newblock {\em Hard qcd scatterings in diffractive reactions at hera},
+\newblock in {\em Proc.\ of the Workshop Physics at HERA}, ed.~R.~Peccei.
+\newblock Hamburg, 1987\relax
+\relax
+\bibitem{Strengb}
+K.~Streng,
+\newblock {\em Hard qcd scatterings in diffractive reactions at hera}, 1988.
+\newblock \mbox{CERN-TH} 4949 (1988)\relax
+\relax
+\bibitem{Berger_Collins}
+E.~Berger, J.~Collins, D.~Soper, and G.~Sterman,
+\newblock Nucl. Phys. {\bf B}{} {\bf 286},~704~(1987)\relax
+\relax
+\bibitem{Ingelman_Brunia}
+P.~Bruni and G.~Ingelman,
+\newblock Phys. Lett. {\bf B}{} {\bf 311},~317~(1993)\relax
+\relax
+\bibitem{Ingelman_Brunib}
+P.~Bruni and G.~Ingelman,
+\newblock {\em Diffractive hard scattering at e p and p anti-p colliders},
+\newblock in {\em Proc. of the EPS International High Energy Physics
+  Conference}, eds.~J.~Carr and M.~Perrottet.
+\newblock Editions Frontieres, Marseille, France, 22-28 Jul, 1993.
+\newblock \mbox{DESY} 93-187\relax
+\relax
+\bibitem{Ingelman_Brunic}
+P.~Bruni, G.~Ingelman, and A.Solano,
+\newblock {\em Diffractively produced hadronic final states and the pomeron
+  structure},
+\newblock in {\em Proc.\ of the Workshop on Physics at HERA, Vol. 1},
+  eds.~W.~Buchm\"uller and G.~Ingelman, Vol. 311, p. 363.
+\newblock \mbox{DESY}, Hamburg, 1991\relax
+\relax
+\bibitem{DL_84}
+A.~Donnachie and P.~Landshoff,
+\newblock Nucl. Phys. {\bf B}{} {\bf 244},~322~(1984)\relax
+\relax
+\bibitem{H1_F2D3_97}
+\mbox{H1} Collaboration; C. Adloff~et al.,
+\newblock Z. Phys. {\bf C}{} {\bf 76},~613~(1997)\relax
+\relax
+\bibitem{H1_F2D3_06}
+H.~Collaboration,
+\newblock {\em Measurement and qcd analysis of the diffractive deep-inelastic
+  scattering cross section at hera}, 2006.
+\newblock Hep-ex/0606004\relax
+\relax
+\bibitem{Wusthoff}
+M.~Wusthoff,
+\newblock {\em Photon diffractive dissociation in deep inelastic scattering},
+  1995.
+\newblock \mbox{PhD thesis}, \mbox{DESY-95-166}\relax
+\relax
+\bibitem{Diehl1}
+M.~Diehl,
+\newblock {\em Diffraction in electron - proton collisions}, 1996.
+\newblock \mbox{PhD thesis}\relax
+\relax
+\bibitem{Diehl2}
+M.~Diehl,
+\newblock Z. Phys. {\bf C}{} {\bf 76},~499~(1997).
+\newblock Hep-ph/9610430\relax
+\relax
+\bibitem{Bartels_dijet_ws}
+J.~Bartels, C.~Ewerz, H.~Lotter, M.~Wusthoff, and M.~Diehl,
+\newblock {\em {Q}uark - {A}ntiquark {J}ets in {DIS} {D}iffractive
+  {D}issociation},
+\newblock in {\em Proc. of the Workshop on Future Physics at HERA},
+  eds.~A.~\mbox{De Roeck}, G.~Ingelman, and R.~Klanner.
+\newblock \mbox{DESY}, Hamburg, 1996.
+\newblock Hep-ph/9609239\relax
+\relax
+\bibitem{Bartels_jets}
+J.~Bartels, H.~Lotter, and M.~W\"usthoff,
+\newblock Phys. Lett. {\bf B}{} {\bf 379},~239~(1996).
+\newblock \mbox{ERRATUM}-ibid. {\bf B 382} (1996) 449, hep-ph/9602363\relax
+\relax
+\bibitem{Bartels_asym}
+J.~Bartels, C.~Ewerz, H.~Lotter, and M.~Wusthoff,
+\newblock Phys. Lett. {\bf B}{} {\bf 386},~389~(1996).
+\newblock Hep-ph/9605356\relax
+\relax
+\bibitem{GRVa}
+M.~Gl\"uck, E.~Reya, and A.~Vogt,
+\newblock Z. Phys. {\bf C}{} {\bf 53},~127~(1992)\relax
+\relax
+\bibitem{GRVb}
+M.~Gl\"uck, E.~Reya, and A.~Vogt,
+\newblock Phys. Lett. {\bf B}{} {\bf 306},~391~(1993)\relax
+\relax
+\bibitem{Bartels_qqga}
+J.~Bartels, H.~Jung, and M.~Wusthoff,
+\newblock Eur. Phys. J. {\bf C}{} {\bf 11},~111~(1999).
+\newblock Hep-ph/9903265\relax
+\relax
+\bibitem{Bartels_qqg-charm}
+J.~Bartels, H.~Jung, and A.~Kyrieleis,
+\newblock Eur. Phys. J. {\bf C}{} {\bf 24},~555~(2002).
+\newblock Hep-ph/0204269\relax
+\relax
+\bibitem{jung-dis04}
+H.~Jung,
+\newblock {\em Un-integrated parton density functions in ccfm}, April 2004.
+\newblock \mbox{DIS 2004}, Strbsk\'e Pleso,~Slovakia, hep-ph/0411287\relax
+\relax
+\bibitem{GRV95}
+M.~Gl\"uck, E.~Reya, and A.~Vogt,
+\newblock Z. Phys. {\bf C}{} {\bf 67},~433~(1995)\relax
+\relax
+\bibitem{Bluemlein}
+J.~Bl\"umlein,
+\newblock {\em On the $k_t$ dependent gluon density of the proton},
+\newblock in {\em Proc. of the Workshop on Deep Inelastic Scattering and QCD},
+  eds.~J.~Laporte and Y.~Sirois.
+\newblock 1995.
+\newblock \mbox{DESY} 95-121 and hep-ph/9506403\relax
+\relax
+\bibitem{baranov_zotov_1999}
+S.~Baranov and N.~Zotov,
+\newblock Phys. Lett. {\bf B}{} {\bf 458},~389~(1999)\relax
+\relax
+\bibitem{baranov_zotov_2000}
+S.~Baranov and N.~Zotov,
+\newblock Phys. Lett. {\bf B}{} {\bf 491},~111~(2000)\relax
+\relax
+\bibitem{martin_stasto}
+J.~Kwiecinski, A.~Martin, and A.~Stasto,
+\newblock Phys. Rev. {\bf D}{} {\bf 56},~3991~(1997)\relax
+\relax
+\bibitem{wuesthoff_golec-biernat}
+K.~Golec-Biernat and M.~Wusthoff,
+\newblock Phys. Rev. {\bf D}{} {\bf 60},~114023~(1999).
+\newblock Hep-ph/9903358\relax
+\relax
+\bibitem{martin_kimber}
+M.~A. Kimber, A.~D. Martin, and M.~G. Ryskin,
+\newblock Phys. Rev.{} {\bf D63},~114027~(2001).
+\newblock \href{http://www.arXiv.org/abs/hep-ph/0101348}{{\tt
+  hep-ph/0101348}}\relax
+\relax
+\bibitem{Buchmuller_Hebecker_Mcdermott}
+W.~Buchmuller, M.~McDermott, and A.~Hebecker,
+\newblock Nucl. Phys. {\bf B}{} {\bf 487},~283~(1997).
+\newblock Hep-ph/9607290\relax
+\relax
+\bibitem{NikZak}
+N.~Nikolaev and B.~Zakharov,
+\newblock Z. Phys. {\bf C}{} {\bf 53},~331~(1992)\relax
+\relax
+\bibitem{satrap}
+H.~Kowalski and M.~Wusthoff,
+\newblock {\em Satrap model for diffractive dis processes}.
+\newblock Prepared for 8th International Workshop on Deep Inelastic Scattering
+  and QCD (DIS 2000), Liverpool, England, 25-30 Apr 2000\relax
+\relax
+\bibitem{HERACLESa}
+A.~Kwiatkowski, H.~Spiesberger, and H.-J. M\"ohring,
+\newblock {\em Heracles 4.1 - an event generator for $ep$ interactions at hera
+  including radiative processes},
+\newblock in {\em Proc.\ of the Workshop on Physics at HERA, Vol. 3},
+  eds.~W.~Buchm\"uller and G.~Ingelman, p. 1294.
+\newblock 1991\relax
+\relax
+\bibitem{HERACLESb}
+H.~Spiesberger,
+\newblock {\em \mbox{HERACLES and DJANGOH} - Event generation of $ep$
+  interactions at HERA including radiative processes. version 4.6.6}, Aug 2005.
+\newblock
+  \verb+http://wwwthep.physik.uni-mainz.de/~hspiesb/djangoh/djangoh.html+\relax
+\relax
+\bibitem{sophia}
+A.~Mucke, R.~Engel, J.~P. Rachen, R.~J. Protheroe, and T.~Stanev,
+\newblock Comput. Phys. Commun.{} {\bf 124},~290~(2000).
+\newblock \href{http://www.arXiv.org/abs/astro-ph/9903478}{{\tt
+  astro-ph/9903478}}\relax
+\relax
+\bibitem{DGLAPa}
+V.~Gribov and L.~Lipatov,
+\newblock Sov. J. Nucl. Phys.{} {\bf 15},~438 and 675~(1972)\relax
+\relax
+\bibitem{DGLAPb}
+L.~Lipatov,
+\newblock Sov. J. Nucl. Phys.{} {\bf 20},~94~(1975)\relax
+\relax
+\bibitem{DGLAPc}
+G.~Altarelli and G.~Parisi,
+\newblock Nucl. Phys. {\bf B}{} {\bf 126},~298~(1977)\relax
+\relax
+\bibitem{DGLAPd}
+Y.~Dokshitser,
+\newblock Sov. Phys. JETP{} {\bf 46},~641~(1977)\relax
+\relax
+\bibitem{Collins-collfac}
+J.~C. Collins and X.-M. Zu,
+\newblock JHEP{} {\bf 06},~018~(2002).
+\newblock Hep-ph/0204127\relax
+\relax
+\bibitem{Collins-collfac2}
+J.~C. Collins and X.~Zu~(2004).
+\newblock Hep-ph/0411332\relax
+\relax
+\bibitem{sschilling}
+S.~Schilling,
+\newblock {\em Implementation of bgf-processes in monte carlo generators for
+  electron proton scattering}.
+\newblock DESY-THESIS-2000-040\relax
+\relax
+\bibitem{Chyla_res_gamma}
+J.~Chyla and J.~Cvach,
+\newblock {\em {V}irtual photon structure from jet production at {HERA}},
+\newblock in {\em Proc. of the Workshop on Future Physics at HERA},
+  eds.~A.~\mbox{De Roeck}, G.~Ingelman, and R.~Klanner.
+\newblock Hamburg, 1996\relax
+\relax
+\bibitem{RAPGAP32}
+H.~Jung,
+\newblock {\em \mbox{T}he RAPGAP Monte Carlo for Deep Inelastic Scattering,
+  version 3.2}.
+\newblock DESY Hamburg, 2007.
+\newblock \verb+http://www.desy.de/~jung/rapgap/+\relax
+\relax
+\bibitem{GRS}
+M.~Gl\"uck, E.~Reya, and M.~Stratman,
+\newblock Phys. Rev. {\bf D}{} {\bf 54},~5515~(1996)\relax
+\relax
+\bibitem{Sasgam}
+G.~Schuler and T.~Sj\"ostrand,
+\newblock Phys. Lett. {\bf B}{} {\bf 376},~193~(1996)\relax
+\relax
+\bibitem{Drees_Godbole}
+M.~Drees and R.~Godbole,
+\newblock Phys. Rev. {\bf D}{} {\bf 50},~3124~(1994)\relax
+\relax
+\bibitem{Mirkes_nlo}
+E.~Mirkes and D.~Zeppenfeld,
+\newblock Phys. Lett. {\bf B}{} {\bf 380},~105~(1996)\relax
+\relax
+\bibitem{catani_nlo}
+S.~Catani and M.~Seymour,
+\newblock {\em {NLO QCD} calculations in {DIS} at {HERA} based on the dipole
+  formalism},
+\newblock in {\em Proc. of the Workshop on Future Physics at HERA},
+  eds.~A.~\mbox{De Roeck}, G.~Ingelman, and R.~Klanner.
+\newblock Hamburg, 1996\relax
+\relax
+\bibitem{Kramer_res_gamma}
+M.~Klasen, G.~Kramer, and B.~Potter,
+\newblock Eur. Phys. J. {\bf C}{} {\bf 1},~261~(1998).
+\newblock Hep-ph/9703302\relax
+\relax
+\bibitem{MEPS}
+G.~Ingelman,
+\newblock {\em Lepto 6.1 the lund monte carlo for deep inelastic lepton-nucleon
+  scattering},
+\newblock in {\em Proc. of the Workshop Physics at HERA (1991) Vol. 3, 1366},
+  eds.~W.~Buchm\"uller and G.~Ingelman.
+\newblock \mbox{DESY}, Hamburg, 1991\relax
+\relax
+\bibitem{Jetseta}
+T.~Sj\"ostrand,
+\newblock Comp. Phys. Comm.{} {\bf 39},~347~(1986)\relax
+\relax
+\bibitem{Jetsetb}
+T.~Sj\"ostrand and M.~Bengtsson,
+\newblock Comp. Phys. Comm.{} {\bf 43},~367~(1987)\relax
+\relax
+\bibitem{Jetsetc}
+T.~Sj\"ostrand,
+\newblock Comp. Phys. Comm.{} {\bf 82},~74~(1994)\relax
+\relax
+\bibitem{Briskin_vm}
+G.~Briskin.
+\newblock PhD Thesis , changing LUKFDI for vm production\relax
+\relax
+\bibitem{Jpsi_H1_dis}
+\mbox{H1} Collaboration; S.~Aid {\em et al.},
+\newblock Nucl. Phys. {\bf B}{} {\bf 468},~3~(1996)\relax
+\relax
+\bibitem{Jpsi_ZEUS}
+\mbox{ZEUS} Collaboration; J. Breitweg~et al.,
+\newblock Z. Phys. {\bf C}{} {\bf 75},~215~(1997).
+\newblock Hep-ex/9704013\relax
+\relax
+\bibitem{Jung_Eilat}
+H.~Jung,
+\newblock {\em Modelling diffractive processes},
+\newblock in {\em Proc. of the Workshop on Diffractive Interactions},
+  ed.~A.~Levy.
+\newblock Eilat, Israel, Feb. 18 - 23, 1995\relax
+\relax
+\bibitem{CDM}
+L.~L\"onnblad,
+\newblock Comp. Phys. Comm.{} {\bf 71},~15~(1992)\relax
+\relax
+\bibitem{LHA-generator}
+E.~Boos {\em et al.}~(2001).
+\newblock Hep-ph/0109068\relax
+\relax
+\bibitem{Ingelman_LEPTO65}
+G.~Ingelman, A.~Edin, and J.~Rathsman,
+\newblock Comp. Phys. Comm.{} {\bf 101},~108~(1997).
+\newblock \href{http://www.arXiv.org/abs/hep-ph/9605286}{{\tt
+  hep-ph/9605286}}\relax
+\relax
+\bibitem{PYTHIA_ppbar_color}
+M.~H. Bengtsson,
+\newblock Comp. Phys. Comm.{} {\bf 31},~323~(1984)\relax
+\relax
+\bibitem{DIFFVM}
+B.~List,
+\newblock {\em Diffraktive $J/\psi$ Produktion in Elektron - Proton St\"o\ss en
+  am Speicherring HERA} (unpublished).
+\newblock \mbox{Diploma thesis, Techn. Univ. Berlin, H1 note: H1-10/93-319},
+  1993\relax
+\relax
+\bibitem{DIFFVM2}
+B.~List and A.~Mastroberardino,
+\newblock {\em Diffvm: A monte carlo generator for diffractive processes in e p
+  scattering},
+\newblock in {\em Proceedings of the Workshop on Monte Carlo generators for
+  HERA physics}, eds.~A.~Doyle, G.~Grindhammer, G.~Ingelman, and H.~Jung, p.
+  396.
+\newblock \mbox{DESY}, Hamburg, 1999\relax
+\relax
+\bibitem{PYTHIAPSa}
+T.~Sj\"ostrand,
+\newblock Phys. Lett. {\bf B}{} {\bf 157},~321~(1985)\relax
+\relax
+\bibitem{PYTHIAPSb}
+M.~Bengtsson, T.~Sj\"ostrand, and M.~van Zijl,
+\newblock Z. Phys. {\bf C}{} {\bf 32},~67~(1986)\relax
+\relax
+\bibitem{H1_energyflow}
+\mbox{H1} Collaboration; I. Abt~et al.,
+\newblock Z. Phys. {\bf C}{} {\bf 63},~377~(1994).
+\newblock \mbox{DESY 94-033}\relax
+\relax
+\bibitem{LEPTOPS}
+M.~Bengtsson and T.~Sj\"ostrand,
+\newblock Z. Phys. {\bf C}{} {\bf 37},~465~(1988)\relax
+\relax
+\bibitem{Bartels_qqg}
+J.~Bartels,
+\newblock {\em qqg jets in diffraction},
+\newblock in {\em Proc. of the LISHEP workshop on diffractive physics},
+  ed.~A.~Santoro.
+\newblock Rio de Janeiro, Brazil, Feb 16 - 20, 1998\relax
+\relax
+\bibitem{Kohrsa}
+H.~Kohrs,
+\newblock {\em Direct and resolved pomeron},
+\newblock in {\em Proc. of the Workshop on Deep Inelastic Scattering and QCD},
+  eds.~J.~Laporte and Y.~Sirois.
+\newblock 1995\relax
+\relax
+\bibitem{Kohrsb}
+B.~Kniehl, H.~Kohrs, and G.~Kramer,
+\newblock Z. Phys. {\bf C}{} {\bf 65},~657~(1995)\relax
+\relax
+\bibitem{Holtmann}
+H.~Holtmann, G.~Levman, N.~Nikolaev, A.~Szczurek, and J.~Speth,
+\newblock Phys. Lett. {\bf B}{} {\bf 338},~363~(1994)\relax
+\relax
+\bibitem{hztool2006}
+B.~M. Waugh {\em et al.}~(2006).
+\newblock \href{http://www.arXiv.org/abs/hep-ph/0605034}{{\tt
+  hep-ph/0605034}}\relax
+\relax
+\end{mcbibliography}
+
+\end{document}
+
+

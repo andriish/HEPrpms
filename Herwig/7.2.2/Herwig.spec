@@ -8,7 +8,7 @@
 
 Name:           Herwig
 Version:        7.2.2
-Release:        2%{?dist}
+Release:        1007%{?dist}
 
 Summary:        Herwig is a multi-purpose particle physics event generator.
 License:        GPLv3
@@ -17,7 +17,7 @@ Patch0:         patch-Herwig-0.txt
 Url:            https://herwig.hepforge.org/
 BuildRequires:  MG5_aMC lhapdf-sets-Herwig zlib zlib-devel fastjet-devel 
 BuildRequires:  openloops  njet gsl-devel gosam autoconf automake libtool   gengetopt
-Requires:       MG5_aMC zlib fastjet  gosam   gsl  njet openloops  
+Requires:       MG5_aMC lhapdf-sets-Herwig zlib fastjet  gosam   gsl  njet openloops  
 Requires:       ThePEG  == 2.2.2
 Requires:       ThePEG-devel  == 2.2.2
 BuildRequires:  ThePEG  == 2.2.2 
@@ -106,6 +106,7 @@ The library documentation is available on header files.
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 pathfix.py -i /usr/bin/python2  -p -n  ./
+pathfix.py -pn -i %{__python3}  MatrixElement/Matchbox/External/MadGraph
 autoreconf --force --install --verbose .
 automake -a --force
 export LDFLAGS='-Wl,-z,lazy'
@@ -113,7 +114,7 @@ export LDFLAGS='-Wl,-z,lazy'
 FCFLAGS="-fallow-argument-mismatch"
 FFLAGS="-fallow-argument-mismatch"
 %endif
-%configure        --infodir=/usr/share/info  --with-evtgen=%_prefix --with-madgraph=%_prefix  --with-openloops=%_prefix/%_lib/openloops --with-pythia=%_prefix --with-evtgen=%_prefix --with-thepeg=%_prefix --with-gosam=%_prefix --with-gosam-contrib=%_libdir  --with-njet=%_prefix  --libdir=/usr/%_lib        --with-vbfnlo=/usr
+%configure  --disable-rpath      --infodir=/usr/share/info  --with-evtgen=%_prefix --with-madgraph=%_prefix  --with-openloops=%_prefix/%_lib/openloops --with-pythia=%_prefix --with-evtgen=%_prefix --with-thepeg=%_prefix --with-gosam=%_prefix --with-gosam-contrib=%_libdir  --with-njet=%_prefix  --libdir=/usr/%_lib        --with-vbfnlo=/usr
 make %{?_smp_mflags}
 %endif
 
@@ -126,7 +127,7 @@ automake -a --force
 export LDFLAGS='-Wl,-z,lazy'
 FCFLAGS="-fallow-argument-mismatch"
 FFLAGS="-fallow-argument-mismatch"
-%configure        --infodir=/usr/share/info  --with-evtgen=%_prefix --with-madgraph=%_prefix  --with-openloops=%_prefix/%_lib/openloops --with-pythia=%_prefix --with-evtgen=%_prefix --with-thepeg=%_prefix --with-gosam=%_prefix --with-gosam-contrib=%_libdir  --with-njet=%_prefix  --libdir=/usr/%_lib        --with-vbfnlo=/usr
+%configure  --disable-rpath      --infodir=/usr/share/info  --with-evtgen=%_prefix --with-madgraph=%_prefix  --with-openloops=%_prefix/%_lib/openloops --with-pythia=%_prefix --with-evtgen=%_prefix --with-thepeg=%_prefix --with-gosam=%_prefix --with-gosam-contrib=%_libdir  --with-njet=%_prefix  --libdir=/usr/%_lib        --with-vbfnlo=/usr
 make %{?_smp_mflags}
 %endif
 
@@ -135,6 +136,8 @@ make %{?_smp_mflags}
 %make_install 
 sed -i "s|${RPM_BUILD_ROOT}||g" $RPM_BUILD_ROOT/%{_prefix}/share/Herwig/defaults/PDF.in
 # contains Rivet /usr/share/Herwig/snippets/DipoleMerging.in
+export QA_RPATHS=3
+
 %files -n %{libname}
 %_bindir/*
 %_datadir/Herwig
@@ -149,6 +152,10 @@ sed -i "s|${RPM_BUILD_ROOT}||g" $RPM_BUILD_ROOT/%{_prefix}/share/Herwig/defaults
 %_libdir/Herwig/*.la
 
 %changelog
+* Fri Sep 17 2021 Andrii Verbytskyi 7.2.2
+- Try to make it work with newer madgraph
+* Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+  - RPATH
 * Thu Feb 18 2021 Andrii Verbytskyi 7.2.2
 + Spec for 7.2.2
 * Sat Jan 09 2021 Andrii Verbytskyi 7.2.1

@@ -1,0 +1,47 @@
+diff -Nru a/configure b/configure
+--- a/configure	2015-03-13 18:07:49.000000000 +0100
++++ b/configure	2018-05-17 09:52:59.814973186 +0200
+@@ -4746,7 +4746,7 @@
+ 
+ if test -n "$HAVE_QMAKE"; then :
+   case `qmake -v` in #(
+-  *Qt?version?4*) :
++  *Qt?version?5*) :
+     TOOLS_DEFAULT=tools ;; #(
+   *) :
+      ;;
+diff -Nru a/configure.ac b/configure.ac
+--- a/configure.ac	2015-03-13 18:06:41.000000000 +0100
++++ b/configure.ac	2018-05-17 09:53:10.450044977 +0200
+@@ -121,7 +121,7 @@
+ AC_CHECK_PROGS([HAVE_QMAKE], [qmake])
+ AS_IF([test -n "$HAVE_QMAKE"],
+   [AS_CASE([`qmake -v`],
+-    [*Qt?version?4*], [TOOLS_DEFAULT=tools])])
++    [*Qt?version?5*], [TOOLS_DEFAULT=tools])])
+ AC_SUBST([TOOLS_DEFAULT])
+ 
+ test -n "$FC" && DEMO_FORTRAN_DEFAULT=demo-fortran
+diff -Nru a/tools/partview.cpp b/tools/partview.cpp
+--- a/tools/partview.cpp	2013-12-18 10:54:14.000000000 +0100
++++ b/tools/partview.cpp	2018-05-17 10:08:57.720383186 +0200
+@@ -18,7 +18,7 @@
+ #include <QPrinter>
+ #include <QPrintDialog>
+ #include <QApplication>
+-#include <QColorGroup>
++#include <QColor>
+ 
+ #include <list>
+ 
+diff -Nru a/tools/partview.pro b/tools/partview.pro
+--- a/tools/partview.pro	2005-02-17 09:34:24.000000000 +0100
++++ b/tools/partview.pro	2018-05-17 09:53:30.238178491 +0200
+@@ -4,3 +4,7 @@
+ HEADERS += quit.xpm print.xpm
+ DESTDIR = .
+ MOC_DIR = .
++
++isEqual(QT_MAJOR_VERSION, 5) {
++	QT += widgets printsupport
++}

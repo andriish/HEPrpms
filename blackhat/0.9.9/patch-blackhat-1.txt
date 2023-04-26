@@ -1,5 +1,5 @@
---- blackhat-config.in.orig	2021-03-06 20:11:25.884626966 +0100
-+++ blackhat-config.in	2021-03-06 20:11:25.884626966 +0100
+--- ORIG/blackhat-config.in	2022-12-07 07:06:23.715826660 +0100
++++ PATCHED/blackhat-config.in	2022-12-07 07:06:23.718826700 +0100
 @@ -9,7 +9,7 @@
    --prefix)
      echo @prefix@;;

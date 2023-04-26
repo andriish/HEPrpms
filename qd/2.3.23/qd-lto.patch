@@ -1,0 +1,22 @@
+--- a/fortran/f_dd.cpp	2018-10-30 10:05:01.000000000 -0600
++++ b/fortran/f_dd.cpp	2021-08-19 11:07:25.301690360 -0600
+@@ -301,7 +301,7 @@ void f_dd_sincosh(const double *a, doubl
+  * spaces.  Parameter maxlen should at least be precision + 7 
+  * characters.  Prec can be zero to put out the defaut number of 
+  * digits. */
+-void f_dd_swrite(const double *a, int *precision, char *s, int *maxlen) {
++void f_dd_swrite(const double *a, int *precision, char *s, int *maxlen, size_t ignore __attribute__((unused))) {
+   int prec = *precision;
+   if (prec <= 0 || prec > dd_real::_ndigits) prec = dd_real::_ndigits;
+   std::ios_base::fmtflags fmt = static_cast<std::ios_base::fmtflags>(0);
+--- a/fortran/f_qd.cpp	2018-10-30 10:05:01.000000000 -0600
++++ b/fortran/f_qd.cpp	2021-08-19 11:07:08.805659216 -0600
+@@ -422,7 +422,7 @@ void f_qd_sincosh(const double *a, doubl
+  * spaces.  Parameter maxlen should at least be precision + 7 
+  * characters.  Prec can be zero to put out the defaut number of 
+  * digits. */
+-void f_qd_swrite(const double *a, int *precision, char *s, int *maxlen) {
++void f_qd_swrite(const double *a, int *precision, char *s, int *maxlen, size_t ignore __attribute__((unused))) {
+   int prec = *precision;
+   if (prec <= 0 || prec > qd_real::_ndigits) prec = qd_real::_ndigits;
+   std::ios_base::fmtflags fmt = static_cast<std::ios_base::fmtflags>(0);

@@ -6,7 +6,7 @@
 
 Name:           EvtGen
 Version:        2.0.0
-Release:        5%{?dist}
+Release:        10%{?dist}
 License:        GPLv3
 Url:            http://evtgen.warwick.ac.uk
 Source0:        https://evtgen.hepforge.org/downloads/EvtGen-02.00.00.tar.gz
@@ -36,8 +36,8 @@ BuildRequires:  root-tree
 
 %if 0%{?suse_version}
 BuildRequires:  pythia-devel HepMC2-devel HepMC3-devel 
-Requires:       libpythia8  libHepMC4 libHepMC3-1 
-BuildRequires:  root6 root6-libs root6-devel
+Requires:       libpythia8  libHepMC4 libHepMC3-1  root6-libs  root6-utils
+BuildRequires:  root6 root6-libs root6-devel root6-config  root6-utils
 %endif
 
 
@@ -96,13 +96,16 @@ mkdir -p build
 export CXXFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export CFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export LDFLAGS=" "
-%cmake -H. -Bbuild\
+%if %{?fedora}%{!?fedora:0} >= 34
+export CMAKE_CXX_STANDARD=17
+%endif
+
+%cmake -H. -Bbuild -DCMAKE_SKIP_RPATH=ON \
  -DEVTGEN_PYTHIA:BOOL=ON \
  -DEVTGEN_PHOTOS:BOOL=ON \
  -DEVTGEN_TAUOLA:BOOL=ON \
  -DEVTGEN_HEPMC3:BOOL=ON  \
  -DEVTGEN_BUILD_DOC:BOOL=ON  \
- -DEVTGEN_BUILD_TESTS:BOOL=ON  \
  -DEVTGEN_BUILD_VALIDATIONS:BOOL=ON
 make -C build %{?_smp_mflags} 
 %endif
@@ -111,13 +114,13 @@ make -C build %{?_smp_mflags}
 export CXXFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export CFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export LDFLAGS=" "
-%cmake \
+export CMAKE_CXX_STANDARD=17
+%cmake  -DCMAKE_SKIP_RPATH=ON \
  -DEVTGEN_PYTHIA:BOOL=ON \
  -DEVTGEN_PHOTOS:BOOL=ON \
  -DEVTGEN_TAUOLA:BOOL=ON \
  -DEVTGEN_HEPMC3:BOOL=ON  \
  -DEVTGEN_BUILD_DOC:BOOL=ON  \
- -DEVTGEN_BUILD_TESTS:BOOL=ON  \
  -DEVTGEN_BUILD_VALIDATIONS:BOOL=ON  -DCMAKE_SHARED_LINKER_FLAGS=" "
 make %{?_smp_mflags} SHELL='sh -x'
 %endif
@@ -143,7 +146,6 @@ mv %{buildroot}%{_datadir}/EvtGen/*.*  %{buildroot}%{_datadir}/
 
 %files -n  %{libnamedoc}
 %{_datadir}/%{name}/validation/*
-%{_datadir}/%{name}/test/*
 %{_prefix}/share/doc/EvtGen/guide.ps
 
 

@@ -4,10 +4,10 @@
 
 Name:           Professor
 Version:        2.3.3
-Release:        1%{?dist}
+Release:        3%{?dist}
 License:        Unknown
 Url:            http://professor.hepforge.org/
-Source0:        http://www.hepforge.org/archive/professor/%{name}-%{version}.tar.gz
+Source0:        https://www.hepforge.org/archive/professor/%{name}-%{version}.tar.gz
 Patch0:         patch-Professor-0.txt
 Prefix:         %{_prefix}
 Summary:        A tuning tool for Monte Carlo event generators.
@@ -15,7 +15,7 @@ Requires:       YODA
 BuildRequires:  YODA-devel eigen3-devel gcc-c++ 
 
 
-%if %{?rhel}%{!?rhel:0} == 8
+%if %{?rhel}%{!?rhel:0} >= 8
 Requires: python3 python3-numpy root-core
 BuildRequires: python3-numpy python3-devel platform-python-devel python3-Cython root-core
 %endif

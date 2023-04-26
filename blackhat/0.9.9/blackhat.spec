@@ -5,10 +5,10 @@
 
 Name:           blackhat
 Version:        0.9.9
-Release:        2%{?dist}
+Release:        6%{?dist}
 License:        Unknown
 Url:            http://www.blackhat.hepforge.org
-Source0:        http://www.hepforge.org/archive/blackhat/%{name}-%{version}.tar.gz
+Source0:        https://www.hepforge.org/archive/blackhat/%{name}-%{version}.tar.gz
 Patch0:         patch-blackhat-0.txt
 Patch1:         patch-blackhat-1.txt
 Patch2:         patch-blackhat-2.txt
@@ -69,13 +69,14 @@ the %{name} library
 
 %build
 autoreconf --force --install --verbose 
-%configure --enable-dependency-tracking 
+export CXXFLAGS="%{optflags} -std=c++98"
+%configure --enable-dependency-tracking   --disable-rpath
 
 make %{?_smp_mflags}
 
 %install
 %make_install
-
+export QA_RPATHS=3
 
 
 %files -n %{libname}
@@ -108,6 +109,8 @@ make %{?_smp_mflags}
 
 
 %changelog
+* Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+  - RPATH
 * Tue Apr 20 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 + Preparation for release
 * Fri Nov 29 2019 Andrii Verbytskyi 0.9.9

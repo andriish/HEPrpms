@@ -29,10 +29,10 @@ libpythia6_dummy.a: ${OBJSD}
 
 
 libpythia6.so: ${OBJS}
-	$(LD) $(LDFLAGS) -shared  $+ -o libpythia6.so
+	$(LD) $(LDFLAGS) -shared  $+ -o libpythia6.so --no-as-needed  $(shell gfortran -print-file-name=libgfortran.so)
 
 libpythia6_dummy.so: ${OBJSD}
-	$(LD) $(LDFLAGS) -shared  $+ -o libpythia6_dummy.so
+	$(LD) $(LDFLAGS) -shared  $+ -o libpythia6_dummy.so --no-as-needed $(shell gfortran -print-file-name=libgfortran.so)
 
 
 bigfile:

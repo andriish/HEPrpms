@@ -1,6 +1,6 @@
 Name:           applgrid
 Version:        1.5.46
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        GPL
 Prefix:         %{_prefix}
 Summary:        A fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution 
@@ -12,8 +12,8 @@ BuildRequires:  gcc-c++ gcc-gfortran hoppet root   autoconf binutils automake li
 Requires:       hoppet root
 %endif
 %if 0%{?suse_version}
-BuildRequires:  gcc-c++ gcc-fortran hoppet root6 root6-libs root6-devel  autoconf binutils automake libtool 
-Requires:       hoppet root6 root6-libs root6-devel libgfortran5
+BuildRequires:  gcc-c++ gcc-fortran hoppet root6-config root6-libs root6-devel root6  autoconf binutils automake libtool 
+Requires:       hoppet root6-config root6-libs root6-devel libgfortran5
 %endif
 
 %description

@@ -1,14 +1,15 @@
 Name:       BAT
 Version:    1.0.0
-Release:    1%{?dist}
+Release:    7%{?dist}
 Summary:    BAT -- Bayesian Analysis Toolkit
 
 License:    LGPL v3
 URL:        https://bat.mpp.mpg.de/
-Source:     http://github.com/bat/bat/releases/download/v1.0.0/BAT-%{version}.tar.gz
+Source:     https://github.com/bat/bat/releases/download/v1.0.0/BAT-%{version}.tar.gz
+Patch0:         patch-BAT-0.txt
 Prefix: %{_prefix}
 
-BuildRequires:    cuba-devel
+BuildRequires:    cuba-devel autoconf automake libtool
 Requires:         cuba
 BuildRequires:    gcc-c++
 %if 0%{?rhel} || 0%{?fedora}
@@ -16,8 +17,8 @@ BuildRequires:    root-core root-hist root-io root-tree
 Requires:         root-core root-hist root-io root-tree
 %endif
 %if 0%{?suse_version}
-BuildRequires:    root6 root6-devel root6-libs
-Requires:         root6 root6-devel root6-libs
+BuildRequires:    root6-config root6-devel root6-libs root6 root6-utils
+Requires:         root6-config root6-devel root6-libs root6 root6-utils
 %endif
 
 
@@ -32,9 +33,12 @@ limit setting and uncertainty propagation.
 
 %prep
 %setup -q
+%patch0 -p 1
 
-%build
-%configure --with-cuba=/usr/include 
+%build 
+autoreconf --force --install --verbose .
+automake -a --force
+%configure --with-cuba=/usr/include  --with-rootsys=/usr
 
 make %{?_smp_mflags} 
 

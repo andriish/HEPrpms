@@ -1,9 +1,9 @@
 Name:           nlojet++
 Version:        4.1.3
-Release:        1%{?dist}
+Release:        3%{?dist}
 License:        GPL
 Url:            http://desy.de/~znagy
-Source0:        http://desy.de/~znagy/hep-programs/nlojet++/%{name}-%{version}.tar.gz
+Source0:        https://desy.de/~znagy/hep-programs/nlojet++/%{name}-%{version}.tar.gz
 Prefix: %{_prefix}
 Summary:        A C++ program for calculating LO and NLO order cross sections
 %if 0%{?rhel} || 0%{?fedora}
@@ -30,11 +30,12 @@ photoproduction in electron proton scattering and with various processes
 %prep
 %setup -q
 %build
-%configure 
+%configure  --disable-rpath
 make
 %install
 %make_install 
 find $RPM_BUILD_ROOT -type f -name '*.la' -exec rm -f {} \;
+export QA_RPATHS=3
 
 %files 
 %defattr(-,root,root)
@@ -44,7 +45,9 @@ find $RPM_BUILD_ROOT -type f -name '*.la' -exec rm -f {} \;
 %{_libdir}/*
 /usr/libexec/*
 
-%changelog             
+%changelog
+* Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+  - RPATH
 * Thu Nov 23 2017 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
  - Initial
 

@@ -6,14 +6,14 @@
 
 Name:           TAUOLA
 Version:        1.1.8
-Release:        2%{?dist}
+Release:        6%{?dist}
 License:        Unknown
 Url:            http://tauolapp.web.cern.ch/tauolapp
-Source0:        http://tauolapp.web.cern.ch/tauolapp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
+Source0:        https://tauolapp.web.cern.ch/tauolapp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
 Patch0:         patch-TAUOLA-0.txt
 Summary:        Tau lepton decay Monte Carlo
 BuildRequires:  gcc-c++ autoconf automake libtool  
-BuildRequires:  tex(latex) tex(fmtcount.sty) ghostscript doxygen
+BuildRequires:  tex(latex) tex(fmtcount.sty) ghostscript doxygen tex(eurosym.sty)
 %if 0%{?rhel} || 0%{?fedora}
 Requires:       HepMC HepMC3 libgfortran pythia8
 BuildRequires:  gcc-gfortran pythia8 pythia8-devel  HepMC-devel HepMC3-devel HepMC HepMC3 
@@ -21,9 +21,9 @@ BuildRequires:  lhapdf lhapdf-devel
 %endif
 %if 0%{?suse_version}
 BuildRequires:  tex(eurosym.sty)
-BuildRequires:  gcc-fortran libpythia8 pythia-devel  HepMC3-devel HepMC2-devel libHepMC4 libHepMC3-1 
+BuildRequires:  gcc-fortran libpythia8 pythia-devel  HepMC3-devel HepMC2-devel libHepMC4 libHepMC3-3
 BuildRequires:  libLHAPDF LHAPDF-devel 
-Requires:       libHepMC4 libHepMC3-1 gcc-fortran libpythia8
+Requires:       libHepMC4 libHepMC3-3 gcc-fortran libpythia8
 %endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
@@ -107,6 +107,8 @@ install -m 644 documentation/doxy_documentation/html/*   %{buildroot}/%{_docdir}
 
 
 %changelog
+* Sun Jan 30 2022 Andrii Verbytskyi 1.1.8
++ Fix HepMC3 interfaces.
 * Wed Feb 19 2020 Andrii Verbytskyi 1.1.8
 + New version Prerelease.
 * Thu Jan 23 2020 Andrii Verbytskyi 1.1.7

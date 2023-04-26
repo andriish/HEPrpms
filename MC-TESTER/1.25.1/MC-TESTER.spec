@@ -1,19 +1,20 @@
 Name:           MC-TESTER
 Version:        1.25.1
-Release:        1%{?dist}
+Release:        5%{?dist}
 License:        MIT
 Url:            http://mc-tester.web.cern.ch/MC-TESTER/
 Source0:        https://gitlab.cern.ch/cvsmctst/mc-tester/-/archive/v1.25.1/mc-tester-v%{version}.tar.gz
 Summary:        A universal tool for comparisons of Monte Carlo predictions in High Energy Physics
 
 BuildRequires:  autoconf automake libtool  doxygen
+BuildRequires:  gcc-c++ make
 %if 0%{?rhel} || 0%{?fedora}
 Requires:       HepMC  HepMC3 root  root-core root-graf  root-hist
 BuildRequires:  HepMC HepMC-devel HepMC3 HepMC3-devel root  root-core root-graf  root-hist
 %endif
 %if 0%{?suse_version}
-Requires:       libHepMC4 libHepMC3-1  root6  root6-libs root6-devel
-BuildRequires:  libHepMC4 libHepMC3-1  root6  root6-libs root6-devel HepMC2-devel HepMC3-devel
+Requires:       libHepMC4 libHepMC3-3  root6-config  root6-libs root6-devel root6
+BuildRequires:  libHepMC4 libHepMC3-3  root6-config  root6-libs root6-devel root6 HepMC2-devel HepMC3-devel
 BuildRequires:  unzip
 %endif
 
@@ -41,6 +42,10 @@ The library documentation is available on header files.
 
 
 %build
+cd include 
+ln -s ../HepMC3Event/HepMC3Particle.h 
+ln -s ../HepMC3Event/HepMC3Event.h 
+cd ..
 autoreconf
 mkdir -p lib
 %configure  --with-HepMC=%_prefix --with-HepMC3=%_prefix   --with-root=%_prefix  
@@ -58,6 +63,8 @@ make -C doc
 %_includedir/*
 
 %changelog
+* Tue Jun 22 2021 Andrii Verbytskyi
++ Added dependency on gcc
 * Thu May 06 2021 Andrii Verbytskyi
 + Version 1.25.1
 * Wed Apr 21 2021 Andrii Verbytskyi

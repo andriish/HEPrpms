@@ -1,6 +1,6 @@
 ## Makefile for Professor 2.x
 
-VERSION := 2.3.2
+VERSION := 2.3.3
 DISTNAME := Professor-$(VERSION)
 $(info Building Professor $(VERSION))
 
@@ -166,7 +166,7 @@ dist: all
 	rm -rf $(DISTNAME)
 	mkdir -p $(DISTNAME)
 	cp --parents \
-       README Makefile \
+       README Makefile Makefile.mac \
        $(LIBHEADERS) \
        $(LIBSOURCES) \
        $(BINPROGS) \

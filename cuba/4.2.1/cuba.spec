@@ -4,7 +4,7 @@
 
 Name:           cuba
 Version:        4.2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A library for multidimensional numerical integration.
 License:        LGPLv3
 Prefix:         %{_prefix}

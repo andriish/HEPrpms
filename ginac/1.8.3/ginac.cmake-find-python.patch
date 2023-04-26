@@ -1,0 +1,64 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index cdb18f09..cc16cf05 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -17,6 +17,8 @@ string(REGEX REPLACE "^.*GINAC_LT_REVISION[ \t]+([0-9]+).*" "\\1" ginac_lt_revis
+ math(EXPR ginaclib_soversion "${ginac_lt_current} - ${ginac_lt_age}")
+ set(ginaclib_version ${ginaclib_soversion}.${ginac_lt_age}.${ginac_lt_revision})
+ 
++find_package(PythonInterp 3 EXACT REQUIRED)
++
+ # make check
+ enable_testing()
+ add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+diff --git a/doc/CMakeLists.txt b/doc/CMakeLists.txt
+index e1416d31..7a226a26 100644
+--- a/doc/CMakeLists.txt
++++ b/doc/CMakeLists.txt
+@@ -45,7 +45,7 @@ macro(pdflatex_process texfile)
+ 	add_custom_command(
+ 		OUTPUT ${_ind}
+ 		COMMAND ${MAKEINDEX_COMPILER} ${_idx}
+-		COMMAND python ${_fixupind} ${_idx}
++		COMMAND ${PYTHON_EXECUTABLE} ${_fixupind} ${_idx}
+ 		WORKING_DIRECTORY ${_dirname}
+ 		DEPENDS ${texfile} ${_idx}
+ 		COMMENT "MAKEINDEX ${_basename}.idx")
+diff --git a/ginac/CMakeLists.txt b/ginac/CMakeLists.txt
+index 27f4db8d..d3d344c1 100644
+--- a/ginac/CMakeLists.txt
++++ b/ginac/CMakeLists.txt
+@@ -168,11 +168,11 @@ install(FILES ${ginaclib_public_headers} DESTINATION "${INCLUDE_INSTALL_DIR}/gin
+ 
+ add_custom_command(
+ 	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/function.h
+-	COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/function.py -o ${CMAKE_CURRENT_BINARY_DIR}/function.h ${CMAKE_CURRENT_SOURCE_DIR}/function.hppy
++	COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/function.py -o ${CMAKE_CURRENT_BINARY_DIR}/function.h ${CMAKE_CURRENT_SOURCE_DIR}/function.hppy
+ 	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/function.hppy ${CMAKE_CURRENT_SOURCE_DIR}/function.py)
+ 
+ add_custom_command(
+ 	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/function.cpp
+-	COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/function.py -o ${CMAKE_CURRENT_BINARY_DIR}/function.cpp ${CMAKE_CURRENT_SOURCE_DIR}/function.cppy
++	COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/function.py -o ${CMAKE_CURRENT_BINARY_DIR}/function.cpp ${CMAKE_CURRENT_SOURCE_DIR}/function.cppy
+ 	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/function.h ${CMAKE_CURRENT_SOURCE_DIR}/function.cppy ${CMAKE_CURRENT_SOURCE_DIR}/function.py)
+ 
+diff --git a/ginsh/CMakeLists.txt b/ginsh/CMakeLists.txt
+index 9f4c0a8f..5e408594 100644
+--- a/ginsh/CMakeLists.txt
++++ b/ginsh/CMakeLists.txt
+@@ -40,13 +40,13 @@ endif()
+ 
+ add_custom_command(
+ 	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ginsh_fcn_help.h
+-	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/ginsh_fcn_help.py -o ginsh_fcn_help.h ${CMAKE_CURRENT_SOURCE_DIR}/ginsh.1.in
++	COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/ginsh_fcn_help.py -o ginsh_fcn_help.h ${CMAKE_CURRENT_SOURCE_DIR}/ginsh.1.in
+ 	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/ginsh.1.in ${CMAKE_CURRENT_SOURCE_DIR}/ginsh_fcn_help.py
+ 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+ 
+ add_custom_command(
+ 	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ginsh_op_help.h
+-	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/ginsh_op_help.py -o ginsh_op_help.h ${CMAKE_CURRENT_SOURCE_DIR}/ginsh.1.in
++	COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/ginsh_op_help.py -o ginsh_op_help.h ${CMAKE_CURRENT_SOURCE_DIR}/ginsh.1.in
+ 	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/ginsh.1.in ${CMAKE_CURRENT_SOURCE_DIR}/ginsh_op_help.py
+ 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+ 

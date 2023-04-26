@@ -1,6 +1,6 @@
 Name:           LCIO
 Version:        2.16.01
-Release:        3%{?dist}
+Release:        6%{?dist}
 Summary:        LCIO (Linear Collider I/O) is a persistency framework and event data model for linear collider detector studies.
 
 Group:          Development/Tools
@@ -18,8 +18,8 @@ BuildRequires: python3 python3-devel gcc-gfortran
 
 
 %if 0%{?suse_version}
-Requires: root6 root6-libs
-BuildRequires: root6 root6-libs root6-devel
+Requires: root6-config root6-libs  root6-utils
+BuildRequires: root6-config root6-libs root6-devel root6  root6-utils
 BuildRequires: pkgconfig(zlib) 
 BuildRequires: python python-devel gcc-fortran
 %endif
@@ -76,8 +76,20 @@ sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
 %endif
 
 %build
-%cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON 
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+%if %{?fedora}%{!?fedora:0} >= 34
+%cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON -DCMAKE_SKIP_RPATH=ON -DCMAKE_CXX_STANDARD=17
+%else
+%cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON -DCMAKE_SKIP_RPATH=ON 
+%endif
+
 %cmake_build
+%endif
+%if  0%{?suse_version}
+%cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON -DCMAKE_SKIP_RPATH=ON -DCMAKE_CXX_STANDARD=17
+%cmake_build
+%endif
+
 
 %install
 

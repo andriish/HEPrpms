@@ -1,7 +1,7 @@
 diff -Naur ORIG/makefile.in PATCHED/makefile.in
---- ORIG/makefile.in	2021-05-21 13:36:48.080993184 +0200
-+++ PATCHED/makefile.in	2021-05-21 13:36:48.081993184 +0200
-@@ -38,18 +38,18 @@
+--- ORIG/makefile.in	2021-10-12 05:17:57.000000001 +0200
++++ PATCHED/makefile.in	2021-10-16 12:36:51.284996576 +0200
+@@ -44,18 +44,18 @@
  	cd $(BLD) && $(MAKE) $(ARGS) $@
  
  install: lib frontend
@@ -14,12 +14,12 @@ diff -Naur ORIG/makefile.in PATCHED/makefile.in
 +	cp -p $(BLD)/$(LIB) $(DESTDIR)$(LIBDIR)
 +	cp -p $(INCLUDE) $(DESTDIR)$(INCLUDEDIR)
  	strip $(BLD)/$(FE)
--	cp -p $(BLD)/fcc $(BLD)/$(FE) $(BINDIR)
--	rm -f $(BINDIR)/f++
--	ln -s fcc $(BINDIR)/f++
-+	cp -p $(BLD)/fcc $(BLD)/$(FE) $(DESTDIR)$(BINDIR)
-+	rm -f $(DESTDIR)$(BINDIR)/f++
-+	ln -s fcc $(DESTDIR)$(BINDIR)/f++
+-	cp -p $(BLD)/$(FCC) $(BLD)/$(FE) $(BINDIR)
+-	rm -f $(BINDIR)/$(FXX)
+-	ln -s $(FCC) $(BINDIR)/$(FXX)
++	cp -p $(BLD)/$(FCC) $(BLD)/$(FE) $(DESTDIR)$(BINDIR)
++	rm -f $(DESTDIR)$(BINDIR)/$(FXX)
++	ln -s $(FCC) $(DESTDIR)$(BINDIR)/$(FXX)
  	test ! -f $(BLD)/$(MFE) || { \
 -	  test -z "$(EXE)" || ldd $(BLD)/$(MFE) | awk '/\/usr\/bin\/cyg/ { system("cp -p " $$3 " $(BINDIR)/"); }' ; \
 +	  test -z "$(EXE)" || ldd $(BLD)/$(MFE) | awk '/\/usr\/bin\/cyg/ { system("cp -p " $$3 " $(DESTDIR)$(BINDIR)/"); }' ; \
