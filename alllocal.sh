@@ -4,7 +4,7 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-applgrid:1.6.32
+#applgrid:1.6.32
 #MG5_aMC:3.4.2
 #gosam:2.1.1
 #qd:2.3.23
@@ -33,7 +33,7 @@ applgrid:1.6.32
 #lhapdf:6.5.3
 #rapgap:3.4.0
 #cascade:3.3.0
-#Rivet:3.1.7
+Rivet:3.1.8
 #Herwig:7.2.3
 #iminuit:2.16.0
 #cascade:3.2.1
@@ -180,7 +180,7 @@ applgrid:1.6.32
 #whizard:3.0.0
 #xbae:4.60.4
 #YODA:1.9.0
-HepMC3:3.2.3
+#HepMC3:3.2.3
 )
 
 for a in "${BUILDLIST[@]}" 
