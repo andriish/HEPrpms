@@ -41,6 +41,7 @@ that it handles special features new in C++11.
 %if %{?fedora}%{!?fedora:0} > 37
 sed -i 's/CMAKE_CXX_STANDARD 14/CMAKE_CXX_STANDARD 17/g' CMakeLists.txt
 %endif
+%cmake  -DBINDER_ENABLE_TEST=OFF
 %else
 %cmake . -DBINDER_ENABLE_TEST=OFF
 %endif
