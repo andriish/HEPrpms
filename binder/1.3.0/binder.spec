@@ -1,6 +1,6 @@
 Name:        binder
 Version:    1.3.0
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    A tool for automatic generation of Python bindings to C++ code
 License:    MIT License
 URL:        https://github.com/RosettaCommons/binder
@@ -38,7 +38,11 @@ that it handles special features new in C++11.
 %build
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
 %if %{?fedora}%{!?fedora:0} > 36 || %{?rhel}%{!?rhel:0} == 8
+%if %{?fedora}%{!?fedora:0} > 37
+%cmake  -DBINDER_ENABLE_TEST=OFF -DCMAKE_CXX_STANDARD=c++17
+%else
 %cmake  -DBINDER_ENABLE_TEST=OFF
+%endif
 %else
 %cmake . -DBINDER_ENABLE_TEST=OFF
 %endif
