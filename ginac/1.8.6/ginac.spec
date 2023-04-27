@@ -2,7 +2,7 @@
 
 Name:             ginac
 Version:          1.8.6
-Release:          2
+Release:          3
 Summary:          C++ library for symbolic calculations
 License:          GPLv2+
 URL:              https://www.ginac.de/
@@ -99,8 +99,10 @@ export CTEST_OUTPUT_ON_FAILURE=1
 %files devel
 %doc AUTHORS NEWS README
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8 
-%doc %{_vpath_builddir}/doc/tutorial/ginac.html
 %{_infodir}/*.info*
+%endif
+%if %{?fedora}%{!?fedora:0}
+%doc %{_vpath_builddir}/doc/tutorial/ginac.html
 %endif
 %{_includedir}/ginac/
 %{_libdir}/*.so

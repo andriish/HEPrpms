@@ -2,7 +2,7 @@
 Summary:  A parton level Monte Carlo for processes with electroweak bosons
 Name: VBFNLO
 Version: 3.0.0beta5
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2
 Source: https://github.com/vbfnlo/vbfnlo/archive/v%{version}.tar.gz
 URL:    https://www.itp.kit.edu/vbfnlo/wiki/doku.php
@@ -11,7 +11,7 @@ Prefix: %{_prefix}
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires: HepMC-devel root-core gsl gsl-devel lhapdf-devel autoconf automake libtool gcc-gfortran  
 BuildRequires: HepMC  lhapdf libgfortran 
-Requires: HepMC root-core gsl gsl-devel lhapdf libgfortran
+Requires: HepMC root-core gsl gsl-devel lhapdf libgfortran root-genvector
 %endif
 %if 0%{?suse_version}
 BuildRequires: HepMC2-devel root6-libs root6-config root6-devel root6 gsl gsl-devel LHAPDF-devel autoconf automake libtool gcc-fortran  
