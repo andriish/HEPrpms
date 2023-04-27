@@ -98,7 +98,7 @@ export CTEST_OUTPUT_ON_FAILURE=1
 
 %files devel
 %doc AUTHORS NEWS README
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8 
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8 
 %{_infodir}/*.info*
 %endif
 %if %{?fedora}%{!?fedora:0}
