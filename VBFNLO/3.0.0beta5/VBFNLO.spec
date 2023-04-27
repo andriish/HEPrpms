@@ -9,7 +9,7 @@ URL:    https://www.itp.kit.edu/vbfnlo/wiki/doku.php
 Patch1:         patch-VBFNLO-1.txt
 Prefix: %{_prefix}
 %if 0%{?rhel} || 0%{?fedora}
-BuildRequires: HepMC-devel root-core gsl gsl-devel lhapdf-devel autoconf automake libtool gcc-gfortran  
+BuildRequires: HepMC-devel root-core gsl gsl-devel lhapdf-devel autoconf automake libtool gcc-gfortran  root-genvector
 BuildRequires: HepMC  lhapdf libgfortran 
 Requires: HepMC root-core gsl gsl-devel lhapdf libgfortran root-genvector
 %endif
