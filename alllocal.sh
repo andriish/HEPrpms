@@ -4,6 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+Rivet:3.1.8
+#YODA:1.9.8
 #applgrid:1.6.32
 #MG5_aMC:3.4.2
 #gosam:2.1.1
@@ -35,7 +37,7 @@ declare -a BUILDLIST=(
 #cascade:3.3.0
 #Rivet:3.1.7
 #Herwig:7.2.3
-iminuit:2.21.3
+#iminuit:2.21.3
 #cascade:3.2.1
 #qgraf:3.4.2
 #YODA:1.9.7
