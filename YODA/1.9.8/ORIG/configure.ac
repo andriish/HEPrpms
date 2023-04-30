@@ -1,7 +1,7 @@
 ## Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.59)
-AC_INIT([YODA],[1.9.7],[yoda@projects.hepforge.org],[YODA])
+AC_PREREQ([2.71])
+AC_INIT([YODA],[1.9.8],[yoda@projects.hepforge.org],[YODA])
 
 ## Check and block installation into the src/build dir
 if test "$prefix" = "$PWD"; then
@@ -39,7 +39,7 @@ AX_CXX_COMPILE_STDCXX([11], [noext], [mandatory])
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_DISABLE_STATIC
-AC_PROG_LIBTOOL
+LT_INIT
 
 ## Work out library suffix for the build
 LIB_SUFFIX=\\\"$shrext_cmds\\\"
@@ -52,7 +52,7 @@ dnl AC_CEDAR_CHECKCXXFLAG([-std=c++98], [AM_CXXFLAGS="$AM_CXXFLAGS -std=c++98"])
 dnl AC_CEDAR_CHECKCXXFLAG([-Wno-unused-variable], [AM_CXXFLAGS="$AM_CXXFLAGS -Wno-unused-variable"])
 
 ## Debug flag (default=none)
-AC_ARG_ENABLE([debug], [AC_HELP_STRING(--enable-debug, [build with debugging symbols  @<:@default=no@:>@])], [], [enable_debug=no])
+AC_ARG_ENABLE([debug], [AS_HELP_STRING([--enable-debug],[build with debugging symbols  @<:@default=no@:>@])], [], [enable_debug=no])
 if test x$enable_debug = xyes; then
   [AM_CXXFLAGS="$AM_CXXFLAGS -g"]
 fi
@@ -62,8 +62,7 @@ fi
 AX_CHECK_ZLIB
 
 ## Optional ROOT compatibility
-AC_ARG_ENABLE([root], [AC_HELP_STRING(--disable-root,
-  [don't try to build YODA interface to PyROOT (needs root-config) @<:@default=yes@:>@])], [], [enable_root=yes])
+AC_ARG_ENABLE([root], [AS_HELP_STRING([--disable-root],[don't try to build YODA interface to PyROOT (needs root-config) @<:@default=yes@:>@])], [], [enable_root=yes])
 if test "x$enable_root" = "xyes"; then
   AC_PATH_PROG(ROOTCONFIG, [root-config])
   if test "x$ROOTCONFIG" = "x"; then
@@ -104,12 +103,11 @@ fi
 
 
 ## Python extension
-AC_ARG_ENABLE(pyext, [AC_HELP_STRING(--disable-pyext,
-  [don't build Python module (default=build)])],
+AC_ARG_ENABLE(pyext, [AS_HELP_STRING([--disable-pyext],[don't build Python module (default=build)])],
   [], [enable_pyext=yes])
 ## Basic Python checks
 if test x$enable_pyext = xyes; then
-  AM_PATH_PYTHON
+  #AM_PATH_PYTHON
   AX_PYTHON_DEVEL([>= '2.7.3'])
   PYTHON_FULL_VERSION=`$PYTHON -c 'from __future__ import print_function; import platform; print(platform.python_version())'`
   PYTHON_MAJOR_VERSION=`$PYTHON -c 'from __future__ import print_function; import sys; print(sys.version_info.major)'`
@@ -117,7 +115,7 @@ if test x$enable_pyext = xyes; then
   AC_SUBST(PYTHON_FULL_VERSION)
   AC_SUBST(PYTHON_MAJOR_VERSION)
   #YODA_PYTHONPATH=$pythondir
-  YODA_PYTHONPATH=`$PYTHON -c "from __future__ import print_function; import sysconfig; print(sysconfig.get_path('platlib', 'posix_user', vars={'userbase' : '$prefix'}))"`
+  YODA_PYTHONPATH=`$PYTHON -c "from __future__ import print_function; import sysconfig; print(sysconfig.get_path('platlib', vars={'platbase': '$prefix', 'base': '$prefix'}))"`
   AC_SUBST(YODA_PYTHONPATH)
   AC_MSG_NOTICE(YODA Python lib will be installed to $YODA_PYTHONPATH)
   if test -z "$PYTHON"; then
@@ -177,8 +175,10 @@ AC_CONFIG_FILES([Makefile Doxyfile])
 AC_CONFIG_FILES([include/Makefile include/YODA/Makefile])
 AC_CONFIG_FILES([src/Makefile
                  src/tinyxml/Makefile
-                 src/yamlcpp/Makefile])
+                 src/yamlcpp/Makefile
+                 src/binreloc/Makefile])
 AC_CONFIG_FILES([tests/Makefile])
+AC_CONFIG_FILES([data/Makefile])
 AC_CONFIG_FILES([pyext/Makefile
                  pyext/build.py
                  pyext/yoda/Makefile])
