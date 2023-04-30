@@ -1,0 +1,19 @@
+diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
+index ee5c33d50..91370927e 100644
+--- a/cmake/CMakeLists.txt
++++ b/cmake/CMakeLists.txt
+@@ -1586,11 +1586,11 @@ endif()
+ 
+ # Flatbuffers
+ if (onnxruntime_PREFER_SYSTEM_LIB)
+-  find_package(Flatbuffers)
++  find_package(Flatbuffers)
+ endif()
+-if (Flatbuffers_FOUND)
++if (Flatbuffers_FOUND)
+   message("Use flatbuffers from preinstalled system lib")
+-  add_library(flatbuffers ALIAS flatbuffers::flatbuffers)
++  add_library(flatbuffers ALIAS flatbuffers::flatbuffers_shared)
+ else()
+   message("Use flatbuffers from submodule")
+   # We do not need to build flatc for iOS or Android Cross Compile

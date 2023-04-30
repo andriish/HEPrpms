@@ -1,0 +1,23 @@
+diff --git a/cmake/onnxruntime_unittests.cmake b/cmake/onnxruntime_unittests.cmake
+index 11c94655e..15bde27c8 100644
+--- a/cmake/onnxruntime_unittests.cmake
++++ b/cmake/onnxruntime_unittests.cmake
+@@ -833,11 +833,13 @@ if (onnxruntime_USE_TVM)
+   endif()
+ endif()
+ 
+-install(TARGETS onnx_test_runner
+-        ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-        LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-        BUNDLE   DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-        RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})
++if (onnxruntime_INSTALL_UNIT_TESTS)
++  install(TARGETS onnx_test_runner
++          ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
++          LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
++          BUNDLE   DESTINATION ${CMAKE_INSTALL_LIBDIR}
++          RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})
++endif()
+ 
+ if (NOT onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
+   if(onnxruntime_BUILD_BENCHMARKS)

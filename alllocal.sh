@@ -4,6 +4,7 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
+onnxruntime:1.14.1
 #applgrid:1.6.32
 #MG5_aMC:3.4.2
 #gosam:2.1.1
@@ -33,7 +34,7 @@ declare -a BUILDLIST=(
 #lhapdf:6.5.3
 #rapgap:3.4.0
 #cascade:3.3.0
-Rivet:3.1.8
+#Rivet:3.1.8
 #Herwig:7.2.3
 #iminuit:2.16.0
 #cascade:3.2.1

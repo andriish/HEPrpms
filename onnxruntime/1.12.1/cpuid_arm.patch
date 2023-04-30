@@ -1,0 +1,32 @@
+diff --git a/onnxruntime/core/common/cpuid_info.cc b/onnxruntime/core/common/cpuid_info.cc
+index 9905e6f3d..57d4212e7 100644
+--- a/onnxruntime/core/common/cpuid_info.cc
++++ b/onnxruntime/core/common/cpuid_info.cc
+@@ -122,9 +122,6 @@ void CPUIDInfo::ArmLinuxInit() {
+     LOGS_DEFAULT(WARNING) << "Failed to init pytorch cpuinfo library, may cause CPU EP performance degradation due to undetected CPU features.";
+     return;
+   }
+-#else
+-  pytorch_cpuinfo_init_ = false;
+-#endif
+ 
+   if (pytorch_cpuinfo_init_) {
+     is_hybrid_ = cpuinfo_get_uarchs_count() > 1;
+@@ -152,6 +149,10 @@ void CPUIDInfo::ArmLinuxInit() {
+   } else {
+     has_arm_neon_dot_ = ((getauxval(AT_HWCAP) & HWCAP_ASIMDDP) != 0);
+   }
++#else
++  pytorch_cpuinfo_init_ = false;
++  has_arm_neon_dot_ = ((getauxval(AT_HWCAP) & HWCAP_ASIMDDP) != 0);
++#endif
+ }
+ 
+ #elif defined(_WIN32)
+@@ -229,4 +230,4 @@ uint32_t CPUIDInfo::GetCurrentCoreIdx() const {
+ #endif
+ }
+ 
+-}  // namespace onnxruntime
+\ No newline at end of file
++}  // namespace onnxruntime
