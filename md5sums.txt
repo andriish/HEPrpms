@@ -204,3 +204,5 @@ c5994b9822452ccefd03dcb4bd36b3b6  HEJ/2.1.3/rpmbuild/SOURCES/HEJ_2.1.3.tar.gz
 3228783e87d6161f9b87cbd7d048aa7a  iminuit/2.21.3/rpmbuild/SOURCES/v2.21.1.tar.gz
 c6a1d202b11e72a58cb840219d8b7adb  iminuit/2.21.3/rpmbuild/SOURCES/914c06fb252b6cc3727d0eedab6736e88a3fcb01.zip
 cd50e0abe8424ae2a0e8042fee604b27  iminuit/2.21.3/rpmbuild/SOURCES/d0b406db5e678a2eed8eee0de3ddfdee746ea568.zip
+e60c75562572905ed9984c67ada1241b  Rivet/3.1.8/rpmbuild/SOURCES/Rivet-3.1.8.tar.gz
+4671a9e99c0d01d3e04195d836cec16b  YODA/1.9.8/rpmbuild/SOURCES/YODA-1.9.8.tar.gz
