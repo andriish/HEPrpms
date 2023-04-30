@@ -204,3 +204,4 @@ c5994b9822452ccefd03dcb4bd36b3b6  HEJ/2.1.3/rpmbuild/SOURCES/HEJ_2.1.3.tar.gz
 f31f4aa5e7a032275dae36f61b59655d  Rivet/3.1.8/rpmbuild/SOURCES/rivet-release-3-1-x.tar.gz
 924440fef537f692a744b7c171771dd9  onnxruntime/1.12.1/rpmbuild/SOURCES/onnxruntime-1.12.1.tar.gz
 93e831d5ff347518d241c6e37d70d747  onnxruntime/1.14.1/rpmbuild/SOURCES/onnxruntime-1.14.1.tar.gz
+e97d79d0eef19bb182d438247e19e532  safeint/3.0.27/rpmbuild/SOURCES/SafeInt-3.0.27.tar.gz
