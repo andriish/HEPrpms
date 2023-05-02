@@ -206,3 +206,4 @@ c6a1d202b11e72a58cb840219d8b7adb  iminuit/2.21.3/rpmbuild/SOURCES/914c06fb252b6c
 cd50e0abe8424ae2a0e8042fee604b27  iminuit/2.21.3/rpmbuild/SOURCES/d0b406db5e678a2eed8eee0de3ddfdee746ea568.zip
 e60c75562572905ed9984c67ada1241b  Rivet/3.1.8/rpmbuild/SOURCES/Rivet-3.1.8.tar.gz
 4671a9e99c0d01d3e04195d836cec16b  YODA/1.9.8/rpmbuild/SOURCES/YODA-1.9.8.tar.gz
+18fd61e7f6b9846f8e9bdaa6a1841315  whizard/3.1.2/rpmbuild/SOURCES/whizard-3.1.2.tar.gz
