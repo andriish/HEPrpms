@@ -6,7 +6,7 @@
 
 Name:           openloops
 Version:        2.1.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
 Source0:        https://www.hepforge.org/archive/openloops/OpenLoops-%{version}.tar.gz
@@ -45,6 +45,10 @@ BuildRequires: python3-devel python3-scons
 
 %build
 sed -i  's@.*process_lib_dir.*@process_lib_dir = /usr/'%_lib'/openloops/proclib@g'  pyol/config/default.cfg
+%if %{?fedora}%{!?fedora:0} > 38 || %{?rhel}%{!?rhel:0} >= 9 
+sed -i  's@ -std=legacy@ -std=legacy -fPIC@g'  pyol/config/default.cfg
+%endif
+
 %if %{?rhel}%{!?rhel:0} == 8
 scons-3
 %else

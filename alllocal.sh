@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-whizard:3.1.2
+openloops:2.1.2
+#whizard:3.1.2
 #Rivet:3.1.8
 #YODA:1.9.8
 #applgrid:1.6.32
