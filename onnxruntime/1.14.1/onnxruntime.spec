@@ -96,7 +96,8 @@ This package provides the Python 3 bindings for %{name}
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
     -Donnxruntime_ENABLE_PYTHON:BOOL=ON \
-    -S cmake -Donnxruntime_EXTENDED_MINIMAL_BUILD=ON -DFlatbuffers_DIR=/usr/lib64/cmake/flatbuffers/
+    -Donnxruntime_MINIMAL_BUILD:BOOL=OFF \
+    -S cmake -DFlatbuffers_DIR=/usr/lib64/cmake/flatbuffers/
     # -DONNX_CUSTOM_PROTOC_EXECUTABLE=/usr/bin/protoc
 %cmake_build
 
@@ -107,7 +108,7 @@ mkdir -p "%{buildroot}/%{python3_sitearch}/%{name}/"
 cp --preserve=timestamps -r "./docs/" "%{buildroot}/%{_docdir}/%{name}"
 
 cp --preserve=timestamps -r  ./%{name}/python/* "%{buildroot}/%{python3_sitearch}/%{name}"
-cp --preserve=timestamps -r  ./%{name}/capi "%{buildroot}/%{python3_sitearch}/%{name}"
+cp --preserve=timestamps -r  %__cmake_builddir/%{name}/capi "%{buildroot}/%{python3_sitearch}/%{name}"
 
 %check
 %ctest
@@ -122,7 +123,7 @@ cp --preserve=timestamps -r  ./%{name}/capi "%{buildroot}/%{python3_sitearch}/%{
 %dir %{_includedir}/onnxruntime/
 %{_includedir}/onnxruntime/*
 %{_libdir}/libonnxruntime.so
-#{_libdir}/libonnxruntime_providers_shared.so
+%{_libdir}/libonnxruntime_providers_shared.so
 %{_libdir}/pkgconfig/libonnxruntime.pc
 
 %files doc
