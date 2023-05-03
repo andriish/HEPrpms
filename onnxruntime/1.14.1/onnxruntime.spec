@@ -64,6 +64,16 @@ Summary:    Documentation files for the %{name} package
 %description doc
 Documentation files for the %{name} package
 
+
+%package -n python%{python3_pkgversion}-%{name}
+Summary:	Python 3 bindings
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{name}}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+
+%description -n python%{python3_pkgversion}-%{name}
+This package provides the Python 3 bindings for %{name}
+
+
 %prep
 %autosetup -p1
 
@@ -85,7 +95,7 @@ Documentation files for the %{name} package
     -Donnxruntime_DISABLE_ABSEIL=ON \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
-    -onnxruntime_ENABLE_PYTHON:BOOL=ON \
+    -Donnxruntime_ENABLE_PYTHON:BOOL=ON \
     -S cmake -Donnxruntime_EXTENDED_MINIMAL_BUILD=ON -DFlatbuffers_DIR=/usr/lib64/cmake/flatbuffers/
     # -DONNX_CUSTOM_PROTOC_EXECUTABLE=/usr/bin/protoc
 %cmake_build
@@ -93,7 +103,11 @@ Documentation files for the %{name} package
 %install
 %cmake_install
 mkdir -p "%{buildroot}/%{_docdir}/"
+mkdir -p "%{buildroot}/%{python3_sitearch}/%{name}/"
 cp --preserve=timestamps -r "./docs/" "%{buildroot}/%{_docdir}/%{name}"
+
+cp --preserve=timestamps -r  ./%{name}/python/* "%{buildroot}/%{python3_sitearch}/%{name}"
+cp --preserve=timestamps -r  ./%{name}/capi "%{buildroot}/%{python3_sitearch}/%{name}"
 
 %check
 %ctest
@@ -113,6 +127,11 @@ cp --preserve=timestamps -r "./docs/" "%{buildroot}/%{_docdir}/%{name}"
 
 %files doc
 %{_docdir}/%{name}
+
+%files -n python%{python3_pkgversion}-%{name}
+%dir %{python3_sitearch}/%{name}
+%{python3_sitearch}/%{name}/*
+
 
 %changelog
 * Mon Sep 12 2022 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.12.1-1
