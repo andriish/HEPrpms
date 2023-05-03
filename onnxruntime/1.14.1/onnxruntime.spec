@@ -4,7 +4,7 @@
 Summary:    A cross-platform inferencing and training accelerator
 Name:       onnxruntime
 Version:    1.14.1
-Release:    1%{?dist}
+Release:    2%{?dist}
 # onnxruntime and SafeInt are MIT
 # onnx is Apache License 2.0
 # optional-lite is Boost Software License 1.0
@@ -44,6 +44,7 @@ BuildRequires:  gmock-devel
 
 BuildRequires:  onnx-devel
 BuildRequires:  safeint-devel
+BuildRequires:  pybind11-devel
 
 %description
 %{name} is a cross-platform inferencing and training accelerator compatible
@@ -84,6 +85,7 @@ Documentation files for the %{name} package
     -Donnxruntime_DISABLE_ABSEIL=ON \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
+    -onnxruntime_ENABLE_PYTHON:BOOL=ON \
     -S cmake -Donnxruntime_EXTENDED_MINIMAL_BUILD=ON -DFlatbuffers_DIR=/usr/lib64/cmake/flatbuffers/
     # -DONNX_CUSTOM_PROTOC_EXECUTABLE=/usr/bin/protoc
 %cmake_build
