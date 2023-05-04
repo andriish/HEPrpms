@@ -5,7 +5,7 @@
 
 Name:           %{srcname}
 Version:        2.21.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A Jupyter-friendly Python interface for the Minuit2 C++ library maintained by CERN’s ROOT team
 
 License:        MIT, LGPL
@@ -42,6 +42,7 @@ mv pybind11-%{pybind11blob} extern/pybind11
 unzip %SOURCE2
 mv root-%{rootblob} extern/root
 sed -i 's/3\.13/3\.11/g' CMakeLists.txt
+sed -i -e 's/^/#include <cstdint>/' src/fcn.hpp
 
 %build
 %if 0%{?rhel} || 0%{?fedora}
