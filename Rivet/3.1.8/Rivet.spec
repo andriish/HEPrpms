@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        3.1.8
-Release:        1002%{?dist}
+Release:        1003%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -25,10 +25,8 @@ BuildRequires:  rsync
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
 Requires:       zlib gsl
 BuildRequires:  zlib zlib-devel gsl gsl-devel 
-Requires:       HepMC3
-Requires:       HepMC3-search
-BuildRequires:  HepMC3-devel
-BuildRequires:  HepMC3-search-devel
+Requires:       HepMC
+BuildRequires:  HepMC-devel
 %endif
 %if 0%{?suse_version}
 Requires:       pkgconfig(zlib) pkgconfig(gsl)
@@ -93,7 +91,7 @@ pathfix.py -pn -i %{__python3}  bin/make-*
 
 autoreconf --force --install --verbose .
 automake -a --force
-%configure  --disable-doxygen --with-yoda=$(yoda-config --prefix ) --with-hepmc3=$(HepMC3-config --prefix) --with-fjcontrib=/usr --with-fastjet=$(fastjet-config --prefix)
+%configure  --disable-doxygen --with-yoda=$(yoda-config --prefix ) --with-hepmc=$(HepMC-config --prefix) --with-fjcontrib=/usr --with-fastjet=$(fastjet-config --prefix)
 make %{?_smp_mflags}
 %endif
 
@@ -104,7 +102,7 @@ export PYTHON=%{_bindir}/python%{py3_ver}
 export CXXFLAGS="-Wno-error -fPIC"  
 autoreconf --force --install --verbose .
 automake -a --force
-%configure  --disable-doxygen --with-yoda=$(yoda-config --prefix ) --with-hepmc3=$(HepMC3-config --prefix) --with-fjcontrib=/usr --with-fastjet=$(fastjet-config --prefix)
+%configure  --disable-doxygen --with-yoda=$(yoda-config --prefix ) --with-hepmc=$(HepMC-config --prefix) --with-fjcontrib=/usr --with-fastjet=$(fastjet-config --prefix)
 make %{?_smp_mflags}
 %endif
 

@@ -4,7 +4,7 @@
 
 Name:           ThePEG
 Version:        2.2.3
-Release:        1003%{?dist}
+Release:        1004%{?dist}
 License:        GPLv3
 Url:            http://www.hepforge.org/archive/thepeg
 Source0:        https://thepeg.hepforge.org/downloads/%{name}-%{version}.tar.bz2
@@ -19,8 +19,8 @@ BuildRequires:  autoconf automake    libtool  libquadmath-devel  libquadmath
 BuildRequires:  gsl gsl-devel fastjet fastjet-devel zlib-devel lhapdf-devel  boost boost-devel
 Requires:       MG5_aMC fjcontrib YODA
 BuildRequires:  MG5_aMC fjcontrib YODA YODA-devel
-Requires:       HepMC3  HepMC3-rootIO HepMC3-search   HepMC3-devel HepMC3-search-devel HepMC3-rootIO-devel 
-BuildRequires:  HepMC3  HepMC3-rootIO HepMC3-search   HepMC3-devel HepMC3-search-devel HepMC3-rootIO-devel 
+Requires:       HepMC  HepMC-devel
+BuildRequires:  HepMC  HepMC-devel
 %endif
 %if 0%{?suse_version}
 Requires:       libLHAPDF fastjet gsl zlib gsl fastjet libquadmath0
@@ -80,14 +80,14 @@ The library documentation is available on header files.
 touch configure.ac
 autoreconf --force --install --verbose .
 automake -a --force
-%configure  --disable-rpath  --with-hepmc=%_prefix --with-rivet=%_prefix --with-fastjet=%_prefix  --with-lhapdf=/usr   --with-hepmcversion=3
+%configure  --disable-rpath  --with-hepmc=%_prefix --with-rivet=%_prefix --with-fastjet=%_prefix  --with-lhapdf=/usr   --with-hepmcversion=2
 make %{?_smp_mflags}
 %endif
 %if 0%{?suse_version}
 touch configure.ac
 autoreconf --force --install --verbose .
 automake -a --force
-%configure  --disable-rpath  --with-hepmc=%_prefix --with-rivet=%_prefix --with-fastjet=%_prefix  --with-lhapdf=/usr   --with-hepmcversion=3
+%configure  --disable-rpath  --with-hepmc=%_prefix --with-rivet=%_prefix --with-fastjet=%_prefix  --with-lhapdf=/usr   --with-hepmcversion=2
 make %{?_smp_mflags}
 %endif
 
