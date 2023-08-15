@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        3.1.8
-Release:        1002%{?dist}
+Release:        1003%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -29,6 +29,9 @@ Requires:       HepMC3
 Requires:       HepMC3-search
 BuildRequires:  HepMC3-devel
 BuildRequires:  HepMC3-search-devel
+%if %{?fedora}%{!?fedora:0} >= 39
+BuildRequires: python3-rpm-macros
+%endif
 %endif
 %if 0%{?suse_version}
 Requires:       pkgconfig(zlib) pkgconfig(gsl)
@@ -87,10 +90,15 @@ The library documentation is available on header files.
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 export PYTHON=%{_bindir}/python3
 export CXXFLAGS="-g -Wformat -Wno-error -fPIC"  
+%if %{?fedora}%{!?fedora:0} >= 39
+%py3_shebang_fix  ./
+%py3_shebang_fix  bin/rivet*
+%py3_shebang_fix  bin/make-*
+%else
 pathfix.py -pn -i %{__python3}  ./
 pathfix.py -pn -i %{__python3}  bin/rivet*
 pathfix.py -pn -i %{__python3}  bin/make-*
-
+%endif
 autoreconf --force --install --verbose .
 automake -a --force
 %configure  --disable-doxygen --with-yoda=$(yoda-config --prefix ) --with-hepmc3=$(HepMC3-config --prefix) --with-fjcontrib=/usr --with-fastjet=$(fastjet-config --prefix)

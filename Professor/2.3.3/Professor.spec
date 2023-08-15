@@ -27,7 +27,9 @@ BuildRequires: python3-devel  Cython root-core
 Requires: root6-libs root6
 BuildRequires: python3-devel  python3-Cython  python3-tools root6-libs root6
 %endif
-
+%if %{?fedora}%{!?fedora:0} >= 39
+BuildRequires: python3-rpm-macros
+%endif
 
 %description
  Professor is a tuning tool for Monte Carlo event generators, based on 
@@ -46,9 +48,15 @@ export PYTHON=/usr/bin/python3
 export CXXFLAGS='%{optflags} -O0 ' 
 export CPPFLAGS=-I/usr/include/eigen3
 sed -i 's@python@python3@1'   Makefile
+%if %{?fedora}%{!?fedora:0} >= 39
+%py3_shebang_fix   ./
+%py3_shebang_fix   ./bin/prof*
+%py3_shebang_fix  ./contrib/prof*
+%else
 pathfix.py -pn -i %{__python3}  ./
 pathfix.py -pn -i %{__python3}  ./bin/prof*
 pathfix.py -pn -i %{__python3}  ./contrib/prof*
+%endif
 %make_build %{?_smp_mflags}
 %endif
 
