@@ -1,7 +1,7 @@
 Summary:  A parton-level Monte Carlo event generator
 Name: MCFM
 Version: 10.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 URL:     https://mcfm.fnal.gov/
@@ -63,6 +63,9 @@ cmake --build BUILD
 %else
 %make_install -C build/BUILD
 %endif
+find $RPM_BUILD_ROOT -type f -name '._CXX_Interface.h' -exec rm -f {} \;
+find $RPM_BUILD_ROOT -type f -name '._CXX_Wrapper.h' -exec rm -f {} \;
+find $RPM_BUILD_ROOT -type f -name '._Flavor_Map.h' -exec rm -f {} \;
 
 %files
 %defattr(-,root,root)
