@@ -4,7 +4,7 @@
 
 Name:           YODA
 Version:        1.9.8
-Release:        1001
+Release:        1002
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
 Source0:        https://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
@@ -18,6 +18,9 @@ BuildRequires: gcc-c++  python3-Cython   zlib
 %if %{?fedora}%{!?fedora:0}
 %if %{?fedora}%{!?fedora:0} >= 35
 BuildRequires: python-setuptools
+%endif
+%if %{?fedora}%{!?fedora:0} >= 39
+BuildRequires: python3-rpm-macros
 %endif
 BuildRequires: gcc-c++  Cython   zlib
 %endif
@@ -101,11 +104,19 @@ sed -E -i "1{s|^#! /usr/bin/env python||}" pyext/yoda/search.py
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 export PYTHON=%{_bindir}/python3
 export CXXFLAGS="%{optflags} -Wformat -Wno-error"
+%if %{?fedora}%{!?fedora:0} >= 39
+%py3_shebang_fix  ./
+%py3_shebang_fix  bin/flat2yoda
+%py3_shebang_fix  bin/yoda*
+%py3_shebang_fix  bin/aida*
+%py3_shebang_fix  bin/root*
+%else
 pathfix.py -pn -i %{__python3}  ./
 pathfix.py -pn -i %{__python3}  bin/flat2yoda
 pathfix.py -pn -i %{__python3}  bin/yoda*
 pathfix.py -pn -i %{__python3}  bin/aida*
 pathfix.py -pn -i %{__python3}  bin/root*
+%endif
 autoreconf -fi
 %configure
 %make_build %{?_smp_mflags}
