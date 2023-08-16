@@ -22,7 +22,7 @@ BuildRequires: python3  python3-devel
 
 
 %if 0%{?rhel} || 0%{?fedora}
-BuildRequires: gcc-gfortran
+BuildRequires: gcc-gfortran python3-setuptools
 %endif
 %if 0%{?suse_version}
 BuildRequires: gcc-fortran python-rpm-macros
