@@ -22,7 +22,7 @@ declare -a BUILDLIST=(
 #clhep:2.4.6.4
 #blackhat:0.9.9
 #binder:1.3.0
-SHERPA-MC:2.2.15
+#SHERPA-MC:2.2.15
 #FeynHiggs:2.19.0
 #f90cache:0.99c
 #tmdlib:2.2.08
@@ -81,7 +81,7 @@ SHERPA-MC:2.2.15
 #python-uproot4:4.1.8
 #fastnlo:2.5.0.2826
 #LCIO:02.17.00
-#gosam:2.1.1
+gosam:2.1.1
 #clhep:2.4.5.1
 #Rivet:3.1.5
 #YODA:1.9.2
