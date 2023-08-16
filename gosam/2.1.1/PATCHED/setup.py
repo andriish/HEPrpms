@@ -2,7 +2,7 @@
 # vim: ts=3:sw=3
 import os
 try:
-  from xxdistutils.core import setup
+  from distutils.core import setup
   from distutils.sysconfig import get_config_vars
   from distutils.command.build_py import build_py as _build_py
   from distutils.command.install_scripts import install_scripts as _install_scripts
