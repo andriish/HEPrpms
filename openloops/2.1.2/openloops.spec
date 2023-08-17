@@ -55,8 +55,7 @@ sed -i  's@ -std=legacy@ -std=legacy -fPIC@g'  pyol/config/default.cfg
 %if %{?rhel}%{!?rhel:0} == 8
 scons-3
 %else
-./scons
-%endif 
+
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 %if %{?fedora}%{!?fedora:0} >= 39
@@ -65,6 +64,8 @@ scons-3
 pathfix.py -pn -i %{__python3}  ./
 %endif
 %endif
+./scons
+%endif 
 
 %install
 mkdir -p $RPM_BUILD_ROOT/usr/bin
