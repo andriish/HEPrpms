@@ -208,3 +208,4 @@ e60c75562572905ed9984c67ada1241b  Rivet/3.1.8/rpmbuild/SOURCES/Rivet-3.1.8.tar.g
 4671a9e99c0d01d3e04195d836cec16b  YODA/1.9.8/rpmbuild/SOURCES/YODA-1.9.8.tar.gz
 18fd61e7f6b9846f8e9bdaa6a1841315  whizard/3.1.2/rpmbuild/SOURCES/whizard-3.1.2.tar.gz
 506dd46b6ece24e25c6d893d97e057e1  MCFM/10.3/rpmbuild/SOURCES/MCFM-10.3.tar.gz
+ee90d4aa305eece0b3b2949fdc7bcbc8  MG5_aMC/3.5.1/rpmbuild/SOURCES/MG5_aMC_v3.5.1.tar.gz

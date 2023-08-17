@@ -44,7 +44,7 @@ declare -a BUILDLIST=(
 #qgraf:3.4.2
 #YODA:1.9.7
 #whizard:3.0.3
-#MG5_aMC:3.4.0
+MG5_aMC:3.5.1
 #MCFM:10.2.1
 #f2c:20210928
 #DD4hep:01.20.00
@@ -81,7 +81,7 @@ declare -a BUILDLIST=(
 #python-uproot4:4.1.8
 #fastnlo:2.5.0.2826
 #LCIO:02.17.00
-gosam:2.1.1
+#gosam:2.1.1
 #clhep:2.4.5.1
 #Rivet:3.1.5
 #YODA:1.9.2
