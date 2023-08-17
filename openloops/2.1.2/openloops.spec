@@ -53,12 +53,6 @@ sed -i  's@.*process_lib_dir.*@process_lib_dir = /usr/'%_lib'/openloops/proclib@
 sed -i  's@ -std=legacy@ -std=legacy -fPIC@g'  pyol/config/default.cfg
 %endif
 
-%if %{?rhel}%{!?rhel:0} == 8
-scons-3
-%else
-%if %{?fedora}%{!?fedora:0} >= 38
-sed -i 's/import imp/import importlib as imp/g' scons-local/scons-local-3.0.5/SCons/compat/__init__.py
-%endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 %if %{?fedora}%{!?fedora:0} >= 39
@@ -67,6 +61,14 @@ sed -i 's/import imp/import importlib as imp/g' scons-local/scons-local-3.0.5/SC
 pathfix.py -pn -i %{__python3}  ./
 %endif
 %endif
+%if %{?fedora}%{!?fedora:0} >= 38
+sed -i 's/import imp/import importlib as imp/g' scons-local/scons-local-3.0.5/SCons/compat/__init__.py
+%endif
+
+
+%if %{?rhel}%{!?rhel:0} == 8
+scons-3
+%else
 scons
 %endif 
 
