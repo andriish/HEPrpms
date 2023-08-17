@@ -55,7 +55,9 @@ sed -i  's@ -std=legacy@ -std=legacy -fPIC@g'  pyol/config/default.cfg
 %if %{?rhel}%{!?rhel:0} == 8
 scons-3
 %else
-
+%if %{?fedora}%{!?fedora:0} >= 38
+sed -i 's/import imp/import importlib as imp/g' scons-local/scons-local-3.0.5/SCons/compat/__init__.py
+%endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 %if %{?fedora}%{!?fedora:0} >= 39
