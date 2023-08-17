@@ -18,6 +18,9 @@ BuildRequires:  libtool
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran
 %endif
+%if %{?fedora}%{!?fedora:0} >= 39
+BuildRequires: python3-rpm-macros
+%endif
 %if 0%{?suse_version}
 BuildRequires:  gcc-fortran
 Requires: python3
@@ -52,11 +55,15 @@ sed -i  's@ -std=legacy@ -std=legacy -fPIC@g'  pyol/config/default.cfg
 %if %{?rhel}%{!?rhel:0} == 8
 scons-3
 %else
-scons
+./scons
 %endif 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+%if %{?fedora}%{!?fedora:0} >= 39
+%py3_shebang_fix ./
+%else
 pathfix.py -pn -i %{__python3}  ./
+%endif
 %endif
 
 %install

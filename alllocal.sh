@@ -81,7 +81,7 @@ declare -a BUILDLIST=(
 #python-uproot4:4.1.8
 #fastnlo:2.5.0.2826
 #LCIO:02.17.00
-gosam:2.1.1
+#gosam:2.1.1
 #clhep:2.4.5.1
 #Rivet:3.1.5
 #YODA:1.9.2
@@ -154,7 +154,7 @@ gosam:2.1.1
 #njet:2.1.1
 #nlojet++:4.1.3
 #noweb:2.11
-#openloops:2.1.2
+openloops:2.1.2
 #PHOTOS:3.64
 #Professor:2.3.3
 #PTL:1.0.2
