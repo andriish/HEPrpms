@@ -103,11 +103,13 @@ def get_config(args=[]):
     """
     try:
       config = configparser.SafeConfigParser()
+      with open(os.path.join(prefix, default_config_file), 'r') as fh:
+        config.read_fp(fh)
     except:
       config = configparser.ConfigParser()
     # default configuration
-    with open(os.path.join(prefix, default_config_file), 'r') as fh:
-        config.readfp(fh)
+      with open(os.path.join(prefix, default_config_file), 'r') as fh:
+        config.read_fp(fh)
     # override with user configuration
     config.read([os.path.join(prefix, user_config_file)])
     config = dict(config.items('OpenLoops'))
