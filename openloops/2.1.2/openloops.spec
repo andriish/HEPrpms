@@ -66,7 +66,7 @@ sed -i 's/import imp/import importlib as imp/g' scons-local/scons-local-3.0.5/SC
 pathfix.py -pn -i %{__python3}  ./
 %endif
 %endif
-./scons
+scons
 %endif 
 
 %install
