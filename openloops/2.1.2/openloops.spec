@@ -6,10 +6,11 @@
 
 Name:           openloops
 Version:        2.1.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
 Source0:        https://www.hepforge.org/archive/openloops/OpenLoops-%{version}.tar.gz
+Patch0:         patch-openloops-0.txt
 Prefix:         %{_prefix}
 Summary:        Automated calculation of one-loop amplitudes 
 BuildRequires:  autoconf
@@ -44,7 +45,7 @@ BuildRequires: python3-devel python3-scons
 
 %prep
 %setup -qn OpenLoops-%{version}
-
+%patch0 -p1
 
 %build
 sed -i  's@.*process_lib_dir.*@process_lib_dir = /usr/'%_lib'/openloops/proclib@g'  pyol/config/default.cfg
