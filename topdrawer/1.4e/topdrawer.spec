@@ -6,7 +6,7 @@ License: Free
 Source: https://ftp.riken.jp/iris/topdrawer/topdrawer.tar.gz
 URL:    https://ribf.riken.jp/comp/doc/topdrawer/
 #Patch: ugs-24bit-color.patch
-Patch:  topdrawer_OSX_fix.patch
+Patch0:  topdrawer_OSX_fix.patch
 Prefix: %{_prefix}
 BuildRequires: f2c ugs imake  
 BuildRequires: libX11-devel libXt-devel  libSM-devel libICE-devel libXext-devel
@@ -31,7 +31,7 @@ developed by R.B. Chaffee at SLAC.
 
 %prep
 %setup -n topdrawer -q
-%patch -p1
+%patch0 -p1
 
 %build
 xmkmf -a
