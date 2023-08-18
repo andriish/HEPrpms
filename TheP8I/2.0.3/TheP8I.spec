@@ -4,7 +4,6 @@ Release:        1%{?dist}
 License:        GPL
 Url:            https://gitlab.cern.ch/TheP8I/TheP8I
 Source0:        https://gitlab.cern.ch/TheP8I/TheP8I/-/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:         patch-TheP8I-0.txt
 Prefix:         %{_prefix}
 Summary:        Lund hadronisation for Herwig
 %if 0%{?rhel} || 0%{?fedora}
