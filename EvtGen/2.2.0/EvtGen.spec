@@ -6,7 +6,7 @@
 
 Name:           EvtGen
 Version:        2.2.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv3
 Url:            http://evtgen.warwick.ac.uk
 Source0:        https://evtgen.hepforge.org/downloads/EvtGen-02.02.00.tar.gz
