@@ -8,7 +8,7 @@
 
 Name:           Herwig
 Version:        7.2.3
-Release:        1003%{?dist}
+Release:        1004%{?dist}
 
 Summary:        Herwig is a multi-purpose particle physics event generator.
 License:        GPLv3
@@ -53,6 +53,10 @@ BuildRequires: python3
 
 %if %{?fedora}%{!?fedora:0} 
 BuildRequires: python3 python3-devel
+%endif
+
+%if %{?fedora}%{!?fedora:0} >= 39
+BuildRequires: python3-rpm-macros
 %endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
@@ -105,8 +109,13 @@ The library documentation is available on header files.
 %build
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+%if %{?fedora}%{!?fedora:0} >= 39
+%py3_shebang_fix  ./
+%py3_shebang_fix  MatrixElement/Matchbox/External/MadGraph
+%else
 pathfix.py -i /usr/bin/python3  -p -n  ./
 pathfix.py -pn -i %{__python3}  MatrixElement/Matchbox/External/MadGraph
+%endif
 autoreconf --force --install --verbose .
 automake -a --force
 export LDFLAGS='-Wl,-z,lazy'
