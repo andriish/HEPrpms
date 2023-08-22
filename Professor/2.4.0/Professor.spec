@@ -69,6 +69,7 @@ export CPPFLAGS=-I/usr/include/eigen3
 
 
 %install
+export PYTHON=/usr/bin/python3
 %make_install PREFIX=%{_prefix} LIBDIR=%{_prefix}/%{_lib} PYTHONPATH=$PYTHONPATH:$RPM_BUILD_ROOT/%{python3_sitearch}
 rm -rf $RPM_BUILD_ROOT/%{_prefix}/jupyter/*
 rm -rf $RPM_BUILD_ROOT/%{python3_sitearch}/*pth
