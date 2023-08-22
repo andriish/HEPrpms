@@ -158,7 +158,7 @@ declare -a BUILDLIST=(
 #noweb:2.11
 #openloops:2.1.2
 #PHOTOS:3.64
-Professor:2.3.3
+Professor:2.4.0
 #PTL:1.0.2
 #pythia6:6.4.28
 #python-uproot4:4.0.6
