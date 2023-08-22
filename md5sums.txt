@@ -211,3 +211,4 @@ e60c75562572905ed9984c67ada1241b  Rivet/3.1.8/rpmbuild/SOURCES/Rivet-3.1.8.tar.g
 ee90d4aa305eece0b3b2949fdc7bcbc8  MG5_aMC/3.5.1/rpmbuild/SOURCES/MG5_aMC_v3.5.1.tar.gz
 d7f61d18b56a1fd1713d47daca271418  TheP8I/2.0.3/rpmbuild/SOURCES/TheP8I-2.0.3.tar.gz
 857fb04d82d40308377afa1bd24c2990  ginac/1.8.7/rpmbuild/SOURCES/ginac-1.8.7.tar.bz2
+d41d8cd98f00b204e9800998ecf8427e  EvtGen/2.2.1/rpmbuild/SOURCES/EvtGen-02.02.01.tar.gz

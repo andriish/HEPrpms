@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 set -x 
 declare -a BUILDLIST=(
-ginac:1.8.7
+EvtGen:2.2.1
+#ginac:1.8.7
 #TheP8I:2.0.3
 #openloops:2.1.2
 #whizard:3.1.2
