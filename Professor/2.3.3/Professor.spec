@@ -4,7 +4,7 @@
 
 Name:           Professor
 Version:        2.3.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        Unknown
 Url:            http://professor.hepforge.org/
 Source0:        https://www.hepforge.org/archive/professor/%{name}-%{version}.tar.gz

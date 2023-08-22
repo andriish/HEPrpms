@@ -117,7 +117,7 @@ pyext: pyext/professor2/core.so $(wildcard pyext/professor2/*.py)
 
 ifdef HAVE_GOOD_CYTHON
 pyext/professor2/core.cpp: $(LIBHEADERS) $(CYTHONSOURCES) lib
-	$(CYTHON) pyext/professor2/core.pyx --cplus
+	$(CYTHON) pyext/professor2/core.pyx --cplus -Ipyext/professor2
 else
 pyext/professor2/core.cpp: $(LIBHEADERS) $(CYTHONSOURCES) lib
 	$(info "Cython >= 0.20 not available; can't build $@")
