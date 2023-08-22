@@ -18,7 +18,7 @@ ext = Extension("professor2.core",
                 language="C++",
                 depends=glob("../include/*.h"),
                 include_dirs=[incdir, os.path.join(srcdir, "pyext", "professor2")],
-                extra_compile_args="-std=c++11 -O3 -Wno-unused-but-set-variable -Wno-sign-compare".split(),
+                extra_compile_args="-I. -I./include -std=c++11 -O3 -Wno-unused-but-set-variable -Wno-sign-compare".split(),
                 library_dirs=[libdir],
                 runtime_library_dirs=[],
                 libraries=["Professor2"])

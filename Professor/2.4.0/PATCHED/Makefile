@@ -109,7 +109,7 @@ lib/libProfessor2.so: $(LIBOBJECTS)
 
 obj/%.o: src/%.cc $(LIBHEADERS)
 	mkdir -p obj
-	$(CXX) -std=$(CXXSTD) -DPROF_VERSION="$(VERSION)" -I./include $(CPPFLAGS) $(CXXFLAGS) -c -fPIC $< -o $@
+	$(CXX) -std=$(CXXSTD) -DPROF_VERSION="$(VERSION)" -I./ -I./include $(CPPFLAGS) $(CXXFLAGS) -c -fPIC $< -o $@
 
 pydeps:
 	@$(PYTHON) -m pip &> /dev/null || { echo "Python doesn't have pip support"; exit 1; }
