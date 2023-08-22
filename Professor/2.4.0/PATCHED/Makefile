@@ -112,12 +112,12 @@ obj/%.o: src/%.cc $(LIBHEADERS)
 	$(CXX) -std=$(CXXSTD) -DPROF_VERSION="$(VERSION)" -I./ -I./include $(CPPFLAGS) $(CXXFLAGS) -c -fPIC $< -o $@
 
 pydeps:
-	@$(PYTHON) -m pip &> /dev/null || { echo "Python doesn't have pip support"; exit 1; }
-	@$(PYTHON) -c "import setuptools" &> /dev/null || { echo "Python setuptools needs to be installed: pip install setuptools"; exit 1; }
-	@$(PYTHON) -c "import cython" &> /dev/null || { echo "Cython needs to be installed: pip install Cython"; exit 1; }
+#	@$(PYTHON) -m pip &> /dev/null || { echo "Python doesn't have pip support"; exit 1; }
+#	@$(PYTHON) -c "import setuptools" &> /dev/null || { echo "Python setuptools needs to be installed: pip install setuptools"; exit 1; }
+#	@$(PYTHON) -c "import cython" &> /dev/null || { echo "Cython needs to be installed: pip install Cython"; exit 1; }
 	
 pyext: pydeps pyext/professor2/core.cpp $(wildcard pyext/professor2/*.py)
-	PROF_VERSION=$(VERSION) $(PYTHON) -m pip install -vv ./pyext/
+#	PROF_VERSION=$(VERSION) $(PYTHON) -m pip install -vv ./pyext/
 
 ifdef HAVE_GOOD_CYTHON
 pyext/professor2/core.cpp: $(LIBHEADERS) $(CYTHONSOURCES) lib
