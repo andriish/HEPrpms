@@ -17,11 +17,11 @@ BuildRequires:  YODA-devel eigen3-devel gcc-c++
 
 %if %{?rhel}%{!?rhel:0} >= 8
 Requires: python3 python3-numpy root-core
-BuildRequires: python3-numpy python3-devel platform-python-devel python3-Cython root-core python3-pip python3-setuotools
+BuildRequires: python3-numpy python3-devel platform-python-devel python3-Cython root-core python3-pip python3-setuptools
 %endif
 %if %{?fedora}%{!?fedora:0} 
 Requires: root-core
-BuildRequires: python3-devel  Cython root-core  python3-pip python3-setuotools
+BuildRequires: python3-devel  Cython root-core  python3-pip python3-setuptools
 %endif
 %if 0%{?suse_version}
 Requires: root6-libs root6
