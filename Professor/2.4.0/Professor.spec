@@ -21,7 +21,7 @@ BuildRequires: python3-numpy python3-devel platform-python-devel python3-Cython 
 %endif
 %if %{?fedora}%{!?fedora:0} 
 Requires: root-core
-BuildRequires: python3-devel  Cython root-core
+BuildRequires: python3-devel  Cython root-core  python3-pip
 %endif
 %if 0%{?suse_version}
 Requires: root6-libs root6
