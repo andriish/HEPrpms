@@ -25,7 +25,7 @@ BuildRequires: python3-devel  Cython root-core  python3-pip python3-setuptools
 %endif
 %if 0%{?suse_version}
 Requires: root6-libs root6
-BuildRequires: python3-devel  python3-Cython  python3-tools root6-libs root6
+BuildRequires: python3-devel  python3-Cython  python3-tools root6-libs root6 python3-setuptools
 %endif
 %if %{?fedora}%{!?fedora:0} >= 39
 BuildRequires: python3-rpm-macros
