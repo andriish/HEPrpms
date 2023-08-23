@@ -22,7 +22,7 @@ declare -a BUILDLIST=(
 #cascade:3.3.1
 #MCFM:10.3
 #clhep:2.4.6.4
-#blackhat:0.9.9
+blackhat:0.9.9
 #binder:1.3.0
 #SHERPA-MC:2.2.15
 #FeynHiggs:2.19.0
@@ -158,7 +158,7 @@ declare -a BUILDLIST=(
 #noweb:2.11
 #openloops:2.1.2
 #PHOTOS:3.64
-Professor:2.4.0
+#Professor:2.4.0
 #PTL:1.0.2
 #pythia6:6.4.28
 #python-uproot4:4.0.6

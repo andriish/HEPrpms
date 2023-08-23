@@ -199,6 +199,33 @@ private:
 	template <class T> SeriesC<T> eval_fn(momentum_configuration<T>& mc, const std::vector<int>& ind,int mu_index);
 
 };
+template <class T> SeriesC<T> partial_amplitude_cached::eval_fn(momentum_configuration<T>& mc, const vector<int>& ind,int mu_index){
+	SeriesC<T> res(-2,0);
+	for (int i=0;i<d_ampls.size();i++){
+		res+=std::complex<T>(d_factors[i].get<T>(),0)*std::complex<T>(d_factors_R[i],0)*(d_ampls[i]->eval(mc,mu_index));
+		/*BH_DEBUG(
+			cout << "ampl " << d_ampls[i].get_process() << " ";
+			const vector<int>& vec=d_ampls[i].get_index_vector();
+			copy(vec.begin(),vec.end(),ostream_iterator<int>(cout," "));
+			cout << " " <<  d_ampls[i].color_struct() << ":" << d_ampls[i].eval(mc,mu_index)  << endl;  ///d_ampls[i].get_tree(mc,mu_index);
+		);
+        */
+	}
+	for (int i=0;i<d_subs.size();i++){
+		/*vector<int> new_ind;
+		for (int j=0;j<ind.size();j++){
+			new_ind.push_back(ind[d_subs_indices[i][j]-1]);
+		}
+		res-=d_subs[i]->eval(mc,new_ind);
+		 */
+		res-=d_subs[i]->eval(mc);
+	}
+	if (m_prefactor != 0 ){
+		std::complex<T> pref=m_prefactor->eval(mc);
+		res=pref*res;
+	}
+	return res;
+}
 }
 
 

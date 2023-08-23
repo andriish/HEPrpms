@@ -1,5 +1,5 @@
---- ORIG/Makefile.am	2022-12-07 07:06:23.715826660 +0100
-+++ PATCHED/Makefile.am	2022-12-07 07:06:23.718826700 +0100
+--- ORIG/Makefile.am	2022-06-27 22:13:22.896555733 +0200
++++ PATCHED/Makefile.am	2022-06-27 22:13:22.898555738 +0200
 @@ -3,10 +3,10 @@
  SUBDIRS =   \
  	src/rational_eval \
@@ -77,8 +77,8 @@
  
  uninstall-hook:
  	rm -rf $(prefix)/share/blackhat/datafiles
---- ORIG/utils/Makefile.am	2022-12-07 07:06:23.718826700 +0100
-+++ PATCHED/utils/Makefile.am	2022-12-07 07:06:23.720826726 +0100
+--- ORIG/utils/Makefile.am	2022-06-27 22:13:22.898555738 +0200
++++ PATCHED/utils/Makefile.am	2022-06-27 22:13:22.899555739 +0200
 @@ -14,6 +14,7 @@
  endif
  
@@ -96,8 +96,8 @@
  
  
  if BH_USE_GMP
---- ORIG/src/eval_param.h	2022-12-07 07:06:23.717826686 +0100
-+++ PATCHED/src/eval_param.h	2022-12-07 07:06:23.719826713 +0100
+--- ORIG/src/eval_param.h	2022-06-27 22:13:22.897555735 +0200
++++ PATCHED/src/eval_param.h	2022-06-27 22:13:22.898555738 +0200
 @@ -12,6 +12,7 @@
  #include "mom_conf.h"
  #include "process.h"
@@ -115,8 +115,8 @@
  	eval_param(momentum_configuration<T>& mc, std::vector<int>& ind);
  	eval_param(momentum_configuration<T>& mc, const std::vector<int>& ind);
  	~eval_param() {delete[] _em; delete _epstate;};
---- ORIG/src/ME2_from_file.h	2022-12-07 07:06:23.716826673 +0100
-+++ PATCHED/src/ME2_from_file.h	2022-12-07 07:06:23.718826700 +0100
+--- ORIG/src/ME2_from_file.h	2022-06-27 22:13:22.897555735 +0200
++++ PATCHED/src/ME2_from_file.h	2022-06-27 22:13:22.898555738 +0200
 @@ -15,7 +15,8 @@
  #include "assembly.h"
  #include "cached_OLHA.h"
@@ -204,8 +204,8 @@
  	~construction_cache();
  };
  
---- ORIG/src/assembly.h	2022-12-07 07:06:23.716826673 +0100
-+++ PATCHED/src/assembly.h	2022-12-07 07:06:23.718826700 +0100
+--- ORIG/src/assembly.h	2022-06-27 22:13:22.897555735 +0200
++++ PATCHED/src/assembly.h	2023-08-23 13:16:33.452880030 +0200
 @@ -17,7 +17,8 @@
  #include "cached_OLHA.h"
  #include <map>
@@ -216,7 +216,41 @@
  namespace BH {
  
  enum approx{born=1,virt};
-@@ -288,7 +289,7 @@
+@@ -198,6 +199,33 @@
+ 	template <class T> SeriesC<T> eval_fn(momentum_configuration<T>& mc, const std::vector<int>& ind,int mu_index);
+ 
+ };
++template <class T> SeriesC<T> partial_amplitude_cached::eval_fn(momentum_configuration<T>& mc, const vector<int>& ind,int mu_index){
++	SeriesC<T> res(-2,0);
++	for (int i=0;i<d_ampls.size();i++){
++		res+=std::complex<T>(d_factors[i].get<T>(),0)*std::complex<T>(d_factors_R[i],0)*(d_ampls[i]->eval(mc,mu_index));
++		/*BH_DEBUG(
++			cout << "ampl " << d_ampls[i].get_process() << " ";
++			const vector<int>& vec=d_ampls[i].get_index_vector();
++			copy(vec.begin(),vec.end(),ostream_iterator<int>(cout," "));
++			cout << " " <<  d_ampls[i].color_struct() << ":" << d_ampls[i].eval(mc,mu_index)  << endl;  ///d_ampls[i].get_tree(mc,mu_index);
++		);
++        */
++	}
++	for (int i=0;i<d_subs.size();i++){
++		/*vector<int> new_ind;
++		for (int j=0;j<ind.size();j++){
++			new_ind.push_back(ind[d_subs_indices[i][j]-1]);
++		}
++		res-=d_subs[i]->eval(mc,new_ind);
++		 */
++		res-=d_subs[i]->eval(mc);
++	}
++	if (m_prefactor != 0 ){
++		std::complex<T> pref=m_prefactor->eval(mc);
++		res=pref*res;
++	}
++	return res;
++}
+ }
+ 
+ 
+@@ -288,7 +316,7 @@
      std::vector<int> m_perm, m_hels;
      double* real;
      double* imag;
@@ -225,7 +259,7 @@
  };
  
  class Squared_ME 
-@@ -392,7 +393,7 @@
+@@ -392,7 +420,7 @@
      //vector< pair< pos-m_kin_fn_vals, pos-m_tree_vals > >
      std::vector<std::pair<std::vector<int>,int> > m_trees; 
      //std::map<std::pair< kn_fn, kn_fn >, std::map<tree-left  ,std::map<tree-right,pre-factor> > > m_cross_terms;
@@ -234,8 +268,8 @@
      //iterators
      std::map<std::pair<vector<int>,vector<int> >, std::map<int,std::map<int,double> > >::const_iterator it_ct;
      std::map<int,std::map<int,double> >::const_iterator it_lt;
---- ORIG/src/from_file.h	2022-12-07 07:06:23.717826686 +0100
-+++ PATCHED/src/from_file.h	2022-12-07 07:06:23.719826713 +0100
+--- ORIG/src/from_file.h	2022-06-27 22:13:22.897555735 +0200
++++ PATCHED/src/from_file.h	2022-06-27 22:13:22.898555738 +0200
 @@ -32,7 +32,7 @@
  std::string GetParentDataDirectory();
  std::string get_worker_dir(const std::string& subdir);
@@ -245,8 +279,8 @@
  
  
  
---- ORIG/configure.ac	2022-12-07 07:06:23.715826660 +0100
-+++ PATCHED/configure.ac	2022-12-07 07:06:23.718826700 +0100
+--- ORIG/configure.ac	2022-06-27 22:13:22.896555733 +0200
++++ PATCHED/configure.ac	2022-06-27 22:13:22.898555738 +0200
 @@ -1,6 +1,8 @@
  AC_INIT([BlackHat], [0.9.9], [daniel.maitre@durham.ac.uk])
 -AM_INIT_AUTOMAKE([-Wall -Werror foreign])
@@ -275,8 +309,8 @@
      	AM_QD_PATH="$(qd-config --prefix)"
  	else
    		AC_MSG_ERROR([no qd-config found in PATH! Are you sure the qd library is installed? Consider using the --with-QDpath option.])
---- ORIG/dataInstall.in	2022-12-07 07:06:23.715826660 +0100
-+++ PATCHED/dataInstall.in	2022-12-07 07:06:23.718826700 +0100
+--- ORIG/dataInstall.in	2022-06-27 22:13:22.897555735 +0200
++++ PATCHED/dataInstall.in	2022-06-27 22:13:22.898555738 +0200
 @@ -1,9 +1,9 @@
  #!/bin/sh
  
@@ -291,3 +325,39 @@
  mkdir -p $DIR
 -tar -xzf $1 -C $DIR > /dev/null 
 +tar --overwrite -xzf  $1 -C $2$DIR > /dev/null 
+--- ORIG/src/partial_amplitude.cpp	2011-04-06 18:35:45.000000000 +0200
++++ PATCHED/src/partial_amplitude.cpp	2023-08-23 13:16:09.883850015 +0200
+@@ -127,33 +127,6 @@
+ 	}
+ }
+ 
+-template <class T> SeriesC<T> partial_amplitude_cached::eval_fn(momentum_configuration<T>& mc, const vector<int>& ind,int mu_index){
+-	SeriesC<T> res(-2,0);
+-	for (int i=0;i<d_ampls.size();i++){
+-		res+=complex<T>(d_factors[i].get<T>(),0)*complex<T>(d_factors_R[i],0)*(d_ampls[i]->eval(mc,mu_index));
+-		/*BH_DEBUG(
+-			cout << "ampl " << d_ampls[i].get_process() << " ";
+-			const vector<int>& vec=d_ampls[i].get_index_vector();
+-			copy(vec.begin(),vec.end(),ostream_iterator<int>(cout," "));
+-			cout << " " <<  d_ampls[i].color_struct() << ":" << d_ampls[i].eval(mc,mu_index)  << endl;  ///d_ampls[i].get_tree(mc,mu_index);
+-		);
+-        */
+-	}
+-	for (int i=0;i<d_subs.size();i++){
+-		/*vector<int> new_ind;
+-		for (int j=0;j<ind.size();j++){
+-			new_ind.push_back(ind[d_subs_indices[i][j]-1]);
+-		}
+-		res-=d_subs[i]->eval(mc,new_ind);
+-		 */
+-		res-=d_subs[i]->eval(mc);
+-	}
+-	if (m_prefactor != 0 ){
+-		complex<T> pref=m_prefactor->eval(mc);
+-		res=pref*res;
+-	}
+-	return res;
+-}
+ 
+ void partial_amplitude_cached::dry_run(const vector<int>& ind){
+ 	for (int i=0;i<d_ampls.size();i++){
