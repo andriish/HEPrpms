@@ -178,6 +178,7 @@ b3b26a1dc31d42f6b744b44b548769bb  lhapdf/6.5.3/rpmbuild/SOURCES/LHAPDF-6.5.3.tar
 f470c7be0db95573d2a430de972e5840  f90cache/0.99c/rpmbuild/SOURCES/f90cache-0.99c.tar.gz
 74d8e994f800d0e46559a5cc3fa4e17b  rapgap/3.4.0/rpmbuild/SOURCES/rapgap-v3.4.0.tar.gz
 c127179b4d62b6e99f01102a222a06a7  cernlib/2022.11.08.0/rpmbuild/SOURCES/cernlib-2022.11.08.0-free.tar.gz
+9b72ea2e3378bae9290c211948ccb29b  cernlib/2023.08.14.0/rpmbuild/SOURCES/cernlib-2023.08.14.0-free.tar.gz
 43add57664b6848980505ddc44160e7b  FeynHiggs/2.19.0/rpmbuild/SOURCES/FeynHiggs-2.19.0.tar.gz
 52126b6524fc5f0a7f2d68c84e285079  SHERPA-MC/2.2.13/rpmbuild/SOURCES/SHERPA-MC-2.2.13.tar.gz
 2ba6e7d5018938b3aa10c8e6e9b2fab0  SHERPA-MC/2.2.13/rpmbuild/SOURCES/SHERPA-MC-2.2.13.tar.gz
