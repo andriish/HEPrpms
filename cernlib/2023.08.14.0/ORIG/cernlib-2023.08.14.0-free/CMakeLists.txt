@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 ###########################Package@#####################################
 project(CERNLIB LANGUAGES C Fortran )
-#The complicated way to set the version is used to assure the simple 
+#The complicated way to set the version is used to assure the simple
 #replacement of version variable with sed will not break the CMakeLists.txt
 if (NOT __CL_VERSION__)
-  set(EXTERNAL_VERSION_STRING "2022.11.1")
+  set(EXTERNAL_VERSION_STRING "2023.08.06")
 else()
   set(EXTERNAL_VERSION_STRING "__CL_VERSION__.1")
 endif()
@@ -33,10 +33,8 @@ else(CMAKE_BUILD_TYPE)
 endif(CMAKE_BUILD_TYPE)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
 
-if (APPLE)
-  set(CMAKE_VERBOSE_MAKEFILE ON)
-endif()
-set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
+set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE FALSE)
 ###########################Options#####################################
 option(CERNLIB_USE_INTERNAL_XBAE          "Forces using internal XBAE." ON)
 option(CERNLIB_USE_INTERNAL_LAPACK        "Forces using internal LAPACK/BLAS." ON)
@@ -50,6 +48,7 @@ option(CERNLIB_FORCE_32                   "Force build of 32 bit libraries." OFF
 set(CERNLIB_BUILD_STATIC ON)  #This is always ON, but it is convenient to have it like this from the point of view of logic.
 ###########################Options handeling#####################################
 if (CERNLIB_FORCE_32)
+  add_definitions(-DCERNLIB_32BITCROSS)
   list(PREPEND CMAKE_SYSTEM_LIBRARY_PATH "/usr/lib")
   message(STATUS "${CMAKE_SYSTEM_LIBRARY_PATH}")
   set( FIND_LIBRARY_USE_LIB32_PATHS  ON)
@@ -77,7 +76,7 @@ endif()
 ###########Respect HFS, e.g. defines lib or lib64 when it is needed.####
 include("GNUInstallDirs")
 if(CMAKE_SYSTEM_NAME MATCHES Darwin)
-  if (NOT CMAKE_MACOSX_RPATH) 
+  if (NOT CMAKE_MACOSX_RPATH)
     set(CMAKE_MACOSX_RPATH 1)
   endif()
   message(STATUS "CERNLIB: CMAKE_MACOSX_RPATH  ${CMAKE_MACOSX_RPATH}. Set by default to 1. Set to 0 to disable RPATH in the build executables.")
@@ -138,7 +137,7 @@ FUNCTION(list_JOIN LISTNAME GLUE OUTP)
   STRING(LENGTH "${GLUE}" GLUE_LEN)
   STRING(LENGTH "${_TMP_STR}" OUT_LEN)
   MATH(EXPR OUT_LEN ${OUT_LEN}-${GLUE_LEN})
-#  STRING(SUBSTRING "${_TMP_STR}" ${GLUE_LEN} ${OUT_LEN} _TMP_STR) 
+#  STRING(SUBSTRING "${_TMP_STR}" ${GLUE_LEN} ${OUT_LEN} _TMP_STR)
   SET(${OUTP} "${_TMP_STR}" PARENT_SCOPE)
 ENDFUNCTION()
 ########################################################################
@@ -186,7 +185,7 @@ macro(CLBTestTarget ast)
     endif()
     add_test(NAME test${exec} COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${exec}/${exec} {MYCMD}           WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${exec})
   else()
-    if (CERNLIB_ENABLE_MEMORYTEST)  
+    if (CERNLIB_ENABLE_MEMORYTEST)
       add_test(NAME memory_test${exec} COMMAND sh -c "${VG} ${VGOPTIONS} ${CMAKE_CURRENT_BINARY_DIR}/${exec}/${exec} ${MYCMD}"  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${exec})
     endif()
     add_test(NAME test${exec} COMMAND sh -c "${CMAKE_CURRENT_BINARY_DIR}/${exec}/${exec} ${MYCMD}"  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${exec})
@@ -244,7 +243,7 @@ endif()
 endmacro(CLEpioFortranProgramTarget)
 ########################################################################
 macro(cdf_compile a b)
-     add_custom_command(OUTPUT ${b} 
+     add_custom_command(OUTPUT ${b}
                         DEPENDS ${a}  kuipc
                         COMMAND ${CMAKE_BINARY_DIR}/kuipc -c ${a} ${b}
                        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -279,23 +278,35 @@ macro(install_symlink filepath sympath)
      INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/symlinks/${sympath} DESTINATION ${LINKDIR})
 endmacro(install_symlink)
 ########################################################################
+# set architecture flags
+if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+  if (CERNLIB_FORCE_32)
+    add_definitions(-D__i386__)
+  else()
+    add_definitions(-D__X86_64__)
+  endif()
+else(${CMAKE_SYSTEM_PROCESSOR} MATCHES "aarch64")
+  add_definitions(-D__aarch64__)
+endif()
+########################################################################
 if (CMAKE_C_COMPILER_ID STREQUAL "AppleClang" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
-  set(C_C_FLAGS_TO_CHECK       
+  set(C_C_FLAGS_TO_CHECK
                                "-fcommon"
                                "-fexceptions"
                                "-trigraphs"
-                               "-mfpmath=387"    
-                               "-Wno-cpp"  
-                               "-Wno-conversion"  
-                               "-Wno-uninitialized"  
-                               "-Wno-implicit-int"  
-                               "-Wno-int-to-pointer-cast"  
-                               "-Wno-implicit-function-declaration" 
-                               "-Wno-incompatible-pointer-types" 
-                               "-Wno-return-type" 
-                               "-Wno-trigraphs" 
-                               "-Wno-unused-label" 
-                               "-Wno-unused-function" 
+                               "-finit-local-zero"
+                               "-mfpmath=387"
+                               "-Wno-cpp"
+                               "-Wno-conversion"
+                               "-Wno-uninitialized"
+                               "-Wno-implicit-int"
+                               "-Wno-int-to-pointer-cast"
+                               "-Wno-implicit-function-declaration"
+                               "-Wno-incompatible-pointer-types"
+                               "-Wno-return-type"
+                               "-Wno-trigraphs"
+                               "-Wno-unused-label"
+                               "-Wno-unused-function"
                                "-Wno-unused-dummy-argument"
                                "-Wno-missing-braces"
                                "-Wno-switch"
@@ -313,37 +324,38 @@ endif()
 if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
   set(C_C_FLAGS_TO_CHECK       "-fcommon"
                                "--param=ssp-buffer-size=4"
+                               "-finit-local-zero"
                                "-fexceptions"
                                "-fasynchronous-unwind-tables"
                                "-fcf-protection"
-                               "-trigraphs" 
-                               "-mfpmath=387"                               
+                               "-fno-strict-aliasing"
+                               "-trigraphs"
+                               "-mfpmath=387"
                                "-grecord-gcc-switches"
                                "-pipe"
                                "-Wall"
-                               "-Wno-trigraphs" 
-                               "-Wno-pointer-to-int-cast"
-                               "-Wno-unused-but-set-variable" 
-                               "-Wno-unused-function" 
+                               "-Wno-trigraphs"
+                               "-Wno-unused-but-set-variable"
+                               "-Wno-unused-function"
                                "-Wno-missing-braces"
                                "-Wno-switch"
                                "-Wno-array-bounds"
-                               "-Wno-conversion"  
-                               "-Wno-uninitialized"  
-                               "-Wno-int-to-pointer-cast"  
-                               "-Wno-implicit-function-declaration" 
+                               "-Wno-conversion"
+                               "-Wno-uninitialized"
+                               "-Wno-implicit-function-declaration"
                                "-Wformat -Werror=format-security"
+                               "-no-pie"
                                "-O0"
                                "-g"
                                )
 if (CMAKE_C_COMPILER_VERSION VERSION_GREATER 4.0)
-     list(APPEND C_C_FLAGS_TO_CHECK  
-                                     "-fstack-protector-strong" 
+     list(APPEND C_C_FLAGS_TO_CHECK
+                                     "-fstack-protector-strong"
                                      "-fstack-clash-protection"
                                      )
 endif()
 if (CMAKE_C_COMPILER_VERSION VERSION_GREATER 4.5)
-    list(APPEND C_C_FLAGS_TO_CHECK 
+    list(APPEND C_C_FLAGS_TO_CHECK
                          "-Wno-restrict"
                          "-Wno-unused-result"
                          "-Wno-format-overflow"
@@ -372,7 +384,7 @@ if (CMAKE_C_COMPILER_ID STREQUAL "Intel")
                          "-diag-disable=556"  # value of type "long *" cannot be assigned to an entity of type "int *"
                          "-diag-disable=810" # conversion from char to int
                          "-diag-disable=1224" # _FORTIFY_SOURCE requires compiling with optimization (-O)
-                         "-diag-disable=2193" # null argument 
+                         "-diag-disable=2193" # null argument
                          "-O0"
                          "-mp1"
                          "-g"
@@ -380,18 +392,18 @@ if (CMAKE_C_COMPILER_ID STREQUAL "Intel")
 endif()
 if (CMAKE_C_COMPILER_ID STREQUAL "NVHPC")
   set(C_C_FLAGS_TO_CHECK       "-Wno-cpp"
-                               "-fcommon"  
-                               "-Wno-conversion"  
-                               "-Wno-uninitialized"  
-                               "-Wno-implicit-int"  
-                               "-Wno-int-to-pointer-cast"  
-                               "-Wno-implicit-function-declaration" 
-                               "-Wno-incompatible-pointer-types" 
-                               "-Wno-return-type" 
-                               "-trigraphs" 
-                               "-Wno-trigraphs" 
-                               "-Wno-unused-label" 
-                               "-Wno-unused-function" 
+                               "-fcommon"
+                               "-Wno-conversion"
+                               "-Wno-uninitialized"
+                               "-Wno-implicit-int"
+                               "-Wno-int-to-pointer-cast"
+                               "-Wno-implicit-function-declaration"
+                               "-Wno-incompatible-pointer-types"
+                               "-Wno-return-type"
+                               "-trigraphs"
+                               "-Wno-trigraphs"
+                               "-Wno-unused-label"
+                               "-Wno-unused-function"
                                "-Wno-unused-dummy-argument"
                                "-Wno-missing-braces"
                                "-Wno-switch"
@@ -400,43 +412,45 @@ if (CMAKE_C_COMPILER_ID STREQUAL "NVHPC")
                                "-Wno-array-bounds"
                                "-Wno-restrict"
                                "-flto=no"
-                               "-O0" 
-                               "-g"  
+                               "-O0"
+                               "-g"
                                "-fstack-protector"
                                )
 endif()
 ########################################################################
 if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
-  set(F_Fortran_FLAGS_TO_CHECK 
+  set(F_Fortran_FLAGS_TO_CHECK
                                "--param=ssp-buffer-size=4"
-                               "-fno-backslash" 
-                               "-ffixed-line-length-72" 
+                               "-fno-backslash"
+                               "-ffixed-line-length-72"
                                "-std=legacy"
                                "-fcommon"
-                               "-fno-automatic" 
-                               "-fno-second-underscore" 
-                               "-mfpmath=387" 
-                               "-fno-align-commons" 
-                               "-fno-aggressive-loop-optimizations" 
+                               "-fno-automatic"
+                               "-fno-second-underscore"
+                               "-mfpmath=387"
+                               "-fno-align-commons"
+                               "-fno-aggressive-loop-optimizations"
                                "-finit-local-zero"
                                "-fallow-argument-mismatch"
                                "-fno-range-check"
                                "-fno-bounds-check"
                                "-fbacktrace"
-                               "-Wno-cpp" 
-                               "-Wno-uninitialized" 
-                               "-Wno-character-truncation" 
-                               "-Wno-line-truncation" 
+                               "-fno-strict-aliasing"
+                               "-Wno-cpp"
+                               "-Wno-uninitialized"
+                               "-Wno-character-truncation"
+                               "-Wno-line-truncation"
                                "-Wno-lto-type-mismatch"
                                "-Wno-integer-division"
                                "-Wno-intrinsic-shadow"
                                "-Wno-argument-mismatch"
                                "-Wno-aggressive-loop-optimizations"
-                               "-Wno-unused-label" 
-                               "-Wno-unused-function" 
-                               "-Wno-unused-variable" 
-                               "-Wno-maybe-uninitialized" 
+                               "-Wno-unused-label"
+                               "-Wno-unused-function"
+                               "-Wno-unused-variable"
+                               "-Wno-maybe-uninitialized"
                                "-Wno-unused-dummy-argument"
+			       "-no-pie"
                                "-O0"
                                "-g"
                                "-fallow-invalid-boz" #needed for patchy4/p4lib/jartpx.F
@@ -451,45 +465,45 @@ if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
     set( COMPSUFFIX -g77)
   else()
     set( COMPSUFFIX -gfortran)
-    list(APPEND F_Fortran_FLAGS_TO_CHECK    
-                               "-Wno-conversion" 
+    list(APPEND F_Fortran_FLAGS_TO_CHECK
+                               "-Wno-conversion"
                                "-Wno-implicit-function-declaration"
                                "-Wno-return-type"
    )
   endif()
 ########################################################################
 elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
-  set(F_Fortran_FLAGS_TO_CHECK 
+  set(F_Fortran_FLAGS_TO_CHECK
                               "-Wall"
                               "-fcommon"
                               "-g"
                               "-diag-disable6178" # return value is not defined
-#                              "-diag-disable7615" 
+#                              "-diag-disable7615"
                               "-diag-disable7713" # Statement function has not been used
                               "-diag-disable7784" # Symbol in BLOCK DATA program unit is not in a COMMON block.
                               "-diag-disable8291" # Recommended relationship between field width
                               "-diag-disable8577" # The scale factor (k) ..
                               "-O0"
                               "-traceback"
-                              "-noalign" 
-                              "-noauto" 
-                              "-zero" 
+                              "-noalign"
+                              "-noauto"
+                              "-zero"
                               "-nbs"
                               "-mp1"
    )
   set( COMPSUFFIX -ifort)
 elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "NVHPC")
-  set(F_Fortran_FLAGS_TO_CHECK 
-                               "-fcommon" 
+  set(F_Fortran_FLAGS_TO_CHECK
+                               "-fcommon"
                                "-traceback"
                                "-Mnobounds"
                                "-Mnostandard"
-                               "-Mnobackslash" 
-                               "-Mpreprocess" 
-                               "-Mnosave" 
+                               "-Mnobackslash"
+                               "-Mpreprocess"
+                               "-Mnosave"
                                "-Mnofree"
-                               "-Wno-cpp" 
-                               "-O0" 
+                               "-Wno-cpp"
+                               "-O0"
                                "-g"
    )
   set( COMPSUFFIX -nvfortran)
@@ -504,6 +518,7 @@ if (CERNLIB_NO_SUFFIX)
 endif()
 message(STATUS "CERNLIB: COMPSUFFIX=${COMPSUFFIX}")
 
+#include "paw/quest.inc"
 #Linux has here -Wl,-z,relro -Wl,--as-needed  -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1
 set(CMAKE_EXE_LINKER_FLAGS "")
 set(CMAKE_MODULE_LINKER_FLAGS  "")
@@ -554,6 +569,7 @@ if (NOT CMAKE_FORCE_FLAGS)
   set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS_X})
 endif()
 if (CERNLIB_FORCE_32)
+  add_definitions(-DCERNLIB_32BITCROSS)
   if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
     set(CMAKE_C_FLAGS " -m32 ${CMAKE_C_FLAGS}")
   endif()
@@ -567,7 +583,7 @@ foreach(fl IN LISTS LIST_CMAKE_Fortran_FLAGS)
     check_Fortran_compiler_flag(${fl} Fortran_COMPILER_SUPPORTS_${fl})
     if(Fortran_COMPILER_SUPPORTS_${fl})
       list( APPEND NEW_CMAKE_Fortran_FLAGS ${fl})
-      set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${fl}" ) #neede for dependent flags      
+      set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${fl}" ) #needed for dependent flags
     endif()
   endif()
 endforeach()
@@ -583,13 +599,14 @@ if (NOT CMAKE_FORCE_FLAGS)
   set(CMAKE_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_X})
 endif()
 if (CERNLIB_FORCE_32)
+  add_definitions(-DCERNLIB_32BITCROSS)
   if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
     set(CMAKE_Fortran_FLAGS " -m32 ${CMAKE_Fortran_FLAGS}")
   endif()
 endif()
 message(STATUS "CERNLIB : CMAKE_Fortran_FLAGS=${CMAKE_Fortran_FLAGS}")
 ########################################################################
-set(man1  cernlib.1  cernlib-static.1  dzedit.1  dzeX11.1  gxint.1  kuesvr.1  kuipc.1  kxterm.1  nycheck.1  nydiff.1  nyindex.1  nylist.1  
+set(man1  cernlib.1  cernlib-static.1  dzedit.1  dzeX11.1  gxint.1  kuesvr.1  kuipc.1  kxterm.1  nycheck.1  nydiff.1  nyindex.1  nylist.1
           nymerge.1  nypatchy.1  nyshell.1  nysynopt.1  nytidy.1  paw++.1  paw.1  pawX11.1  yexpand.1  ypatchy.1  zftp.1)
 set(man8  pawserv.8  zserv.8)
 
@@ -680,7 +697,7 @@ string(REPLACE "\"pro\"" "\"${CERNLIB_VERSION_MAJOR}\"" FILE_CONTENTS "${FILE_CO
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script "${FILE_CONTENTS}")
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script  DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME paw${COMPSUFFIX} COMPONENT libs)
 ########################################################################
-add_custom_target( gxint321f ALL BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/gxint321.f 
+add_custom_target( gxint321f ALL BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/gxint321.f
                         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/geant321/gxint/gxint.F
                         COMMAND ${CPP} -x c -E -traditional  -o ${CMAKE_CURRENT_BINARY_DIR}/gxint321.f -I ${CMAKE_CURRENT_SOURCE_DIR}/geant321 ${CMAKE_CURRENT_SOURCE_DIR}/geant321/gxint/gxint.F
                         COMMAND  ${SED} -i -e "/^$$/d" -e "/^#  *[0-9][0-9]*  *.*$$/d" -e "/^XCOMM$$/s//#/" -e "/^XCOMM[^a-zA-Z0-9_]/s/^XCOMM/#/" -e "/^# [0-9][0-9]/d" -e "/^#line /d"   ${CMAKE_CURRENT_BINARY_DIR}/gxint321.f
@@ -689,7 +706,7 @@ add_custom_target( gxint321f ALL BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/gxint321
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gxint321.f DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT libs  )
 install_symlink(gxint321.f ${CMAKE_INSTALL_INCLUDEDIR}/gxint.f )
 ########################################################################
-install(FILES 
+install(FILES
 ${CMAKE_CURRENT_SOURCE_DIR}/contrib/pixmaps/kxterm48x48.xpm
 ${CMAKE_CURRENT_SOURCE_DIR}/contrib/pixmaps/paw48x48.xpm
 ${CMAKE_CURRENT_SOURCE_DIR}/contrib/pixmaps/paw32x32.xpm
@@ -697,11 +714,11 @@ ${CMAKE_CURRENT_SOURCE_DIR}/contrib/pixmaps/kxterm32x32.xpm
 DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/contrib/icons/hicolor DESTINATION ${CMAKE_INSTALL_DATADIR}/icons)
 
-install(FILES 
-${CMAKE_CURRENT_SOURCE_DIR}/contrib/X11/app-defaults/Geant++  
-${CMAKE_CURRENT_SOURCE_DIR}/contrib/X11/app-defaults/KxGeant++  
-${CMAKE_CURRENT_SOURCE_DIR}/contrib/X11/app-defaults/KxPaw++  
-${CMAKE_CURRENT_SOURCE_DIR}/contrib/X11/app-defaults/KXterm  
+install(FILES
+${CMAKE_CURRENT_SOURCE_DIR}/contrib/X11/app-defaults/Geant++
+${CMAKE_CURRENT_SOURCE_DIR}/contrib/X11/app-defaults/KxGeant++
+${CMAKE_CURRENT_SOURCE_DIR}/contrib/X11/app-defaults/KxPaw++
+${CMAKE_CURRENT_SOURCE_DIR}/contrib/X11/app-defaults/KXterm
 ${CMAKE_CURRENT_SOURCE_DIR}/contrib/X11/app-defaults/Paw++
 DESTINATION
 ${CMAKE_INSTALL_DATADIR}/X11/app-defaults)
@@ -717,7 +734,7 @@ make_directory(${CMAKE_CURRENT_BINARY_DIR}/contrib)
 file(READ ${CMAKE_CURRENT_SOURCE_DIR}/contrib/cernlib.copyright FILE_CONTENTS)
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/contrib/cernlib.copyright "${FILE_CONTENTS}")
 
-install(FILES 
+install(FILES
 ${CMAKE_CURRENT_BINARY_DIR}/contrib/cernlib.copyright
 ${CMAKE_CURRENT_SOURCE_DIR}/contrib/geant321.README
 DESTINATION
@@ -778,7 +795,7 @@ if(LINUX OR SunOS)
     message(STATUS "CERNLIB: Guess for 32bit: OPENSSL_CRYPTO_LIBRARY=${OPENSSL_CRYPTO_LIBRARY}")
   endif()
   endif()
-  set(crypto ${OPENSSL_CRYPTO_LIBRARY})  
+  set(crypto ${OPENSSL_CRYPTO_LIBRARY})
   find_library(nsl NAMES nsl nsl2 REQUIRED)
   message(STATUS "CERNLIB: nsl=${nsl}")
   set(Xm Xm)
@@ -895,10 +912,10 @@ message(STATUS "CERNLIB: MOTIF_INCLUDE_DIR=${MOTIF_INCLUDE_DIR} MOTIF_LIBRARIES=
 include_directories(${X11_INCLUDE_DIR} ${MOTIF_INCLUDE_DIR})
 ########################################################################
 if (CERNLIB_USE_INTERNAL_XBAE)
-  add_subdirectory(paw_motif/xbae) 
+  add_subdirectory(paw_motif/xbae)
   set(Xbae xbae_static)
 endif()
-add_subdirectory(packlib) 
+add_subdirectory(packlib)
 add_subdirectory(kernlib)
 add_subdirectory(mathlib)
 add_subdirectory(graflib/higz)
@@ -913,17 +930,17 @@ add_subdirectory(mclibs/cojets)
 add_subdirectory(mclibs/eurodec)
 add_subdirectory(mclibs/fritiof)
 add_subdirectory(mclibs/herwig)
-#add_subdirectory(mclibs/herwig58) 
-add_subdirectory(mclibs/isajet) 
-add_subdirectory(mclibs/jetset) 
-add_subdirectory(mclibs/lepto63) 
+#add_subdirectory(mclibs/herwig58)
+add_subdirectory(mclibs/isajet)
+add_subdirectory(mclibs/jetset)
+add_subdirectory(mclibs/lepto63)
 add_subdirectory(mclibs/pdf)
-add_subdirectory(mclibs/photos) 
+add_subdirectory(mclibs/photos)
 add_subdirectory(mclibs/pythia)
 add_subdirectory(code_motif)
 ########################################################################
 set(CERNLIB_MMAP 1)
-install(FILES     
+install(FILES
 ${CMAKE_CURRENT_SOURCE_DIR}/cfortran/cfortran.h
 ${CMAKE_CURRENT_SOURCE_DIR}/cfortran/comis.h
 ${CMAKE_CURRENT_SOURCE_DIR}/cfortran/cspack.h
@@ -951,7 +968,7 @@ set(head cfortran.h comis.h cspack.h geant315.h geant321.h gen.h graflib.h hbook
 install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_INSTALL_INCLUDEDIR}/cfortran/)")
 foreach ( m ${head} )
   install_symlink(../${m} ${CMAKE_INSTALL_INCLUDEDIR}/cfortran/${m} )
-endforeach ( m ${head} )  
+endforeach ( m ${head} )
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/contrib/converter.h  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/paw/  )
 
@@ -963,13 +980,13 @@ cdf_compile(${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb/programs/hepdb/cdcdf.cdf $
 list(TRANSFORM hepdb_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb/programs/hepdb/")
 add_executable(hepdb ${hepdb_SRCS_F} ${CMAKE_CURRENT_BINARY_DIR}/cdcdf.cdf.c)
 if (APPLE)
-target_link_libraries(hepdb  PRIVATE ${Xbae} packlib_static kernlib_static graflib_static  ${grafX11}_static 
-        pawlib_static mathlib_static paw_motif_static code_motif_static 
-   ${X11_LIBRARIES} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${X11_Xaw_LIB})
+target_link_libraries(hepdb  PRIVATE packlib_static kernlib_static graflib_static  ${grafX11}_static
+        pawlib_static mathlib_static paw_motif_static code_motif_static
+   ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} )
 else()
-target_link_libraries(hepdb PRIVATE  -Wl,--start-group  ${Xbae} packlib_static kernlib_static graflib_static  ${grafX11}_static
- pawlib_static mathlib_static paw_motif_static code_motif_static 
-   ${X11_LIBRARIES} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${X11_Xaw_LIB} -Wl,--end-group )
+target_link_libraries(hepdb PRIVATE  -Wl,--start-group  packlib_static kernlib_static graflib_static  ${grafX11}_static
+ pawlib_static mathlib_static paw_motif_static code_motif_static
+   ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} -Wl,--end-group )
 endif()
 target_include_directories(hepdb PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS hepdb DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
@@ -1011,22 +1028,22 @@ install(TARGETS kuesvr DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(kuesvr PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/kuip)
 set_target_properties(kuesvr PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME kuesvr${COMPSUFFIX})
 ########################################################################
-set(kxterm_SRCS_C 
-       #actions.c 
-       dialogs.c help.c inputtrdial.c kuipio.c 
-       kxpan.c kxterm.c menu.c saveastrdial.c searchdialog.c utils.c 
+set(kxterm_SRCS_C
+       actions.c
+       dialogs.c help.c inputtrdial.c kuipio.c
+       kxpan.c kxterm.c menu.c saveastrdial.c searchdialog.c utils.c
        uxpanel.c uxxt.c kkern.c)
 list(TRANSFORM kxterm_SRCS_C PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/kuip/programs/kxterm/")
 add_executable(kxterm ${kxterm_SRCS_C} )
 if (APPLE)
-  target_link_libraries(kxterm PRIVATE ${Xbae} packlib_static kernlib_static graflib_static  ${grafX11}_static mathlib_static
-   pawlib_static paw_motif_static code_motif_static 
-   ${X11_LIBRARIES} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt} ${X11_Xt_LIB} ${MOTIF_LIBRARIES} )
+  target_link_libraries(kxterm PRIVATE packlib_static kernlib_static graflib_static  ${grafX11}_static mathlib_static
+   pawlib_static paw_motif_static code_motif_static
+   ${BLAS_LIBRARIES} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES})
 else()
-  target_link_libraries(kxterm PRIVATE ${Xbae} -Wl,--start-group packlib_static kernlib_static graflib_static  ${grafX11}_static
-   mathlib_static pawlib_static paw_motif_static code_motif_static -Wl,--end-group 
-   ${X11_LIBRARIES} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt} ${X11_Xt_LIB} ${X11_Xaw_LIB} ${MOTIF_LIBRARIES} ${Xbae} )
-endif()   
+  target_link_libraries(kxterm PRIVATE -Wl,--start-group packlib_static kernlib_static graflib_static  ${grafX11}_static
+   mathlib_static pawlib_static paw_motif_static code_motif_static -Wl,--end-group
+   ${BLAS_LIBRARIES} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES})
+endif()
 target_include_directories(kxterm PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS kxterm DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(kxterm PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/kxterm)
@@ -1042,7 +1059,7 @@ install(TARGETS cdbackup DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(cdbackup PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb)
 set_target_properties(cdbackup PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME cdbackup${COMPSUFFIX})
 ########################################################################
-set(cdserv_SRCS_F abend.F cdback.F cdbad.F cdconf.F cddelf.F cdload.F 
+set(cdserv_SRCS_F abend.F cdback.F cdbad.F cdconf.F cddelf.F cdload.F
        cdlogf.F cdsend.F cdserv.F cdstop.F cdtrap.F cdwake.F)
 list(TRANSFORM cdserv_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb/programs/cdserv/")
 add_executable(cdserv ${cdserv_SRCS_F} )
@@ -1053,18 +1070,18 @@ target_include_directories(cdserv PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/he
 set_target_properties(cdserv PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME cdserv${COMPSUFFIX})
 ########################################################################
 set(dzeX11_SRCS_F dzebkk.F dzechf.F dzechk.F dzecpp.F dzedel.F dzedff.F
-       dzedof.F dzedrw.F dzedrz.F dzedsp.F dzehpe.F dzelal.F 
-       dzelas.F dzelin.F dzelof.F dzemrz.F dzenpg.F dzeop1.F dzeopl.F 
-       dzeppa.F dzepsb.F dzepur.F dzeqit.F dzerds.F dzesgp.F dzeurz.F 
+       dzedof.F dzedrw.F dzedrz.F dzedsp.F dzehpe.F dzelal.F
+       dzelas.F dzelin.F dzelof.F dzemrz.F dzenpg.F dzeop1.F dzeopl.F
+       dzeppa.F dzepsb.F dzepur.F dzeqit.F dzerds.F dzesgp.F dzeurz.F
        dzewem.F dzezer.F dzedit.F)
 cdf_compile(${CMAKE_CURRENT_SOURCE_DIR}/graflib/dzdoc/dzedit/dzeditcdf.cdf ${CMAKE_CURRENT_BINARY_DIR}/dzeditcdf.cdf.c)
 list(TRANSFORM dzeX11_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/graflib/dzdoc/dzedit/")
 add_executable(dzeX11 ${dzeX11_SRCS_F} ${CMAKE_CURRENT_BINARY_DIR}/dzeditcdf.cdf.c)
 if (APPLE)
-target_link_libraries(dzeX11 PRIVATE  graflib_static kernlib_static graflib_static packlib_static ${grafX11}_static 
+target_link_libraries(dzeX11 PRIVATE  graflib_static kernlib_static graflib_static packlib_static ${grafX11}_static
 mathlib_static  ${X11_LIBRARIES} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt})
 else()
-target_link_libraries(dzeX11 PRIVATE -Wl,--start-group graflib_static kernlib_static graflib_static packlib_static ${grafX11}_static 
+target_link_libraries(dzeX11 PRIVATE -Wl,--start-group graflib_static kernlib_static graflib_static packlib_static ${grafX11}_static
 mathlib_static  -Wl,--end-group ${X11_LIBRARIES} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt})
 endif()
 
@@ -1084,15 +1101,15 @@ list(TRANSFORM pawX11_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/pawlib/paw/pro
 if (CERNLIB_BUILD_SHARED)
 add_executable(pawX11.dynamic ${pawX11_SRCS_F} )
 if (APPLE)
-target_link_libraries(pawX11.dynamic PRIVATE pawlib kernlib graflib ${grafX11} 
-packlib paw_motif code_motif mathlib  
-${X11_LIBRARIES} ${BLAS_LIBRARIES} 
-   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${Xbae} ${X11_Xaw_LIB}  ${MOTIF_LIBRARIES} dl)
+target_link_libraries(pawX11.dynamic PRIVATE pawlib kernlib graflib ${grafX11}
+packlib paw_motif code_motif mathlib
+${BLAS_LIBRARIES}
+   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
 else()
-target_link_libraries(pawX11.dynamic PRIVATE -Wl,--start-group pawlib kernlib graflib ${grafX11} 
+target_link_libraries(pawX11.dynamic PRIVATE -Wl,--start-group pawlib kernlib graflib ${grafX11}
 packlib paw_motif code_motif mathlib  -Wl,--end-group
-${X11_LIBRARIES} ${BLAS_LIBRARIES} 
-   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${Xbae} ${X11_Xaw_LIB}  ${MOTIF_LIBRARIES} dl)
+${BLAS_LIBRARIES}
+   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
 endif()
 target_include_directories(pawX11.dynamic PRIVATE ${PROJECT_SOURCE_DIR}/include )
 install(TARGETS pawX11.dynamic DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
@@ -1101,12 +1118,12 @@ endif()
 ########################################################################
 add_executable(pawX11 ${pawX11_SRCS_F} )
 if (APPLE)
- target_link_libraries(pawX11 PRIVATE dl ${X11_Xt_LIB} pawlib_static kernlib_static graflib_static ${grafX11}_static 
-     packlib_static paw_motif_static code_motif_static mathlib_static ${X11_LIBRARIES} ${BLAS_LIBRARIES} 
-     ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${Xbae} ${X11_Xaw_LIB} ${MOTIF_LIBRARIES})
+ target_link_libraries(pawX11 PRIVATE dl pawlib_static kernlib_static graflib_static ${grafX11}_static
+     packlib_static paw_motif_static code_motif_static mathlib_static ${BLAS_LIBRARIES}
+     ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${X11_LIBRARIES})
 else()
-  target_link_libraries(pawX11 PRIVATE ${X11_Xt_LIB} -Wl,--start-group pawlib_static kernlib_static graflib_static ${grafX11}_static packlib_static paw_motif_static code_motif_static mathlib_static -Wl,--end-group ${X11_LIBRARIES} ${BLAS_LIBRARIES} 
-     ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${Xbae} ${X11_Xaw_LIB} ${MOTIF_LIBRARIES} dl)
+  target_link_libraries(pawX11 PRIVATE -Wl,--start-group pawlib_static kernlib_static graflib_static ${grafX11}_static packlib_static paw_motif_static code_motif_static mathlib_static -Wl,--end-group ${BLAS_LIBRARIES}
+     ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${X11_LIBRARIES} dl)
 endif()
 target_include_directories(pawX11 PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS pawX11 DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
@@ -1121,12 +1138,12 @@ if (CERNLIB_BUILD_SHARED)
 add_executable(paw++.dynamic ${paw++_SRCS_F} )
 if (APPLE)
 target_link_libraries(paw++.dynamic PRIVATE  pawlib kernlib graflib ${grafX11}
- packlib paw_motif code_motif mathlib 
-   ${X11_LIBRARIES} ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${Xbae} ${X11_Xaw_LIB} ${MOTIF_LIBRARIES} dl)
+ packlib paw_motif code_motif mathlib
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
 else()
 target_link_libraries(paw++.dynamic PRIVATE  -Wl,--start-group pawlib kernlib graflib ${grafX11}
  packlib paw_motif code_motif mathlib  -Wl,--end-group
-   ${X11_LIBRARIES} ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${Xbae} ${X11_Xaw_LIB} ${MOTIF_LIBRARIES} dl)
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
 
 endif()
 target_include_directories(paw++.dynamic PRIVATE ${PROJECT_SOURCE_DIR}/include)
@@ -1135,32 +1152,32 @@ set_target_properties(paw++.dynamic PROPERTIES POSITION_INDEPENDENT_CODE ${CERNL
 endif()
 add_executable(paw++ ${paw++_SRCS_F} )
 if (APPLE)
-  target_link_libraries(paw++ PRIVATE ${X11_Xt_LIB} pawlib_static kernlib_static graflib_static ${grafX11}_static
-   packlib_static paw_motif_static code_motif_static mathlib_static  ${X11_LIBRARIES} 
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${Xbae} ${X11_Xaw_LIB} ${MOTIF_LIBRARIES} dl)
+  target_link_libraries(paw++ PRIVATE pawlib_static kernlib_static graflib_static ${grafX11}_static
+   packlib_static paw_motif_static code_motif_static mathlib_static
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
 else()
-  target_link_libraries(paw++ PRIVATE ${X11_Xt_LIB} -Wl,--start-group pawlib_static kernlib_static graflib_static ${grafX11}_static
-   packlib_static paw_motif_static code_motif_static mathlib_static -Wl,--end-group ${X11_LIBRARIES} 
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${Xbae} ${X11_Xaw_LIB} ${MOTIF_LIBRARIES} dl)
+  target_link_libraries(paw++ PRIVATE -Wl,--start-group pawlib_static kernlib_static graflib_static ${grafX11}_static
+   packlib_static paw_motif_static code_motif_static mathlib_static -Wl,--end-group
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
 endif()
 target_include_directories(paw++ PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS paw++ DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 set_target_properties(paw++ PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME paw++${COMPSUFFIX})
 ########################################################################
-set(zftp_SRCS_F geta.F getb.F getd.F getfz.F getp.F getrz.F getx.F 
-     mget.F mput.F puta.F putb.F putd.F putfz.F putp.F putrz.F 
-     putx.F rclose.F rlogin.F rshell.F zabend.F zexit.F zfctof.F 
-     zfftoc.F zffzcp.F zflogc.F zfrfrf.F zfrtof.F zfrzcp.F zftlcd.F 
-     zftlls.F zftlmv.F zftlrm.F zftpcd.F zftpls.F zftpmv.F 
+set(zftp_SRCS_F geta.F getb.F getd.F getfz.F getp.F getrz.F getx.F
+     mget.F mput.F puta.F putb.F putd.F putfz.F putp.F putrz.F
+     putx.F rclose.F rlogin.F rshell.F zabend.F zexit.F zfctof.F
+     zfftoc.F zffzcp.F zflogc.F zfrfrf.F zfrtof.F zfrzcp.F zftlcd.F
+     zftlls.F zftlmv.F zftlrm.F zftpcd.F zftpls.F zftpmv.F
      zftprm.F zftpwd.F zfvers.F zftp.F)
      cdf_compile(${CMAKE_CURRENT_SOURCE_DIR}/packlib/cspack/programs/zftp/zftpcdf.cdf ${CMAKE_CURRENT_BINARY_DIR}/zftpcdf.cdf.c)
 list(TRANSFORM zftp_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/cspack/programs/zftp/")
 add_executable(zftp ${zftp_SRCS_F} ${CMAKE_CURRENT_BINARY_DIR}/zftpcdf.cdf.c)
 if (APPLE)
-target_link_libraries(zftp PRIVATE   packlib_static kernlib_static graflib_static ${grafX11}_static 
+target_link_libraries(zftp PRIVATE   packlib_static kernlib_static graflib_static ${grafX11}_static
 mathlib_static   ${X11_LIBRARIES} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt})
 else()
-target_link_libraries(zftp PRIVATE -Wl,--start-group  packlib_static kernlib_static graflib_static ${grafX11}_static 
+target_link_libraries(zftp PRIVATE -Wl,--start-group  packlib_static kernlib_static graflib_static ${grafX11}_static
 mathlib_static -Wl,--end-group  ${X11_LIBRARIES} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt})
 endif()
 target_include_directories(zftp PRIVATE ${PROJECT_SOURCE_DIR}/include)
@@ -1172,7 +1189,7 @@ set(fatback_SRCS_F fatback.F zabend.F)
 list(TRANSFORM fatback_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen/programs/fatback/")
 add_executable(fatback  ${fatback_SRCS_F} )
 target_link_libraries(fatback PRIVATE packlib_static kernlib_static graflib_static ${grafX11}_static mathlib_static
- ${X11_LIBRARIES} 
+ ${X11_LIBRARIES}
    ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt})
 target_include_directories(fatback PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS fatback DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
@@ -1197,7 +1214,7 @@ set_target_properties(pawserv PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POS
 #identical to pawserv
 ########################################################################
 add_executable(zserv ${pawserv_SRCS_F} )
-target_link_libraries(zserv PRIVATE packlib_static pawlib_static kernlib_static graflib_static ${grafX11}_static mathlib_static 
+target_link_libraries(zserv PRIVATE packlib_static pawlib_static kernlib_static graflib_static ${grafX11}_static mathlib_static
 ${X11_LIBRARIES} ${X11_Xaw_LIB} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt})
 target_include_directories(zserv PRIVATE ${PROJECT_SOURCE_DIR}/include  )
 install(TARGETS zserv DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
@@ -1216,7 +1233,7 @@ set_target_properties(zserv        PROPERTIES  POSITION_INDEPENDENT_CODE ${CERNL
 set(fatnew_SRCS_F fatnew.F)
 list(TRANSFORM fatnew_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen/programs/fatnew/")
 add_executable(fatnew  ${fatnew_SRCS_F} )
-target_link_libraries(fatnew PRIVATE packlib_static kernlib_static graflib_static ${grafX11}_static mathlib_static 
+target_link_libraries(fatnew PRIVATE packlib_static kernlib_static graflib_static ${grafX11}_static mathlib_static
 ${X11_LIBRARIES} ${X11_Xaw_LIB} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt})
 target_include_directories(fatnew PRIVATE ${PROJECT_SOURCE_DIR}/include  )
 install(TARGETS fatnew DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
@@ -1239,15 +1256,15 @@ cdf_compile(${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen/programs/fmkuip/fmcdf.cdf
 list(TRANSFORM fatmen_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen/programs/fmkuip/")
 add_executable(fatmen ${fatmen_SRCS_F} ${CMAKE_CURRENT_BINARY_DIR}/fmcdf.cdf.c)
 if (APPLE)
-target_link_libraries(fatmen PRIVATE  pawlib_static kernlib_static graflib_static ${grafX11}_static packlib_static 
+target_link_libraries(fatmen PRIVATE  pawlib_static kernlib_static graflib_static ${grafX11}_static packlib_static
 paw_motif_static
- code_motif_static mathlib_static  ${X11_LIBRARIES} 
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${Xbae} ${X11_Xaw_LIB} ${MOTIF_LIBRARIES})
+ code_motif_static mathlib_static
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES})
 else()
-target_link_libraries(fatmen PRIVATE -Wl,--start-group pawlib_static kernlib_static graflib_static ${grafX11}_static packlib_static 
+target_link_libraries(fatmen PRIVATE -Wl,--start-group pawlib_static kernlib_static graflib_static ${grafX11}_static packlib_static
 paw_motif_static
- code_motif_static mathlib_static -Wl,--end-group ${X11_LIBRARIES} 
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${Xbae} ${X11_Xaw_LIB} ${MOTIF_LIBRARIES})
+ code_motif_static mathlib_static -Wl,--end-group
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES})
 endif()
 target_include_directories(fatmen PRIVATE ${PROJECT_SOURCE_DIR}/include  )
 install(TARGETS fatmen DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
@@ -1257,7 +1274,7 @@ set_target_properties(fatmen PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSI
 set(fatsend_SRCS_F fatsend.F)
 list(TRANSFORM fatsend_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen/programs/fatsend/")
 add_executable(fatsend ${fatsend_SRCS_F} )
-target_link_libraries(fatsend PRIVATE packlib_static kernlib_static graflib_static ${grafX11}_static mathlib_static 
+target_link_libraries(fatsend PRIVATE packlib_static kernlib_static graflib_static ${grafX11}_static mathlib_static
 ${X11_LIBRARIES} ${X11_Xaw_LIB} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${crypt})
 target_include_directories(fatsend PRIVATE ${PROJECT_SOURCE_DIR}/include )
 install(TARGETS fatsend DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
@@ -1273,19 +1290,19 @@ install(TARGETS fatsrv DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(fatsrv PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen)
 set_target_properties(fatsrv PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fatsrv${COMPSUFFIX})
 ########################################################################
-#patchy4/p4lib/Imakefile 
+#patchy4/p4lib/Imakefile
 set(patchy4_p4lib_FSRC acexq.F auxini.F crdeco.F depart.F dospgo.F flink.F hollcv.F ictype.F iucomp.F jartyp.F kdfill.F
-   locseq.F mqend.F msbyt.F pabend.F popin.F qfatal.F qsort.F qverif.F setnum.F ucopiv.F upkbyt.F vzero.F ybcdex.F yfrcex.F yshmac.F acpeel.F cbyt.F 
-   creapd.F depid.F doupd.F flkrak.F icdeci.F inchch.F iufila.F jbit.F kdnextvx.F locsq2.F mqgarb.F mxactd.F paberr.F popoff.F qfatam.F qsorth.F renamef.F 
-   setopt.F ucopy2.F upkch.F xinb.F ybinex.F yixex.F yshtag.F acseq.F cckrak.F crebuf.F depmsg.F douref.F floper.F icfila.F iofile.F iufind.F jbytet.F kdngo.F 
+   locseq.F mqend.F msbyt.F pabend.F popin.F qfatal.F qsort.F qverif.F setnum.F ucopiv.F upkbyt.F vzero.F ybcdex.F yfrcex.F yshmac.F acpeel.F cbyt.F
+   creapd.F depid.F doupd.F flkrak.F icdeci.F inchch.F iufila.F jbit.F kdnextvx.F locsq2.F mqgarb.F mxactd.F paberr.F popoff.F qfatam.F qsorth.F renamef.F
+   setopt.F ucopy2.F upkch.F xinb.F ybinex.F yixex.F yshtag.F acseq.F cckrak.F crebuf.F depmsg.F douref.F floper.F icfila.F iofile.F iufind.F jbytet.F kdngo.F
    loglv.F mqinit.F mxactn.F pend.F poprew.F qlump.F qsorti.F rqtell.F tmpro.F ucopy.F uset.F xinbf.F ycomex.F ylisex.F yshval.F acsort.F ccproc.F cright.F doasm.F
-   douse.F flpara.F icfind.F iofilx.F iufnbl.F jbyt.F kdnrew.F lqfind.F mqmove.F mxjoin.F pilect.F pready.F qlumpr.F qsorv.F sbit0.F toceta.F uctoh1.F utrans.F 
+   douse.F flpara.F icfind.F iofilx.F iufnbl.F jbyt.F kdnrew.F lqfind.F mqmove.F mxjoin.F pilect.F pready.F qlumpr.F qsorv.F sbit0.F toceta.F uctoh1.F utrans.F
    xinbs.F yedarr.F ylispg.F ytocex.F acxref.F cctoup.F csetdi.F dodeck.F dpexe.F frceta.F icfmul.F iotype.F iuforw.F jbytor.F kdstep.F lqlocf.F mqrelc.F mxnew.F
    pileup.F prtitl.F qname.F qsorvh.F sbit1.F tosetu.F uctoh.F vblank.F xincf.F yedkrk.F yserbf.F arbcd.F cetup.F csethi.F domatf.F dpexgo.F frsetu.F icfnbl.F
    iqbcd.F iulast.F jedchk.F kqlast.F lqlong.F mqtabl.F mxset.F pinit.F qabend.F qnamex.F qsorvi.F sbit.F traceq.F uh1toc.F vfill.F xoutb.F yedmat.F yserex.F
-   arbin.F cfill.F csqmbl.F doopt.F dplist.F getenvf.F ichexi.F iqlocf.F iunext.F jedtyp.F liftbk.F mbytet.F msbit0.F namefl.F pkbyt.F qblow.F qpage.F qtchid.F 
+   arbin.F cfill.F csqmbl.F doopt.F dplist.F getenvf.F ichexi.F iqlocf.F iunext.F jedtyp.F liftbk.F mbytet.F msbit0.F namefl.F pkbyt.F qblow.F qpage.F qtchid.F
    sbyt.F ublank.F uhtoc.F vizpri.F xoutbf.F yedriv.F ysfind.F arrive.F cleft.F ctrans.F dorun.F dpmix.F getwdf.F icloc.F iucola.F iusame.F jrsbyt.F liftrh.F mbytor.F
-   msbit1.F nomem.F pkchar.F qblowx.F qpostm.F qtopsy.F sbytor.F ublow.F uleft.F vxinvb.F xoutbs.F yedtex.F yshanl.F auxfil.F cltou.F cutol.F dospec.F dppage.F helppr.F 
+   msbit1.F nomem.F pkchar.F qblowx.F qpostm.F qtopsy.F sbytor.F ublow.F uleft.F vxinvb.F xoutbs.F yedtex.F yshanl.F auxfil.F cltou.F cutol.F dospec.F dppage.F helppr.F
    icnext.F iucomh.F jartpx.F kdcopy.F lnblnk.F mcbyt.F msbit.F notitl.F pload.F qend.F qshunt.F qtouch.F setid.F ubunch.F uopt.F vxinvc.F xoutcf.F yedxch.F yshfex.F)
 set(patchy4_p4lib_CSRC abend.c datime.c fchput.c fchtak.c geteni.c getwdi.c intrac.c ishft.c locb.c locf.c renami.c tminit.c tmproi.c tmread.c)
 list(TRANSFORM patchy4_p4lib_FSRC PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/patchy4/p4lib/")
@@ -1320,8 +1337,8 @@ set_target_properties(ylist  PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSI
 set_target_properties(ysearc PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ysearch${COMPSUFFIX})
 set_target_properties(ytocet PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ytoceta${COMPSUFFIX})
 ########################################################################
-add_custom_target( unsplit_SRC_p5libf  BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/p5lib.f 
-#                        DEPENDS ypatchy 
+add_custom_target( unsplit_SRC_p5libf  BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/p5lib.f
+#                        DEPENDS ypatchy
                         COMMAND      ${CMAKE_CURRENT_BINARY_DIR}/ypatchy${COMPSUFFIX} - p5lib p5lib TTY .go
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/patchy5)
 add_dependencies(unsplit_SRC_p5libf ypatchy)
@@ -1332,7 +1349,7 @@ install(TARGETS fcasplit DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 set_target_properties(fcasplit PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fcasplit${COMPSUFFIX} RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 
-add_custom_target( SRC_p5libf ALL  
+add_custom_target( SRC_p5libf ALL
 #                        DEPENDS fcasplit unsplit_SRC_p5lib.f
                         COMMAND  ${CMAKE_CURRENT_BINARY_DIR}/fcasplit${COMPSUFFIX} p5lib.f "-c "  "-c  -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX -DCERNLIB_QMGLIBC -DCERNLIB_QMLXIA64  -DCERNLIB_VERBOSE -DCERNLIB_QGETCWD -DCERNLIB_GFORTRAN"   "" "gfortran" "gcc"
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/patchy5 )
@@ -1363,12 +1380,12 @@ set_target_properties(nypatchy PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_PO
 set( PRG nycheck nydiff nyindex nylist nymerge nyshell nysynopt nytidy )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/patchy5/patchy.car   ${CMAKE_CURRENT_BINARY_DIR}/patchy5/patchy.car COPYONLY)
 foreach ( XXX ${PRG} )
-  add_custom_target( CRA_${XXX}  BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/patchy5/${XXX}.cra 
+  add_custom_target( CRA_${XXX}  BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/patchy5/${XXX}.cra
                         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/yexpand.script ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/${XXX}.cra
-                        COMMAND  ${CMAKE_COMMAND} -E env "PLINAME=${PLINAME}"     ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/yexpand.script  ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/${XXX}.cra ${XXX}.cra 
+                        COMMAND  ${CMAKE_COMMAND} -E env "PLINAME=${PLINAME}"     ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/yexpand.script  ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/${XXX}.cra ${XXX}.cra
                         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/patchy5/
                        )
-  add_custom_target( SRC_${XXX}  BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/patchy5/${XXX}.f 
+  add_custom_target( SRC_${XXX}  BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/patchy5/${XXX}.f
                         DEPENDS ypatchy CRA_${XXX}
                         COMMAND      ${CMAKE_CURRENT_BINARY_DIR}/ypatchy${COMPSUFFIX} - :${XXX}.f :${XXX}.cra  TTY .go
                        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/patchy5/
@@ -1389,11 +1406,10 @@ configure_package_config_file(cmake/Templates/CERNLIBConfig.cmake.in ${CMAKE_CUR
                               INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
                               PATH_VARS CMAKE_INSTALL_INCLUDEDIR
                               CMAKE_INSTALL_LIBDIR)
-            
+
 write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/cmake/CERNLIBConfig-version.cmake COMPATIBILITY SameMajorVersion VERSION ${PROJECT_VERSION})
 
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/CERNLIBConfig.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/cmake/CERNLIBConfig-version.cmake
               DESTINATION ${CONFIG_INSTALL_DIR} COMPONENT devel)
-              

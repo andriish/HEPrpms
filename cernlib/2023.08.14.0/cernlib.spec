@@ -46,7 +46,7 @@ Summary:       General purpose CERN library
 Group:         Development/Libraries
 License:       GPL+ and LGPLv2+
 URL:           http://cernlib.web.cern.ch/cernlib/
-#Patch0:         patch-cernlib-0.txt
+Patch0:         patch-cernlib-0.txt
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 7
 BuildRequires: openssl-libs openssl-devel  lapack-devel blas-devel lapack blas
@@ -283,10 +283,11 @@ Utilities for extracting sources from patchy cards and cradles.
 
 %prep
 %setup -q -c 
-#patch0 -p1
+%patch0 -p1
 
 
 %build
+find cernlib-%{version}-free -type f -name '.*' -exec rm -rf  {} \;
 %if %{?rhel}%{!?rhel:0} == 4 || %{?rhel}%{!?rhel:0} == 5 || %{?rhel}%{!?rhel:0} == 6
 find -name CMakeLists.txt -exec sed -i -e 's@list(TRANSFORM@list_TRANSFORM(@g' -e 's@list(JOIN@list_JOIN(@g' {} \; 
 %endif
@@ -296,18 +297,18 @@ export FC=g77
 %else
 export FC=gfortran
 %endif
-cmake  -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF  -DCMAKE_Fortran_COMPILER=${FC} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+cmake  -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF  -DCMAKE_Fortran_COMPILER=${FC} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %cmakeB
 %endif
 %if 0%{?fedora} || %{?rhel}%{!?rhel:0} >= 7
 export FC=gfortran
-%cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+%cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %cmakeB
 %endif
 
 %if 0%{?suse_version}
 export FC=gfortran
-%cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S ../cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+%cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S ../cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %cmake_build
 %endif
 
@@ -609,7 +610,7 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %endif
 
 %changelog
-* Thu Sep 27 2023 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 2023-08
+* Wed Sep 27 2023 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 2023-08
  - bump version
 * Wed Oct 19 2022 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 2022-10
  - bump version
