@@ -215,3 +215,11 @@ d7f61d18b56a1fd1713d47daca271418  TheP8I/2.0.3/rpmbuild/SOURCES/TheP8I-2.0.3.tar
 d41d8cd98f00b204e9800998ecf8427e  EvtGen/2.2.1/rpmbuild/SOURCES/EvtGen-02.02.01.tar.gz
 3e3c800d44f537d74adb68114d585544  EvtGen/2.2.1/rpmbuild/SOURCES/EvtGen-02.02.01.tar.gz
 5b80572444855fd87ebeee4737492391  Professor/2.4.0/rpmbuild/SOURCES/Professor-2.4.0.tar.gz
+8f3e35f75e1f05cd74f7d9259b888722  clhep/2.4.7.1/rpmbuild/SOURCES/clhep-2.4.7.1.tgz
+e2d3a98d11dd075f754b48a9f5dd9aa0  LoopTools/2.16/rpmbuild/SOURCES/LoopTools-2.16.tar.gz
+24bde27c26e2ae41684269d3dd2beffa  tmdlib/2.2.10/rpmbuild/SOURCES/tmdlib-2.2.10.tar.gz
+d434f671c76877b4c7d18dad955fe93f  LCIO/02.20.00/rpmbuild/SOURCES/v02-20.tar.gz
+e6b9f419dbb75b9756097964eed36362  fjcontrib/1.053/rpmbuild/SOURCES/fjcontrib-1.053.tar.gz
+89e271e7e15c2988b8f084f383364c9e  form/4.3.1/rpmbuild/SOURCES/form-4.3.1.tar.gz
+e65db519da4513c8bd1ab14e10d70ba8  geant4/11.1.2/rpmbuild/SOURCES/geant4-v11.1.2.tar.gz
+d8aede1539f478547f8be5412ab6869c  fastjet/3.4.2/rpmbuild/SOURCES/fastjet-3.4.2.tar.gz

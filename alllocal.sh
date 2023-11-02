@@ -2,9 +2,19 @@
 
 export PATH=$PATH:$(pwd)
 
-set -x 
+#set -x 
 declare -a BUILDLIST=(
-cernlib:2023.08.14.0
+
+#form:4.3.1
+#geant4:11.1.2
+#tmdlib:2.2.10
+
+#fastjet:3.4.2
+#clhep:2.4.7.1
+#fjcontrib:1.053
+#LCIO:02.20.00
+#LoopTools:2.16
+#cernlib:2023.08.14.0
 #ginac:1.8.7
 #TheP8I:2.0.3
 #openloops:2.1.2
