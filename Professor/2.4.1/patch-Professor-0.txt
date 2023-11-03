@@ -1,0 +1,86 @@
+diff -Naur ORIG/Makefile PATCHED/Makefile
+--- ORIG/Makefile	2023-11-03 22:34:20.125883113 +0100
++++ PATCHED/Makefile	2023-11-03 22:27:18.954756317 +0100
+@@ -109,23 +109,22 @@
+ 
+ obj/%.o: src/%.cc $(LIBHEADERS)
+ 	mkdir -p obj
+-	$(CXX) -std=$(CXXSTD) -DPROF_VERSION="$(VERSION)" -I include $(CPPFLAGS) $(CXXFLAGS) -c -fPIC $< -o $@
+-
++	$(CXX) -std=$(CXXSTD) -DPROF_VERSION="$(VERSION)" -I./ -I./include $(CPPFLAGS) $(CXXFLAGS) -c -fPIC $< -o $@
+ obj/Version.o: src/Version.cc $(LIBHEADERS) Makefile
+ 	mkdir -p obj
+ 	$(CXX) -std=$(CXXSTD) -DPROF_VERSION="$(VERSION)" -Iinclude $(CPPFLAGS) $(CXXFLAGS) -c -fPIC $< -o $@
+ 
+ pydeps:
+-	@$(PYTHON) -m pip &> /dev/null || { echo "Python doesn't have pip support"; exit 1; }
+-	@$(PYTHON) -c "import setuptools" &> /dev/null || { echo "Python setuptools needs to be installed: pip install setuptools"; exit 1; }
+-	@$(PYTHON) -c "import cython" &> /dev/null || { echo "Cython needs to be installed: pip install Cython"; exit 1; }
++#	@$(PYTHON) -m pip &> /dev/null || { echo "Python doesn't have pip support"; exit 1; }
++#	@$(PYTHON) -c "import setuptools" &> /dev/null || { echo "Python setuptools needs to be installed: pip install setuptools"; exit 1; }
++#	@$(PYTHON) -c "import cython" &> /dev/null || { echo "Cython needs to be installed: pip install Cython"; exit 1; }
+ 
+ pyext: pydeps pyext/professor2/core.cpp $(wildcard pyext/professor2/*.py)
+-	cd pyext/ && PROF_VERSION=$(VERSION) PROF_ROOT=$(PWD) $(PYTHON) -m pip install -vv ./
++#	PROF_VERSION=$(VERSION) $(PYTHON) -m pip install -vv ./pyext/
+ 
+ ifdef HAVE_GOOD_CYTHON
+ pyext/professor2/core.cpp: $(LIBHEADERS) $(CYTHONSOURCES) lib
+-	$(CYTHON) pyext/professor2/core.pyx --cplus
++	$(CYTHON) pyext/professor2/core.pyx --cplus -Ipyext/professor2
+ else
+ pyext/professor2/core.cpp: $(LIBHEADERS) $(CYTHONSOURCES) lib
+ 	$(info "Cython >= 0.20 not available; can't build $@")
+@@ -162,12 +161,12 @@
+ 	test/testPython2D
+ 
+ install: all
+-	mkdir -p $(PREFIX)/bin && cp bin/* $(PREFIX)/bin/
+-	mkdir -p $(PREFIX)/contrib && cp contrib/* $(PREFIX)/contrib/
+-	mkdir -p $(PREFIX)/jupyter && cp jupyter/* $(PREFIX)/jupyter/
+-	mkdir -p $(PREFIX)/include && cp -r include/Professor $(PREFIX)/include/
+-	test -d lib   && mkdir -p $(PREFIX)/lib   && cp -r lib/* $(PREFIX)/lib/ || true
+-	test -d lib64 && mkdir -p $(PREFIX)/lib64 && cp -r lib64/* $(PREFIX)/lib64/ || true
++	mkdir -p $(DESTDIR)$(PREFIX)/bin && cp bin/* $(DESTDIR)$(PREFIX)/bin/
++	mkdir -p $(DESTDIR)$(PREFIX)/contrib && cp contrib/* $(DESTDIR)$(PREFIX)/contrib/
++	mkdir -p $(DESTDIR)$(PREFIX)/jupyter && cp jupyter/* $(DESTDIR)$(PREFIX)/jupyter/
++	mkdir -p $(DESTDIR)$(PREFIX)/include && cp -r include/Professor $(DESTDIR)$(PREFIX)/include/
++	test -d lib   && mkdir -p $(DESTDIR)$(LIBDIR)   && cp -r lib/libProfessor2.so $(DESTDIR)$(LIBDIR)/ || true
++	cd pyext && $(PYTHON) setup.py install --prefix=$(DESTDIR)$(PREFIX)
+ #	cp setup.sh $(PREFIX)
+ 
+ dist: all
+diff -Naur ORIG/pyext/setup.py PATCHED/pyext/setup.py
+--- ORIG/pyext/setup.py	2023-11-03 22:29:48.610288702 +0100
++++ PATCHED/pyext/setup.py	2023-11-03 22:37:52.473288129 +0100
+@@ -3,10 +3,9 @@
+ from glob import glob
+ 
+ import os
+-#srcdir = os.path.abspath(os.path.join("./")
+-srcdir = os.environ["PROF_ROOT"]
+-libdir = os.path.abspath(os.path.join(srcdir, "lib"))
+-incdir = os.path.abspath(os.path.join(srcdir, "include"))
++srcdir = os.path.relpath("./")
++libdir = os.path.relpath("../lib")
++incdir = os.path.relpath("../include")
+ os.environ.setdefault("CC", "g++")
+ os.environ.setdefault("CXX", "g++")
+ 
+@@ -18,13 +17,13 @@
+                 ["professor2/core.cpp"],
+                 language="C++",
+                 depends=glob("../include/*.h"),
+-                include_dirs=[incdir, os.path.join(srcdir, "pyext", "professor2")],
+-                extra_compile_args="-std=c++11 -O3 -Wno-unused-but-set-variable -Wno-sign-compare".split(),
++                include_dirs=[incdir, os.path.join(srcdir, "pyext", "professor2","../include", "../", "./")],
++                extra_compile_args="-I. -I./include -I../ -I../include -std=c++11 -O3 -Wno-unused-but-set-variable -Wno-sign-compare".split(),
+                 library_dirs=[libdir],
+                 runtime_library_dirs=[],
+                 libraries=["Professor2"])
+ 
+-v = os.environ.get("PROF_VERSION", "X.Y.Z")
++v = os.environ.get("PROF_VERSION", "2.4.1")
+ setup(name = "professor2",
+       version=v,
+       ext_modules = [ext],

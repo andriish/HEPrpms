@@ -223,3 +223,8 @@ e6b9f419dbb75b9756097964eed36362  fjcontrib/1.053/rpmbuild/SOURCES/fjcontrib-1.0
 89e271e7e15c2988b8f084f383364c9e  form/4.3.1/rpmbuild/SOURCES/form-4.3.1.tar.gz
 e65db519da4513c8bd1ab14e10d70ba8  geant4/11.1.2/rpmbuild/SOURCES/geant4-v11.1.2.tar.gz
 d8aede1539f478547f8be5412ab6869c  fastjet/3.4.2/rpmbuild/SOURCES/fastjet-3.4.2.tar.gz
+31d3584849f4b2711dc93280d266a588  collier/1.2.8/rpmbuild/SOURCES/collier-1.2.8.tar.gz
+ecce372d19cc251786d3be58a682037d  recola/1.4.4/rpmbuild/SOURCES/recola-1.4.4.tar.gz
+86a3130c57f0a7f85ff111a1b6079c11  applgrid/1.6.35/rpmbuild/SOURCES/applgrid-1.6.35.tgz
+909ab1f0dbdf070b391554a616c77cef  Professor/2.4.1/rpmbuild/SOURCES/Professor-2.4.1.tar.gz
+1c67302a0f090cbda7db2276fb3f7da1  whizard/3.1.3/rpmbuild/SOURCES/whizard-3.1.3.tar.gz

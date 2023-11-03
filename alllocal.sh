@@ -4,6 +4,12 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+#applgrid:1.6.35
+#collier:1.2.8
+#Professor:2.4.1
+#recola:1.4.4
+
+whizard:3.1.3
 
 #form:4.3.1
 #geant4:11.1.2
@@ -203,7 +209,8 @@ for a in "${BUILDLIST[@]}"
 do
 p=$(echo $a | cut -f1 -d: )
 v=$(echo $a | cut -f2 -d: )
-(sh srpmsbuild.sh $p $v --build &)
+mkdir -p  logs
+(sh srpmsbuild.sh $p $v --build  &> logs/$p$v".log" || echo "$p $v build failed" &)
 done
 wait
 exit
