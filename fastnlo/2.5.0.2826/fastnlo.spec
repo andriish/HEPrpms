@@ -1,6 +1,6 @@
 Name: fastnlo
 Version: 2.5.0.2826
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPL
 Prefix: %{_prefix}
 Summary: Fast pQCD calculations for PDF fits.
@@ -40,7 +40,7 @@ develop programs which make use of %{name}.
 The library documentation is available on header files.
 
 
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+%if %{?rhel}%{!?rhel:0} >= 8
 %package  -n python-%{name}
 Summary:        python bindings for %{name}
 Provides:       python3-%{name} = %{version}-%{release}
@@ -48,16 +48,6 @@ Provides:       python3-%{name} = %{version}-%{release}
 %description -n python-%{name}
 python-%{name} contains python bindings for %{name}.
 %endif
-#if 0#{?suse_version}
-#package  -n python-#{name}
-#Summary:        python bindings for #{name}
-#Provides:       python3-#{name} = #{version}-#{release}
-
-#description -n python-#{name}
-#python-#{name} contains python bindings for #{name}.
-#endif
-
-
 
 %description
 The fastNLO project provides computer code to create and evaluate fast 
@@ -71,11 +61,11 @@ for observables in hadron-induced processes.
 
 
 sed -i 's|\#\$(DEPDIR)/fastnlo_wrap.Plo:|\$(DEPDIR)/fastnlo_wrap.Plo:|g' pyext/Makefile.in
-%if 0%{?rhel} || 0%{?fedora}
+%if 0%{?rhel} 
 %configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root --with-yoda --with-fastjet --with-qcdnum --enable-pyext3 
 %endif
 
-%if 0%{?suse_version}
+%if 0%{?suse_version} || 0%{?fedora}
 %configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root --with-yoda --with-fastjet --with-qcdnum  
 %endif
 
@@ -83,15 +73,10 @@ make %{?_smp_mflags}
 
 %install 
 %make_install
-%if 0%{?rhel} || 0%{?fedora}
+%if 0%{?rhel} 
 mkdir -p %{buildroot}/%{python3_sitearch}/
 mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch}/
 %endif
-
-#if 0#{?suse_version}
-#mv #{buildroot}/usr/lib/python3.10/site-packages/*  #{buildroot}/usr/#_lib/python3.10/site-packages/
-#endif
-
 
 %files
 %defattr(-,root,root)
@@ -103,17 +88,10 @@ mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch
 /usr/include/*
 
 
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+%if %{?rhel}%{!?rhel:0} >= 8
 %files -n python-%{name}
 %{python3_sitearch}/*
 %endif
-
-#if 0#{?suse_version}
-#files -n python-#{name}
-#/usr/#_lib/python3.*/site-packages/*
-#endif
-
-
 
 %post 
 ldconfig 

@@ -41,7 +41,7 @@
 
 Name:          cernlib
 Version:       2023.08.14.0
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       General purpose CERN library
 Group:         Development/Libraries
 License:       GPL+ and LGPLv2+
