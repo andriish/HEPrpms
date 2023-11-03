@@ -16,8 +16,8 @@ Requires:         pybind11-devel
 %endif
 
 %if 0%{?suse_version}
-BuildRequires:    libclang17
-Requires:         libclang17
+BuildRequires:    libclang-cpp17
+Requires:         libclang-cpp17
 BuildRequires:    python-pybind11-common-devel
 Requires:         python-pybind11-common-devel
 %endif
