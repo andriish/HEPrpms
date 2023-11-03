@@ -1,6 +1,6 @@
 Name:        binder
 Version:    1.3.0
-Release:    4%{?dist}
+Release:    5%{?dist}
 Summary:    A tool for automatic generation of Python bindings to C++ code
 License:    MIT License
 URL:        https://github.com/RosettaCommons/binder
@@ -16,8 +16,8 @@ Requires:         pybind11-devel
 %endif
 
 %if 0%{?suse_version}
-BuildRequires:    libclang11
-Requires:         libclang11
+BuildRequires:    libclang17
+Requires:         libclang17
 BuildRequires:    python-pybind11-common-devel
 Requires:         python-pybind11-common-devel
 %endif

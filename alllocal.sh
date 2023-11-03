@@ -8,8 +8,8 @@ declare -a BUILDLIST=(
 #collier:1.2.8
 #Professor:2.4.1
 #recola:1.4.4
-
-whizard:3.1.3
+EvtGen:2.2.1
+#whizard:3.1.3
 
 #form:4.3.1
 #geant4:11.1.2
