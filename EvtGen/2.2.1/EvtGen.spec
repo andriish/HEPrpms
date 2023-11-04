@@ -87,7 +87,7 @@ Provides:       %{name}-doc = %{version}-%{release}
 
 %prep
 %setup -q -n EvtGen/R02-02-01
-#patch0 -p1
+%patch0 -p1
 
 %build
 mkdir -p build
