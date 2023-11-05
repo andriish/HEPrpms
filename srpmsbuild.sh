@@ -17,8 +17,9 @@ fi
 rm -rf $TOPDIR/$PACKAGE/$VERSION/rpmbuild/{SOURCES,SPECS,SRPMS} 
 mkdir -p $TOPDIR/$PACKAGE/$VERSION/rpmbuild/{SOURCES,SPECS,RPMS,SRPMS} 
 for a in $($SPECTOOL $TOPDIR/$PACKAGE/$VERSION/$PACKAGE.spec | tr -s ' '| cut -f 2 -d' ' | grep '://' ); do
+fn=$(basename $a)
 wget --no-check-certificate  --no-cache $a -P $TOPDIR/$PACKAGE/$VERSION/rpmbuild/SOURCES
-s=$(md5sum $PACKAGE/$VERSION/rpmbuild/SOURCES/$(basename $a))
+s=$(md5sum $PACKAGE/$VERSION/rpmbuild/SOURCES/$fn)
 if grep -Fxq "$s" $TOPDIR/md5sums.txt
 then
 echo "MD5 sum->"$s"<-     Found in "$TOPDIR"/md5sums.txt"

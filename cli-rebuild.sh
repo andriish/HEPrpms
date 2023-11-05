@@ -84,39 +84,39 @@ declare -a BATCH6=(
 HJets
 )
 
-for a in "${BATCH1[@]}" 
+for p in "${BATCH1[@]}" 
 do
 (copr-cli build-package --name  $p averbyts/HEPrpms &)
 done
 wait $(jobs -p)
 
-for a in "${BATCH2[@]}" 
-do
-(copr-cli build-package --name  $p averbyts/HEPrpms &)
-done
-wait $(jobs -p)
-
-
-for a in "${BATCH3[@]}" 
-do
-(copr-cli build-package --name  $p averbyts/HEPrpms &)
-done
-wait $(jobs -p)
-
-for a in "${BATCH4[@]}" 
+for p in "${BATCH2[@]}" 
 do
 (copr-cli build-package --name  $p averbyts/HEPrpms &)
 done
 wait $(jobs -p)
 
 
-for a in "${BATCH5[@]}" 
+for p in "${BATCH3[@]}" 
 do
 (copr-cli build-package --name  $p averbyts/HEPrpms &)
 done
 wait $(jobs -p)
 
-for a in "${BATCH6[@]}" 
+for p in "${BATCH4[@]}" 
+do
+(copr-cli build-package --name  $p averbyts/HEPrpms &)
+done
+wait $(jobs -p)
+
+
+for p in "${BATCH5[@]}" 
+do
+(copr-cli build-package --name  $p averbyts/HEPrpms &)
+done
+wait $(jobs -p)
+
+for p in "${BATCH6[@]}" 
 do
 (copr-cli build-package --name  $p averbyts/HEPrpms &)
 done
