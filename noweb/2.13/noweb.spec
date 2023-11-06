@@ -116,5 +116,5 @@ strip $RPM_BUILD_ROOT%{_bindir}/* >/dev/null 2>&1 || true
     rm -rf $RPM_BUILD_ROOT
 
 %changelog
-Mon 6 Nov 2023 Andrii Verbytskyi
- * 2.13
+* Mon 6 Nov 2023 Andrii Verbytskyi
+ - 2.13
