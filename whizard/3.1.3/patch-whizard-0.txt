@@ -1,6 +1,6 @@
 diff -Naur ORIG/m4/gosam.m4 PATCHED/m4/gosam.m4
---- ORIG/m4/gosam.m4	2023-11-03 21:51:09.260644792 +0100
-+++ PATCHED/m4/gosam.m4	2023-11-03 21:51:09.260644792 +0100
+--- ORIG/m4/gosam.m4	2023-11-03 23:10:00.756645779 +0100
++++ PATCHED/m4/gosam.m4	2023-11-03 23:10:00.757645794 +0100
 @@ -68,7 +68,7 @@
    else
      AC_MSG_RESULT([no])
@@ -53,8 +53,8 @@ diff -Naur ORIG/m4/gosam.m4 PATCHED/m4/gosam.m4
    if test "$samurai_lib" != "no"; then
      samurai_libdir=`dirname $samurai_lib`
 diff -Naur ORIG/m4/hepmc.m4 PATCHED/m4/hepmc.m4
---- ORIG/m4/hepmc.m4	2023-11-03 21:51:09.260644792 +0100
-+++ PATCHED/m4/hepmc.m4	2023-11-03 21:51:09.260644792 +0100
+--- ORIG/m4/hepmc.m4	2023-11-03 23:10:00.756645779 +0100
++++ PATCHED/m4/hepmc.m4	2023-11-03 23:10:00.758645809 +0100
 @@ -79,7 +79,7 @@
        AC_MSG_CHECKING([the HepMC3 version])
        save_CXXFLAGS="$CXXFLAGS"
@@ -100,8 +100,8 @@ diff -Naur ORIG/m4/hepmc.m4 PATCHED/m4/hepmc.m4
        AC_MSG_RESULT([yes])
        $1
 diff -Naur ORIG/m4/pythia8.m4 PATCHED/m4/pythia8.m4
---- ORIG/m4/pythia8.m4	2023-11-03 21:51:09.260644792 +0100
-+++ PATCHED/m4/pythia8.m4	2023-11-03 21:51:09.260644792 +0100
+--- ORIG/m4/pythia8.m4	2023-11-03 23:10:00.756645779 +0100
++++ PATCHED/m4/pythia8.m4	2023-11-03 23:10:00.758645809 +0100
 @@ -46,14 +46,14 @@
  [
  dnl ckeck if a directory is specified for PYTHIA8
@@ -177,8 +177,8 @@ diff -Naur ORIG/m4/pythia8.m4 PATCHED/m4/pythia8.m4
    AC_LINK_IFELSE([dnl
      AC_LANG_PROGRAM([[#include "Pythia8/Pythia.h"]],
 diff -Naur ORIG/omega/scripts/ufo-sanitizer.in PATCHED/omega/scripts/ufo-sanitizer.in
---- ORIG/omega/scripts/ufo-sanitizer.in	2023-11-03 21:51:09.260644792 +0100
-+++ PATCHED/omega/scripts/ufo-sanitizer.in	2023-11-03 21:51:09.260644792 +0100
+--- ORIG/omega/scripts/ufo-sanitizer.in	2023-11-03 23:10:00.756645779 +0100
++++ PATCHED/omega/scripts/ufo-sanitizer.in	2023-11-03 23:10:00.758645809 +0100
 @@ -1,4 +1,4 @@
 -#! /usr/bin/python
 +#! /usr/bin/python3
@@ -186,8 +186,8 @@ diff -Naur ORIG/omega/scripts/ufo-sanitizer.in PATCHED/omega/scripts/ufo-sanitiz
  ########################################################################
  #
 diff -Naur ORIG/src/recola/recola.nw PATCHED/src/recola/recola.nw
---- ORIG/src/recola/recola.nw	2023-11-03 21:51:09.260644792 +0100
-+++ PATCHED/src/recola/recola.nw	2023-11-03 21:51:09.260644792 +0100
+--- ORIG/src/recola/recola.nw	2023-11-03 23:10:00.757645794 +0100
++++ PATCHED/src/recola/recola.nw	2023-11-03 23:10:00.758645809 +0100
 @@ -1146,6 +1146,7 @@
      real(double), intent(out), optional :: sqme
      if (debug_on) call msg_debug2 (D_ME_METHODS, "compute_colour_correlation_rcl")
@@ -260,28 +260,9 @@ diff -Naur ORIG/src/recola/recola.nw PATCHED/src/recola/recola.nw
    end subroutine rclwrap_get_spin_color_correlation
  
  @ %def rclwrap_get_spin_color_correlation
-diff -Naur ORIG/src/rng/dispatch_rng.f90 PATCHED/src/rng/dispatch_rng.f90
---- ORIG/src/rng/dispatch_rng.f90	2023-11-03 22:54:31.141908371 +0100
-+++ PATCHED/src/rng/dispatch_rng.f90	2023-11-03 22:54:32.327925677 +0100
-@@ -44,13 +44,13 @@
-        dispatch_rng_factory_fallback => null ()
- 
-   interface
--    module subroutine dispatch_rng_factory &
-+    subroutine dispatch_rng_factory &
-          (rng_factory, var_list, next_rng_seed)
-       class(rng_factory_t), allocatable, intent(inout) :: rng_factory
-       type(var_list_t), intent(in) :: var_list
-       integer, intent(out) :: next_rng_seed
-     end subroutine dispatch_rng_factory
--    module subroutine update_rng_seed_in_var_list (var_list, next_rng_seed)
-+    subroutine update_rng_seed_in_var_list (var_list, next_rng_seed)
-       type(var_list_t), intent(inout), optional :: var_list
-       integer, intent(in) :: next_rng_seed
-     end subroutine update_rng_seed_in_var_list
 diff -Naur ORIG/src/rng/dispatch_rng_sub.f90 PATCHED/src/rng/dispatch_rng_sub.f90
---- ORIG/src/rng/dispatch_rng_sub.f90	2023-11-03 22:54:47.066140753 +0100
-+++ PATCHED/src/rng/dispatch_rng_sub.f90	2023-11-03 22:54:49.329173776 +0100
+--- ORIG/src/rng/dispatch_rng_sub.f90	2023-11-03 23:10:00.757645794 +0100
++++ PATCHED/src/rng/dispatch_rng_sub.f90	2023-11-03 23:10:00.758645809 +0100
 @@ -38,7 +38,7 @@
  
  contains

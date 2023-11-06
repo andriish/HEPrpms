@@ -4,12 +4,21 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+#ThePEG:2.3.0
+#Herwig:7.3.0
+
+#whizard:3.1.3
+
+SHERPA-MC:2.2.15
+
+#Delphes:3.5.1pre10
+
 #cernlib:2023.08.14.0
 #applgrid:1.6.35
 #collier:1.2.8
 #Professor:2.4.1
 #recola:1.4.4
-EvtGen:2.2.1
+#EvtGen:2.2.1
 #whizard:3.1.3
 
 #form:4.3.1
