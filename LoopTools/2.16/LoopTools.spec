@@ -7,7 +7,6 @@ Version: 2.16
 Release: 8%{?dist}
 License: LGPLv3
 Source: https://www.feynarts.de/looptools/LoopTools-%{version}.tar.gz
-#Source:        https://github.com/andriish/HEPsources/raw/master/LoopTools-%{version}.tar.gz
 Patch0:         patch-LoopTools-0.txt
 URL:    http://www.feynarts.de/looptools/
 Prefix: %{_prefix}
