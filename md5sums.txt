@@ -232,3 +232,4 @@ ecce372d19cc251786d3be58a682037d  recola/1.4.4/rpmbuild/SOURCES/recola-1.4.4.tar
 0bd4bd0dba6c6c611924fabd2b647cb5  ThePEG/2.3.0/rpmbuild/SOURCES/ThePEG-2.3.0.tar.bz2
 33947bb014b2662092b105a2c9320ba2  SHERPA-MC/2.2.15/rpmbuild/SOURCES/SHERPA-MC-2.2.15.tar.gz
 976917c1763bebeabe510314b775ae55  Delphes/3.5.1pre10/rpmbuild/SOURCES/3.5.1pre10.tar.gz
+66cb386801305c64699cf4af73cb0eaf  noweb/2.13/rpmbuild/SOURCES/v2_13.tar.gz
