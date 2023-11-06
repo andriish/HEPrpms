@@ -2,7 +2,7 @@
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.1.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
@@ -159,6 +159,8 @@ rm -rf %{buildroot}
 ldconfig 
 
 %changelog
+* Mon Nov 10 2023 Andrii Verbytskyi 3.1.3
+- Update to 3.1.3
 * Fri Mar 10 2023 Andrii Verbytskyi 3.1.0
 - Update to 3.1.0
 * Wed Jan 19 2022 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
