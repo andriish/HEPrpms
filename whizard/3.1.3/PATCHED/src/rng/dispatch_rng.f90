@@ -44,13 +44,13 @@ module dispatch_rng
        dispatch_rng_factory_fallback => null ()
 
   interface
-    subroutine dispatch_rng_factory &
+    module subroutine dispatch_rng_factory &
          (rng_factory, var_list, next_rng_seed)
       class(rng_factory_t), allocatable, intent(inout) :: rng_factory
       type(var_list_t), intent(in) :: var_list
       integer, intent(out) :: next_rng_seed
     end subroutine dispatch_rng_factory
-    subroutine update_rng_seed_in_var_list (var_list, next_rng_seed)
+    module subroutine update_rng_seed_in_var_list (var_list, next_rng_seed)
       type(var_list_t), intent(inout), optional :: var_list
       integer, intent(in) :: next_rng_seed
     end subroutine update_rng_seed_in_var_list

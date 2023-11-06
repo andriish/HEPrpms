@@ -1,36 +1,66 @@
 diff -Naur ORIG/AddOns/Python/Makefile.am PATCHED/AddOns/Python/Makefile.am
---- ORIG/AddOns/Python/Makefile.am	2022-11-23 11:10:01.711962647 +0100
-+++ PATCHED/AddOns/Python/Makefile.am	2022-11-23 11:10:01.713962649 +0100
-@@ -12,12 +12,12 @@
+--- ORIG/AddOns/Python/Makefile.am	2023-08-15 21:19:15.969714957 +0200
++++ PATCHED/AddOns/Python/Makefile.am	2023-11-06 01:06:48.533407194 +0100
+@@ -9,24 +9,24 @@
+ 	MEProcess.i \
+ 	Random.i
+ 
++pkglib_LTLIBRARIES = libMEProcess.la
++libMEProcess_la_SOURCES = MEProcess.C
++localinc_HEADERS = MEProcess.H
++
  if ENABLE_PYEXT
  
- Sherpa_wrap.cxx: $(noinst_HEADERS)
+-Sherpa_wrap.cxx: $(noinst_HEADERS)
 -	@$(SWIG) -c++ -python -I$(top_srcdir) $<
++Sherpa_wrap.cxx: $(noinst_HEADERS) libMEProcess.la
 +	@$(SWIG) -c++ -python -I$(top_srcdir) -I$(top_srcdir)/../ $<
  
  python_LTLIBRARIES = _Sherpa.la
  
  nodist__Sherpa_la_SOURCES = Sherpa_wrap.cxx
--_Sherpa_la_CPPFLAGS= @PYTHON_CPPFLAGS@
+-_Sherpa_la_CPPFLAGS= @PYTHON_CPPFLAGS@ -I$(top_srcdir)
 +_Sherpa_la_CPPFLAGS= @PYTHON_CPPFLAGS@  -I$(top_srcdir) -I$(top_srcdir)/../
  _Sherpa_la_LDFLAGS = -module
- _Sherpa_la_LIBADD  = -L@SHERPABUILDDIR@/Main -lSherpaMain -lMEProcess\
+-_Sherpa_la_LIBADD  = -L@SHERPABUILDDIR@/Main -lSherpaMain -lMEProcess\
++_Sherpa_la_LIBADD  = -L@SHERPABUILDDIR@/Main -L.  -lSherpaMain -lMEProcess\
  		$(HZTOOLLIBS) $(PGSLIBS) @ATOOLSLIBS@
-diff -Naur ORIG/AddOns/Python/Makefile.in PATCHED/AddOns/Python/Makefile.in
---- ORIG/AddOns/Python/Makefile.in	2022-11-23 11:10:01.711962647 +0100
-+++ PATCHED/AddOns/Python/Makefile.in	2022-11-23 11:10:01.713962649 +0100
-@@ -495,7 +495,7 @@
  
- @ENABLE_PYEXT_TRUE@python_LTLIBRARIES = _Sherpa.la
- @ENABLE_PYEXT_TRUE@nodist__Sherpa_la_SOURCES = Sherpa_wrap.cxx
--@ENABLE_PYEXT_TRUE@_Sherpa_la_CPPFLAGS = @PYTHON_CPPFLAGS@
-+@ENABLE_PYEXT_TRUE@_Sherpa_la_CPPFLAGS = @PYTHON_CPPFLAGS@ -I$(top_srcdir)
- @ENABLE_PYEXT_TRUE@_Sherpa_la_LDFLAGS = -module
- @ENABLE_PYEXT_TRUE@_Sherpa_la_LIBADD = -L@SHERPABUILDDIR@/Main -lSherpaMain -lMEProcess\
- @ENABLE_PYEXT_TRUE@		$(HZTOOLLIBS) $(PGSLIBS) @ATOOLSLIBS@
+ nodist_python_PYTHON = Sherpa.py
+ 
+ endif
+ 
+-pkglib_LTLIBRARIES = libMEProcess.la
+-libMEProcess_la_SOURCES = MEProcess.C
+-localinc_HEADERS = MEProcess.H
+-
+diff -Naur ORIG/AddOns/Python/Makefile.in PATCHED/AddOns/Python/Makefile.in
+--- ORIG/AddOns/Python/Makefile.in	2023-08-15 21:19:15.970714972 +0200
++++ PATCHED/AddOns/Python/Makefile.in	2023-08-15 21:19:15.973715019 +0200
+@@ -289,12 +289,8 @@
+ CONDITIONAL_MCFMDIR = @CONDITIONAL_MCFMDIR@
+ CONDITIONAL_MCFMINCS = @CONDITIONAL_MCFMINCS@
+ CONDITIONAL_MCFMLIBS = @CONDITIONAL_MCFMLIBS@
+-CONDITIONAL_OPENLOOPSLDADD = @CONDITIONAL_OPENLOOPSLDADD@
+-CONDITIONAL_OPENLOOPSLDFLAGS = @CONDITIONAL_OPENLOOPSLDFLAGS@
+ CONDITIONAL_PGSLIBS = @CONDITIONAL_PGSLIBS@
+ CONDITIONAL_RECOLAINCS = @CONDITIONAL_RECOLAINCS@
+-CONDITIONAL_RECOLALDADD = @CONDITIONAL_RECOLALDADD@
+-CONDITIONAL_RECOLALDFLAGS = @CONDITIONAL_RECOLALDFLAGS@
+ CONDITIONAL_RIVETCPPFLAGS = @CONDITIONAL_RIVETCPPFLAGS@
+ CONDITIONAL_RIVETLDADD = @CONDITIONAL_RIVETLDADD@
+ CONDITIONAL_ROOTDIR = @CONDITIONAL_ROOTDIR@
+@@ -335,7 +331,6 @@
+ FCFLAGS = @FCFLAGS@
+ FCLIBS = @FCLIBS@
+ FGREP = @FGREP@
+-FILECMD = @FILECMD@
+ GREP = @GREP@
+ HADRONSBUILDDIR = @HADRONSBUILDDIR@
+ HADRONSDIR = @HADRONSDIR@
 diff -Naur ORIG/m4/ax_python_devel.m4 PATCHED/m4/ax_python_devel.m4
---- ORIG/m4/ax_python_devel.m4	2022-11-23 11:10:01.712962648 +0100
-+++ PATCHED/m4/ax_python_devel.m4	2022-11-23 11:10:01.714962650 +0100
+--- ORIG/m4/ax_python_devel.m4	2023-08-15 21:19:15.972715003 +0200
++++ PATCHED/m4/ax_python_devel.m4	2023-08-15 21:19:15.974715034 +0200
 @@ -1,5 +1,5 @@
  # ===========================================================================
 -#      http://www.gnu.org/software/autoconf-archive/ax_python_devel.html
@@ -337,29 +367,3 @@ diff -Naur ORIG/m4/ax_python_devel.m4 PATCHED/m4/ax_python_devel.m4
    ============================================================================
     ERROR!
     You probably have to install the development version of the Python package
-diff -Naur ORIG/SHERPA/PerturbativePhysics/Matrix_Element_Handler.C PATCHED/SHERPA/PerturbativePhysics/Matrix_Element_Handler.C
---- ORIG/SHERPA/PerturbativePhysics/Matrix_Element_Handler.C	2022-11-23 11:10:01.712962648 +0100
-+++ PATCHED/SHERPA/PerturbativePhysics/Matrix_Element_Handler.C	2022-11-23 11:10:01.714962650 +0100
-@@ -238,17 +238,17 @@
-         wf /= Min(1.0, m_weightfactor);
-       }
-       if (hasvars) {
--        // re-run with same rng state and include the calculatin of variations
--        // this time; note that afterwards we also re-consume the random number
--        // which was used above for the unweighting
-+        // re-run with same rng state and include the calculation of variations
-+        // this time
-         ran->RestoreStatus();
-         proc->SetVariationWeights(p_variationweights);
-         ATOOLS::Weight_Info *info=proc->OneEvent(m_eventmode);
-         proc->SetVariationWeights(NULL);
--      } else {
--        p_variationweights->InitialiseWeights();
-       }
-     }
-+    if (!hasvars) {
-+      p_variationweights->InitialiseWeights();
-+    }
-     m_evtinfo.m_weight*=wf;
-     if (p_proc->GetSubevtList()) {
-       (*p_proc->GetSubevtList())*=wf;

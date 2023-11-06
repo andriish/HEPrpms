@@ -1,0 +1,33 @@
+diff -Naur ORIG/m4/hepmc.m4 PATCHED/m4/hepmc.m4
+--- ORIG/m4/hepmc.m4	2023-11-05 23:53:28.451129824 +0100
++++ PATCHED/m4/hepmc.m4	2023-11-05 23:36:46.923044104 +0100
+@@ -56,12 +56,12 @@
+ else
+ 	AC_MSG_RESULT([$with_hepmc])
+ 	HEPMCINCLUDE=-I$with_hepmc/include
+-	HEPMCLIBS="-L$with_hepmc/lib -R$with_hepmc/lib "$SHORTHEPMCLIBS
++	HEPMCLIBS="-L$with_hepmc/lib -L$with_hepmc/lib/root -Wl,-rpath=$with_hepmc/lib "$SHORTHEPMCLIBS
+ 	if test "${host_cpu}" == "x86_64" -a "x$with_hepmcversion" = "x2" -a -e $with_hepmc/lib64/libHepMC.so ; then
+-	  HEPMCLIBS="-L$with_hepmc/lib64 -R$with_hepmc/lib64 "$SHORTHEPMCLIBS
++	  HEPMCLIBS="-L$with_hepmc/lib64 -Wl,-rpath=$with_hepmc/lib64 "$SHORTHEPMCLIBS
+ 	fi
+ 	if test "${host_cpu}" == "x86_64" -a "x$with_hepmcversion" = "x3" -a -e $with_hepmc/lib64/libHepMC3.so ; then
+-	  HEPMCLIBS="-L$with_hepmc/lib64 -R$with_hepmc/lib64 "$SHORTHEPMCLIBS
++	  HEPMCLIBS="-L$with_hepmc/lib64  -L$with_hepmc/lib64/root -Wl,-rpath=$with_hepmc/lib64 "$SHORTHEPMCLIBS
+ 	fi
+ fi
+ 
+@@ -111,11 +111,13 @@
+        [ 
+          HEPMCROOTIO=1
+          AC_MSG_RESULT([HepMC3 has ROOT support.])
++       	AC_DEFINE([HAVE_HEPMC_ROOTIO],  [1],[ We have HepMC3 ROOT support])
+        ],[])
+        AC_CHECK_HEADERS([HepMC3/WriterRootTree.h],
+        [       
+         HEPMCROOTIO=1
+         AC_MSG_RESULT([HepMC has ROOT Tree support.])
++        AC_DEFINE([HAVE_HEPMC_ROOTIO],  [1],[ We have HepMC3 ROOT support])
+        ],[])
+        
+        AC_CHECK_HEADERS([HepMC3/Writer.h],    

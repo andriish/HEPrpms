@@ -18,7 +18,7 @@ BuildRequires: fastjet hoppet HepMC3 HepMC3-search HepMC3-rootIO openloops ocaml
 BuildRequires: fastjet-devel HepMC3-devel HepMC3-rootIO-devel HepMC3-search-devel gosam  lhapdf-devel  autoconf automake libtool
 BuildRequires: pythia8 pythia8-devel  libtirpc  libtirpc-devel lhapdf-sets-whizard
 BuildRequires: root  python3 python3-devel  openmpi openmpi-devel noweb LCIO LCIO-devel TAUOLA TAUOLA-devel hdf5 hdf5-devel
-
+BuildRequires: hdf5-devel
 #Fails for RH
 %if %{?fedora}%{!?fedora:0}
 BuildRequires:  hevea 

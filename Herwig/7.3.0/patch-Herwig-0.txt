@@ -1,0 +1,385 @@
+diff -Naur ORIG/Looptools/Makefile.am PATCHED/Looptools/Makefile.am
+--- ORIG/Looptools/Makefile.am	2023-11-05 23:38:48.519873336 +0100
++++ PATCHED/Looptools/Makefile.am	2023-11-05 23:38:48.520873351 +0100
+@@ -49,18 +49,18 @@
+ 
+ libHwLooptoolsXFC_la_SOURCES = $(theXFCSOURCES)
+ libHwLooptoolsXFC_la_CPPFLAGS = $(commonCPPFLAGS)
+-libHwLooptoolsXFC_la_FCFLAGS = $(AM_FCFLAGS)
+-libHwLooptoolsXFC_la_FFLAGS  = $(AM_FFLAGS)
++libHwLooptoolsXFC_la_FCFLAGS = $(AM_FCFLAGS) -ffixed-line-length-none -fno-range-check -DQUAD=0 -DQUADSIZE=16 -DU77EXT=0 
++libHwLooptoolsXFC_la_FFLAGS  = $(AM_FFLAGS)  -ffixed-line-length-none -fno-range-check -DQUAD=0 -DQUADSIZE=16 -DU77EXT=0 
+ 
+ libHwLooptoolsCFC_la_SOURCES = $(theCFCSOURCES)
+ libHwLooptoolsCFC_la_CPPFLAGS = $(commonCPPFLAGS) -DCOMPLEXPARA
+-libHwLooptoolsCFC_la_FCFLAGS = $(AM_FCFLAGS)
+-libHwLooptoolsCFC_la_FFLAGS  = $(AM_FFLAGS)
++libHwLooptoolsCFC_la_FCFLAGS = $(AM_FCFLAGS) -ffixed-line-length-none -fno-range-check -DQUAD=0 -DQUADSIZE=16 -DU77EXT=0 
++libHwLooptoolsCFC_la_FFLAGS  = $(AM_FFLAGS)  -ffixed-line-length-none -fno-range-check -DQUAD=0 -DQUADSIZE=16 -DU77EXT=0 
+ 
+ libHwLooptools_la_SOURCES = util/cache.c clooptools.cc
+-libHwLooptools_la_CXXFLAGS = $(AM_CXXFLAGS) -Wno-strict-aliasing
+-libHwLooptools_la_CPPFLAGS = $(commonCPPFLAGS) 
+-libHwLooptools_la_CFLAGS = $(AM_CFLAGS) -std=c99 
++libHwLooptools_la_CXXFLAGS = $(AM_CXXFLAGS) -Wno-strict-aliasing -DQUAD=0 -DQUADSIZE=16 -DU77EXT=0
++libHwLooptools_la_CPPFLAGS = $(commonCPPFLAGS)  -DQUAD=0 -DQUADSIZE=16 -DU77EXT=0
++libHwLooptools_la_CFLAGS = $(AM_CFLAGS) -std=c99  -DQUAD=0 -DQUADSIZE=16 -DU77EXT=0
+ libHwLooptools_la_LIBADD = libHwLooptoolsXFC.la libHwLooptoolsCFC.la
+ 
+ EXTRA_PROGRAMS = tester
+diff -Naur ORIG/Looptools/Makefile.in PATCHED/Looptools/Makefile.in
+--- ORIG/Looptools/Makefile.in	2023-11-06 00:19:13.984504904 +0100
++++ PATCHED/Looptools/Makefile.in	2023-11-06 00:19:19.310585568 +0100
+@@ -236,10 +236,7 @@
+ am__v_at_1 = 
+ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/Config -I$(top_builddir)/PDF
+ depcomp = $(SHELL) $(top_srcdir)/Config/depcomp
+-am__maybe_remake_depfiles = depfiles
+-am__depfiles_remade = ./$(DEPDIR)/libHwLooptools_la-clooptools.Plo \
+-	./$(DEPDIR)/tester.Po \
+-	util/$(DEPDIR)/libHwLooptools_la-cache.Plo
++am__depfiles_maybe = depfiles
+ am__mv = mv -f
+ PPF77COMPILE = $(F77) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+ 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_FFLAGS) $(FFLAGS)
+@@ -595,12 +592,12 @@
+ commonCPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/include
+ libHwLooptoolsXFC_la_SOURCES = $(theXFCSOURCES)
+ libHwLooptoolsXFC_la_CPPFLAGS = $(commonCPPFLAGS)
+-libHwLooptoolsXFC_la_FCFLAGS = $(AM_FCFLAGS)
+-libHwLooptoolsXFC_la_FFLAGS = $(AM_FFLAGS)
++libHwLooptoolsXFC_la_FCFLAGS = $(AM_FCFLAGS) -ffixed-line-length-none
++libHwLooptoolsXFC_la_FFLAGS = $(AM_FFLAGS)  -ffixed-line-length-none
+ libHwLooptoolsCFC_la_SOURCES = $(theCFCSOURCES)
+ libHwLooptoolsCFC_la_CPPFLAGS = $(commonCPPFLAGS) -DCOMPLEXPARA
+-libHwLooptoolsCFC_la_FCFLAGS = $(AM_FCFLAGS)
+-libHwLooptoolsCFC_la_FFLAGS = $(AM_FFLAGS)
++libHwLooptoolsCFC_la_FCFLAGS = $(AM_FCFLAGS) -ffixed-line-length-none
++libHwLooptoolsCFC_la_FFLAGS = $(AM_FFLAGS)  -ffixed-line-length-none
+ libHwLooptools_la_SOURCES = util/cache.c clooptools.cc
+ libHwLooptools_la_CXXFLAGS = $(AM_CXXFLAGS) -Wno-strict-aliasing
+ libHwLooptools_la_CPPFLAGS = $(commonCPPFLAGS) 
+@@ -629,8 +626,8 @@
+ 	  *config.status*) \
+ 	    cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh;; \
+ 	  *) \
+-	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__maybe_remake_depfiles)'; \
+-	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__maybe_remake_depfiles);; \
++	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
++	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
+ 	esac;
+ 
+ $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
+@@ -898,15 +895,9 @@
+ distclean-compile:
+ 	-rm -f *.tab.c
+ 
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libHwLooptools_la-clooptools.Plo@am__quote@ # am--include-marker
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tester.Po@am__quote@ # am--include-marker
+-@AMDEP_TRUE@@am__include@ @am__quote@util/$(DEPDIR)/libHwLooptools_la-cache.Plo@am__quote@ # am--include-marker
+-
+-$(am__depfiles_remade):
+-	@$(MKDIR_P) $(@D)
+-	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
+-
+-am--depfiles: $(am__depfiles_remade)
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libHwLooptools_la-clooptools.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tester.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@util/$(DEPDIR)/libHwLooptools_la-cache.Plo@am__quote@
+ 
+ .F.o:
+ 	$(AM_V_PPF77)$(PPF77COMPILE) -c -o $@ $<
+@@ -1308,10 +1299,8 @@
+ 
+ distclean-tags:
+ 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
+-distdir: $(BUILT_SOURCES)
+-	$(MAKE) $(AM_MAKEFLAGS) distdir-am
+ 
+-distdir-am: $(DISTFILES)
++distdir: $(DISTFILES)
+ 	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
+ 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
+ 	list='$(DISTFILES)'; \
+@@ -1393,9 +1382,7 @@
+ 	mostlyclean-am
+ 
+ distclean: distclean-am
+-		-rm -f ./$(DEPDIR)/libHwLooptools_la-clooptools.Plo
+-	-rm -f ./$(DEPDIR)/tester.Po
+-	-rm -f util/$(DEPDIR)/libHwLooptools_la-cache.Plo
++	-rm -rf ./$(DEPDIR) util/$(DEPDIR)
+ 	-rm -f Makefile
+ distclean-am: clean-am distclean-compile distclean-generic \
+ 	distclean-tags
+@@ -1441,9 +1428,7 @@
+ installcheck-am:
+ 
+ maintainer-clean: maintainer-clean-am
+-		-rm -f ./$(DEPDIR)/libHwLooptools_la-clooptools.Plo
+-	-rm -f ./$(DEPDIR)/tester.Po
+-	-rm -f util/$(DEPDIR)/libHwLooptools_la-cache.Plo
++	-rm -rf ./$(DEPDIR) util/$(DEPDIR)
+ 	-rm -f Makefile
+ maintainer-clean-am: distclean-am maintainer-clean-generic
+ 
+@@ -1464,16 +1449,16 @@
+ 
+ .MAKE: install-am install-strip
+ 
+-.PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
+-	clean-generic clean-libtool clean-noinstLTLIBRARIES \
+-	cscopelist-am ctags ctags-am distclean distclean-compile \
+-	distclean-generic distclean-libtool distclean-tags distdir dvi \
+-	dvi-am html html-am info info-am install install-am \
+-	install-data install-data-am install-dvi install-dvi-am \
+-	install-exec install-exec-am install-html install-html-am \
+-	install-info install-info-am install-man install-pdf \
+-	install-pdf-am install-ps install-ps-am install-strip \
+-	installcheck installcheck-am installdirs maintainer-clean \
++.PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
++	clean-libtool clean-noinstLTLIBRARIES cscopelist-am ctags \
++	ctags-am distclean distclean-compile distclean-generic \
++	distclean-libtool distclean-tags distdir dvi dvi-am html \
++	html-am info info-am install install-am install-data \
++	install-data-am install-dvi install-dvi-am install-exec \
++	install-exec-am install-html install-html-am install-info \
++	install-info-am install-man install-pdf install-pdf-am \
++	install-ps install-ps-am install-strip installcheck \
++	installcheck-am installdirs maintainer-clean \
+ 	maintainer-clean-generic mostlyclean mostlyclean-compile \
+ 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+ 	tags tags-am uninstall uninstall-am
+diff -Naur ORIG/m4/fastjet.m4 PATCHED/m4/fastjet.m4
+--- ORIG/m4/fastjet.m4	2023-11-05 23:38:48.519873336 +0100
++++ PATCHED/m4/fastjet.m4	2023-11-05 23:38:48.520873351 +0100
+@@ -40,7 +40,7 @@
+    save_LIBS="$LIBS"
+ 
+    CXXFLAGS="${CXXFLAGS} `${fjconfig} --cxxflags`"
+-   LIBS="${LIBS} `${fjconfig} --libs --plugins`"
++   LIBS="${LIBS} `${fjconfig} --libs --plugins| tr ' ' '\n' | grep -v gcc  | tr '\n' ' '`"
+ 
+    AC_MSG_CHECKING([if FastJet is functional])
+    AC_LANG_PUSH(C++)
+@@ -57,7 +57,7 @@
+    AC_MSG_CHECKING(FastJet)
+    if test "${fjok}" = "yes"; then
+       FASTJET_CXXFLAGS="`${fjconfig} --cxxflags`"
+-      FASTJET_LIBS="`${fjconfig} --libs --plugins`"
++      FASTJET_LIBS="`${fjconfig} --libs --plugins| tr ' ' '\n' | grep -v gcc  | tr '\n' ' '`"
+       LOAD_FASTJET="library HwLEPJetAnalysis.so"
+       CREATE_FASTJET="create"
+       AC_MSG_RESULT(yes)
+diff -Naur ORIG/m4/herwig.m4 PATCHED/m4/herwig.m4
+--- ORIG/m4/herwig.m4	2023-11-06 00:10:44.541789403 +0100
++++ PATCHED/m4/herwig.m4	2023-11-06 00:10:47.505834293 +0100
+@@ -351,30 +351,10 @@
+       ${with_njet}/lib/libnjet2.dylib,
+       [have_njet=lib], [have_njet=no])])
+ 
+-AS_IF([test "x$with_njet" != "xno" -a "x$have_njet" = "xno" ],
+-      [AC_CHECK_FILES(
+-      ${with_njet}/lib/libnjet3.so,
+-      [have_njet=lib], [have_njet=no])])
+-
+-AS_IF([test "x$with_njet" != "xno" -a "x$have_njet" = "xno" ],
+-      [AC_CHECK_FILES(
+-      ${with_njet}/lib64/libnjet3.so,
+-      [have_njet=lib], [have_njet=no])])
+-
+-AS_IF([test "x$with_njet" != "xno" -a "x$have_njet" = "xno" ],
+-      [AC_CHECK_FILES(
+-      ${with_njet}/lib/libnjet3.dylib,
+-      [have_njet=lib], [have_njet=no])])
+-
+-AS_IF([test "x$with_njet" != "xno" ],
+-      [AC_CHECK_FILES(
+-      ${with_njet}/include/njet.h,
+-      [njet_include=include], [njet_include=include/njet])])
+-
+ AS_IF([test "x$have_njet" = "xlib"],
+       [NJETLIBPATH=${with_njet}/lib
+       AC_SUBST(NJETLIBPATH)
+-      NJETINCLUDEPATH=${with_njet}/$njet_include
++      NJETINCLUDEPATH=${with_njet}/include
+       AC_SUBST(NJETINCLUDEPATH)
+       NJETPREFIX=${with_njet}
+       AC_SUBST(NJETPREFIX)
+@@ -383,7 +363,7 @@
+ AS_IF([test "x$have_njet" = "xlib64"],
+       [NJETLIBPATH=${with_njet}/lib64
+       AC_SUBST(NJETLIBPATH)
+-      NJETINCLUDEPATH=${with_njet}/$njet_include
++      NJETINCLUDEPATH=${with_njet}/include
+       AC_SUBST(NJETINCLUDEPATH)
+       NJETPREFIX=${with_njet}
+       AC_SUBST(NJETPREFIX)
+@@ -535,6 +515,13 @@
+ 
+ AS_IF([test "x$with_gosam_contrib" != "xno" -a "x$have_gosam_contrib" = "xno" ],
+       [AC_CHECK_FILES(
++      ${with_gosam_contrib}/gosam-contrib/libsamurai.so,
++      [have_gosam_contrib=gosam-contrib], [have_gosam_contrib=no])])
++
++
++
++AS_IF([test "x$with_gosam_contrib" != "xno" -a "x$have_gosam_contrib" = "xno" ],
++      [AC_CHECK_FILES(
+       ${with_gosam_contrib}/lib/libsamurai.dylib,
+       [have_gosam_contrib=lib], [have_gosam_contrib=no])])
+ 
+@@ -543,6 +530,10 @@
+       ${with_gosam_contrib}/lib64/libsamurai.dylib,
+       [have_gosam_contrib=lib64], [have_gosam_contrib=no])])
+ 
++AS_IF([test "x$with_gosam_contrib" != "xno" -a "x$have_gosam_contrib" = "xno" ],
++      [AC_CHECK_FILES(
++      ${with_gosam_contrib}/gosam-contrib/libsamurai.dylib,
++      [have_gosam_contrib=gosam-contrib], [have_gosam_contrib=no])])
+ 
+ 
+ 
+@@ -563,13 +554,18 @@
+       [GOSAMCONTRIBLIBS=${with_gosam_contrib}/lib64
+       AC_SUBST(GOSAMCONTRIBLIBS)
+       ])
++AS_IF([test "x$have_gosam_contrib" = "xgosam-contrib"],
++      [GOSAMCONTRIBLIBS=${with_gosam_contrib}/gosam-contrib
++      AC_SUBST(GOSAMCONTRIBLIBS)
++      ])
++
+ 
+ AS_IF([test "x$with_gosam_contrib" != "xno"  -a "x$have_gosam_contrib" = "xno"],
+       [AC_MSG_ERROR([GoSam-Contrib requested but not found])])
+ 
+-AM_CONDITIONAL(HAVE_GOSAM_CONTRIB,[test "x$have_gosam_contrib" = "xlib" -o "x$have_gosam_contrib" = "xlib64"])
++AM_CONDITIONAL(HAVE_GOSAM_CONTRIB,[test "x$have_gosam_contrib" = "xlib" -o "x$have_gosam_contrib" = "xlib64" -o "x$have_gosam_contrib" = "xgosam-contrib"])
+ 
+-if test "x$have_gosam_contrib" = "xlib" -o "x$have_gosam_contrib" = "xlib64" ; then
++if test "x$have_gosam_contrib" = "xlib" -o "x$have_gosam_contrib" = "xlib64" -o "x$have_gosam_contrib" = "xgosam-contrib"; then
+         LOAD_GOSAM_CONTRIB="library"
+         CREATE_GOSAM_CONTRIB="create"
+         INSERT_GOSAM_CONTRIB="insert"
+diff -Naur ORIG/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc PATCHED/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc
+--- ORIG/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc	2023-11-06 00:17:07.817594102 +0100
++++ PATCHED/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc	2023-11-06 00:17:11.148644551 +0100
+@@ -150,7 +150,7 @@
+   // specific input file at gosamSetupInFileName. If the GoSam input file
+   // does not exist yet at gosamSetupInFileName the python script will get 
+   // it from src/defaults/ before making the replacements.
+-  string cmd = "python "+bindir_+"/gosam2herwig ";
++  string cmd = "gosam2herwig ";
+   cmd+=" --usrinfile="+gosamSetupInFileNameInterface;
+   cmd+=" --infile="+gosamSetupInFileName+".tbu";
+   cmd+=" --definfile="+pkgdatadir_+"/defaults/setup.gosam.in";
+@@ -541,7 +541,7 @@
+     string cmd = GoSamPrefix_+"/bin/gosam.py --olp --output-file=" + contract + " --config=" + 
+       gosamSetupInFileName+".tbu" + " --destination=" + gosamSourcePath + " " + order + " > " + cwd + folderMatchboxBuild + "gosam-amplitudes.log 2>&1";
+     std::system(cmd.c_str());
+-    cmd = "python "+bindir_+"/gosam2herwig ";
++    cmd = "gosam2herwig ";
+     cmd += " --makelink ";
+     // cmd += " --makelinkfrom=contract ";
+     cmd += " --makelinkfrom="+gosamPath+"/"+name()+".OLPContract.lh";
+diff -Naur ORIG/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc PATCHED/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc
+--- ORIG/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc	2023-11-05 23:38:48.519873336 +0100
++++ PATCHED/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc	2023-11-05 23:38:48.520873351 +0100
+@@ -257,7 +257,7 @@
+   params<<"\n$MTA$ "    <<std::setiosflags(ios::scientific)   << getParticleData(ParticleID::tauplus)->hardProcessMass() /GeV <<flush;
+ 
+   
+-  string cmd = "python " + bindir_ + "/mg2herwig ";
++  string cmd = "mg2herwig ";
+   cmd +=" --buildpath "+mgProcLibPath();
+   cmd += !theProcessPath.empty() ? " --absolute-links" : "";
+   cmd +=" --model "+theMGmodel;
+@@ -299,7 +299,7 @@
+   std::system(cmd.c_str());
+   
+   
+-  cmd = "python " + bindir_ + "/mg2herwig ";
++  cmd = "mg2herwig ";
+   cmd +=" --buildpath "+mgProcLibPath();
+   cmd +=" --model "+theMGmodel;
+   cmd +=" --runpath "+factory()->runStorage()+"/MadGraphAmplitudes ";
+diff -Naur ORIG/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in PATCHED/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in
+--- ORIG/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in	2023-11-06 00:15:50.754426981 +0100
++++ PATCHED/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in	2023-11-06 00:15:51.825443202 +0100
+@@ -130,7 +130,7 @@
+ parser = OptionParser()
+ parser.add_option("-a", "--buildpath", dest="buildpath",help="Do not use this script. Only for Herwig internal use. ")
+ parser.add_option("-b", "--build", action="store_true", dest="build", default=True,help="Do not use this script. Only for Herwig internal use.")
+-parser.add_option("-c", "--madgraph", dest="madgraph",help="Do not use this script. Only for Herwig internal use.")
++parser.add_option("-c", "--madgraph", dest="madgraph",default="",help="Do not use this script. Only for Herwig internal use.")
+ parser.add_option("-d", "--runpath", dest="runpath",help="Do not use this script. Only for Herwig internal use.")
+ parser.add_option("-e", "--model", dest="model",help="Do not use this script. Only for Herwig internal use.")
+ parser.add_option("-f", "--orderas", dest="orderas",help="Do not use this script. Only for Herwig internal use.")
+@@ -152,7 +152,25 @@
+ cachedir = os.path.abspath(options.cacheprefix)
+ mkdir_p(cachedir)
+ 
++if os.path.isfile(options.madgraph+"/mg5_aMC"):
++ print ("Found MadGraph in "+options.madgraph+"/mg5_aMC")
++else:
++ print ("Updating the Madgraph search path to "+os.path.dirname(os.path.abspath(__file__)))
++ if os.path.isfile(os.path.dirname(os.path.abspath(__file__))+"/mg5_aMC"):
++  options.madgraph=os.path.dirname(os.path.abspath(__file__))
++  print ("After the update found MadGraph in "+options.madgraph+"/mg5_aMC") 
++ else:
++  print ("MadGraph not found")
+ 
++if os.path.isdir(options.datadir):
++ print ("Found Herwig data directory in "+options.datadir)
++else:
++ print ("Updating the Herwig data directory search path to "+os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","share","Herwig"))
++ if os.path.isdir(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","share","Herwig")):
++  options.datadir=os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","share","Herwig")
++  print ("After the update found Herwig data directory in "+options.datadir) 
++ else:
++  print ("Herwig data directory not found")
+ #MG_TMP = tempfile.mkdtemp(prefix='MG_tmp_',dir=cachedir)
+ MG_TMP = os.path.join(cachedir, 'MG_tmp')
+ mkdir_p(MG_TMP)
+@@ -188,7 +206,7 @@
+   file.close()
+ elif  options.model.startswith("/"):
+ 
+-  os.system("python %s/write_param_card.py " % options.model)
++  os.system(str(sys.executable)+" %s/write_param_card.py " % options.model)
+ 
+ 
+ 
+@@ -231,10 +249,7 @@
+ 
+ Bornlist,Virtlist=fillprocs(options.model,options.orderas,options.orderew,int(MGVersion))
+ 
+-if sys.version_info[0] == 2 and MGVersion == "3" :
+-    os.system("python3 "+options.madgraph+"/mg5_aMC proc.dat")
+-else:
+-    os.system("python "+options.madgraph+"/mg5_aMC proc.dat")
++os.system( str(sys.executable)+" "+options.madgraph+"/mg5_aMC proc.dat")
+ 
+ 
+ 
+diff -Naur ORIG/MatrixElement/Matchbox/External/Makefile.am PATCHED/MatrixElement/Matchbox/External/Makefile.am
+--- ORIG/MatrixElement/Matchbox/External/Makefile.am	2023-11-05 23:38:48.519873336 +0100
++++ PATCHED/MatrixElement/Matchbox/External/Makefile.am	2023-11-05 23:38:48.520873351 +0100
+@@ -27,7 +27,7 @@
+ pkglib_LTLIBRARIES += HwMatchboxVBFNLO.la
+ endif
+ 
+-HwMatchboxVBFNLO_la_LDFLAGS = $(AM_LDFLAGS) -module -version-info 6:0:0
++HwMatchboxVBFNLO_la_LDFLAGS = $(AM_LDFLAGS) -module -version-info 5:0:0
+ HwMatchboxVBFNLO_la_CPPFLAGS = $(AM_CPPFLAGS)
+ HwMatchboxVBFNLO_la_CPPFLAGS += -I$(VBFNLOINCLUDE)
+ HwMatchboxVBFNLO_la_CPPFLAGS += -DVBFNLOLIB=$(VBFNLOLIB)
+@@ -77,7 +77,7 @@
+ pkglib_LTLIBRARIES += HwMatchboxMadGraph.la
+ endif
+ 
+-HwMatchboxMadGraph_la_LDFLAGS = $(AM_LDFLAGS) -module -version-info 6:0:0
++HwMatchboxMadGraph_la_LDFLAGS = $(AM_LDFLAGS) -Wl,-z,lazy -module -version-info 6:0:0
+ 
+ HwMatchboxMadGraph_la_SOURCES = \
+ MadGraph/MadGraphAmplitude.cc
