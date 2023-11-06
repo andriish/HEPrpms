@@ -50,7 +50,7 @@ sed -i 's/CMAKE_CXX_STANDARD 14/CMAKE_CXX_STANDARD 17/g' CMakeLists.txt
 %endif
 
 %if 0%{?suse_version}
-cmake .  -DCMAKE_INSTALL_PREFIX=/usr
+cmake .  -DCMAKE_INSTALL_PREFIX=/usr -DBINDER_ENABLE_TEST=OFF
 make
 %endif
 
