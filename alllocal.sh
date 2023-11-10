@@ -4,9 +4,9 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-binder:1.3.0
+#binder:1.3.0
 #ThePEG:2.3.0
-#Herwig:7.3.0
+Herwig:7.3.0
 
 #whizard:3.1.3
 
