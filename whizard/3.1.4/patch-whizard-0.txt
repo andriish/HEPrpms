@@ -1,0 +1,220 @@
+diff -Naur ORIG/configure.ac PATCHED/configure.ac
+--- ORIG/configure.ac	2023-11-06 17:42:46.000000000 +0100
++++ PATCHED/configure.ac	2023-11-13 12:09:43.301916790 +0100
+@@ -474,7 +474,7 @@
+ ### Check for ocamlc and its relatives
+ AC_PROG_OCAML()
+ if test "$enable_ocaml" != "no"; then
+-   AC_OCAML_VERSION_CHECK(408000)
++   AC_OCAML_VERSION_CHECK(407000)
+    AC_PROG_OCAMLLEX()
+    AC_PROG_OCAMLYACC()
+    AC_PROG_OCAMLCP()
+diff -Naur ORIG/m4/gosam.m4 PATCHED/m4/gosam.m4
+--- ORIG/m4/gosam.m4	2023-11-13 11:44:46.641098706 +0100
++++ PATCHED/m4/gosam.m4	2023-11-13 11:44:46.644098720 +0100
+@@ -68,7 +68,7 @@
+   else
+     AC_MSG_RESULT([no])
+     PATH=${GOSAM_DIR}/bin:$PATH
+-    LD_LIBRARY_PATH=${GOSAM_DIR}/lib:${GOSAM_DIR}/lib64:$LD_LIBRARY_PATH
++    LD_LIBRARY_PATH=${GOSAM_DIR}/lib:${GOSAM_DIR}/lib64:${GOSAM_DIR}/lib/gosam-contrib:${GOSAM_DIR}/lib64/gosam-contrib:$LD_LIBRARY_PATH
+   fi
+ 
+   WO_PROG_GOLEM()
+@@ -124,10 +124,10 @@
+ [dnl
+   unset GOLEM_DIR
+   if test -n "$with_golem"; then
+-    echo "Checking for golem in " ${with_golem}/lib
+-    WO_PATH_LIB(golem_lib, [golem], [libgolem.la], ${with_golem}/lib:${with_golem}/lib64)
++    echo "Checking for golem in " ${with_golem}/lib:${with_golem}/lib64:${with_golem}/lib/gosam-contrib:${with_golem}/lib64/gosam-contrib
++    WO_PATH_LIB(golem_lib, [golem], [libgolem.so], ${with_golem}/lib:${with_golem}/lib64:${with_golem}/lib/gosam-contrib:${with_golem}/lib64/gosam-contrib)
+   else
+-    WO_PATH_LIB(golem_lib, [golem], [libgolem.la], $LD_LIBRARY_PATH)
++    WO_PATH_LIB(golem_lib, [golem], [libgolem.so], $LD_LIBRARY_PATH)
+   fi
+   if test "$golem_lib" != "no"; then
+     golem_libdir=`dirname $golem_lib`
+@@ -170,10 +170,10 @@
+ [dnl
+   unset NINJA_DIR
+   if test -n "$with_ninja"; then
+-    echo "Checking for ninja in " ${with_ninja}/lib
+-    WO_PATH_LIB(ninja_lib, [ninja], [libninja.la], ${with_ninja}/lib:${with_ninja}/lib64)
++    echo "Checking for ninja in " ${with_ninja}/lib:${with_ninja}/lib64:${with_ninja}/lib/gosam-contrib:${with_ninja}/lib64/gosam-contrib
++    WO_PATH_LIB(ninja_lib, [ninja], [libninja.so], ${with_ninja}/lib:${with_ninja}/lib64:${with_ninja}/lib/gosam-contrib:${with_ninja}/lib64/gosam-contrib)
+   else
+-    WO_PATH_LIB(ninja_lib, [ninja], [libninja.la], $LD_LIBRARY_PATH)
++    WO_PATH_LIB(ninja_lib, [ninja], [libninja.so], $LD_LIBRARY_PATH)
+   fi
+   if test "$ninja_lib" != "no"; then
+     ninja_libdir=`dirname $ninja_lib`
+@@ -186,10 +186,10 @@
+ [dnl
+   unset SAMURAI_DIR
+   if test -n "$with_samurai"; then
+-    echo "Checking for samurai in " ${with_samurai}/lib
+-    WO_PATH_LIB(samurai_lib, [samurai], [libsamurai.la], ${with_samurai}/lib:${with_samurai}/lib64)
++    echo "Checking for samurai in " ${with_samurai}/lib:${with_samurai}/lib64/:${with_samurai}/lib/gosam-contrib:${with_samurai}/lib64/gosam-contrib
++    WO_PATH_LIB(samurai_lib, [samurai], [libsamurai.so], ${with_samurai}/lib:${with_samurai}/lib64/:${with_samurai}/lib/gosam-contrib:${with_samurai}/lib64/gosam-contrib)
+   else
+-    WO_PATH_LIB(samurai_lib, [samurai], [libsamurai.la], $LD_LIBRARY_PATH)
++    WO_PATH_LIB(samurai_lib, [samurai], [libsamurai.so], $LD_LIBRARY_PATH)
+   fi
+   if test "$samurai_lib" != "no"; then
+     samurai_libdir=`dirname $samurai_lib`
+diff -Naur ORIG/m4/hepmc.m4 PATCHED/m4/hepmc.m4
+--- ORIG/m4/hepmc.m4	2023-11-13 11:44:46.642098711 +0100
++++ PATCHED/m4/hepmc.m4	2023-11-13 11:44:46.644098720 +0100
+@@ -79,7 +79,7 @@
+       AC_MSG_CHECKING([the HepMC3 version])
+       save_CXXFLAGS="$CXXFLAGS"
+       save_LIBS="$LIBS"
+-      CXXFLAGS="${CXXFLAGS} `${hepmcconfig} --cxxflags`"
++      CXXFLAGS="${CXXFLAGS} --std=c++1y `${hepmcconfig} --cxxflags`"
+       LIBS="${LIBS} -Wl,-rpath,`${hepmcconfig} --libdir` `${hepmcconfig} --libs`"
+       AC_LANG([C++])
+       AC_LINK_IFELSE([dnl
+@@ -145,7 +145,7 @@
+ [
+ dnl ckeck if a directory is specified for HepMC
+ AC_ARG_WITH(HepMC,
+-            [AS_HELP_STRING([--with-hepmc=dir],
++            [AC_HELP_STRING([--with-hepmc=dir],
+                             [assume the given directory for HepMC])])
+ 
+ dnl search for the Hepmc3-config script
+@@ -165,14 +165,14 @@
+    save_CXXFLAGS="$CXXFLAGS"
+    save_LIBS="$LIBS"
+ 
+-   CXXFLAGS="${CXXFLAGS} `${hepmcconfig} --cxxflags`"
++   CXXFLAGS="${CXXFLAGS} --std=c++1y `${hepmcconfig} --cxxflags`"
+    LIBS="${LIBS} `${hepmcconfig} --libs`"
+ 
+    AC_MSG_CHECKING([if HepMC3 is built with ROOT interface])
+    if ${hepmcconfig} --rootIO | grep rootIO >/dev/null 2>&1; then
+       hepmc3_root="yes"
+       HEPMCROOTLIBS="`${hepmcconfig} --rootIO` -Wl,-rpath,$ROOTLIBDIR -L$ROOTLIBDIR $ROOTLIBS"
+-      HEPMCROOTINCL="-I$ROOTINCDIR"
++      HEPMCROOTINCLUDES="-I$ROOTINCDIR $ROOTCFLAGS"
+    else
+       hepmc3_root="no"
+    fi
+@@ -193,7 +193,7 @@
+ 
+    AC_MSG_CHECKING([for HepMC3])
+    if test "${hepmcok}" = "yes"; then
+-      HEPMC_INCLUDES="`${hepmcconfig} --cxxflags` $HEPMCROOTINCL"
++      HEPMC_INCLUDES="--std=c++1y `${hepmcconfig} --cxxflags` $HEPMCROOTINCLUDES "
+       LDFLAGS_HEPMC="-Wl,-rpath,`${hepmcconfig} --libdir` `${hepmcconfig} --libs` $HEPMCROOTLIBS"
+       AC_MSG_RESULT([yes])
+       $1
+diff -Naur ORIG/m4/pythia8.m4 PATCHED/m4/pythia8.m4
+--- ORIG/m4/pythia8.m4	2023-11-13 11:44:46.642098711 +0100
++++ PATCHED/m4/pythia8.m4	2023-11-13 11:44:46.644098720 +0100
+@@ -46,14 +46,14 @@
+ [
+ dnl ckeck if a directory is specified for PYTHIA8
+ AC_ARG_WITH(pythia8,
+-            [AS_HELP_STRING([--with-pythia8=dir],
++            [AC_HELP_STRING([--with-pythia8=dir],
+                             [assume the given directory for PYTHIA8])])
+ 
+ dnl search for the pythia8-config script
+ if test "$with_pythia8" = ""; then
+    AC_PATH_PROG(pyconfig, pythia8-config, no)
+ else
+-   AC_PATH_PROG(pyconfig, pythia8-config, no, ${with_pythia8}/bin)
++   AC_PATH_PROG(pyconfig, pythia8-config, no)
+ fi
+ 
+ if test "${pyconfig}" = "no"; then
+@@ -76,13 +76,13 @@
+   save_CXXFLAGS="$CXXFLAGS"
+   save_LIBS="$LIBS"
+ 
+-  if test "$pythia8_has_noconfig" = "yes"; then
++ # if test "$pythia8_has_noconfig" = "yes"; then
+     CXXFLAGS="${CXXFLAGS} -I${with_pythia8}/include"
+     LIBS="${LIBS} -Wl,-rpath,${with_pythia8}/lib -Wl,-rpath,${with_pythia8}/lib64 -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+-  else
+-    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
+-    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
+-  fi
++#  else
++#    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
++#    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
++#  fi
+ 
+   AC_MSG_CHECKING([if PYTHIA8 is functional])
+   AC_LANG_PUSH(C++)
+@@ -98,13 +98,13 @@
+ 
+   AC_MSG_CHECKING([for PYTHIA8])
+   if test "${pyok}" = "yes"; then
+-     if test "$pythia8_has_noconfig" = "yes"; then
++#     if test "$pythia8_has_noconfig" = "yes"; then
+        PYTHIA8_CXXFLAGS="-I${with_pythia8}/include"
+        PYTHIA8_LIBS="-Wl,-rpath,${with_pythia8}/lib -Wl,-rpath,${with_pythia8}/lib64 -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+-     else
+-       PYTHIA8_CXXFLAGS="`${pyconfig} --cxxflags`"
+-       PYTHIA8_LIBS="-Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
+-     fi
++#     else
++#       PYTHIA8_CXXFLAGS="`${pyconfig} --cxxflags`"
++#       PYTHIA8_LIBS="-Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
++#     fi
+      AC_MSG_RESULT(yes)
+      $1
+   else
+@@ -117,13 +117,13 @@
+ 
+   save_CXXFLAGS="$CXXFLAGS"
+   save_LIBS="$LIBS"
+-  if test "$pythia8_has_noconfig" = "yes"; then
++#  if test "$pythia8_has_noconfig" = "yes"; then
+     CXXFLAGS="${CXXFLAGS} -Wl,-rpath,${with_pythia8}/lib -Wl,-rpath,${with_pythia8}/lib64 -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+     LIBS="${LIBS} -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+-  else
+-    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
+-    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
+-  fi
++#  else
++#    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
++#    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
++#  fi
+ 
+   AC_LINK_IFELSE([dnl
+     AC_LANG_PROGRAM([[#include "Pythia8/Pythia.h"]],
+diff -Naur ORIG/omega/scripts/ufo-sanitizer.in PATCHED/omega/scripts/ufo-sanitizer.in
+--- ORIG/omega/scripts/ufo-sanitizer.in	2023-11-13 11:44:46.642098711 +0100
++++ PATCHED/omega/scripts/ufo-sanitizer.in	2023-11-13 11:44:46.645098724 +0100
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python
++#! /usr/bin/python3
+ # ufo-sanitizer.py -- read UFO files and write them back out
+ ########################################################################
+ #
+diff -Naur ORIG/src/rng/dispatch_rng_sub.f90 PATCHED/src/rng/dispatch_rng_sub.f90
+--- ORIG/src/rng/dispatch_rng_sub.f90	2023-11-13 11:51:20.653905723 +0100
++++ PATCHED/src/rng/dispatch_rng_sub.f90	2023-11-13 11:51:19.845902010 +0100
+@@ -38,7 +38,7 @@
+ 
+ contains
+ 
+-  module subroutine dispatch_rng_factory &
++  subroutine dispatch_rng_factory &
+        (rng_factory, var_list, next_rng_seed)
+     class(rng_factory_t), allocatable, intent(inout) :: rng_factory
+     type(var_list_t), intent(in) :: var_list
+@@ -76,7 +76,7 @@
+     call rng_factory%init (s)
+   end subroutine dispatch_rng_factory
+ 
+-  module subroutine update_rng_seed_in_var_list (var_list, next_rng_seed)
++  subroutine update_rng_seed_in_var_list (var_list, next_rng_seed)
+     type(var_list_t), intent(inout), optional :: var_list
+     integer, intent(in) :: next_rng_seed
+     if (present (var_list)) then 

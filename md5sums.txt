@@ -234,3 +234,4 @@ ecce372d19cc251786d3be58a682037d  recola/1.4.4/rpmbuild/SOURCES/recola-1.4.4.tar
 976917c1763bebeabe510314b775ae55  Delphes/3.5.1pre10/rpmbuild/SOURCES/3.5.1pre10.tar.gz
 66cb386801305c64699cf4af73cb0eaf  noweb/2.13/rpmbuild/SOURCES/v2_13.tar.gz
 32d572bc8a8aa4e652c1d7b13b983ce4  binder/1.3.0/rpmbuild/SOURCES/ccafcfba9e04bc627e9cb3ddda3d8e1c89a0a7da.zip
+c9550e7c1cb8a3fff464f15abf04d192  whizard/3.1.4/rpmbuild/SOURCES/whizard-3.1.4.tar.gz
