@@ -109,7 +109,7 @@ autoreconf --force --install --verbose .
     --enable-looptools  --with-looptools=/usr  --with-mpi-lib=openmpi
 %else
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
-    --disable-ocaml=yes --disable-ocaml \
+    --disable-ocaml  \
     --enable-recola     --with-recola=/usr/%_lib \
     --enable-gosam      --with-gosam=/usr  --with-golem=/usr  --with-ninja=/usr --with-samurai=/usr \
     --enable-fastjet    --with-fastjet=/usr \
