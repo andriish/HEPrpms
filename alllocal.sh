@@ -7,8 +7,9 @@ declare -a BUILDLIST=(
 #binder:1.3.0
 #ThePEG:2.3.0
 #Herwig:7.3.0
-
-whizard:3.1.4
+geant4:11.1.3
+#COCOA:0.1.1
+#whizard:3.1.4
 
 #noweb:2.13
 #SHERPA-MC:2.2.15
