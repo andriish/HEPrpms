@@ -18,7 +18,7 @@ BuildRequires:	zlib-devel
 BuildRequires:	PTL-devel 
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:	 expat expat-devel  xerces-c-devel xerces-c tbb-devel 
-BuildRequires:	 HepMC HepMC-devel root root-hist root-net root-tree root-genvector pythia8-devel fastjet-devel jsoncpp-devel pythia8
+BuildRequires:	 HepMC HepMC-devel root root-hist root-net root-tree root-genvector pythia8-devel fastjet-devel jsoncpp-devel pythia8 liburing-devel
 BuildRequires:	 geant4 geant4-devel geant4-data
 %endif
 %if 0%{?suse_version}
