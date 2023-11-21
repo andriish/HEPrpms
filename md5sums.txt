@@ -237,3 +237,5 @@ ecce372d19cc251786d3be58a682037d  recola/1.4.4/rpmbuild/SOURCES/recola-1.4.4.tar
 c9550e7c1cb8a3fff464f15abf04d192  whizard/3.1.4/rpmbuild/SOURCES/whizard-3.1.4.tar.gz
 de1df5485819132ea6616c18839291bf  COCOA/0.1.1/rpmbuild/SOURCES/25788cd9b2d860a655e72186bcdbfe040b1d0f87.zip
 3d7104d3e55f3fc4f04e19a659b68bb1  geant4/11.1.3/rpmbuild/SOURCES/geant4-v11.1.3.tar.gz
+0d3c6e6f9a30fdf0704753190be0173b  apfel/3.0.7/rpmbuild/SOURCES/1f9f9219cf5aa8e2de088e1648624ca9d47b6aca.zip
+e5e4eccd98efc407f270614ce40bba7c  apfel/3.1.0/rpmbuild/SOURCES/3.1.0.tar.gz
