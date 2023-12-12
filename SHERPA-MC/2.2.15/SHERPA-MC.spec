@@ -35,7 +35,7 @@ BuildRequires:    texinfo git
 %if 0%{?suse_version}
 BuildRequires:    gcc-fortran gcc-c++ pythia-devel libpythia8   Rivet Rivet-devel hztool
 BuildRequires:    root6-libs root6-devel root6-config root6 HepMC3-devel  libHepMC4 HepMC2-devel 
-BuildRequires:    autoconf automake libtool sqlite-devel sqlite subversion  libzip-devel openmpi3-devel
+BuildRequires:    autoconf automake libtool sqlite-devel sqlite subversion  libzip-devel openmpi4-devel
 BuildRequires:    openmpi environment-modules LHAPDF-devel fastjet fastjet-devel  YODA-devel Rivet-devel zlib zlib-devel
 Requires:         libHepMC4 libLHAPDF libHepMC4  sqlite root6 root6-libs openloops Rivet YODA libpythia8 openmpi4 fastjet  zlib
 Requires:         hztool gcc-fortran  recola libqd0 openssl
