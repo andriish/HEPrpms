@@ -227,11 +227,11 @@ export CC=mpicc
 export CXX=mpicxx
 export FC=mpif90
 export F77=mpif77
-export MPI_HOME=/usr/lib64/mpi/gcc/openmpi3
+export MPI_HOME=/usr/lib64/mpi/gcc/openmpi4
 export MPI_SUFFIX=_openmpi
 # Build OpenMPI version
 #{_openmpi_load}
-mpi-selector --set openmpi3
+mpi-selector --set openmpi4
 source /etc/profile.d/mpi-selector.sh
 mkdir openmpi3; \
 cd openmpi3; \
@@ -262,7 +262,7 @@ make -C $MPI_COMPILER install DESTDIR=%{buildroot} INSTALL="install -p" CPPROG="
 %if 0%{?suse_version}
 mkdir -p %{buildroot}/usr/%{_lib}/python%{python3_version}/
 mv %{buildroot}/usr/lib/python%{python3_version}/site-packages    %{buildroot}/%{python3_sitearch}
-mpi-selector --set openmpi3
+mpi-selector --set openmpi4
 source /etc/profile.d/mpi-selector.sh
 make -C openmpi3 install DESTDIR=%{buildroot} INSTALL="install -p" CPPROG="cp -p"
 mpi-selector --unset
@@ -317,11 +317,11 @@ export QA_RPATHS=3
 
 
 %files  -n python3-%{name}-openmpi
-/usr/lib64/mpi/gcc/openmpi3/lib/python%{python3_version}/site-packages/Sherpa.py
-/usr/lib64/mpi/gcc/openmpi3/lib/python%{python3_version}/site-packages/_Sherpa.la
-/usr/lib64/mpi/gcc/openmpi3/lib/python%{python3_version}/site-packages/_Sherpa.so
-/usr/lib64/mpi/gcc/openmpi3/lib/python%{python3_version}/site-packages/_Sherpa.so.0
-/usr/lib64/mpi/gcc/openmpi3/lib/python%{python3_version}/site-packages/_Sherpa.so.0.0.0
+/usr/lib64/mpi/gcc/openmpi4/lib/python%{python3_version}/site-packages/Sherpa.py
+/usr/lib64/mpi/gcc/openmpi4/lib/python%{python3_version}/site-packages/_Sherpa.la
+/usr/lib64/mpi/gcc/openmpi4/lib/python%{python3_version}/site-packages/_Sherpa.so
+/usr/lib64/mpi/gcc/openmpi4/lib/python%{python3_version}/site-packages/_Sherpa.so.0
+/usr/lib64/mpi/gcc/openmpi4/lib/python%{python3_version}/site-packages/_Sherpa.so.0.0.0
 
 
 %endif
@@ -353,12 +353,12 @@ export QA_RPATHS=3
 %if 0%{?suse_version}
 
 %files  -n %{openmpiname} 
-/usr/lib64/mpi/gcc/openmpi3/%_lib/SHERPA-MC/*.so*
-/usr/lib64/mpi/gcc/openmpi3/%_lib/SHERPA-MC/*a
-/usr/lib64/mpi/gcc/openmpi3/bin/*
+/usr/lib64/mpi/gcc/openmpi4/%_lib/SHERPA-MC/*.so*
+/usr/lib64/mpi/gcc/openmpi4/%_lib/SHERPA-MC/*a
+/usr/lib64/mpi/gcc/openmpi4/bin/*
 
 %files -n %{openmpiname}-devel
-/usr/lib64/mpi/gcc/openmpi3/include/SHERPA-MC/*
+/usr/lib64/mpi/gcc/openmpi4/include/SHERPA-MC/*
 
 %endif
 
