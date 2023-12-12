@@ -242,3 +242,5 @@ e5e4eccd98efc407f270614ce40bba7c  apfel/3.1.0/rpmbuild/SOURCES/3.1.0.tar.gz
 0a122d6c57059236e7b054701d20305c  MG5_aMC/3.5.2/rpmbuild/SOURCES/MG5_aMC_v3.5.2.tar.gz
 9bdbcaa570c4a04d525f0f7ee6e06d54  YODA/1.9.9/rpmbuild/SOURCES/YODA-1.9.9.tar.gz
 e4a031492fb6d196273daac8fe176a30  Rivet/3.1.9/rpmbuild/SOURCES/Rivet-3.1.9.tar.gz
+abb2e8b2745df328f43dd5d6ad4a2b64  ThePEG/2.3.0/rpmbuild/SOURCES/ThePEG-2.3.0.tar.bz2
+0fafff773d6789de42783ad550ff19d0  Herwig/7.3.0/rpmbuild/SOURCES/Herwig-7.3.0.tar.bz2
