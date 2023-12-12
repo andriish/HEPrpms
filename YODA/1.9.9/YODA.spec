@@ -8,7 +8,7 @@ Release:        1001
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
 Source0:        https://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
-Patch0:         patch-YODA-0.txt
+#Patch0:         patch-YODA-0.txt
 Prefix:         %{_prefix}
 Summary:        Plotting and histogramming tool
 BuildRequires:   autoconf binutils automake libtool  zlib-devel
