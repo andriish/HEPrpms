@@ -13,7 +13,7 @@
 
 Name:           SHERPA-MC
 Version:        2.2.15
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://sherpa.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -37,7 +37,7 @@ BuildRequires:    gcc-fortran gcc-c++ pythia-devel libpythia8   Rivet Rivet-deve
 BuildRequires:    root6-libs root6-devel root6-config root6 HepMC3-devel  libHepMC4 HepMC2-devel 
 BuildRequires:    autoconf automake libtool sqlite-devel sqlite subversion  libzip-devel openmpi3-devel
 BuildRequires:    openmpi environment-modules LHAPDF-devel fastjet fastjet-devel  YODA-devel Rivet-devel zlib zlib-devel
-Requires:         libHepMC4 libLHAPDF libHepMC4  sqlite root6 root6-libs openloops Rivet YODA libpythia8 openmpi3 fastjet  zlib
+Requires:         libHepMC4 libLHAPDF libHepMC4  sqlite root6 root6-libs openloops Rivet YODA libpythia8 openmpi4 fastjet  zlib
 Requires:         hztool gcc-fortran  recola libqd0 openssl
 BuildRequires:    swig  recola libqd0 qd-devel openssl-devel openssl
 Requires:         blackhat blackhat-data libgfortran5
