@@ -96,7 +96,7 @@ mkdir -p build
 export CXXFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export CFLAGS="-O2 -g -pipe -Wall -Werror=format-security  -m64"
 export LDFLAGS=" "
-%if %{?fedora}%{!?fedora:0} >= 34 || %{?rhel}%{!?rhel:0} > 8
+%if %{?fedora}%{!?fedora:0} >= 34 || %{?rhel}%{!?rhel:0} >= 8
 export CMAKE_CXX_STANDARD=17
 %endif
 
