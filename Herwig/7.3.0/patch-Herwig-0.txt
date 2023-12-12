@@ -1,6 +1,6 @@
 diff -Naur ORIG/Decay/FormFactors/CzyzNucleonFormFactor.cc PATCHED/Decay/FormFactors/CzyzNucleonFormFactor.cc
---- ORIG/Decay/FormFactors/CzyzNucleonFormFactor.cc	2023-11-10 22:38:37.983451435 +0100
-+++ PATCHED/Decay/FormFactors/CzyzNucleonFormFactor.cc	2023-11-10 22:34:34.697485421 +0100
+--- ORIG/Decay/FormFactors/CzyzNucleonFormFactor.cc	2023-11-10 23:02:42.417868844 +0100
++++ PATCHED/Decay/FormFactors/CzyzNucleonFormFactor.cc	2023-11-10 23:02:42.417868844 +0100
 @@ -38,6 +38,9 @@
    // Magnetic moments
    mup_ =  2.792847356;
