@@ -4,8 +4,9 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+MG5_aMC:3.5.2
 #apfel:3.0.7
-apfel:3.1.0
+#apfel:3.1.0
 #binder:1.3.0
 #ThePEG:2.3.0
 #Herwig:7.3.0
