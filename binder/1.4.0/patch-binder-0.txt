@@ -1,0 +1,12 @@
+diff -Naur ORIG/source/enum.cpp PATCHED/source/enum.cpp
+--- ORIG/source/enum.cpp	2023-04-26 11:28:37.566205418 +0200
++++ PATCHED/source/enum.cpp	2023-04-26 11:28:37.566205418 +0200
+@@ -126,7 +126,7 @@
+ /// check if generator can create binding
+ bool EnumBinder::bindable() const
+ {
+-	return is_bindable(E);
++	return is_bindable(E) and !is_banned_symbol(E);
+ }
+ 
+ 

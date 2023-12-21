@@ -4,13 +4,25 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-#YODA:1.9.9
-#Rivet:3.1.9
+apfel:3.1.1
+cascade:3.3.3
+binder:1.4.0
+cernlib:2023.10.31.0
+geant4:11.2.0
+iminuit:2.23.0
+LCIO:02.20.02
+#qd ?
+#uproot?
+#hevea?
+#CGAL?
+#hoppet!
+YODA:1.9.9
+Rivet:3.1.9
 #apfel:3.0.7
 #apfel:3.1.0
 #binder:1.3.0
 #ThePEG:2.3.0
-Herwig:7.3.0
+#Herwig:7.3.0
 #geant4:11.1.3
 #COCOA:0.1.1
 #whizard:3.1.4
