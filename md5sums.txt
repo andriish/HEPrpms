@@ -254,3 +254,4 @@ cd50e0abe8424ae2a0e8042fee604b27  iminuit/2.23.0/rpmbuild/SOURCES/d0b406db5e678a
 5391da11b95aa1d90600bc69da4f84cd  pythia6/6.4.28/rpmbuild/SOURCES/pythia6428-split.tgz
 2d678bd412aa746431d3127deb75492c  hevea/2.36/rpmbuild/SOURCES/hevea-2.36.tar.gz
 83b99423fbdaee311806a861a8ba7f4f  hevea/2.36/rpmbuild/SOURCES/hevea-2.36-manual.pdf
+861c3b73582fe7d411b7c4f000715188  hevea/2.36/rpmbuild/SOURCES/v2.36.tar.gz

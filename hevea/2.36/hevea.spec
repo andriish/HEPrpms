@@ -15,8 +15,7 @@ Summary:	LaTeX to HTML translator
 # GPL-2.0-or-later: html/mathpartir.hva, examples/mathpartir-test.tex
 License:	QPL-1.0-INRIA-2004 WITH QPL-1.0-INRIA-2004-exception AND LPPL-1.3a AND GPL-2.0-or-later
 URL:		http://hevea.inria.fr/
-Source0:	http://hevea.inria.fr/distri/%{name}-%{version}.tar.gz
-Source1:	http://hevea.inria.fr/distri/%{name}-%{version}-manual.pdf
+Source0:	https://github.com/maranget/hevea/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires:	make
 BuildRequires:	ocaml
@@ -45,7 +44,6 @@ modern browsers display correctly most of the time.
 
 %prep
 %setup -q
-cp -p %{SOURCE1} .
 
 # Fix encoding
 iconv -f iso-8859-1 -t utf-8 CHANGES > CHANGES.utf8
@@ -89,7 +87,7 @@ ln -s %{_texmf}/tex/latex/hevea/hevea.sty examples
 
 
 %files
-%doc README CHANGES examples %{name}-%{version}-manual.pdf
+%doc README CHANGES examples
 %license LICENSE
 %{_bindir}/*
 %{_datadir}/hevea
