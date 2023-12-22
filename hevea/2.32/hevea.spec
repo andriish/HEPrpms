@@ -6,12 +6,11 @@
 
 Name:		hevea
 Version:	2.32
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	LaTeX to HTML translator
 License:	QPL
 URL:		http://hevea.inria.fr/
 Source0:	https://github.com/maranget/hevea/archive/refs/tags/v2.32.tar.gz
-Source1:	https://raw.githubusercontent.com/andriish/HEPsources/master/%{name}-%{version}-manual.pdf
 BuildRequires:	ocaml, tex(latex)
 BuildRequires:  ocaml-ocamlbuild
 Requires:	tex(latex) netpbm-progs ghostscript tex(dvips)
@@ -25,7 +24,6 @@ modern browsers display correctly most of the time.
 
 %prep
 %setup -q
-cp -p %{SOURCE1} .
 
 # Fix encoding
 iconv -f iso-8859-1 -t utf-8 CHANGES > CHANGES.utf8
@@ -57,7 +55,7 @@ make install \
 
 	
 %files
-%doc README CHANGES examples %{name}-%{version}-manual.pdf
+%doc README CHANGES examples 
 %license LICENSE
 %{_bindir}/*
 %{_datadir}/hevea
