@@ -11,7 +11,6 @@ c7860639290a2b1bfa21cbb71e093ccc  iminuit/2.4.0/rpmbuild/SOURCES/v2.4.0.tar.gz
 6fea5ca2725adf5dbfe3e7f918a09067  iminuit/2.4.0/rpmbuild/SOURCES/a642cc22e3efa73276fb84084f9d5c2fd8dbac75.zip
 633af531dd07c7b2d3fd6f4145f371ea  TheP8I/2.0.1/rpmbuild/SOURCES/TheP8I-2.0.1.tar.gz
 867c031ec5ca3ea6362e09c6227354b4  qd/2.3.22/rpmbuild/SOURCES/qd-2.3.22.tar.gz
-118029311d8e6a81c93de6a0250c7564  qgraf/3.4.2/rpmbuild/SOURCES/qgraf-3.4.2.tgz
 6ed6f6915ca72a57af04fba9d38c9b13  qcdloop/2.0.6/rpmbuild/SOURCES/2.0.6.tar.gz
 12fed44164ea4e3d74f33a836ee0e5d3  LoopTools/2.15/rpmbuild/SOURCES/LoopTools-2.15.tar.gz
 3da63672b434b5ecca6c60c5461785f3  LoopTools/2.16/rpmbuild/SOURCES/LoopTools-2.16.tar.gz
@@ -252,3 +251,6 @@ bbebcc56ed6409f22583eddb0e4fd899  geant4/11.2.0/rpmbuild/SOURCES/geant4-v11.2.0.
 2a9e2a0fd40c66b8a398d5c37475071c  LCIO/02.20.02/rpmbuild/SOURCES/v02-20-02.tar.gz
 1b469c78c607b431a61091eeaf4746be  binder/1.4.0/rpmbuild/SOURCES/v1.4.0.tar.gz
 cd50e0abe8424ae2a0e8042fee604b27  iminuit/2.23.0/rpmbuild/SOURCES/d0b406db5e678a2eed8eee0de3ddfdee746ea568.zip
+5391da11b95aa1d90600bc69da4f84cd  pythia6/6.4.28/rpmbuild/SOURCES/pythia6428-split.tgz
+2d678bd412aa746431d3127deb75492c  hevea/2.36/rpmbuild/SOURCES/hevea-2.36.tar.gz
+83b99423fbdaee311806a861a8ba7f4f  hevea/2.36/rpmbuild/SOURCES/hevea-2.36-manual.pdf
