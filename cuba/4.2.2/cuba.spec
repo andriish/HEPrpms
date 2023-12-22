@@ -10,7 +10,6 @@ License:        LGPLv3
 Prefix:         %{_prefix}
 URL:            http://www.feynarts.de/cuba
 Source0:        https://www.feynarts.de/cuba/%{srcname}-%{version}.tar.gz
-#Source0:        https://github.com/andriish/HEPsources/raw/master/%{srcname}-%{version}.tar.gz
 #build shared lib
 Patch0:         cuba-4.2.1-shlib.patch
 #remove all deps to Wolfwram Mathematica
