@@ -83,7 +83,7 @@ The library documentation is available on header files.
 
 %prep
 %setup -q -n %{name}-%{version}
-#patch0 -p1
+%patch0 -p1
 
 %build
 

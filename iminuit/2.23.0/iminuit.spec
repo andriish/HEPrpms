@@ -17,7 +17,7 @@ BuildRequires: gcc-c++ git cmake unzip
 BuildRequires: python3-setuptools 
 %endif
 %if 0%{?rhel} || 0%{?fedora}
-BuildRequires: python%{python3_pkgversion}  python%{python3_pkgversion}-devel pybind11-devel
+BuildRequires: python%{python3_pkgversion}  python%{python3_pkgversion}-devel pybind11-devel  python-scikit-build-core
 %endif
 %if 0%{?suse_version}
 BuildRequires: python3  python3-devel  python3-setuptools
@@ -41,8 +41,13 @@ sed -i -e '1i#include <cstdint>' src/fcn.hpp
 
 %build
 %if 0%{?rhel} || 0%{?fedora}
-export CMAKE_BUILD_PARALLEL_LEVEL=1
-python%{python3_pkgversion} setup.py  build 
+
+#export CMAKE_BUILD_PARALLEL_LEVEL=1
+#python{python3_pkgversion} setup.py  build 
+
+%pyproject_buildrequires -t
+%pyproject_wheel
+
 %endif
 %if 0%{?suse_version}
 python3 setup.py  build 
@@ -52,8 +57,9 @@ python3 setup.py  build
 
 %install
 %if 0%{?rhel} || 0%{?fedora}
-export CMAKE_BUILD_PARALLEL_LEVEL=1
-python%{python3_pkgversion}  setup.py  install -O1 --skip-build --root %{buildroot} --prefix=%{_prefix}
+#export CMAKE_BUILD_PARALLEL_LEVEL=1
+#python{python3_pkgversion}  setup.py  install -O1 --skip-build --root {buildroot} --prefix={_prefix}
+%pyproject_install
 %endif
 %if 0%{?suse_version}
 python3  setup.py  install -O1 --skip-build --root %{buildroot} --prefix=%{_prefix}

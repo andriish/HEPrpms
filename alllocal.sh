@@ -9,16 +9,17 @@ declare -a BUILDLIST=(
 #OK binder:1.4.0
 #OK cernlib:2023.10.31.0
 #OK geant4:11.2.0
+python-scikit-build-core:0.6.1
 iminuit:2.23.0
 #OK LCIO:02.20.02
-pybind11:2.11.1
+#OK pybind11:2.11.1
 #qd ?
 #uproot?
 #hevea?
 #CGAL?
 #hoppet!
 #OK YODA:1.9.9
-Rivet:3.1.9
+#OK Rivet:3.1.9
 #apfel:3.0.7
 #apfel:3.1.0
 #binder:1.3.0

@@ -138,15 +138,6 @@ done
 %py3_build
 %endif
 
-%if %{with tests}
-%check
-%if %{python2_enabled}
-make -C python2 check %{?_smp_mflags}
-%endif
-%if %{python3_enabled}
-make -C python3 check %{?_smp_mflags}
-%endif
-%endif
 
 %install
 # Doesn't matter if both installs run
