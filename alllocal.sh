@@ -4,19 +4,20 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-apfel:3.1.1
-cascade:3.3.3
-binder:1.4.0
-cernlib:2023.10.31.0
-geant4:11.2.0
+#OK apfel:3.1.1
+#OK cascade:3.3.3
+#OK binder:1.4.0
+#OK cernlib:2023.10.31.0
+#OK geant4:11.2.0
 iminuit:2.23.0
-LCIO:02.20.02
+#OK LCIO:02.20.02
+pybind11:2.11.1
 #qd ?
 #uproot?
 #hevea?
 #CGAL?
 #hoppet!
-YODA:1.9.9
+#OK YODA:1.9.9
 Rivet:3.1.9
 #apfel:3.0.7
 #apfel:3.1.0

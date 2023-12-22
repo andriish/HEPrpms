@@ -4,7 +4,7 @@ project(CERNLIB LANGUAGES C Fortran )
 #The complicated way to set the version is used to assure the simple
 #replacement of version variable with sed will not break the CMakeLists.txt
 if (NOT __CL_VERSION__)
-  set(EXTERNAL_VERSION_STRING "2023.08.06")
+  set(EXTERNAL_VERSION_STRING "2023.10.11")
 else()
   set(EXTERNAL_VERSION_STRING "__CL_VERSION__.1")
 endif()
@@ -329,6 +329,7 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
                                "-fasynchronous-unwind-tables"
                                "-fcf-protection"
                                "-fno-strict-aliasing"
+                               "-flto"
                                "-trigraphs"
                                "-mfpmath=387"
                                "-grecord-gcc-switches"
@@ -427,6 +428,7 @@ if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
                                "-fcommon"
                                "-fno-automatic"
                                "-fno-second-underscore"
+                               "-flto"
                                "-mfpmath=387"
                                "-fno-align-commons"
                                "-fno-aggressive-loop-optimizations"
@@ -450,7 +452,7 @@ if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
                                "-Wno-unused-variable"
                                "-Wno-maybe-uninitialized"
                                "-Wno-unused-dummy-argument"
-			       "-no-pie"
+                               "-no-pie"
                                "-O0"
                                "-g"
                                "-fallow-invalid-boz" #needed for patchy4/p4lib/jartpx.F
@@ -462,11 +464,19 @@ if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
   if (Fortran_COMPILER_NAME STREQUAL g77)
     SET(CMAKE_C_USE_RESPONSE_FILE_FOR_OBJECTS 0)
     SET(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_OBJECTS 0)
-    set( COMPSUFFIX g77)
+    if (NOT COMPSUFFIX)
+    set( COMPSUFFIX -g77)
+    endif()
+    if (NOT COMPSUFFIXBIN)
     set( COMPSUFFIXBIN -g77)
+    endif()
   else()
-    set( COMPSUFFIX gfortran)
+    if (NOT COMPSUFFIX)
+    set( COMPSUFFIX -gfortran)
+    endif()
+    if (NOT COMPSUFFIXBIN)
     set( COMPSUFFIXBIN -gfortran)
+    endif()
     list(APPEND F_Fortran_FLAGS_TO_CHECK
                                "-Wno-conversion"
                                "-Wno-implicit-function-declaration"
@@ -493,8 +503,12 @@ elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
                               "-nbs"
                               "-mp1"
    )
-  set( COMPSUFFIX ifort)
+  if (NOT COMPSUFFIX)
+  set( COMPSUFFIX -ifort)
+  endif()
+  if (NOT COMPSUFFIXBIN)
   set( COMPSUFFIXBIN -ifort)
+  endif()
 elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "NVHPC")
   set(F_Fortran_FLAGS_TO_CHECK
                                "-fcommon"
@@ -509,8 +523,12 @@ elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "NVHPC")
                                "-O0"
                                "-g"
    )
-  set( COMPSUFFIX nvfortran)
-  set( COMPSUFFIXBIN -nvfortran)
+  if (NOT COMPSUFFIX)
+    set( COMPSUFFIX -nvfortran)
+  endif()
+  if (NOT COMPSUFFIXBIN)
+    set( COMPSUFFIXBIN -nvfortran)
+  endif()
 elseif()
   message(FATAL "CERNLIB: Don't know how to set Fortran FLAGS for  ${Fortran_COMPILER_NAME} with ID ${Fortran_COMPILER_ID}")
 endif ()
@@ -1116,12 +1134,12 @@ if (APPLE)
 target_link_libraries(pawX11.dynamic PRIVATE pawlib kernlib graflib ${grafX11}
 packlib paw_motif code_motif mathlib
 ${BLAS_LIBRARIES}
-   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 else()
 target_link_libraries(pawX11.dynamic PRIVATE -Wl,--start-group pawlib kernlib graflib ${grafX11}
 packlib paw_motif code_motif mathlib  -Wl,--end-group
 ${BLAS_LIBRARIES}
-   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 endif()
 target_include_directories(pawX11.dynamic PRIVATE ${PROJECT_SOURCE_DIR}/include )
 install(TARGETS pawX11.dynamic DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
@@ -1130,18 +1148,18 @@ endif()
 ########################################################################
 add_executable(pawX11 ${pawX11_SRCS_F} )
 if (APPLE)
- target_link_libraries(pawX11 PRIVATE dl pawlib_static kernlib_static graflib_static ${grafX11}_static
+ target_link_libraries(pawX11 PRIVATE ${CMAKE_DL_LIBS} pawlib_static kernlib_static graflib_static ${grafX11}_static
      packlib_static paw_motif_static code_motif_static mathlib_static ${BLAS_LIBRARIES}
      ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${X11_LIBRARIES})
 else()
   target_link_libraries(pawX11 PRIVATE -Wl,--start-group pawlib_static kernlib_static graflib_static ${grafX11}_static packlib_static paw_motif_static code_motif_static mathlib_static -Wl,--end-group ${BLAS_LIBRARIES}
-     ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${X11_LIBRARIES} dl)
+     ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 endif()
 target_include_directories(pawX11 PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS pawX11 DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 set_target_properties(pawX11 PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME pawX11${COMPSUFFIXBIN})
 if (NOT CERNLIB_NO_SUFFIX)
-  install_symlink(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/pawX11${COMPSUFFIX} ${CMAKE_INSTALL_LIBDIR}/../bin/pawX11${COMPSUFFIXBIN})
+  install_symlink(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/pawX11${COMPSUFFIXBIN} ${CMAKE_INSTALL_LIBDIR}/../bin/pawX11${COMPSUFFIXBIN})
 endif()
 ########################################################################
 set(paw++_SRCS_F 0pamainm.F)
@@ -1151,11 +1169,11 @@ add_executable(paw++.dynamic ${paw++_SRCS_F} )
 if (APPLE)
 target_link_libraries(paw++.dynamic PRIVATE  pawlib kernlib graflib ${grafX11}
  packlib paw_motif code_motif mathlib
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 else()
 target_link_libraries(paw++.dynamic PRIVATE  -Wl,--start-group pawlib kernlib graflib ${grafX11}
  packlib paw_motif code_motif mathlib  -Wl,--end-group
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 
 endif()
 target_include_directories(paw++.dynamic PRIVATE ${PROJECT_SOURCE_DIR}/include)
@@ -1166,11 +1184,11 @@ add_executable(paw++ ${paw++_SRCS_F} )
 if (APPLE)
   target_link_libraries(paw++ PRIVATE pawlib_static kernlib_static graflib_static ${grafX11}_static
    packlib_static paw_motif_static code_motif_static mathlib_static
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 else()
   target_link_libraries(paw++ PRIVATE -Wl,--start-group pawlib_static kernlib_static graflib_static ${grafX11}_static
    packlib_static paw_motif_static code_motif_static mathlib_static -Wl,--end-group
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 endif()
 target_include_directories(paw++ PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS paw++ DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)

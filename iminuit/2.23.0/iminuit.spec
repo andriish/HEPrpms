@@ -1,7 +1,6 @@
 %undefine _debugsource_packages
 %global srcname iminuit
 %global rootblob d0b406db5e678a2eed8eee0de3ddfdee746ea568
-%global pybind11blob 914c06fb252b6cc3727d0eedab6736e88a3fcb01
 
 Name:           %{srcname}
 Version:        2.23.0
@@ -11,7 +10,6 @@ Summary:        A Jupyter-friendly Python interface for the Minuit2 C++ library 
 License:        MIT, LGPL
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://github.com/scikit-hep/iminuit/archive/v%{version}.tar.gz
-Source1:        https://github.com/pybind/pybind11/archive/%{pybind11blob}.zip
 Source2:        https://github.com/root-project/root/archive/%{rootblob}.zip
 
 BuildRequires: gcc-c++ git cmake unzip
@@ -19,7 +17,7 @@ BuildRequires: gcc-c++ git cmake unzip
 BuildRequires: python3-setuptools 
 %endif
 %if 0%{?rhel} || 0%{?fedora}
-BuildRequires: python%{python3_pkgversion}  python%{python3_pkgversion}-devel 
+BuildRequires: python%{python3_pkgversion}  python%{python3_pkgversion}-devel pybind11-devel
 %endif
 %if 0%{?suse_version}
 BuildRequires: python3  python3-devel  python3-setuptools
@@ -36,9 +34,6 @@ Summary:   A Jupyter-friendly Python interface for the Minuit2 C++ library maint
 %prep
 %autosetup -n %{srcname}-%{version}
 rm -rf extern/root
-rm -rf extern/pybind11
-unzip %SOURCE1
-mv pybind11-%{pybind11blob} extern/pybind11
 unzip %SOURCE2
 mv root-%{rootblob} extern/root
 sed -i 's/3\.13/3\.11/g' CMakeLists.txt

@@ -4,7 +4,7 @@ project(CERNLIB LANGUAGES C Fortran )
 #The complicated way to set the version is used to assure the simple
 #replacement of version variable with sed will not break the CMakeLists.txt
 if (NOT __CL_VERSION__)
-  set(EXTERNAL_VERSION_STRING "2023.08.06")
+  set(EXTERNAL_VERSION_STRING "2023.10.11")
 else()
   set(EXTERNAL_VERSION_STRING "__CL_VERSION__.1")
 endif()
@@ -33,7 +33,7 @@ else(CMAKE_BUILD_TYPE)
 endif(CMAKE_BUILD_TYPE)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE FALSE)
 ###########################Options#####################################
 option(CERNLIB_USE_INTERNAL_XBAE          "Forces using internal XBAE." ON)
@@ -329,6 +329,7 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
                                "-fasynchronous-unwind-tables"
                                "-fcf-protection"
                                "-fno-strict-aliasing"
+                               "-flto"
                                "-trigraphs"
                                "-mfpmath=387"
                                "-grecord-gcc-switches"
@@ -427,6 +428,7 @@ if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
                                "-fcommon"
                                "-fno-automatic"
                                "-fno-second-underscore"
+                               "-flto"
                                "-mfpmath=387"
                                "-fno-align-commons"
                                "-fno-aggressive-loop-optimizations"
@@ -450,7 +452,7 @@ if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
                                "-Wno-unused-variable"
                                "-Wno-maybe-uninitialized"
                                "-Wno-unused-dummy-argument"
-			       "-no-pie"
+                               "-no-pie"
                                "-O0"
                                "-g"
                                "-fallow-invalid-boz" #needed for patchy4/p4lib/jartpx.F
@@ -462,9 +464,19 @@ if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
   if (Fortran_COMPILER_NAME STREQUAL g77)
     SET(CMAKE_C_USE_RESPONSE_FILE_FOR_OBJECTS 0)
     SET(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_OBJECTS 0)
+    if (NOT COMPSUFFIX)
     set( COMPSUFFIX -g77)
+    endif()
+    if (NOT COMPSUFFIXBIN)
+    set( COMPSUFFIXBIN -g77)
+    endif()
   else()
+    if (NOT COMPSUFFIX)
     set( COMPSUFFIX -gfortran)
+    endif()
+    if (NOT COMPSUFFIXBIN)
+    set( COMPSUFFIXBIN -gfortran)
+    endif()
     list(APPEND F_Fortran_FLAGS_TO_CHECK
                                "-Wno-conversion"
                                "-Wno-implicit-function-declaration"
@@ -491,7 +503,12 @@ elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
                               "-nbs"
                               "-mp1"
    )
+  if (NOT COMPSUFFIX)
   set( COMPSUFFIX -ifort)
+  endif()
+  if (NOT COMPSUFFIXBIN)
+  set( COMPSUFFIXBIN -ifort)
+  endif()
 elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "NVHPC")
   set(F_Fortran_FLAGS_TO_CHECK
                                "-fcommon"
@@ -506,7 +523,12 @@ elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "NVHPC")
                                "-O0"
                                "-g"
    )
-  set( COMPSUFFIX -nvfortran)
+  if (NOT COMPSUFFIX)
+    set( COMPSUFFIX -nvfortran)
+  endif()
+  if (NOT COMPSUFFIXBIN)
+    set( COMPSUFFIXBIN -nvfortran)
+  endif()
 elseif()
   message(FATAL "CERNLIB: Don't know how to set Fortran FLAGS for  ${Fortran_COMPILER_NAME} with ID ${Fortran_COMPILER_ID}")
 endif ()
@@ -515,8 +537,9 @@ if(CMAKE_SYSTEM_NAME MATCHES Darwin)
 endif()
 if (CERNLIB_NO_SUFFIX)
   set ( COMPSUFFIX "" )
+  set ( COMPSUFFIXBIN "" )
 endif()
-message(STATUS "CERNLIB: COMPSUFFIX=${COMPSUFFIX}")
+message(STATUS "CERNLIB: COMPSUFFIX=${COMPSUFFIX} COMPSUFFIXBIN=${COMPSUFFIXBIN}")
 
 #include "paw/quest.inc"
 #Linux has here -Wl,-z,relro -Wl,--as-needed  -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1
@@ -640,7 +663,7 @@ endif()
   install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/${m}.gz DESTINATION ${CMAKE_INSTALL_DATADIR}/man/man8)
 endforeach ( m ${man8} )
 
-#install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/yexpand.script  DESTINATION ${CMAKE_INSTALL_BINDIR}/ RENAME yexpand.script${COMPSUFFIX} )
+#install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/yexpand.script  DESTINATION ${CMAKE_INSTALL_BINDIR}/ RENAME yexpand.script${COMPSUFFIXBIN} )
 set ( CERN ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/cernlib/)
 
 ########################################################################
@@ -681,21 +704,21 @@ string(REPLACE "\$\{CERN\}/\$\{ver\}/lib/gxint\$\{gvs\}.$_o" "${CERN}/${CERNLIB_
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/scripts/gxint "${FILE_CONTENTS}")
 install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/scripts/gxint DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs  )
 ########################################################################
-install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/yexpand.script  DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME yexpand${COMPSUFFIX} COMPONENT libs)
+install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/yexpand.script  DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME yexpand${COMPSUFFIXBIN} COMPONENT libs)
 ########################################################################
 file(READ ${CMAKE_CURRENT_SOURCE_DIR}/graflib/dzdoc/dzedit/dzedit.script FILE_CONTENTS)
 string(REPLACE "\$drv " "\$drv${COMPSUFFIX} " FILE_CONTENTS "${FILE_CONTENTS}")
 string(REPLACE "\"/cern\"" "\"${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/cernlib\"" FILE_CONTENTS "${FILE_CONTENTS}")
 string(REPLACE "\"pro\"" "\"${CERNLIB_VERSION_MAJOR}\"" FILE_CONTENTS "${FILE_CONTENTS}")
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/graflib/dzdoc/dzedit/dzedit.script "${FILE_CONTENTS}")
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/graflib/dzdoc/dzedit/dzedit.script  DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME dzedit${COMPSUFFIX} COMPONENT libs)
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/graflib/dzdoc/dzedit/dzedit.script  DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME dzedit${COMPSUFFIXBIN} COMPONENT libs)
 ########################################################################
 file(READ ${CMAKE_CURRENT_SOURCE_DIR}/pawlib/paw/programs/paw.script FILE_CONTENTS)
 string(REPLACE "\$drv " "\$drv${COMPSUFFIX} " FILE_CONTENTS "${FILE_CONTENTS}")
 string(REPLACE "\"/cern\"" "\"${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/cernlib\"" FILE_CONTENTS "${FILE_CONTENTS}")
-string(REPLACE "\"pro\"" "\"${CERNLIB_VERSION_MAJOR}\"" FILE_CONTENTS "${FILE_CONTENTS}")
+# string(REPLACE "\"pro\"" "\"${CERNLIB_VERSION_MAJOR}\"" FILE_CONTENTS "${FILE_CONTENTS}")
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script "${FILE_CONTENTS}")
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script  DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME paw${COMPSUFFIX} COMPONENT libs)
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script  DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME paw${COMPSUFFIXBIN} COMPONENT libs)
 ########################################################################
 add_custom_target( gxint321f ALL BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/gxint321.f
                         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/geant321/gxint/gxint.F
@@ -725,7 +748,7 @@ ${CMAKE_INSTALL_DATADIR}/X11/app-defaults)
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/contrib/vim DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/cernlib)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cfortran/Examples DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/cernlib-devel/cfortran PATTERN "*makefile*" EXCLUDE PATTERN "*fcn\.f*" EXCLUDE)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/contrib/zftp.README DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/cernlib-packlib${COMPSUFFIX} )
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/contrib/zftp.README DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/cernlib-packlib${COMPSUFFIXBIN} )
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/contrib/comis-64bit-example.F DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/cernlib-devel )
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/contrib/cernlib.m4 DESTINATION ${CMAKE_INSTALL_DATADIR}/aclocal)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/geant321/data/xsneut95.dat ${CMAKE_CURRENT_SOURCE_DIR}/mclibs/eurodec/data/eurodec.dat DESTINATION ${CMAKE_INSTALL_DATADIR}/cernlib/${CERNLIB_VERSION})
@@ -902,6 +925,9 @@ if (CERNLIB_USE_INTERNAL_LAPACK)
 else()
   find_package(BLAS REQUIRED)
   find_package(LAPACK REQUIRED)
+#One should hanlde the deprecated codes here
+#Lapack >= 3.7.0 needs the flag below
+  set(LAPACK_COMPILE_DEFINITIONS -DDGEQPF=DGEQP3 -Ddgeqpf=dgeqp3)
 endif()
 
 find_package(Freetype REQUIRED)
@@ -991,7 +1017,7 @@ endif()
 target_include_directories(hepdb PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS hepdb DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(hepdb PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb)
-set_target_properties(hepdb PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME "hepdb${COMPSUFFIX}" )
+set_target_properties(hepdb PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME "hepdb${COMPSUFFIXBIN}" )
 ########################################################################
 set(cdmake_SRCS_F cdmake.F)
 list(TRANSFORM cdmake_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb/programs/cdmake/")
@@ -1006,7 +1032,7 @@ endif()
 target_include_directories(cdmake PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS cdmake DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(cdmake PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb)
-set_target_properties(cdmake PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME "cdmake${COMPSUFFIX}" )
+set_target_properties(cdmake PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME "cdmake${COMPSUFFIXBIN}" )
 ########################################################################
 set(cdmove_SRCS_F cdmove.F)
 list(TRANSFORM cdmove_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb/programs/cdmove/")
@@ -1016,7 +1042,7 @@ target_link_libraries(cdmove PRIVATE packlib_static kernlib_static graflib_stati
 target_include_directories(cdmove PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS cdmove DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(cdmove PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb)
-set_target_properties(cdmove PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME cdmove${COMPSUFFIX})
+set_target_properties(cdmove PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME cdmove${COMPSUFFIXBIN})
 ########################################################################
 set(kuesvr_SRCS_C kuesvr.c)
 list(TRANSFORM kuesvr_SRCS_C PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/kuip/programs/kuesvr/")
@@ -1026,7 +1052,7 @@ target_link_libraries(kuesvr PRIVATE packlib_static kernlib_static graflib_stati
 target_include_directories(kuesvr PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS kuesvr DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(kuesvr PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/kuip)
-set_target_properties(kuesvr PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME kuesvr${COMPSUFFIX})
+set_target_properties(kuesvr PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME kuesvr${COMPSUFFIXBIN})
 ########################################################################
 set(kxterm_SRCS_C
        actions.c
@@ -1048,7 +1074,7 @@ target_include_directories(kxterm PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS kxterm DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(kxterm PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/kxterm)
 target_include_directories(kxterm PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/kuip)
-set_target_properties(kxterm PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME kxterm${COMPSUFFIX})
+set_target_properties(kxterm PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME kxterm${COMPSUFFIXBIN})
 ########################################################################
 set(cdbackup_SRCS_F cdbackup.F zabend.F)
 list(TRANSFORM cdbackup_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb/programs/cdbackup/")
@@ -1057,7 +1083,7 @@ target_link_libraries(cdbackup PRIVATE packlib_static kernlib_static graflib_sta
 target_include_directories(cdbackup PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS cdbackup DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(cdbackup PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb)
-set_target_properties(cdbackup PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME cdbackup${COMPSUFFIX})
+set_target_properties(cdbackup PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME cdbackup${COMPSUFFIXBIN})
 ########################################################################
 set(cdserv_SRCS_F abend.F cdback.F cdbad.F cdconf.F cddelf.F cdload.F
        cdlogf.F cdsend.F cdserv.F cdstop.F cdtrap.F cdwake.F)
@@ -1067,7 +1093,7 @@ target_link_libraries(cdserv PRIVATE packlib_static kernlib_static graflib_stati
 target_include_directories(cdserv PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS cdserv DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(cdserv PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/hepdb)
-set_target_properties(cdserv PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME cdserv${COMPSUFFIX})
+set_target_properties(cdserv PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME cdserv${COMPSUFFIXBIN})
 ########################################################################
 set(dzeX11_SRCS_F dzebkk.F dzechf.F dzechk.F dzecpp.F dzedel.F dzedff.F
        dzedof.F dzedrw.F dzedrz.F dzedsp.F dzehpe.F dzelal.F
@@ -1088,12 +1114,12 @@ endif()
 target_include_directories(dzeX11 PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS dzeX11 DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(dzeX11 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/graflib/dzdoc)
-set_target_properties(dzeX11 PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME dzeX11${COMPSUFFIX})
+set_target_properties(dzeX11 PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME dzeX11${COMPSUFFIXBIN})
 make_directory(${CMAKE_CURRENT_BINARY_DIR}/FOO)
 make_directory(${CMAKE_CURRENT_BINARY_DIR}/FOO/bin)
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/FOO/bin DESTINATION ${CMAKE_INSTALL_LIBDIR}/../)
 if (NOT CERNLIB_NO_SUFFIX)
-  install_symlink( ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/dzeX11${COMPSUFFIX} ${CMAKE_INSTALL_LIBDIR}/../bin/dzeX11${COMPSUFFIX} )
+  install_symlink( ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/dzeX11${COMPSUFFIX} ${CMAKE_INSTALL_LIBDIR}/../bin/dzeX11${COMPSUFFIXBIN} )
 endif()
 ########################################################################
 set(pawX11_SRCS_F 0pamain.F)
@@ -1104,32 +1130,32 @@ if (APPLE)
 target_link_libraries(pawX11.dynamic PRIVATE pawlib kernlib graflib ${grafX11}
 packlib paw_motif code_motif mathlib
 ${BLAS_LIBRARIES}
-   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 else()
 target_link_libraries(pawX11.dynamic PRIVATE -Wl,--start-group pawlib kernlib graflib ${grafX11}
 packlib paw_motif code_motif mathlib  -Wl,--end-group
 ${BLAS_LIBRARIES}
-   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 endif()
 target_include_directories(pawX11.dynamic PRIVATE ${PROJECT_SOURCE_DIR}/include )
 install(TARGETS pawX11.dynamic DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
-set_target_properties(pawX11.dynamic PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME pawX11.dynamic${COMPSUFFIX})
+set_target_properties(pawX11.dynamic PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME pawX11.dynamic${COMPSUFFIXBIN})
 endif()
 ########################################################################
 add_executable(pawX11 ${pawX11_SRCS_F} )
 if (APPLE)
- target_link_libraries(pawX11 PRIVATE dl pawlib_static kernlib_static graflib_static ${grafX11}_static
+ target_link_libraries(pawX11 PRIVATE ${CMAKE_DL_LIBS} pawlib_static kernlib_static graflib_static ${grafX11}_static
      packlib_static paw_motif_static code_motif_static mathlib_static ${BLAS_LIBRARIES}
      ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${X11_LIBRARIES})
 else()
   target_link_libraries(pawX11 PRIVATE -Wl,--start-group pawlib_static kernlib_static graflib_static ${grafX11}_static packlib_static paw_motif_static code_motif_static mathlib_static -Wl,--end-group ${BLAS_LIBRARIES}
-     ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${X11_LIBRARIES} dl)
+     ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 endif()
 target_include_directories(pawX11 PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS pawX11 DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
-set_target_properties(pawX11 PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME pawX11${COMPSUFFIX})
+set_target_properties(pawX11 PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME pawX11${COMPSUFFIXBIN})
 if (NOT CERNLIB_NO_SUFFIX)
-  install_symlink(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/pawX11${COMPSUFFIX} ${CMAKE_INSTALL_LIBDIR}/../bin/pawX11${COMPSUFFIX})
+  install_symlink(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/pawX11${COMPSUFFIXBIN} ${CMAKE_INSTALL_LIBDIR}/../bin/pawX11${COMPSUFFIXBIN})
 endif()
 ########################################################################
 set(paw++_SRCS_F 0pamainm.F)
@@ -1139,30 +1165,30 @@ add_executable(paw++.dynamic ${paw++_SRCS_F} )
 if (APPLE)
 target_link_libraries(paw++.dynamic PRIVATE  pawlib kernlib graflib ${grafX11}
  packlib paw_motif code_motif mathlib
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 else()
 target_link_libraries(paw++.dynamic PRIVATE  -Wl,--start-group pawlib kernlib graflib ${grafX11}
  packlib paw_motif code_motif mathlib  -Wl,--end-group
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 
 endif()
 target_include_directories(paw++.dynamic PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS paw++.dynamic DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
-set_target_properties(paw++.dynamic PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME paw++.dynamic${COMPSUFFIX})
+set_target_properties(paw++.dynamic PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME paw++.dynamic${COMPSUFFIXBIN})
 endif()
 add_executable(paw++ ${paw++_SRCS_F} )
 if (APPLE)
   target_link_libraries(paw++ PRIVATE pawlib_static kernlib_static graflib_static ${grafX11}_static
    packlib_static paw_motif_static code_motif_static mathlib_static
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 else()
   target_link_libraries(paw++ PRIVATE -Wl,--start-group pawlib_static kernlib_static graflib_static ${grafX11}_static
    packlib_static paw_motif_static code_motif_static mathlib_static -Wl,--end-group
-   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} dl)
+   ${BLAS_LIBRARIES} ${nsl} ${LAPACK_lapack_LIBRARY} ${crypt} ${MOTIF_LIBRARIES} ${Xbae} ${X11_Xaw_LIB} ${X11_Xt_LIB} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
 endif()
 target_include_directories(paw++ PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS paw++ DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
-set_target_properties(paw++ PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME paw++${COMPSUFFIX})
+set_target_properties(paw++ PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME paw++${COMPSUFFIXBIN})
 ########################################################################
 set(zftp_SRCS_F geta.F getb.F getd.F getfz.F getp.F getrz.F getx.F
      mget.F mput.F puta.F putb.F putd.F putfz.F putp.F putrz.F
@@ -1183,7 +1209,7 @@ endif()
 target_include_directories(zftp PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS zftp DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(zftp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/cspack)
-set_target_properties(zftp PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME zftp${COMPSUFFIX})
+set_target_properties(zftp PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME zftp${COMPSUFFIXBIN})
 ########################################################################
 set(fatback_SRCS_F fatback.F zabend.F)
 list(TRANSFORM fatback_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen/programs/fatback/")
@@ -1194,7 +1220,7 @@ target_link_libraries(fatback PRIVATE packlib_static kernlib_static graflib_stat
 target_include_directories(fatback PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS fatback DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(fatback PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen)
-set_target_properties(fatback PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fatback${COMPSUFFIX})
+set_target_properties(fatback PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fatback${COMPSUFFIXBIN})
 ########################################################################
 set(pawserv_SRCS_F zs.F fatmen.F message.F xzserv.F zscdir.F zsclos.F zsfile.F  zsldir.F zslfil.F zslist.F zsout.F zsrzin.F sgeta.F sgetfz.F  sgetp.F sgetrz.F sputa.F sputfz.F sputp.F sputrz.F)
 if (CERNLIB_UNIX)
@@ -1210,7 +1236,7 @@ target_link_libraries(pawserv PRIVATE packlib_static pawlib_static kernlib_stati
 target_include_directories(pawserv PRIVATE ${PROJECT_SOURCE_DIR}/include  )
 install(TARGETS pawserv DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(pawserv PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/cspack)
-set_target_properties(pawserv PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME pawserv${COMPSUFFIX})
+set_target_properties(pawserv PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME pawserv${COMPSUFFIXBIN})
 #identical to pawserv
 ########################################################################
 add_executable(zserv ${pawserv_SRCS_F} )
@@ -1228,7 +1254,7 @@ target_include_directories(zserv PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/kui
 target_include_directories(zserv PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/minuit)
 target_include_directories(zserv PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/zbook)
 target_include_directories(zserv PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/zebra)
-set_target_properties(zserv        PROPERTIES  POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME zserv${COMPSUFFIX})
+set_target_properties(zserv        PROPERTIES  POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME zserv${COMPSUFFIXBIN})
 ########################################################################
 set(fatnew_SRCS_F fatnew.F)
 list(TRANSFORM fatnew_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen/programs/fatnew/")
@@ -1238,7 +1264,7 @@ ${X11_LIBRARIES} ${X11_Xaw_LIB} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${cr
 target_include_directories(fatnew PRIVATE ${PROJECT_SOURCE_DIR}/include  )
 install(TARGETS fatnew DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(fatnew PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen)
-set_target_properties(fatnew PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fatnew${COMPSUFFIX})
+set_target_properties(fatnew PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fatnew${COMPSUFFIXBIN})
 ########################################################################
 set(fatmen_SRCS_F fatmen.F fmcd.F fmclr.F fmcopc.F fmcpc.F fmdumc.F
      fmedit.F fmexit.F fmextr.F fmfc.F fmfndc.F fmgime.F fminic.F
@@ -1269,7 +1295,7 @@ endif()
 target_include_directories(fatmen PRIVATE ${PROJECT_SOURCE_DIR}/include  )
 install(TARGETS fatmen DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(fatmen PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen)
-set_target_properties(fatmen PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fatmen${COMPSUFFIX})
+set_target_properties(fatmen PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fatmen${COMPSUFFIXBIN})
 ########################################################################
 set(fatsend_SRCS_F fatsend.F)
 list(TRANSFORM fatsend_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen/programs/fatsend/")
@@ -1279,7 +1305,7 @@ ${X11_LIBRARIES} ${X11_Xaw_LIB} ${BLAS_LIBRARIES}  ${LAPACK_lapack_LIBRARY} ${cr
 target_include_directories(fatsend PRIVATE ${PROJECT_SOURCE_DIR}/include )
 install(TARGETS fatsend DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(fatsend PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen)
-set_target_properties(fatsend PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fatsend${COMPSUFFIX})
+set_target_properties(fatsend PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fatsend${COMPSUFFIXBIN})
 ########################################################################
 set(fatsrv_SRCS_F abend.F facopy.F fatlog.F fatsrv.F fmallk.F fmfzi.F fmssnd.F)
 list(TRANSFORM fatsrv_SRCS_F PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen/programs/fatsrv/")
@@ -1288,7 +1314,7 @@ target_link_libraries(fatsrv PRIVATE packlib_static kernlib_static graflib_stati
 target_include_directories(fatsrv PRIVATE ${PROJECT_SOURCE_DIR}/include )
 install(TARGETS fatsrv DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 target_include_directories(fatsrv PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/packlib/fatmen)
-set_target_properties(fatsrv PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fatsrv${COMPSUFFIX})
+set_target_properties(fatsrv PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fatsrv${COMPSUFFIXBIN})
 ########################################################################
 #patchy4/p4lib/Imakefile
 set(patchy4_p4lib_FSRC acexq.F auxini.F crdeco.F depart.F dospgo.F flink.F hollcv.F ictype.F iucomp.F jartyp.F kdfill.F
@@ -1317,7 +1343,7 @@ add_executable(ypatchy  ${CMAKE_CURRENT_SOURCE_DIR}/patchy4/patchy/ypatch.F  )
 target_link_libraries(ypatchy PRIVATE patchy4_static)
 target_include_directories(ypatchy PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS ypatchy DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
-set_target_properties(ypatchy PROPERTIES OUTPUT_NAME ypatchy${COMPSUFFIX})
+set_target_properties(ypatchy PROPERTIES OUTPUT_NAME ypatchy${COMPSUFFIXBIN})
 #add_dependencies(ypatchy patchy4_static)
 ########################################################################
 set(EXECS ycompa yedit yfrcet yindex ylist ysearc yshift ytobcd ytobin ytocet )
@@ -1326,32 +1352,32 @@ foreach ( XXX ${EXECS} )
    target_link_libraries(${XXX} PRIVATE patchy4_static)
    target_include_directories(${XXX} PRIVATE ${PROJECT_SOURCE_DIR}/include)
    install(TARGETS ${XXX} DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
-   set_target_properties(${XXX} PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ${XXX}${COMPSUFFIX})
+   set_target_properties(${XXX} PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ${XXX}${COMPSUFFIXBIN})
 endforeach ( XXX ${EXECS} )
 
-set_target_properties(ypatchy PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ypatchy${COMPSUFFIX})
-set_target_properties(ycompa PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ycompar${COMPSUFFIX})
-set_target_properties(yfrcet PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME yfrceta${COMPSUFFIX})
-set_target_properties(yindex PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME yindexb${COMPSUFFIX})
-set_target_properties(ylist  PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ylistb${COMPSUFFIX})
-set_target_properties(ysearc PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ysearch${COMPSUFFIX})
-set_target_properties(ytocet PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ytoceta${COMPSUFFIX})
+set_target_properties(ypatchy PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ypatchy${COMPSUFFIXBIN})
+set_target_properties(ycompa PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ycompar${COMPSUFFIXBIN})
+set_target_properties(yfrcet PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME yfrceta${COMPSUFFIXBIN})
+set_target_properties(yindex PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME yindexb${COMPSUFFIXBIN})
+set_target_properties(ylist  PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ylistb${COMPSUFFIXBIN})
+set_target_properties(ysearc PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ysearch${COMPSUFFIXBIN})
+set_target_properties(ytocet PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME ytoceta${COMPSUFFIXBIN})
 ########################################################################
 add_custom_target( unsplit_SRC_p5libf  BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/p5lib.f
 #                        DEPENDS ypatchy
-                        COMMAND      ${CMAKE_CURRENT_BINARY_DIR}/ypatchy${COMPSUFFIX} - p5lib p5lib TTY .go
+                        COMMAND      ${CMAKE_CURRENT_BINARY_DIR}/ypatchy${COMPSUFFIXBIN} - p5lib p5lib TTY .go
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/patchy5)
 add_dependencies(unsplit_SRC_p5libf ypatchy)
 
 
 add_executable(fcasplit  ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/fcasplit.F  )
 install(TARGETS fcasplit DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
-set_target_properties(fcasplit PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fcasplit${COMPSUFFIX} RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+set_target_properties(fcasplit PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME fcasplit${COMPSUFFIXBIN} RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 
 add_custom_target( SRC_p5libf ALL
 #                        DEPENDS fcasplit unsplit_SRC_p5lib.f
-                        COMMAND  ${CMAKE_CURRENT_BINARY_DIR}/fcasplit${COMPSUFFIX} p5lib.f "-c "  "-c  -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX -DCERNLIB_QMGLIBC -DCERNLIB_QMLXIA64  -DCERNLIB_VERBOSE -DCERNLIB_QGETCWD -DCERNLIB_GFORTRAN"   "" "gfortran" "gcc"
+                        COMMAND  ${CMAKE_CURRENT_BINARY_DIR}/fcasplit${COMPSUFFIXBIN} p5lib.f "-c "  "-c  -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX -DCERNLIB_QMGLIBC -DCERNLIB_QMLXIA64  -DCERNLIB_VERBOSE -DCERNLIB_QGETCWD -DCERNLIB_GFORTRAN"   "" "gfortran" "gcc"
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/patchy5 )
 add_dependencies(SRC_p5libf unsplit_SRC_p5libf fcasplit)
 set (p5lib_SRC_F
@@ -1375,7 +1401,7 @@ add_executable(nypatchy  ${CMAKE_CURRENT_SOURCE_DIR}/patchy5/p5boot/nypatchy.f  
 target_link_libraries(nypatchy PRIVATE p5lib_static kernlib_static)
 target_include_directories(nypatchy PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS nypatchy DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
-set_target_properties(nypatchy PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME nypatchy${COMPSUFFIX}  )
+set_target_properties(nypatchy PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE} OUTPUT_NAME nypatchy${COMPSUFFIXBIN}  )
 
 set( PRG nycheck nydiff nyindex nylist nymerge nyshell nysynopt nytidy )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/patchy5/patchy.car   ${CMAKE_CURRENT_BINARY_DIR}/patchy5/patchy.car COPYONLY)
@@ -1387,13 +1413,13 @@ foreach ( XXX ${PRG} )
                        )
   add_custom_target( SRC_${XXX}  BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/patchy5/${XXX}.f
                         DEPENDS ypatchy CRA_${XXX}
-                        COMMAND      ${CMAKE_CURRENT_BINARY_DIR}/ypatchy${COMPSUFFIX} - :${XXX}.f :${XXX}.cra  TTY .go
+                        COMMAND      ${CMAKE_CURRENT_BINARY_DIR}/ypatchy${COMPSUFFIXBIN} - :${XXX}.f :${XXX}.cra  TTY .go
                        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/patchy5/
                        )
   add_executable(${XXX}  ${CMAKE_CURRENT_BINARY_DIR}/patchy5/${XXX}.f  )
   add_dependencies(${XXX}  SRC_${XXX})
   install(TARGETS ${XXX} DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
-  set_target_properties(${XXX} PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE}  OUTPUT_NAME ${XXX}${COMPSUFFIX})
+  set_target_properties(${XXX} PROPERTIES POSITION_INDEPENDENT_CODE ${CERNLIB_POSITION_INDEPENDENT_CODE}  OUTPUT_NAME ${XXX}${COMPSUFFIXBIN})
   target_link_libraries(${XXX} PRIVATE p5lib_static kernlib_static)
 endforeach ( XXX ${PRG} )
 

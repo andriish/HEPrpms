@@ -244,3 +244,13 @@ e5e4eccd98efc407f270614ce40bba7c  apfel/3.1.0/rpmbuild/SOURCES/3.1.0.tar.gz
 e4a031492fb6d196273daac8fe176a30  Rivet/3.1.9/rpmbuild/SOURCES/Rivet-3.1.9.tar.gz
 abb2e8b2745df328f43dd5d6ad4a2b64  ThePEG/2.3.0/rpmbuild/SOURCES/ThePEG-2.3.0.tar.bz2
 0fafff773d6789de42783ad550ff19d0  Herwig/7.3.0/rpmbuild/SOURCES/Herwig-7.3.0.tar.bz2
+7a8cb366d88c96e3d8d212b2b2fb03ed  apfel/3.1.1/rpmbuild/SOURCES/3.1.1.tar.gz
+7fa449ef6b4c2e717dcf15e0bbf8c2ea  cascade/3.3.3/rpmbuild/SOURCES/cascade-3.3.3.tar.gz
+27a230470b4bac9486b1514935152c25  cernlib/2023.10.31.0/rpmbuild/SOURCES/cernlib-2023.10.31.0-free.tar.gz
+bbebcc56ed6409f22583eddb0e4fd899  geant4/11.2.0/rpmbuild/SOURCES/geant4-v11.2.0.tar.gz
+8911ca75b1f6d012f777d6bbc78a91f8  iminuit/2.23.0/rpmbuild/SOURCES/v2.23.0.tar.gz
+2a9e2a0fd40c66b8a398d5c37475071c  LCIO/02.20.02/rpmbuild/SOURCES/v02-20-02.tar.gz
+1b469c78c607b431a61091eeaf4746be  binder/1.4.0/rpmbuild/SOURCES/v1.4.0.tar.gz
+cd50e0abe8424ae2a0e8042fee604b27  iminuit/2.23.0/rpmbuild/SOURCES/d0b406db5e678a2eed8eee0de3ddfdee746ea568.zip
+49e92f92244021912a56935918c927d0  pybind11/2.11.1/rpmbuild/SOURCES/pybind11-2.11.1.tar.gz
+873e37204bda029f4957ffa56dce1719  pybind11/2.11.1/rpmbuild/SOURCES/4902.patch

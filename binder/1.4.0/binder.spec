@@ -4,7 +4,7 @@ Release:    1%{?dist}
 Summary:    A tool for automatic generation of Python bindings to C++ code
 License:    MIT License
 URL:        https://github.com/RosettaCommons/binder
-Source0:    https://github.com/RosettaCommons/binder/archive/v{version}.tar.gz
+Source0:    https://github.com/RosettaCommons/binder/archive/v%{version}.tar.gz
 Patch0:         patch-binder-0.txt
 
 BuildRequires:    clang clang-devel llvm-devel 

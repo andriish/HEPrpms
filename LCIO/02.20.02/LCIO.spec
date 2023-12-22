@@ -40,6 +40,7 @@ all groups involved in linear collider detector studies and thus has become a de
 
 %package  devel
 Summary:        Libraries and headers for %{name}
+Requires:       %{name} = %{version}-%{release}
 Provides:       %{name}-devel = %{version}-%{release}
 
 %description  devel
@@ -102,8 +103,6 @@ mv $RPM_BUILD_ROOT/usr/python/* $RPM_BUILD_ROOT/%{python3_sitearch}
 mkdir -p $RPM_BUILD_ROOT/%{python_sitearch}
 mv $RPM_BUILD_ROOT/usr/python/* $RPM_BUILD_ROOT/%{python_sitearch}
 %endif
-
-mv $RPM_BUILD_ROOT/%{_prefix}/*.cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 
 %post -p /sbin/ldconfig
 
