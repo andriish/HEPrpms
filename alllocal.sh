@@ -9,8 +9,7 @@ declare -a BUILDLIST=(
 #OK binder:1.4.0
 #OK cernlib:2023.10.31.0
 #OK geant4:11.2.0
-python-scikit-build-core:0.6.1
-iminuit:2.23.0
+#No iminuit:2.23.0
 #OK LCIO:02.20.02
 #OK pybind11:2.11.1
 #qd ?
