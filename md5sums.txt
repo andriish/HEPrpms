@@ -255,3 +255,4 @@ cd50e0abe8424ae2a0e8042fee604b27  iminuit/2.23.0/rpmbuild/SOURCES/d0b406db5e678a
 2d678bd412aa746431d3127deb75492c  hevea/2.36/rpmbuild/SOURCES/hevea-2.36.tar.gz
 83b99423fbdaee311806a861a8ba7f4f  hevea/2.36/rpmbuild/SOURCES/hevea-2.36-manual.pdf
 861c3b73582fe7d411b7c4f000715188  hevea/2.36/rpmbuild/SOURCES/v2.36.tar.gz
+de9d74c29d794a4dcd528e6cec3e2895  Professor/2.4.2/rpmbuild/SOURCES/professor-professor-2.4.2.tar.gz
