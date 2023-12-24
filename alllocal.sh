@@ -4,7 +4,7 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-hevea:2.32
+#hevea:2.32
 #pythia6:6.4.28
 #OK apfel:3.1.1
 #OK cascade:3.3.3
