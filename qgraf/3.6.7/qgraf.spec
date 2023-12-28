@@ -38,16 +38,16 @@ mkdir -p %{buildroot}/%_bindir
 mkdir -p %{buildroot}/%_docdir/%{name}
 mkdir -p %{buildroot}/%_includedir/%{name}
 install qgraf %{buildroot}/%_bindir
-install fmodules/* %{buildroot}/%_includedir/%{name}
-install qgraf-%{version}.pdf %{buildroot}/%_docdir/%{name}
-install qgraf-3.0.pdf %{buildroot}/%_docdir/%{name}
+#install fmodules/* #{buildroot}/#_includedir/#{name}
+#install qgraf-#{version}.pdf #{buildroot}/#_docdir/#{name}
+#install qgraf-3.0.pdf #{buildroot}/#_docdir/#{name}
 
 
 %files
 %_bindir/%{name}
-%_includedir/%{name}
-%_docdir/%{name}/qgraf-%{version}.pdf
-%_docdir/%{name}/qgraf-3.0.pdf
+#_includedir/#{name}
+#_docdir/#{name}/qgraf-#{version}.pdf
+#_docdir/#{name}/qgraf-3.0.pdf
 
 
 %changelog
