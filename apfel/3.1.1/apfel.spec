@@ -66,8 +66,9 @@ pathfix.py -pn -i %{__python3}  bin/apfel.in
 %{_bindir}/apfel*
 %{_docdir}/*
 %{_libdir}/libA*
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} 
 %{_datadir}/*
-
+%endif
 
 %files devel
 %{_includedir}/APFEL/*
