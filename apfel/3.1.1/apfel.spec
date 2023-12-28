@@ -64,10 +64,14 @@ pathfix.py -pn -i %{__python3}  bin/apfel.in
 
 %files 
 %{_bindir}/apfel*
-%{_docdir}/*
 %{_libdir}/libA*
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} 
 %{_datadir}/*
+%{_docdir}/*
+%endif
+%if 0%{?suse_version}
+/usr/share/APFEL/*
+/usr/share/doc/apfel/*
 %endif
 
 %files devel
