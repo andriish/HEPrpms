@@ -1,14 +1,25 @@
+%if 0%{?suse_version}
+%{!?python3_pkgversion:%global python3_pkgversion 3}
+%endif
 Name:           apfel
 Version:        3.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL
 Url:            https://github.com/scarrazza/apfel
 Source:         https://github.com/scarrazza/apfel/archive/refs/tags/%{version}.tar.gz
 Summary:        A PDF Evolution Library
 Prefix: %{_prefix}
-BuildRequires:  gcc-c++  gcc-gfortran cmake swig lhapdf-devel python3 python3-devel  
+BuildRequires:  gcc-c++   cmake swig lhapdf-devel python3
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: platform-python-devel 
+%endif
+
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+BuildRequires:  python3-devel gcc-gfortran
+%endif
+%if 0%{?suse_version}
+BuildRequires:  gcc-fortran
+BuildRequires:  python3-devel python-rpm-macros
 %endif
 
 %description 
@@ -24,14 +35,6 @@ Requires: %{name} = %{version}
 %description devel
 Install this package to develop software based on APFEL.
 
-%package -n python%{python3_pkgversion}-%{name}
-Summary:  %{name} Python 3 bindings
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{name}}
-Requires:  %{name}%{?_isa} = %{version}-%{release}
-
-%description -n python%{python3_pkgversion}-%{name}
-This package provides the Python 3 bindings for HepMC3.
- 
 %prep
 %setup  -q -n %{name}-%{version}
 
