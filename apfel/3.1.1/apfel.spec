@@ -51,7 +51,8 @@ This package provides the Python 3 bindings for HepMC3.
 %build
 %if %{?fedora}%{!?fedora:0} >= 39
 %py3_shebang_fix  bin/apfel.in
-%else
+%endif
+%if %{?rhel}%{!?rhel:0}
 pathfix.py -pn -i %{__python3}  bin/apfel.in
 %endif
 
