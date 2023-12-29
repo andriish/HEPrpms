@@ -322,7 +322,6 @@ chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cdbackup%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cdmake%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cdmove%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cdserv%{?compiler_string}
-#chrpath --delete $RPM_BUILD_ROOT%{_bindir}/dzedit%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/dzeX11%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/fatback%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/fatmen%{?compiler_string}
@@ -344,18 +343,14 @@ chrpath --delete $RPM_BUILD_ROOT%{_bindir}/nysynopt%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/nytidy%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/paw++.dynamic%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/paw++%{?compiler_string}
-#chrpath --delete $RPM_BUILD_ROOT%{_bindir}/paw%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/pawserv%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/pawX11.dynamic%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/pawX11%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/ycompar%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/yedit%{?compiler_string}
-#chrpath --delete $RPM_BUILD_ROOT%{_bindir}/yexpand%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/yfrceta%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/yindexb%{?compiler_string}
-#chrpath --delete $RPM_BUILD_ROOT%{_bindir}/yindex%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/ylistb%{?compiler_string}
-#chrpath --delete $RPM_BUILD_ROOT%{_bindir}/ylist%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/ypatchy%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/ysearch%{?compiler_string}
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/yshift%{?compiler_string}

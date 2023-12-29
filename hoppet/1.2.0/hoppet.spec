@@ -29,10 +29,10 @@ with contributions from Juan Rojo, Frederic Dreyer and Alexander Karlberg.
 
 %build
 %if 0%{?rhel} || 0%{?fedora}
-./configure --prefix=%{buildroot}/%{_prefix}  "FFLAGS=%{optflags} -fPIC" "LDFLAGS=%{build_ldflags}"
+./configure --prefix=%{buildroot}/%{_prefix} --libdir=%{buildroot}/%_libdir  "FFLAGS=%{optflags} -fPIC" "LDFLAGS=%{build_ldflags}"
 %endif
 %if 0%{?suse_version}
-./configure --prefix=%{buildroot}/%{_prefix}  "FFLAGS=%{optflags} -fPIC" 
+./configure --prefix=%{buildroot}/%{_prefix} --libdir=%{buildroot}/%_libdir "FFLAGS=%{optflags} -fPIC" 
 %endif
 
 make %{?_smp_mflags}

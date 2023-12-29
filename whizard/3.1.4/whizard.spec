@@ -134,7 +134,7 @@ export PYTHON=%{_bindir}/python3
 export PYTHON_VERSION=%{py3_ver}
 %endif
 ###
-autoreconf --force --install --verbose .
+autoreconf --force  --verbose .
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 
@@ -256,7 +256,7 @@ rm -rf %{buildroot}
 ldconfig 
 
 %changelog
-* Mon Nov 10 2023 Andrii Verbytskyi 3.1.3
+* Fri Nov 10 2023 Andrii Verbytskyi 3.1.3
 - Update to 3.1.3
 * Fri Mar 10 2023 Andrii Verbytskyi 3.1.0
 - Update to 3.1.0

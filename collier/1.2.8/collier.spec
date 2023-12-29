@@ -61,7 +61,6 @@ make -C build
 %if 0%{?rhel} || 0%{?fedora}
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >8 
 %cmake_install
-#make -C x86_64-redhat-linux-gnu install DESTDIR=%{buildroot}
 %else
 make install DESTDIR=%{buildroot}
 %endif

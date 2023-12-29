@@ -90,7 +90,6 @@ sed -i '/F77/s/\$(AM_V_lt)/& --tag=FC/' fortran/Makefile
 mv %{buildroot}%{_docdir}/qd/* .
 rm -rf %{buildroot}%{_datadir}
 
-# Move Fortran modules to %{_fmoddir}
 mkdir -p %{buildroot}%{_fmoddir}/%{name}
 mv %{buildroot}%{_includedir}/qd/*.mod %{buildroot}%{_fmoddir}/%{name}
 

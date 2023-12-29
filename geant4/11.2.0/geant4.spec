@@ -1,26 +1,26 @@
 %undefine __cmake_in_source_build
 %undefine __cmake3_in_source_build
 
-Name:		geant4
-Version:	11.2.0
-Release:	1%{?dist}
-Summary:	A toolkit for the simulation of the passage of particles through matter
+Name:        geant4
+Version:    11.2.0
+Release:    1%{?dist}
+Summary:    A toolkit for the simulation of the passage of particles through matter
 
-License:	Geant
-URL:		https://geant4.web.cern.ch
-Source0:	https://geant4-data.web.cern.ch/releases/geant4-v%{version}.tar.gz
+License:    Geant
+URL:        https://geant4.web.cern.ch
+Source0:    https://geant4-data.web.cern.ch/releases/geant4-v%{version}.tar.gz
 
-BuildRequires:	cmake >= 3.9
-BuildRequires:	gcc-c++
-BuildRequires:	doxygen
-BuildRequires:	clhep-devel
-BuildRequires:	zlib-devel
-BuildRequires:	PTL-devel 
+BuildRequires:    cmake >= 3.9
+BuildRequires:    gcc-c++
+BuildRequires:    doxygen
+BuildRequires:    clhep-devel
+BuildRequires:    zlib-devel
+BuildRequires:    PTL-devel 
 %if 0%{?rhel} || 0%{?fedora}
-BuildRequires:	 expat-devel  xerces-c-devel xerces-c
+BuildRequires:     expat-devel  xerces-c-devel xerces-c
 %endif
 %if 0%{?suse_version}
-BuildRequires:	 libexpat-devel libxerces-c-devel xerces-c 
+BuildRequires:     libexpat-devel libxerces-c-devel xerces-c 
 %endif
 
 
@@ -31,8 +31,8 @@ Geant4: A Simulation Toolkit
 
 
 %package devel
-Summary:	Geant4: A Simulation Toolkit - development files
-Requires:	%{name}%{?_isa} = %{version}-%{release}
+Summary:    Geant4: A Simulation Toolkit - development files
+Requires:    %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 This package provides development files for %{name}.
@@ -40,16 +40,16 @@ This package provides development files for %{name}.
 
 
 %package doc
-Summary:	Geant4: A Simulation Toolkit - documentation
-BuildArch:	noarch
+Summary:    Geant4: A Simulation Toolkit - documentation
+BuildArch:    noarch
 
 %description doc
 This package provides Geant4 manuals and examples.
 
 
 %package data
-Summary:	Geant4: A Simulation Toolkit - documentation
-BuildArch:	noarch
+Summary:    Geant4: A Simulation Toolkit - documentation
+BuildArch:    noarch
 
 %description data
 This package provides Geant4 manuals and examples.
@@ -62,13 +62,13 @@ This package provides Geant4 manuals and examples.
 %build
 
 %cmake -DGEANT4_INSTALL_DATA:BOOL=ON \
-	-DGEANT4_USE_SYSTEM_CLHEP:BOOL=ON \
-	-DGEANT4_USE_SYSTEM_EXPAT:BOOL=ON \
-	-DGEANT4_USE_SYSTEM_ZLIB:BOOL=ON \
-	-DGEANT4_USE_SYSTEM_PTL:BOOL=ON \
-	-DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
-	-DGEANT4_USE_GDML:BOOL=ON \
-	-DGEANT4_BUILD_MULTITHREADED=ON  -DGEANT4_BUILD_TLS_MODEL=global-dynamic
+    -DGEANT4_USE_SYSTEM_CLHEP:BOOL=ON \
+    -DGEANT4_USE_SYSTEM_EXPAT:BOOL=ON \
+    -DGEANT4_USE_SYSTEM_ZLIB:BOOL=ON \
+    -DGEANT4_USE_SYSTEM_PTL:BOOL=ON \
+    -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
+    -DGEANT4_USE_GDML:BOOL=ON \
+    -DGEANT4_BUILD_MULTITHREADED=ON  -DGEANT4_BUILD_TLS_MODEL=global-dynamic
 %cmake_build
 
 

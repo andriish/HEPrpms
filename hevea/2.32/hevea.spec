@@ -4,16 +4,16 @@
 %global debug_package %{nil}
 %endif
 
-Name:		hevea
-Version:	2.32
-Release:	2%{?dist}
-Summary:	LaTeX to HTML translator
-License:	QPL
-URL:		http://hevea.inria.fr/
-Source0:	https://github.com/maranget/hevea/archive/refs/tags/v2.32.tar.gz
-BuildRequires:	ocaml, tex(latex)
+Name:        hevea
+Version:    2.32
+Release:    2%{?dist}
+Summary:    LaTeX to HTML translator
+License:    QPL
+URL:        http://hevea.inria.fr/
+Source0:    https://github.com/maranget/hevea/archive/refs/tags/v2.32.tar.gz
+BuildRequires:    ocaml, tex(latex)
 BuildRequires:  ocaml-ocamlbuild
-Requires:	tex(latex) netpbm-progs ghostscript tex(dvips)
+Requires:    tex(latex) netpbm-progs ghostscript tex(dvips)
 
 
 %description
@@ -35,25 +35,25 @@ mv -f CHANGES.utf8 CHANGES
 ulimit -s unlimited
 make %{?_smp_mflags} \
 %ifnarch %{ocaml_native_compiler}
-	TARGET=byte \
+    TARGET=byte \
 %endif
-	PREFIX=%{_prefix} \
-	LIBDIR=%{_datadir}/%{name} \
-	LATEXLIBDIR=%{_texmf}/tex/latex/hevea \
-	OCAMLFLAGS="-g -w +a-4-9"
+    PREFIX=%{_prefix} \
+    LIBDIR=%{_datadir}/%{name} \
+    LATEXLIBDIR=%{_texmf}/tex/latex/hevea \
+    OCAMLFLAGS="-g -w +a-4-9"
 
 
 %install
 make install \
 %ifnarch %{ocaml_native_compiler}
-	TARGET=byte \
+    TARGET=byte \
 %endif
-	DESTDIR=%{buildroot}
-	PREFIX=%{_prefix} \
-	LIBDIR=%{_datadir}/hevea \
-	LATEXLIBDIR=%{_texmf}/tex/latex/hevea
+    DESTDIR=%{buildroot}
+    PREFIX=%{_prefix} \
+    LIBDIR=%{_datadir}/hevea \
+    LATEXLIBDIR=%{_texmf}/tex/latex/hevea
 
-	
+    
 %files
 %doc README CHANGES examples 
 %license LICENSE
