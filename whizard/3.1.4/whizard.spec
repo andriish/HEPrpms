@@ -21,7 +21,20 @@ BuildRequires:  python36-rpm-macros
 %if 0%{?suse_version}
 BuildRequires:  python3-devel python-rpm-macros
 %endif
-
+######
+%if %{?rhel}%{!?rhel:0} >= 8
+BuildRequires: python3 python3-devel  platform-python-devel python3-Cython
+%endif
+%if %{?fedora}%{!?fedora:0}
+%if %{?fedora}%{!?fedora:0} >= 35
+BuildRequires: python-setuptools
+%endif
+BuildRequires:   Cython python3 python3-devel python3-libs 
+%endif
+%if 0%{?suse_version}
+BuildRequires: python3-Cython python3-devel  python3-setuptools
+%endif
+####
 Requires: recola
 BuildRequires: recola
 
