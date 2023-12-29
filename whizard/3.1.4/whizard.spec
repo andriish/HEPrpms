@@ -18,7 +18,6 @@ BuildRequires:  python3-devel
 %if %{?rhel}%{!?rhel:0} == 8
 BuildRequires:  python36-rpm-macros
 %endif
-%endif
 %if 0%{?suse_version}
 BuildRequires:  python3-devel python-rpm-macros
 %endif
