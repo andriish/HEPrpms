@@ -7,7 +7,7 @@
 
 Name:           gosam
 Version:        2.1.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 License:        GPLv3
 Url:            https://github.com/gudrunhe/gosam
 Source0:        https://github.com/gudrunhe/gosam/releases/download/2.1.1/gosam-2.1.1-4b98559.tar.gz
