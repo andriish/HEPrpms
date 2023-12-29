@@ -144,6 +144,10 @@ FC_OPTFLAGS=`echo "%optflags" | sed -e 's/-mtune=[^ ]\+//'  -e 's@-flto=auto@@g'
 export CXXFLAGS="$FC_OPTFLAGS -Wno-error -std=c++1z -Wno-error=format-security "
 export FFLAGS="$FC_OPTFLAGS -Wno-error -fallow-argument-mismatch "
 export FCFLAGS="$FC_OPTFLAGS -Wno-error -fallow-argument-mismatch "
+%if %{?rhel}%{!?rhel:0} == 8
+export FFLAGS="$FC_OPTFLAGS -Wno-error "
+export FCFLAGS="$FC_OPTFLAGS -Wno-error "
+%endif
 export LDFLAGS=" "
 %else
 export CXXFLAGS="$FC_OPTFLAGS -Wno-error -std=c++1y -Wno-error=format-security "
