@@ -46,7 +46,7 @@ BuildRequires: pythia8 pythia8-devel  libtirpc  libtirpc-devel lhapdf-sets-whiza
 BuildRequires: root  python3 python3-devel  openmpi openmpi-devel noweb LCIO LCIO-devel TAUOLA TAUOLA-devel hdf5 hdf5-devel
 BuildRequires: hdf5-devel
 #Fails for RH
-%if %{?fedora}%{!?fedora:0}
+%if %{?fedora}%{!?fedora:0}|| %{?rhel}%{!?rhel:0}
 BuildRequires:  hevea
 BuildRequires:  tex(latex) 
 %endif
@@ -220,6 +220,7 @@ export FCFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
 
 %install 
 %make_install
+rm -f $RPM_BUILD_ROOT%{_libdir}/whizard/install_files.txt
 %if %{?fedora}%{!?fedora:0} >=34
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/whizard
 chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
