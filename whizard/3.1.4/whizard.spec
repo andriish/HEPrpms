@@ -1,13 +1,27 @@
+%if 0%{?suse_version}
+%{!?python3_pkgversion:%global python3_pkgversion 3}
+%endif
 %undefine _debugsource_packages
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.1.4
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
 URL:    https://whizard.hepforge.org/
 Patch0:         patch-whizard-0.txt
+
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+BuildRequires:  python3-devel
+%endif
+%if %{?rhel}%{!?rhel:0} == 8
+BuildRequires:  python36-rpm-macros
+%endif
+%endif
+%if 0%{?suse_version}
+BuildRequires:  python3-devel python-rpm-macros
+%endif
 
 Requires: recola
 BuildRequires: recola
@@ -68,6 +82,18 @@ obtained by alternative methods (e.g., including loop corrections) may be interf
   for processes with up to eight final-state particles; more particles are possible.
    For more particles, there is the option to generate processes as decay cascades 
    including complete spin correlations. Different options for QCD parton showers are available. 
+
+
+%package -n python%{python3_pkgversion}-%{name}
+Summary:        python bindings for %{name} - Python 3 module
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{name}}
+Requires: %{name}%{?_isa} = %{version}-%{release}
+%description -n python%{python3_pkgversion}-%{name}
+This package contains python bindings for %{name}.
+
+
+
+
 %prep 
 %setup -q
 %patch0 -p1
@@ -107,6 +133,7 @@ autoreconf --force --install --verbose .
     --enable-hoppet     --with-hoppet=/usr     \
     --enable-lcio       --with-lcio=/usr \
     --enable-pythia8    --with-pythia8=/usr \
+    --enable-python             \
     --enable-openloops  --with-openloops=/usr/%_lib/openloops  \
     --enable-looptools  --with-looptools=/usr  --with-mpi-lib=openmpi
 %else
@@ -121,6 +148,7 @@ autoreconf --force --install --verbose .
     --enable-hoppet     --with-hoppet=/usr     \
     --enable-lcio       --with-lcio=/usr \
     --enable-pythia8    --with-pythia8=/usr \
+    --enable-python     \
     --enable-openloops  --with-openloops=/usr/%_lib/openloops  \
     --enable-looptools  --with-looptools=/usr  --with-mpi-lib=openmpi
 %endif
@@ -148,6 +176,7 @@ export FCFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
     --enable-hoppet=yes     --with-hoppet=/usr     \
     --enable-lcio       --with-lcio=/usr \
     --enable-pythia8    --with-pythia8=/usr \
+    --enable-python     \
     --enable-openloops  --with-openloops=/usr/%_lib/openloops  \
     --enable-looptools  --with-looptools=/usr  --with-mpi-lib=openmpi
 
@@ -169,6 +198,13 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 /usr/share/*
 /usr/lib/mod/*
 /usr/include/*
+
+%files -n python%{python3_pkgversion}-%{name}
+%{python3_sitearch}/_%{name}*.so*
+%{python3_sitearch}/*.p*
+%{python3_sitearch}/__pycache__/*
+
+
 
 %clean
 rm -rf %{buildroot}

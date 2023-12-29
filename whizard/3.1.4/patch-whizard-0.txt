@@ -1,18 +1,6 @@
-diff -Naur ORIG/configure.ac PATCHED/configure.ac
---- ORIG/configure.ac	2023-11-06 17:42:46.000000000 +0100
-+++ PATCHED/configure.ac	2023-11-13 12:09:43.301916790 +0100
-@@ -474,7 +474,7 @@
- ### Check for ocamlc and its relatives
- AC_PROG_OCAML()
- if test "$enable_ocaml" != "no"; then
--   AC_OCAML_VERSION_CHECK(408000)
-+   AC_OCAML_VERSION_CHECK(407000)
-    AC_PROG_OCAMLLEX()
-    AC_PROG_OCAMLYACC()
-    AC_PROG_OCAMLCP()
 diff -Naur ORIG/m4/gosam.m4 PATCHED/m4/gosam.m4
---- ORIG/m4/gosam.m4	2023-11-13 11:44:46.641098706 +0100
-+++ PATCHED/m4/gosam.m4	2023-11-13 11:44:46.644098720 +0100
+--- ORIG/m4/gosam.m4	2023-11-17 00:50:20.798797861 +0100
++++ PATCHED/m4/gosam.m4	2023-11-17 00:50:20.799797877 +0100
 @@ -68,7 +68,7 @@
    else
      AC_MSG_RESULT([no])
@@ -65,8 +53,8 @@ diff -Naur ORIG/m4/gosam.m4 PATCHED/m4/gosam.m4
    if test "$samurai_lib" != "no"; then
      samurai_libdir=`dirname $samurai_lib`
 diff -Naur ORIG/m4/hepmc.m4 PATCHED/m4/hepmc.m4
---- ORIG/m4/hepmc.m4	2023-11-13 11:44:46.642098711 +0100
-+++ PATCHED/m4/hepmc.m4	2023-11-13 11:44:46.644098720 +0100
+--- ORIG/m4/hepmc.m4	2023-11-17 00:50:20.798797861 +0100
++++ PATCHED/m4/hepmc.m4	2023-11-17 00:50:20.799797877 +0100
 @@ -79,7 +79,7 @@
        AC_MSG_CHECKING([the HepMC3 version])
        save_CXXFLAGS="$CXXFLAGS"
@@ -112,8 +100,8 @@ diff -Naur ORIG/m4/hepmc.m4 PATCHED/m4/hepmc.m4
        AC_MSG_RESULT([yes])
        $1
 diff -Naur ORIG/m4/pythia8.m4 PATCHED/m4/pythia8.m4
---- ORIG/m4/pythia8.m4	2023-11-13 11:44:46.642098711 +0100
-+++ PATCHED/m4/pythia8.m4	2023-11-13 11:44:46.644098720 +0100
+--- ORIG/m4/pythia8.m4	2023-11-17 00:50:20.798797861 +0100
++++ PATCHED/m4/pythia8.m4	2023-11-17 00:50:20.799797877 +0100
 @@ -46,14 +46,14 @@
  [
  dnl ckeck if a directory is specified for PYTHIA8
@@ -189,8 +177,8 @@ diff -Naur ORIG/m4/pythia8.m4 PATCHED/m4/pythia8.m4
    AC_LINK_IFELSE([dnl
      AC_LANG_PROGRAM([[#include "Pythia8/Pythia.h"]],
 diff -Naur ORIG/omega/scripts/ufo-sanitizer.in PATCHED/omega/scripts/ufo-sanitizer.in
---- ORIG/omega/scripts/ufo-sanitizer.in	2023-11-13 11:44:46.642098711 +0100
-+++ PATCHED/omega/scripts/ufo-sanitizer.in	2023-11-13 11:44:46.645098724 +0100
+--- ORIG/omega/scripts/ufo-sanitizer.in	2023-11-17 00:50:20.798797861 +0100
++++ PATCHED/omega/scripts/ufo-sanitizer.in	2023-11-17 00:50:20.799797877 +0100
 @@ -1,4 +1,4 @@
 -#! /usr/bin/python
 +#! /usr/bin/python3
@@ -198,8 +186,8 @@ diff -Naur ORIG/omega/scripts/ufo-sanitizer.in PATCHED/omega/scripts/ufo-sanitiz
  ########################################################################
  #
 diff -Naur ORIG/src/rng/dispatch_rng_sub.f90 PATCHED/src/rng/dispatch_rng_sub.f90
---- ORIG/src/rng/dispatch_rng_sub.f90	2023-11-13 11:51:20.653905723 +0100
-+++ PATCHED/src/rng/dispatch_rng_sub.f90	2023-11-13 11:51:19.845902010 +0100
+--- ORIG/src/rng/dispatch_rng_sub.f90	2023-11-17 00:50:20.799797877 +0100
++++ PATCHED/src/rng/dispatch_rng_sub.f90	2023-11-17 00:50:20.799797877 +0100
 @@ -38,7 +38,7 @@
  
  contains
