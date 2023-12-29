@@ -199,10 +199,7 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 /usr/include/*
 
 %files -n python%{python3_pkgversion}-%{name}
-%{python3_sitearch}/_%{name}*.so*
-%{python3_sitearch}/*.p*
-%{python3_sitearch}/__pycache__/*
-
+%{python3_sitearch}/*
 
 
 %clean
