@@ -96,12 +96,24 @@ obtained by alternative methods (e.g., including loop corrections) may be interf
    including complete spin correlations. Different options for QCD parton showers are available. 
 
 
-%package -n python%{python3_pkgversion}-%{name}
-Summary:        python bindings for %{name} - Python 3 module
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{name}}
-Requires: %{name}%{?_isa} = %{version}-%{release}
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+%package  -n python%{python3_pkgversion}-%{name}
+Summary:        python bindings for %{name}
+Provides:       python%{python3_pkgversion}-%{name} = %{version}-%{release}
+
 %description -n python%{python3_pkgversion}-%{name}
-This package contains python bindings for %{name}.
+python%{python3_pkgversion}-%{name} contains python bindings for %{name}.
+%endif
+
+
+%if 0%{?suse_version}
+%package  -n python3-%{name}
+Summary:        python bindings for %{name}
+Provides:       python3-%{name} = %{version}-%{release}
+
+%description -n python3-%{name}
+python-%{name} contains python bindings for %{name}.
+%endif
 
 
 
@@ -111,6 +123,16 @@ This package contains python bindings for %{name}.
 %patch0 -p1
 
 %build 
+
+###
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+export PYTHON=%{_bindir}/python3
+%endif
+%if 0%{?suse_version}
+export PYTHON_VERSION=%{py3_ver}
+%endif
+###
+
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 
 FC_OPTFLAGS=`echo "%optflags" | sed -e 's/-mtune=[^ ]\+//'  -e 's@-flto=auto@@g' -e 's@-ffat-lto-objects@@g'  -e 's@-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1@@g' -e 's@-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1@@g'  -e 's@-Werror=format-security@@g' `
@@ -211,8 +233,16 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 /usr/lib/mod/*
 /usr/include/*
 
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 %files -n python%{python3_pkgversion}-%{name}
 %{python3_sitearch}/*
+%endif
+
+
+%if 0%{?suse_version}
+%files -n python3-%{name}
+/usr/%_lib/python*/site-packages/*
+%endif
 
 
 %clean
