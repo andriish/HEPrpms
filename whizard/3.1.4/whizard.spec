@@ -1,3 +1,4 @@
+%global __brp_check_rpaths %{nil}
 %if 0%{?suse_version}
 %{!?python3_pkgversion:%global python3_pkgversion 3}
 %endif
@@ -60,6 +61,7 @@ BuildRequires: chrpath
 %endif
 
 %if %{?rhel}%{!?rhel:0} == 8 
+BuildRequires:   autoconf binutils automake libtool
 %global _use_internal_dependency_generator 0
 %global __find_provides /usr/lib/rpm/ocaml-find-provides.sh
 %global __find_requires /usr/lib/rpm/ocaml-find-requires.sh
@@ -132,6 +134,7 @@ export PYTHON=%{_bindir}/python3
 export PYTHON_VERSION=%{py3_ver}
 %endif
 ###
+autoreconf --force --install --verbose .
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 
@@ -155,7 +158,7 @@ echo $FC_OPTFLAGS
 
 export CFLAGS="$FC_OPTFLAGS -Wno-error -Wno-error=format-security "
 
-autoreconf --force --install --verbose .
+
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 9
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --enable-recola     --with-recola=/usr/%_lib \
