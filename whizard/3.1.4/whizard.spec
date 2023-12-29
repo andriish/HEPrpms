@@ -2,7 +2,7 @@
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.1.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
@@ -21,7 +21,8 @@ BuildRequires: root  python3 python3-devel  openmpi openmpi-devel noweb LCIO LCI
 BuildRequires: hdf5-devel
 #Fails for RH
 %if %{?fedora}%{!?fedora:0}
-BuildRequires:  hevea 
+BuildRequires:  hevea
+BuildRequires:  tex(latex) 
 %endif
 
 Requires: LoopTools
@@ -52,6 +53,7 @@ Requires: LoopTools
 BuildRequires:  LoopTools  hevea
 BuildRequires: python3-LHAPDF gcc-fortran gcc-c++  libtirpc-devel libboost_iostreams-devel
 #libtirpc  
+BuildRequires:  tex(latex)
 %endif
 
 
