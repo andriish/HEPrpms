@@ -66,16 +66,11 @@ Requires: nlojet++ == 4.1.3
 Requires: patchy-gfortran == 2023.10.31.0
 Requires: paw-gfortran == 2023.10.31.0
 Requires: pythia6 == 6.4.28
-%if 0%{?suse_version}
-Requires: python-LCIO == 2.20.02
-#### Requires: python3-SHERPA-MC == 2.2.15
-#### Requires: python3-SHERPA-MC-openmpi == 2.2.15
-%endif
 %if 0%{?rhel} || 0%{?fedora}
-Requires: python3-LCIO == 2.20.02
 Requires: python3-SHERPA-MC == 2.2.15
 Requires: python3-SHERPA-MC-openmpi == 2.2.15
 %endif
+Requires: python3-LCIO == 2.20.02
 Requires: python3-fastjet == 3.4.2
 ##### Requires: python3-whizard == 3.1.4
 Requires: qcdloop == 2.0.9
@@ -88,7 +83,9 @@ Requires: rapgap == 3.4.0
 ##### Requires: recola2-SM == 2.2.3
 Requires: topdrawer == 1.4e
 Requires: ugs == 2.10e
+%if 0%{?suse_version}
 Requires: whizard == 3.1.4
+%endif
 
 %description
 All packages of HEPrpms.
