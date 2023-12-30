@@ -16,8 +16,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Install 
-      if: contains(github.event.head_commit.message, 'CI') == 'true' || ${{ github.event_name == 'schedule' }}
       run: |
+           if [ "x$(git log -1  | grep CI)" != "x" ]; then  exit 0; fi
            zypper --non-interactive  install rpm-build which rpmdevtools git wget
            zypper --non-interactive addrepo https://download.opensuse.org/repositories/science/openSUSE_Tumbleweed/science.repo
            wget https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/repo/opensuse-tumbleweed/averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo
@@ -27,7 +27,6 @@ jobs:
            zypper --non-interactive --no-gpg-checks  --gpg-auto-import-keys install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobEPEL8:
-    if: contains(github.event.head_commit.message, 'CI') == 'true'|| ${{ github.event_name == 'schedule' }}
     name: HEPrpms_on_EPEL8
     runs-on: ubuntu-latest
     container:
@@ -36,8 +35,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Install
-      if: contains(github.event.head_commit.message, 'CI')  || ${{ github.event_name == 'schedule' }}
       run: |
+           if [ "x$(git log -1  | grep CI)" != "x" ]; then  exit 0; fi      
            dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
            yum -y install epel-release
            dnf -y copr enable averbyts/HEPrpms
@@ -53,8 +52,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Install 
-      if: contains(github.event.head_commit.message, 'CI') || ${{ github.event_name == 'schedule' }} 
       run: |
+           if [ "x$(git log -1  | grep CI)" != "x" ]; then  exit 0; fi      
            dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
            yum -y install epel-release
            dnf -y copr enable averbyts/HEPrpms
@@ -64,7 +63,6 @@ jobs:
 
 
   compilejobFedora38:
-    if: contains(github.event.head_commit.message, 'CI') || ${{ github.event_name == 'schedule' }}  
     name: HEPrpms_on_Fedora38
     runs-on: ubuntu-latest
     container:
@@ -74,13 +72,13 @@ jobs:
       uses: actions/checkout@v3
     - name: Install 
       run: |
+           if [ "x$(git log -1  | grep CI)" != "x" ]; then  exit 0; fi
            dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
            dnf -y copr enable averbyts/HEPrpms
            sh srpmsbuild.sh HEPrpms 2023.12.30 --build
            dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobFedora39:
-    if: contains(github.event.head_commit.message, 'CI') || ${{ github.event_name == 'schedule' }}  
     name: HEPrpms_on_Fedora39
     runs-on: ubuntu-latest
     container:
@@ -90,13 +88,13 @@ jobs:
       uses: actions/checkout@v3
     - name: Install 
       run: |
+           if [ "x$(git log -1  | grep CI)" != "x" ]; then  exit 0; fi      
            dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
            dnf -y copr enable averbyts/HEPrpms
            sh srpmsbuild.sh HEPrpms 2023.12.30 --build
            dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobFedora40:
-    if: contains(github.event.head_commit.message, 'CI') || ${{ github.event_name == 'schedule' }}  
     name: HEPrpms_on_Fedora40
     runs-on: ubuntu-latest
     container:
@@ -106,6 +104,7 @@ jobs:
       uses: actions/checkout@v3
     - name: Install 
       run: |
+           if [ "x$(git log -1  | grep CI)" != "x" ]; then  exit 0; fi      
            dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
            dnf -y copr enable averbyts/HEPrpms
            sh srpmsbuild.sh HEPrpms 2023.12.30 --build
