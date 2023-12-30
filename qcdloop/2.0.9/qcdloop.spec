@@ -18,7 +18,7 @@
 %global debug_package %{nil}
 Name:           qcdloop
 Version:        2.0.9
-Release:        2
+Release:        1002
 Summary:        An object-oriented one-loop scalar Feynman integrals framework
 License:        GPL-3.0-only
 URL:            https://qcdloop.web.cern.ch/qcdloop/

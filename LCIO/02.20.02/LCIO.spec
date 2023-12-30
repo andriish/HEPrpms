@@ -1,6 +1,6 @@
 Name:           LCIO
 Version:        2.20.02
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        LCIO (Linear Collider I/O) is a persistency framework and event data model for linear collider detector studies.
 
 Group:          Development/Tools
@@ -56,10 +56,10 @@ Summary:   %{name}  Python 3 bindings
 This package provides the Python 3 bindings for %{name}
 %endif
 %if  0%{?suse_version}
-%package -n python-%{name}
+%package -n python3-%{name}
 Summary:   %{name}  Python  bindings
 %{?python_provide:%python_provide python3-%{name}}
-%description -n python-%{name}
+%description -n python3-%{name}
 This package provides the Python 3 bindings for %{name}
 %endif
 
@@ -124,7 +124,7 @@ mv $RPM_BUILD_ROOT/usr/python/* $RPM_BUILD_ROOT/%{python_sitearch}
 %endif
 
 %if  0%{?suse_version}
-%files  -n python-%{name}
+%files  -n python3-%{name}
 %{python_sitearch}/*
 %endif
 
