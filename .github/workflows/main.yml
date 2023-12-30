@@ -1,8 +1,10 @@
 name: build
 on:
+ push:
  schedule:
 #Every 2 days at midnight 
     - cron:  "0 0 1/48 * *"
+
 
 jobs:
   compilejobTW:
