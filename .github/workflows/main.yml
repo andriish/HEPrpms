@@ -8,7 +8,7 @@ on:
 
 jobs:
   compilejobTW:
-   if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}
+    if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}
     name: HEPrpms_on_TW
     runs-on: ubuntu-latest
     container:
@@ -27,7 +27,7 @@ jobs:
            zypper --non-interactive --no-gpg-checks  --gpg-auto-import-keys install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobEPEL8:
-   if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}
+    if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}
     name: HEPrpms_on_EPEL8
     runs-on: ubuntu-latest
     container:
@@ -44,7 +44,7 @@ jobs:
            dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobEPEL9:
-   if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}  
+    if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}  
     name: HEPrpms_on_EPEL9
     runs-on: ubuntu-latest
     container:
@@ -62,7 +62,7 @@ jobs:
 
 
   compilejobFedora38:
-   if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}  
+    if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}  
     name: HEPrpms_on_Fedora38
     runs-on: ubuntu-latest
     container:
@@ -78,7 +78,7 @@ jobs:
            dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobFedora39:
-   if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}  
+    if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}  
     name: HEPrpms_on_Fedora39
     runs-on: ubuntu-latest
     container:
@@ -94,7 +94,7 @@ jobs:
            dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobFedora40:
-   if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}  
+    if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}  
     name: HEPrpms_on_Fedora40
     runs-on: ubuntu-latest
     container:
