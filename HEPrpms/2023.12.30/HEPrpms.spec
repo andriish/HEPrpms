@@ -7,7 +7,6 @@ License:       GPL+
 URL:           https://github.com/andriish/HEPrpms/
 Source0:       README.txt
 
-%if 0%{?rhel} || 0%{?fedora}
 Requires: SHERPA-MC == 2.2.15
 Requires: SHERPA-MC-common == 2.2.15
 Requires: SHERPA-MC-devel == 2.2.15
@@ -15,7 +14,6 @@ Requires: SHERPA-MC-openmpi == 2.2.15
 Requires: SHERPA-MC-openmpi-devel == 2.2.15
 Requires: python3-SHERPA-MC == 2.2.15
 Requires: python3-SHERPA-MC-openmpi == 2.2.15
-%endif
 %if 0%{?suse_version}
 Requires: whizard == 3.1.4
 Requires: python3-whizard == 3.1.4
