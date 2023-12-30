@@ -4,8 +4,8 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-HEPrpms:2023.12.30
-#whizard:3.1.4
+#HEPrpms:2023.12.30
+whizard:3.1.4
 #MG5_aMC:3.5.3
 #gosam:2.1.1
 #qgraf:3.6.7

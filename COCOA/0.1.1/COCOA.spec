@@ -4,7 +4,7 @@
 
 Name:		COCOA
 Version:	0.1.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A nearly-hermetic calorimeter simulated with Geant4 and interfaced to the Pythia8 event generator
 
 License:	GPL
@@ -23,6 +23,8 @@ BuildRequires:	 geant4 geant4-devel geant4-data
 %endif
 %if 0%{?suse_version}
 BuildRequires:	 libexpat-devel libxerces-c-devel xerces-c 
+BuildRequires:	 unzip
+BuildRequires:	 geant4 geant4-devel geant4-data
 %endif
 
 %description
