@@ -6,7 +6,6 @@ on:
 #Every 2 days at midnight 
     - cron:  "0 0 1/48 * *"
 
-
 jobs:
   compilejobTW:
     if: ${{ github.event.head_commit.message == 'CI' }} || ${{ github.event_name == 'schedule' }}
