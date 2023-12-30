@@ -23,7 +23,7 @@ jobs:
            sed -i 's/\$basearch/x86_64/g' averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo
            zypper --non-interactive addrepo averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo
            sh srpmsbuild.sh HEPrpms 2023.12.30 --build
-           dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
+           zypper --non-interactive install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobEPEL8:
     name: HEPrpms_on_EPEL8
@@ -45,7 +45,7 @@ jobs:
     name: HEPrpms_on_EPEL9
     runs-on: ubuntu-latest
     container:
-        image: centos:centos9
+        image: almalinux:9
     steps:
     - name: Checkout
       uses: actions/checkout@v3
