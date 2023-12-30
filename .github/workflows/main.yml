@@ -1,6 +1,6 @@
 name: build
 on:
- push:
+# push:
  schedule:
 #Every 2 days at midnight 
     - cron:  "0 0 1/48 * *"
