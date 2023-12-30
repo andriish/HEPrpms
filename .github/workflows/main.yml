@@ -61,6 +61,7 @@ jobs:
            dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
 
+
   compilejobFedora38:
     if: contains(github.event.head_commit.message, 'CI') || ${{ github.event_name == 'schedule' }}  
     name: HEPrpms_on_Fedora38
