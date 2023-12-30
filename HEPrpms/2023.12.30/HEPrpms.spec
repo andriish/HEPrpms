@@ -30,11 +30,13 @@ Requires: MC-TESTER-devel == 1.25.1
 Requires: MG5_aMC == 3.5.3
 Requires: PHOTOS-doc == 3.64
 Requires: Professor == 2.4.2
+%if 0%{?rhel} || 0%{?fedora}
 Requires: SHERPA-MC == 2.2.15
 Requires: SHERPA-MC-common == 2.2.15
 Requires: SHERPA-MC-devel == 2.2.15
 Requires: SHERPA-MC-openmpi == 2.2.15
 Requires: SHERPA-MC-openmpi-devel == 2.2.15
+%endif
 Requires: TAUOLA-doc == 1.1.8
 Requires: TheP8I == 2.0.3
 Requires: VBFNLO == 3.0.0beta5
@@ -68,8 +70,8 @@ Requires: paw-gfortran == 2023.10.31.0
 Requires: pythia6 == 6.4.28
 %if 0%{?suse_version}
 Requires: python-LCIO == 2.20.02
-Requires: python3-SHERPA-MC == 2.2.15
-Requires: python3-SHERPA-MC-openmpi == 2.2.15
+#### Requires: python3-SHERPA-MC == 2.2.15
+#### Requires: python3-SHERPA-MC-openmpi == 2.2.15
 Requires: python3-fastjet == 3.4.2
 %endif
 %if 0%{?rhel} || 0%{?fedora}
