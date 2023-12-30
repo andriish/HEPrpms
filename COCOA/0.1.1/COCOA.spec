@@ -24,7 +24,7 @@ BuildRequires:	 geant4 geant4-devel geant4-data
 %if 0%{?suse_version}
 BuildRequires:	 libexpat-devel libxerces-c-devel xerces-c 
 BuildRequires:	 unzip
-BuildRequires:	 HepMC2-devel root6-config root6-libs root6-devel root6  root6-utils fastjet fastjet-devel libpythia8 pythia-devel 
+BuildRequires:	 HepMC2-devel root6-config root6-libs root6-devel root6  root6-utils fastjet fastjet-devel libpythia8 pythia-devel jsoncpp-devel
 BuildRequires:	 geant4 geant4-devel geant4-data
 %endif
 
