@@ -11,7 +11,7 @@ jobs:
     name: HEPrpms_on_Fedora38
     runs-on: ubuntu-latest
     container:
-        image: fedora:fedora38
+        image: fedora:38
     steps:
     - name: Checkout
       uses: actions/checkout@v3
