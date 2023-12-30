@@ -6,7 +6,9 @@ Group:         Development/Libraries
 License:       GPL+
 URL:           https://github.com/andriish/HEPrpms/
 Source0:       README.txt
+%if 0%{?rhel} || 0%{?fedora}
 Requires: COCOA == 0.1.1
+%endif
 Requires: Delphes == 3.5.1pre10
 Requires: Delphes-doc == 3.5.1pre10
 Requires: EvtGen == 2.2.1
