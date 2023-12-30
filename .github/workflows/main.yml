@@ -1,0 +1,23 @@
+name: build
+on:
+ push:
+ pull_request:
+ schedule:
+#Every 2 days at midnight 
+    - cron:  "0 0 1/48 * *"
+
+jobs:
+  compilejobFedora38:
+    name: HEPrpms_on_Fedora38
+    runs-on: ubuntu-latest
+    container:
+        image: fedora:fedora38
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Install 
+      run: |
+           dnf -y install 'dnf-command(copr)' 
+           dnf -y copr enable averbyts/HEPrpms
+           sh srpmsbuild.sh HEPrpms 2023.12.30 --build
+           dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/*
