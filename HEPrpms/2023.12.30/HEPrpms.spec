@@ -51,9 +51,7 @@ Requires: cernlib-utils == 2023.10.31.0
 Requires: chaplin == 1.2
 Requires: cuba == 4.2.2
 Requires: cuba-devel == 4.2.2
-%if 0%{?rhel} || 0%{?fedora}
 Requires: f90cache == 0.99c
-%endif
 Requires: fastnlo == 2.5.0.2826
 Requires: fastnlo-devel == 2.5.0.2826
 Requires: form-doc == 4.3.1
@@ -90,7 +88,7 @@ Requires: rapgap == 3.4.0
 ##### Requires: recola2-SM == 2.2.3
 Requires: topdrawer == 1.4e
 Requires: ugs == 2.10e
-##### Requires: whizard == 3.1.4
+Requires: whizard == 3.1.4
 
 %description
 All packages of HEPrpms.
