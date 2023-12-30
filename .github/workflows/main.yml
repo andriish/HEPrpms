@@ -23,7 +23,7 @@ jobs:
            sed -i 's/\$basearch/x86_64/g' averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo
            zypper --non-interactive addrepo averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo
            sh srpmsbuild.sh HEPrpms 2023.12.30 --build
-           zypper --non-interactive --gpg-auto-import-keys install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
+           zypper --non-interactive --no-gpg-checks  --gpg-auto-import-keys install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobEPEL8:
     name: HEPrpms_on_EPEL8
