@@ -44,8 +44,7 @@ jobs:
            sh srpmsbuild.sh HEPrpms 2023.12.30 --build
            dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
-  compilejobEPEL9:
-    if: contains(github.event.head_commit.message, 'CI') || ${{ github.event_name == 'schedule' }}  
+  compilejobEPEL9: 
     name: HEPrpms_on_EPEL9
     runs-on: ubuntu-latest
     container:
@@ -54,6 +53,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Install 
+      if: contains(github.event.head_commit.message, 'CI') || ${{ github.event_name == 'schedule' }} 
       run: |
            dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
            yum -y install epel-release
