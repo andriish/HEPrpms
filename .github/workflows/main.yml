@@ -8,7 +8,6 @@ on:
 
 jobs:
   compilejobTW:
-    if: contains(github.event.head_commit.message, 'CI') == 'true' || ${{ github.event_name == 'schedule' }}
     name: HEPrpms_on_TW
     runs-on: ubuntu-latest
     container:
@@ -17,6 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Install 
+      if: contains(github.event.head_commit.message, 'CI') == 'true' || ${{ github.event_name == 'schedule' }}
       run: |
            zypper --non-interactive  install rpm-build which rpmdevtools git wget
            zypper --non-interactive addrepo https://download.opensuse.org/repositories/science/openSUSE_Tumbleweed/science.repo
@@ -35,7 +35,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Install 
+    - name: Install
+      if: contains(github.event.head_commit.message, 'CI')  || ${{ github.event_name == 'schedule' }}
       run: |
            dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
            yum -y install epel-release
