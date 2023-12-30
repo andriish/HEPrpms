@@ -34,10 +34,12 @@ A nearly-hermetic calorimeter simulated with Geant4 and interfaced to the Pythia
 %setup -q -n cocoa-hep-%{cocoablob}
 
 %build
-%cmake -S COCOA
+cd COCOA
+%cmake 
 %cmake_build
 
 %install
+cd COCOA
 %cmake_install
 
 %files
