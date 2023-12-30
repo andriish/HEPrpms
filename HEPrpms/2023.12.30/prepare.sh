@@ -13,3 +13,8 @@ yum list installed | grep copr:copr.fedorainfracloud.org:averbyts:HEPrpms | tr -
  p=$(echo $a| cut -f 1 -d: | cut -f 1 -d.); 
  echo 'Requires:' $p' == '$v; 
  done)
+ 
+exit
+L="|XXX |[![Copr build status](https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpms/package/XXX/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpms/package/XXX/)  |[![Copr build status](https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/package/XXX/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/package/XXX/)   |"
+
+for a in $(copr list-package-names averbyts/HEPrpms | sort); do echo $(echo $L | sed 's/XXX/'$a'/g') ; done 
