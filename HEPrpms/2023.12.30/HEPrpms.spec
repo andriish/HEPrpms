@@ -6,7 +6,9 @@ Group:         Development/Libraries
 License:       GPL+
 URL:           https://github.com/andriish/HEPrpms/
 Source0:       README.txt
+%if 0%{?rhel} || 0%{?fedora}
 Requires: COCOA == 0.1.1
+%endif
 Requires: Delphes == 3.5.1pre10
 Requires: Delphes-doc == 3.5.1pre10
 Requires: EvtGen == 2.2.1
@@ -28,11 +30,13 @@ Requires: MC-TESTER-devel == 1.25.1
 Requires: MG5_aMC == 3.5.3
 Requires: PHOTOS-doc == 3.64
 Requires: Professor == 2.4.2
+%if 0%{?rhel} || 0%{?fedora}
 Requires: SHERPA-MC == 2.2.15
 Requires: SHERPA-MC-common == 2.2.15
 Requires: SHERPA-MC-devel == 2.2.15
 Requires: SHERPA-MC-openmpi == 2.2.15
 Requires: SHERPA-MC-openmpi-devel == 2.2.15
+%endif
 Requires: TAUOLA-doc == 1.1.8
 Requires: TheP8I == 2.0.3
 Requires: VBFNLO == 3.0.0beta5
@@ -62,9 +66,11 @@ Requires: nlojet++ == 4.1.3
 Requires: patchy-gfortran == 2023.10.31.0
 Requires: paw-gfortran == 2023.10.31.0
 Requires: pythia6 == 6.4.28
-Requires: python3-LCIO == 2.20.02
+%if 0%{?rhel} || 0%{?fedora}
 Requires: python3-SHERPA-MC == 2.2.15
 Requires: python3-SHERPA-MC-openmpi == 2.2.15
+%endif
+Requires: python3-LCIO == 2.20.02
 Requires: python3-fastjet == 3.4.2
 ##### Requires: python3-whizard == 3.1.4
 Requires: qcdloop == 2.0.9
@@ -77,7 +83,9 @@ Requires: rapgap == 3.4.0
 ##### Requires: recola2-SM == 2.2.3
 Requires: topdrawer == 1.4e
 Requires: ugs == 2.10e
-##### Requires: whizard == 3.1.4
+%if 0%{?suse_version}
+Requires: whizard == 3.1.4
+%endif
 
 %description
 All packages of HEPrpms.
