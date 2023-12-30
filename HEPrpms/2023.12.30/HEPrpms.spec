@@ -49,7 +49,9 @@ Requires: cernlib-utils == 2023.10.31.0
 Requires: chaplin == 1.2
 Requires: cuba == 4.2.2
 Requires: cuba-devel == 4.2.2
+%if 0%{?rhel} || 0%{?fedora}
 Requires: f90cache == 0.99c
+%endif
 Requires: fastnlo == 2.5.0.2826
 Requires: fastnlo-devel == 2.5.0.2826
 Requires: form-doc == 4.3.1
