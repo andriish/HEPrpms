@@ -12,13 +12,18 @@ HEPrpmsSUSE https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/
 repositories. Most of the packages in these repositories are related to the High Energy Physics 
 experiment/theory/phenomenology.
 
-As of April 2021, the packages are built for Fedora 33, Fedora 34, Fedora rawhide, CentOS8, and OpenSUSE Tumbleweed.
+As of December 2023, the packages are built for Fedora 38, Fedora 39, Fedora rawhide, CentOS8, CentOS9 and OpenSUSE Tumbleweed.
 The packages are built on COPR https://copr.fedorainfracloud.org/ service, 
 however, other build platforms can be used as well.
 
+
+|       |HEPrpms    |HEPrpmsSUSE|
+|-------|-----------|-----------|
+|binder |[![Copr build status](https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpms/package/binder/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpms/package/binder/)  |[![Copr build status](https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/package/binder/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/package/binder/)   |
+
 ## Using the software repositories
 To enable and use the software repositories on 
-### CentOS8 and other RH-compatible distros:
+### CentOS8/9 and other RH-compatible distros:
 
  - Install EPEL (as root)
    ```
@@ -93,7 +98,7 @@ zypper al -r oss  *ginac*
 Installation of some packages in user mode is also possible, however, it is a bit more complicated and is, basically, requires copying and unpacking the 
 RPM packages into a specific directory.
 
-For RHEL8-compatible systems, the process can be simplified a bit using the yumdownloader script.
+For RHEL8/9-compatible systems, the process can be simplified a bit using the `yumdownloader` script.
 
  - Copy the system `yum.conf`  into some user directory.   
    ```
@@ -150,27 +155,14 @@ https://docs.fedoraproject.org/en-US/packaging-guidelines/
 
 ## Dependencies and features
 
-The packages are compiled with the maximal set of features. Some exceptions are listed below.
--  The support of `Delphes` for `SHERPA-MC` is disabled,  the interface is defunct 
--  The `OpenLoops` package is compiled with a limited set of processes
--  The `recola2` package is compiled only with the `SM` (Standard Model) model files
--  The `YODA` package is  compiled w/o support of ROOT tools
+The packages are compiled with the maximal set of features. Some exceptions are listed at 
+https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpms/
 
 ## Patches for the packages
 
 For most packages the sources are taken from their upstream repositories and only some patches that allow for the builds are applied.
 However some packages contain an extended functionality of a larger amount of added codes, or even created from scratch. 
-These packages  are:
-- `rapgap` -- added support for `Rivet`/`HepMC3`
-- `cascade` -- added support for `Rivet`/`HepMC3`
-- `fjcontrib` -- added compilation of shared libraries
-- `lhapdf-sets-Herwig` -- a technical package created from scratch that provides a set of PDF needed to build `Herwig`
-- `lhapdf-sets-whizard` -- a technical package  created from scratch that provides a set of PDF needed to build ` whizard`
-
-For various reasons, the source codes for some packages are provided internally, i.e. not downloaded at build time from the upstream.
-These packages are:
-- `cernlib`  --  the package is not supported by the upstream
-
+See details at https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpms/.
 All the patches are available in the repository.
 
 ## Creating own spin-off repositories in COPR
