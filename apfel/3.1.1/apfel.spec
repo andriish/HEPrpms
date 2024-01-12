@@ -3,7 +3,7 @@
 %endif
 Name:           apfel
 Version:        3.1.1
-Release:        3%{?dist}
+Release:        1003%{?dist}
 License:        GPL
 Url:            https://github.com/scarrazza/apfel
 Source:         https://github.com/scarrazza/apfel/archive/refs/tags/%{version}.tar.gz
