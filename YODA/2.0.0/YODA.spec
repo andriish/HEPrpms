@@ -4,7 +4,7 @@
 
 Name:           YODA
 Version:        2.0.0
-Release:        1001
+Release:        1002
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
 Source0:        https://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
@@ -87,12 +87,12 @@ python-%{name} contains python bindings for %{name}.
 sed -Ei "1{s|/usr/bin/python|/usr/bin/python3|}" bin/*
 sed -Ei "1{s|/usr/bin/env python|/usr/bin/python3|}" bin/*
 sed -Ei "1{s|/usr/bin/env python|/usr/bin/python3|}" tests/*test*
+sed -Ei "1{s|/usr/bin/env python|/usr/bin/python3|}" pyext/yoda/mktemplates
 
 # FIX env BASED HASHBANGS
 sed -E -i "s|^#! /usr/bin/env bash|#! /bin/bash|" bin/yoda-config*
 
-# REMOVE AN UNNECESSARY ONE
-sed -E -i "1{s|^#! /usr/bin/env python||}" pyext/yoda/search.py
+sed -Ei "1{s|/usr/bin/env python|/usr/bin/python3|}" pyext/yoda/search.py
 %endif
 
 
