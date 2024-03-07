@@ -120,7 +120,7 @@ AS_IF([test "x$with_rivet" != "xno" && [ test "x`ls $with_rivet/lib/libRivet.*`"
         Specify correct path to RIVET installation: --with-rivet=/path/to/rivet]) ; AC_MSG_RESULT([Building RAPGAP without Rivet]); AC_SUBST([no_rivet], [1]))
 if test x$no_rivet == x; then     
   AC_SUBST([RIVETLIB], ["-L$with_rivet/lib -L$with_rivet/lib64 -lRivet"])
-  CXXFLAGS="${CXXFLAGS} -std=c++1y -g"
+  CXXFLAGS="${CXXFLAGS}  -g"
   AC_MSG_RESULT([Building RAPGAP with Rivet: $RIVETLIB])
 fi  
 AM_CONDITIONAL([NO_RIVET],test $no_rivet)     
