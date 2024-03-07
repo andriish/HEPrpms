@@ -1,0 +1,84 @@
+From d4ae490aaa5f8f3a8a7c4986cfc1e55621789354 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Thu, 29 Apr 2021 09:00:16 +0100
+Subject: [PATCH] fix(32bit arches): use explicit casts
+
+Explicitly casts long long unsigned int to size_t
+
+Fixes https://github.com/BlueBrain/HighFive/issues/443
+---
+ include/highfive/bits/H5Attribute_misc.hpp   | 2 +-
+ include/highfive/bits/H5File_misc.hpp        | 2 +-
+ include/highfive/bits/H5Node_traits_misc.hpp | 2 +-
+ include/highfive/bits/H5Path_traits_misc.hpp | 2 +-
+ include/highfive/bits/H5Reference_misc.hpp   | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/include/highfive/bits/H5Attribute_misc.hpp b/include/highfive/bits/H5Attribute_misc.hpp
+index 63ae5f3..9e4ffe4 100644
+--- a/include/highfive/bits/H5Attribute_misc.hpp
++++ b/include/highfive/bits/H5Attribute_misc.hpp
+@@ -30,7 +30,7 @@ namespace HighFive {
+ 
+ inline std::string Attribute::getName() const {
+     return details::get_name([&](char *buffer, hsize_t length) {
+-        return H5Aget_name(_hid, length, buffer);
++        return H5Aget_name(_hid, static_cast<size_t>(length), buffer);
+     });
+ }
+ 
+diff --git a/include/highfive/bits/H5File_misc.hpp b/include/highfive/bits/H5File_misc.hpp
+index 304205a..ee8293c 100644
+--- a/include/highfive/bits/H5File_misc.hpp
++++ b/include/highfive/bits/H5File_misc.hpp
+@@ -78,7 +78,7 @@ inline File::File(const std::string& filename, unsigned openFlags,
+ inline const std::string& File::getName() const noexcept {
+     if (_filename.empty()) {
+         _filename = details::get_name([this](char* buffer, hsize_t length) {
+-            return H5Fget_name(getId(), buffer, length);
++            return H5Fget_name(getId(), buffer, static_cast<size_t>(length));
+         });
+     }
+     return _filename;
+diff --git a/include/highfive/bits/H5Node_traits_misc.hpp b/include/highfive/bits/H5Node_traits_misc.hpp
+index a34067c..859cefd 100644
+--- a/include/highfive/bits/H5Node_traits_misc.hpp
++++ b/include/highfive/bits/H5Node_traits_misc.hpp
+@@ -149,7 +149,7 @@ inline std::string NodeTraits<Derivate>::getObjectName(size_t index) const {
+     return details::get_name([&](char* buffer, hsize_t length) {
+         return H5Lget_name_by_idx(
+                     static_cast<const Derivate*>(this)->getId(), ".", H5_INDEX_NAME, H5_ITER_INC,
+-                    index, buffer, length, H5P_DEFAULT);
++                    index, buffer, static_cast<size_t>(length), H5P_DEFAULT);
+     });
+ }
+ 
+diff --git a/include/highfive/bits/H5Path_traits_misc.hpp b/include/highfive/bits/H5Path_traits_misc.hpp
+index 75617a1..b59f99a 100644
+--- a/include/highfive/bits/H5Path_traits_misc.hpp
++++ b/include/highfive/bits/H5Path_traits_misc.hpp
+@@ -36,7 +36,7 @@ inline PathTraits<Derivate>::PathTraits() {
+ template <typename Derivate>
+ inline std::string PathTraits<Derivate>::getPath() const {
+     return details::get_name([this](char* buffer, hsize_t length) {
+-        return H5Iget_name(static_cast<const Derivate*>(this)->getId(), buffer, length);
++        return H5Iget_name(static_cast<const Derivate*>(this)->getId(), buffer, static_cast<size_t>(length));
+     });
+ }
+ 
+diff --git a/include/highfive/bits/H5Reference_misc.hpp b/include/highfive/bits/H5Reference_misc.hpp
+index b4aea3e..7486bb8 100644
+--- a/include/highfive/bits/H5Reference_misc.hpp
++++ b/include/highfive/bits/H5Reference_misc.hpp
+@@ -20,7 +20,7 @@ namespace HighFive {
+ inline Reference::Reference(const Object& location, const Object& object)
+     : parent_id(location.getId()) {
+     obj_name = details::get_name([&](char *buffer, hsize_t length) {
+-        return H5Iget_name(object.getId(), buffer, length); });
++        return H5Iget_name(object.getId(), buffer, static_cast<size_t>(length)); });
+ }
+ 
+ inline void Reference::create_ref(hobj_ref_t* refptr) const {
+-- 
+2.31.1
+

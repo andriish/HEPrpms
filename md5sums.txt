@@ -262,3 +262,4 @@ de9d74c29d794a4dcd528e6cec3e2895  Professor/2.4.2/rpmbuild/SOURCES/professor-pro
 27e5ee7a8f3a041958f9adf3d9412a32  YODA/2.0.0/rpmbuild/SOURCES/YODA-2.0.0.tar.gz
 686fd8513f30c5b62d29580b89cf42a9  Rivet/4.0.0/rpmbuild/SOURCES/Rivet-4.0.0.tar.gz
 407b9b68a4a394ad9d5ec4ce25977d5f  fjcontrib/1.054/rpmbuild/SOURCES/fjcontrib-1.054.tar.gz
+204a28656cb7fccac1a4f000b4bf5036  highfive/2.3.1/rpmbuild/SOURCES/highfive-2.3.1.tar.gz
