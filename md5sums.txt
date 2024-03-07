@@ -259,3 +259,6 @@ de9d74c29d794a4dcd528e6cec3e2895  Professor/2.4.2/rpmbuild/SOURCES/professor-pro
 007c6c360291b292923f8181a9dbe645  MG5_aMC/3.5.3/rpmbuild/SOURCES/MG5_aMC_v3.5.3.tar.gz
 0b26b5c610aa66c07d526ac51c986b86  openloops/2.1.3/rpmbuild/SOURCES/OpenLoops-OpenLoops-2.1.3.tar.gz
 3f0c46b36d5e1b2f3f2a4072d8d5e5fb  binder/1.4.1/rpmbuild/SOURCES/2d4b1aa19ca3b32b4b459e7a99048ae96712618b.zip
+27e5ee7a8f3a041958f9adf3d9412a32  YODA/2.0.0/rpmbuild/SOURCES/YODA-2.0.0.tar.gz
+686fd8513f30c5b62d29580b89cf42a9  Rivet/4.0.0/rpmbuild/SOURCES/Rivet-4.0.0.tar.gz
+407b9b68a4a394ad9d5ec4ce25977d5f  fjcontrib/1.054/rpmbuild/SOURCES/fjcontrib-1.054.tar.gz

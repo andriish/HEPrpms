@@ -4,7 +4,10 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-binder:1.4.1
+#YODA:2.0.0
+#Rivet:4.0.0
+fjcontrib:1.054
+#binder:1.4.1
 #openloops:2.1.3
 #COCOA:0.1.1
 #HEPrpms:2023.12.30
