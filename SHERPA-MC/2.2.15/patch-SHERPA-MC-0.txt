@@ -1,6 +1,6 @@
 diff -Naur ORIG/AddOns/Python/Makefile.am PATCHED/AddOns/Python/Makefile.am
---- ORIG/AddOns/Python/Makefile.am	2023-08-15 21:19:15.969714957 +0200
-+++ PATCHED/AddOns/Python/Makefile.am	2023-11-06 01:06:48.533407194 +0100
+--- ORIG/AddOns/Python/Makefile.am	2023-06-16 15:32:26.937010882 +0200
++++ PATCHED/AddOns/Python/Makefile.am	2023-11-06 12:52:27.510653828 +0100
 @@ -9,24 +9,24 @@
  	MEProcess.i \
  	Random.i
@@ -35,8 +35,8 @@ diff -Naur ORIG/AddOns/Python/Makefile.am PATCHED/AddOns/Python/Makefile.am
 -localinc_HEADERS = MEProcess.H
 -
 diff -Naur ORIG/AddOns/Python/Makefile.in PATCHED/AddOns/Python/Makefile.in
---- ORIG/AddOns/Python/Makefile.in	2023-08-15 21:19:15.970714972 +0200
-+++ PATCHED/AddOns/Python/Makefile.in	2023-08-15 21:19:15.973715019 +0200
+--- ORIG/AddOns/Python/Makefile.in	2023-06-16 15:32:26.938010883 +0200
++++ PATCHED/AddOns/Python/Makefile.in	2023-06-16 15:32:26.940010886 +0200
 @@ -289,12 +289,8 @@
  CONDITIONAL_MCFMDIR = @CONDITIONAL_MCFMDIR@
  CONDITIONAL_MCFMINCS = @CONDITIONAL_MCFMINCS@
@@ -59,8 +59,8 @@ diff -Naur ORIG/AddOns/Python/Makefile.in PATCHED/AddOns/Python/Makefile.in
  HADRONSBUILDDIR = @HADRONSBUILDDIR@
  HADRONSDIR = @HADRONSDIR@
 diff -Naur ORIG/m4/ax_python_devel.m4 PATCHED/m4/ax_python_devel.m4
---- ORIG/m4/ax_python_devel.m4	2023-08-15 21:19:15.972715003 +0200
-+++ PATCHED/m4/ax_python_devel.m4	2023-08-15 21:19:15.974715034 +0200
+--- ORIG/m4/ax_python_devel.m4	2023-06-16 15:32:26.939010884 +0200
++++ PATCHED/m4/ax_python_devel.m4	2023-06-16 15:32:26.941010887 +0200
 @@ -1,5 +1,5 @@
  # ===========================================================================
 -#      http://www.gnu.org/software/autoconf-archive/ax_python_devel.html
