@@ -13,7 +13,7 @@
 
 Name:           SHERPA-MC
 Version:        2.2.15
-Release:        4%{?dist}
+Release:        5%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://sherpa.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -171,6 +171,10 @@ This package provides the Python 3 bindings for %{name}-openmpi
 
 %build
 autoreconf --force --install --verbose .
+%if %{?rhel}%{!?rhel:0} || %{?fedora}%{!?fedora:0} >= 31 || 0%{?suse_version}
+export CXXFLAGS='%{optflags} -std=c++1z'
+%endif
+
 # Build serial version, dummy arguments
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
