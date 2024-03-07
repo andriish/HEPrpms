@@ -83,9 +83,7 @@ BuildRequires:  opencv-devel
 BuildRequires:  eigen3-static
 
 
-%if %{with docs}
-BuildRequires:  doxygen
-%endif
+
 
 %description %_description
 
@@ -102,14 +100,6 @@ Provides:       %{name}-static = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%if %{with docs}
-%package        doc
-Summary:        Documentation for %{name}
-BuildArch:      noarch
-
-%description    doc
-Documentation for %{name}
-%endif
 
 
 %prep
@@ -140,9 +130,7 @@ CXXFLAGS="${CXXFLAGS} -Wno-deprecated-declarations"
     -DHIGHFIVE_BUILD_DOCS:BOOL=%{?with_docs:TRUE}%{?!with_docs:FALSE} \
     -GNinja
 %cmake_build
-%if %{with docs}
-%cmake_build --target doc
-%endif
+
 
 
 %install
@@ -167,11 +155,7 @@ mv -v '%{buildroot}/%{_datadir}/%{pretty_name}/CMake' \
 %{_libdir}/cmake/%{pretty_name}
 
 
-%if %{with docs}
-%files doc
-%license LICENSE
-%doc %{_vpath_builddir}/doc/html
-%endif
+
 
 
 %changelog
