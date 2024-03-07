@@ -14,7 +14,7 @@ Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
 Prefix: %{_prefix}
 Summary:        Robust Independent Validation of Experiment and Theory
 Requires:       fastjet    ImageMagick tex(latex)  which
-Requires:       YODA >= 1.9.0
+Requires:       YODA >= 2.0.0
 Requires:       fjcontrib
 BuildRequires:  fjcontrib fjcontrib-devel
 BuildRequires:  binutils 
@@ -23,7 +23,7 @@ BuildRequires:  YODA-devel >= 2.0.0
 BuildRequires:  automake autoconf libtool  fastjet-devel  fastjet 
 BuildRequires:  rsync
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
-Requires:       zlib gsl
+Requires:       zlib gsl highfive-devel
 BuildRequires:  zlib zlib-devel gsl gsl-devel hdf5-devel highfive-devel
 Requires:       HepMC3
 Requires:       HepMC3-search
