@@ -1,13 +1,13 @@
 Name:        rapgap
 Version:    3.4.0
-Release:    3%{?dist}
+Release:    4%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy Physics
 
 License:    Unknown
 URL:        https://rapgap.hepforge.org/
 Source0:     https://gitlab.cern.ch/jung/rapgap/-/archive/v%{version}/rapgap-v%{version}.tar.gz
-#Patch0:     patch-rapgap-0.txt
-BuildRequires:  autoconf automake libtool gcc-c++ tex(latex) ghostscript
+Patch0:     patch-rapgap-0.txt
+BuildRequires:  cmake gcc-c++ tex(latex) ghostscript
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran HepMC HepMC-devel lhapdf lhapdf-devel  HepMC3  HepMC3-search HepMC3-devel HepMC3-search-devel Rivet-devel Rivet YODA YODA-devel
 Requires:       libgfortran HepMC lhapdf  HepMC3 Rivet YODA HepMC3  HepMC3-search HepMC3-devel HepMC3-search-devel
@@ -37,10 +37,9 @@ according to the HEP common standards. In ep it can describe all
 
 %prep
 %setup -q -n rapgap-v%{version}
+%patch0 -p1
 
 %build
-sed -i 's/-std=c++1y//g' configure.ac
-autoreconf -fisv
 
 %if %{?rhel}%{!?rhel:0} || %{?fedora}%{!?fedora:0} >= 31 || 0%{?suse_version}
 export CXXFLAGS='%{optflags} -std=c++1z'
@@ -65,12 +64,13 @@ export FFLAGS="$FFLAGS  -fallow-argument-mismatch -fallow-invalid-boz -fno-stric
 export FCFLAGS="$FCFLAGS  -fallow-argument-mismatch -fallow-invalid-boz -fno-strict-aliasing"
 %endif
 
-%configure --with-lhapdf6=/usr --with-rivet=/usr --with-hepmc3=/usr --with-hepmc2=no 
+%cmake -DCMAKE_SKIP_RPATH:BOOL=YES
+%cmake_build 
+
 
 %install
-make %{?_smp_mflags} 
-%make_install 
-rm -f $RPM_BUILD_ROOT/usr/%_lib/*la
+%cmake_install
+
 
 %post -p /sbin/ldconfig
 
@@ -79,7 +79,6 @@ rm -f $RPM_BUILD_ROOT/usr/%_lib/*la
 
 %files
 /usr/%_lib/*.so*
-/usr/%_lib/*.a
 /usr/bin/*
 /usr/include/rapgap
 /usr/share/rapgap
