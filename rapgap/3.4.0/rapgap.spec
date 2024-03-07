@@ -9,7 +9,7 @@ Source0:     https://gitlab.cern.ch/jung/rapgap/-/archive/v%{version}/rapgap-v%{
 Patch0:     patch-rapgap-0.txt
 BuildRequires:  cmake gcc-c++ tex(latex) ghostscript
 %if 0%{?rhel} || 0%{?fedora}
-BuildRequires:  gcc-gfortran HepMC HepMC-devel lhapdf lhapdf-devel  HepMC3  HepMC3-search HepMC3-devel HepMC3-search-devel Rivet-devel Rivet YODA YODA-devel
+BuildRequires:  gcc-gfortran HepMC HepMC-devel lhapdf lhapdf-devel python3-lhapdf HepMC3  HepMC3-search HepMC3-devel HepMC3-search-devel Rivet-devel Rivet YODA YODA-devel
 Requires:       libgfortran HepMC lhapdf  HepMC3 Rivet YODA HepMC3  HepMC3-search HepMC3-devel HepMC3-search-devel
 BuildRequires:  fastjet-devel fastjet zlib zlib-devel 
 Requires:       fastjet zlib ariadne
