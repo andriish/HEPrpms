@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        4.0.0
-Release:        1002%{?dist}
+Release:        1003%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -23,7 +23,7 @@ BuildRequires:  YODA-devel >= 2.0.0
 BuildRequires:  automake autoconf libtool  fastjet-devel  fastjet 
 BuildRequires:  rsync
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
-Requires:       zlib gsl highfive-devel
+Requires:       zlib gsl hdf5 highfive-devel
 BuildRequires:  zlib zlib-devel gsl gsl-devel hdf5-devel highfive-devel
 Requires:       HepMC3
 Requires:       HepMC3-search
@@ -75,7 +75,8 @@ development, validation, and tuning, as well as a convenient infrastructure for
 Summary:        Libraries and headers for %{name}
 Provides:       %{name}-devel = %{version}-%{release}
 Requires:       YODA-devel >= 2.0.0
-Requires:       highfive-devel
+Requires:       %{name} = %{version}-%{release}
+Requires:       highfive-devel hdf5-devel
 %description devel
 %{libnamedev} contains the libraries and header files needed to
 develop programs which make use of %{name}.

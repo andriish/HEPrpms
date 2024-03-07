@@ -1,6 +1,6 @@
 diff -Naur ORIG/m4/hepmc.m4 PATCHED/m4/hepmc.m4
---- ORIG/m4/hepmc.m4	2023-11-05 23:53:28.451129824 +0100
-+++ PATCHED/m4/hepmc.m4	2023-11-05 23:36:46.923044104 +0100
+--- ORIG/m4/hepmc.m4	2023-11-07 00:38:23.392575609 +0100
++++ PATCHED/m4/hepmc.m4	2023-11-07 00:38:23.392575609 +0100
 @@ -56,12 +56,12 @@
  else
  	AC_MSG_RESULT([$with_hepmc])

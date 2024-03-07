@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-highfive:2.3.1
+ThePEG:2.3.0
+#highfive:2.3.1
 #YODA:2.0.0
 #Rivet:4.0.0
 #fjcontrib:1.054
