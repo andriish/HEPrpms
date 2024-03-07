@@ -1,11 +1,12 @@
 Name:       cascade
 Version:    3.3.3
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy physics
 
 License:    GPLv2
 URL:        https://cascade.hepforge.org/
 Source0:    https://cascade.hepforge.org/downloads/cascade-%{version}.tar.gz
+Patch0:     patch-cascade-0.txt
 
 BuildRequires: cmake
 %if 0%{?fedora}
@@ -51,6 +52,7 @@ now accessed via TMDlib.
 
 %prep
 %setup -q -n cascade-%{version}
+%patch0 -p1
 
 %build
 %if %{?fedora}%{!?fedora:0} >= 37

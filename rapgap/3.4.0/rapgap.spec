@@ -64,7 +64,7 @@ export FFLAGS="$FFLAGS  -fallow-argument-mismatch -fallow-invalid-boz -fno-stric
 export FCFLAGS="$FCFLAGS  -fallow-argument-mismatch -fallow-invalid-boz -fno-strict-aliasing"
 %endif
 
-%cmake -DCMAKE_SKIP_RPATH:BOOL=YES
+%cmake -DCMAKE_SKIP_RPATH:BOOL=YES -DCMAKE_CXX_STANDARD=17
 %cmake_build 
 
 
