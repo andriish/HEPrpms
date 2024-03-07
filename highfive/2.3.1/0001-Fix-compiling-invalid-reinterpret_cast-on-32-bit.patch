@@ -1,0 +1,70 @@
+From 8b379f7dd77c3196525cd06ffec1621ca5a373d3 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 26 Aug 2021 13:24:10 -0400
+Subject: [PATCH] Fix compiling invalid reinterpret_cast on 32-bit
+
+---
+ include/highfive/bits/H5Slice_traits_misc.hpp | 33 +++++++++++++------
+ 1 file changed, 23 insertions(+), 10 deletions(-)
+
+diff --git a/include/highfive/bits/H5Slice_traits_misc.hpp b/include/highfive/bits/H5Slice_traits_misc.hpp
+index d5ae746..5b27893 100644
+--- a/include/highfive/bits/H5Slice_traits_misc.hpp
++++ b/include/highfive/bits/H5Slice_traits_misc.hpp
+@@ -121,6 +121,28 @@ inline Selection SliceTraits<Derivate>::select(const std::vector<size_t>& column
+     return Selection(DataSpace(dims), space, dataset);
+ }
+ 
++// no data conversion on 64bits platforms
++template <typename T>
++typename std::enable_if<std::is_same<std::size_t, T>::value>::type
++access_with_conversion(const T*& data,
++                       typename std::vector<T>&,
++                       const std::size_t,
++                       const std::vector<std::size_t>& element_ids) {
++    data = reinterpret_cast<const T*>(&(element_ids[0]));
++}
++
++// data conversion on 32bits platforms
++template <typename T>
++typename std::enable_if<!std::is_same<std::size_t, T>::value>::type
++access_with_conversion(const T*& data,
++                       typename std::vector<T>& raw_elements,
++                       const std::size_t length,
++                       const std::vector<std::size_t>& element_ids) {
++    raw_elements.resize(length);
++    std::copy(element_ids.begin(), element_ids.end(), raw_elements.begin());
++    data = raw_elements.data();
++}
++
+ template <typename Derivate>
+ inline Selection SliceTraits<Derivate>::select(const ElementSet& elements) const {
+     const auto& slice = static_cast<const Derivate&>(*this);
+@@ -135,15 +157,7 @@ inline Selection SliceTraits<Derivate>::select(const ElementSet& elements) const
+     std::vector<hsize_t> raw_elements;
+ 
+     // optimised at compile time
+-    // switch for data conversion on 32bits platforms
+-    if (std::is_same<std::size_t, hsize_t>::value) {
+-        // `if constexpr` can't be used, thus a reinterpret_cast is needed.
+-        data = reinterpret_cast<const hsize_t*>(&(elements._ids[0]));
+-    } else {
+-        raw_elements.resize(length);
+-        std::copy(elements._ids.begin(), elements._ids.end(), raw_elements.begin());
+-        data = raw_elements.data();
+-    }
++    access_with_conversion<>(data, raw_elements, length, elements._ids);
+ 
+     if (H5Sselect_elements(space.getId(), H5S_SELECT_SET, num_elements, data) < 0) {
+         HDF5ErrMapper::ToException<DataSpaceException>("Unable to select elements");
+@@ -152,7 +166,6 @@ inline Selection SliceTraits<Derivate>::select(const ElementSet& elements) const
+     return Selection(DataSpace(num_elements), space, details::get_dataset(slice));
+ }
+ 
+-
+ template <typename Derivate>
+ template <typename T>
+ inline void SliceTraits<Derivate>::read(T& array) const {
+-- 
+2.31.1
+

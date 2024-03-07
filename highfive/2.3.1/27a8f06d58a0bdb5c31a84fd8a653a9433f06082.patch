@@ -1,0 +1,25 @@
+From 27a8f06d58a0bdb5c31a84fd8a653a9433f06082 Mon Sep 17 00:00:00 2001
+From: Matthias Wolf <matthias.wolf@epfl.ch>
+Date: Thu, 17 Mar 2022 16:48:04 +0100
+Subject: [PATCH] bugfix: always refer to the proper signed type for `signed
+ char`
+
+The previous usage of H5T_NATIVE_CHAR for `signed char` fails on
+Fedora/aarch64.  Needed for BlueBrain/libsonata#184.
+---
+ include/highfive/bits/H5DataType_misc.hpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/highfive/bits/H5DataType_misc.hpp b/include/highfive/bits/H5DataType_misc.hpp
+index 9e012f86..babc0145 100644
+--- a/include/highfive/bits/H5DataType_misc.hpp
++++ b/include/highfive/bits/H5DataType_misc.hpp
+@@ -74,7 +74,7 @@ inline AtomicType<char>::AtomicType() {
+ 
+ template <>
+ inline AtomicType<signed char>::AtomicType() {
+-    _hid = H5Tcopy(H5T_NATIVE_CHAR);
++    _hid = H5Tcopy(H5T_NATIVE_SCHAR);
+ }
+ 
+ template <>
