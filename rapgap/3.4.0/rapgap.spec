@@ -39,7 +39,7 @@ according to the HEP common standards. In ep it can describe all
 %setup -q -n rapgap-v%{version}
 
 %build
-sed -i 's/c++1y//g' configure.ac
+sed -i 's/-std=c++1y//g' configure.ac
 autoreconf -fisv
 
 %if %{?rhel}%{!?rhel:0} || %{?fedora}%{!?fedora:0} >= 31 || 0%{?suse_version}
