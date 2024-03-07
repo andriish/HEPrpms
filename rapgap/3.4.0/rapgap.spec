@@ -1,6 +1,6 @@
 Name:        rapgap
 Version:    3.4.0
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy Physics
 
 License:    Unknown
@@ -37,9 +37,9 @@ according to the HEP common standards. In ep it can describe all
 
 %prep
 %setup -q -n rapgap-v%{version}
-#patch0 -p1
 
 %build
+sed -i 's/c++1y//g' configure.ac
 autoreconf -fisv
 
 %if %{?rhel}%{!?rhel:0} || %{?fedora}%{!?fedora:0} >= 31 || 0%{?suse_version}
