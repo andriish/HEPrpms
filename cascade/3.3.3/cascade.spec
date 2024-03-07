@@ -56,14 +56,14 @@ now accessed via TMDlib.
 
 %build
 %if %{?fedora}%{!?fedora:0} >= 37
-%cmake -DCASCADE_BUILD_DOCS:BOOL=OFF
+%cmake -DCASCADE_BUILD_DOCS:BOOL=OFF -DCMAKE_SKIP_RPATH:BOOL=YES -DCMAKE_CXX_STANDARD=17
 %else
 %if 0%{?suse_version}
 #-Wl,--as-needed -Wl,--no-undefined -Wl,-z,now
 #export LDFLAGS="-Wl,--allow-shlib-undefined -Wl,--no-as-needed "
 %cmake -DCMAKE_EXE_LINKER_FLAGS=" " -DCMAKE_MODULE_LINKER_FLAGS=" " -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--allow-shlib-undefined -Wl,--no-as-needed "
 %else
-%cmake
+%cmake -DCMAKE_SKIP_RPATH:BOOL=YES -DCMAKE_CXX_STANDARD=17
 %endif
 
 %endif
@@ -72,13 +72,6 @@ now accessed via TMDlib.
 
 %install
 %cmake_install
-%if 0%{?fedora}
-chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cascade
-chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcascademycern.so
-chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcascadebases.so
-chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcascadepythia.so
-chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcascade3.so
-%endif
 
 %post -p /sbin/ldconfig
 
