@@ -1,3 +1,30 @@
+diff -Naur ORIG/Analysis/RivetAnalysis.cc PATCHED/Analysis/RivetAnalysis.cc
+--- ORIG/Analysis/RivetAnalysis.cc	2023-12-08 11:23:05.000000000 +0100
++++ PATCHED/Analysis/RivetAnalysis.cc	2024-03-07 21:12:06.330740546 +0100
+@@ -184,7 +184,11 @@
+ 
+   // check that analysis list is available
+   _rivet = new Rivet::AnalysisHandler; //(fname);
++#if ThePEG_RIVET_VERSION > 3
++  _rivet->setCheckBeams(_checkBeams);
++#else
+   _rivet->checkBeams(_checkBeams);
++#endif
+   for ( int i = 0, N = _paths.size(); i < N; ++i ) Rivet::addAnalysisLibPath(_paths[i]);
+   _rivet->addAnalyses(_analyses);
+   if ( _rivet->analysisNames().size() != _analyses.size() ) {
+@@ -202,7 +206,11 @@
+   // create Rivet analysis handler
+   CurrentGenerator::Redirect stdout(cout);
+   _rivet = new Rivet::AnalysisHandler;
++#if ThePEG_RIVET_VERSION > 3
++  _rivet->setCheckBeams(_checkBeams);
++#else
+   _rivet->checkBeams(_checkBeams);
++#endif
+   for ( int i = 0, N = _paths.size(); i < N; ++i ) Rivet::addAnalysisLibPath(_paths[i]);
+   _rivet->addAnalyses(_analyses);
+   // check that analysis list is still available
 diff -Naur ORIG/m4/hepmc.m4 PATCHED/m4/hepmc.m4
 --- ORIG/m4/hepmc.m4	2023-11-07 00:38:23.392575609 +0100
 +++ PATCHED/m4/hepmc.m4	2023-11-07 00:38:23.392575609 +0100
@@ -31,3 +58,22 @@ diff -Naur ORIG/m4/hepmc.m4 PATCHED/m4/hepmc.m4
         ],[])
         
         AC_CHECK_HEADERS([HepMC3/Writer.h],    
+diff -Naur ORIG/m4/rivet.m4 PATCHED/m4/rivet.m4
+--- ORIG/m4/rivet.m4	2023-12-08 11:23:06.000000000 +0100
++++ PATCHED/m4/rivet.m4	2024-03-07 20:50:30.220233322 +0100
+@@ -67,12 +67,14 @@
+ if test "x$with_rivet" = "xsystem"; then
+    echo $( rivet-config --version ) | grep -q '^2\.' && rivetversion=2
+    echo $( rivet-config --version ) | grep -q '^3\.' && rivetversion=3
++   echo $( rivet-config --version ) | grep -q '^4\.' && rivetversion=4
+ elif test "x$with_rivet" != "xno"; then
+    echo $( "$with_rivet/bin/rivet-config" --version ) | grep -q '^2\.' && rivetversion=2
+    echo $( "$with_rivet/bin/rivet-config" --version ) | grep -q '^3\.' && rivetversion=3
++   echo $( "$with_rivet/bin/rivet-config" --version ) | grep -q '^4\.' && rivetversion=4
+ fi
+ 
+-AC_DEFINE_UNQUOTED([ThePEG_RIVET_VERSION], [$rivetversion], [Rivet major version (1,2,3)])
++AC_DEFINE_UNQUOTED([ThePEG_RIVET_VERSION], [$rivetversion], [Rivet major version (1,2,3,4)])
+ 
+ AM_CONDITIONAL(HAVE_RIVET,[test "x$with_rivet" != "xno"])
+ AC_SUBST(RIVETINCLUDE)
