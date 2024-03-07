@@ -47,7 +47,7 @@ Feature support:
 
 Name:           highfive
 Version:        2.3.1
-Release:        1
+Release:        2
 Summary:        Header-only C++ HDF5 interface
 
 License:        Boost
@@ -74,9 +74,9 @@ BuildRequires:  boost-devel
 BuildRequires:  ninja-build
 
 # Optional but included in Fedora, so we use these
-BuildRequires:  cmake(eigen3)
+BuildRequires:  eigen3-devel
 %ifnarch %{arm32}
-BuildRequires:  cmake(opencv)
+BuildRequires:  opencv-devel
 %endif
 # The -static versions are required by guidelines for tracking header-only
 # libraries
