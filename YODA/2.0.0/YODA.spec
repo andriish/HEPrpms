@@ -106,10 +106,14 @@ export CXXFLAGS="%{optflags} -Wformat -Wno-error"
 %py3_shebang_fix  ./
 %py3_shebang_fix  bin/yoda*
 %py3_shebang_fix  bin/root*
+%py3_shebang_fix  pyext/yoda/mktemplates
+%py3_shebang_fix  pyext/yoda/*py
 %else
 pathfix.py -pn -i %{__python3}  ./
 pathfix.py -pn -i %{__python3}  bin/yoda*
 pathfix.py -pn -i %{__python3}  bin/root*
+pathfix.py -pn -i %{__python3}  pyext/yoda/mktemplates
+pathfix.py -pn -i %{__python3}  pyext/yoda/*py
 %endif
 autoreconf -fi
 %configure
