@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        4.0.0
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -74,7 +74,8 @@ development, validation, and tuning, as well as a convenient infrastructure for
 %package  devel
 Summary:        Libraries and headers for %{name}
 Provides:       %{name}-devel = %{version}-%{release}
-Requires:       YODA-devel >= 1.8.0
+Requires:       YODA-devel >= 2.0.0
+Requires:       highfive-devel
 %description devel
 %{libnamedev} contains the libraries and header files needed to
 develop programs which make use of %{name}.
@@ -83,7 +84,6 @@ The library documentation is available on header files.
 
 %prep
 %setup -q -n %{name}-%{version}
-#patch0 -p1
 
 %build
 
@@ -99,8 +99,6 @@ pathfix.py -pn -i %{__python3}  ./
 pathfix.py -pn -i %{__python3}  bin/rivet*
 pathfix.py -pn -i %{__python3}  bin/make-*
 %endif
-#autoreconf --force --install --verbose .
-#automake -a --force
 %configure  --disable-doxygen --with-yoda=$(yoda-config --prefix ) --with-hepmc3=$(HepMC3-config --prefix) --with-fjcontrib=/usr --with-fastjet=$(fastjet-config --prefix)
 make %{?_smp_mflags}
 %endif
@@ -110,8 +108,6 @@ make %{?_smp_mflags}
 export PYTHON_VERSION=%{py3_ver}
 export PYTHON=%{_bindir}/python%{py3_ver}
 export CXXFLAGS="-Wno-error -fPIC"  
-#autoreconf --force --install --verbose .
-#automake -a --force
 %configure  --disable-doxygen --with-yoda=$(yoda-config --prefix ) --with-hepmc3=$(HepMC3-config --prefix) --with-fjcontrib=/usr --with-fastjet=$(fastjet-config --prefix)
 make %{?_smp_mflags}
 %endif
