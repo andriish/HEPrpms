@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-rapgap:3.4.0
+binder:1.4.1
+#rapgap:3.4.0
 #cascade:3.3.3
 #ThePEG:2.3.0
 #highfive:2.3.1

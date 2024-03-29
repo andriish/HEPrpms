@@ -1,11 +1,11 @@
 Name:        binder
 Version:    1.4.1
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    A tool for automatic generation of Python bindings to C++ code
 License:    MIT License
 URL:        https://github.com/RosettaCommons/binder
-#Source0:    https://github.com/RosettaCommons/binder/archive/v{version}.tar.gz
-Source0:    https://github.com/RosettaCommons/binder/archive/2d4b1aa19ca3b32b4b459e7a99048ae96712618b.zip
+Source0:    https://github.com/RosettaCommons/binder/archive/v%{version}.tar.gz
+#Source0:    https://github.com/RosettaCommons/binder/archive/2d4b1aa19ca3b32b4b459e7a99048ae96712618b.zip
 
 BuildRequires:    clang clang-devel llvm-devel 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 9
@@ -32,7 +32,8 @@ are all usable within Python. Binder is different from prior tools in
 that it handles special features new in C++11.
 
 %prep
-%setup -q -n binder-2d4b1aa19ca3b32b4b459e7a99048ae96712618b
+#setup -q -n binder-2d4b1aa19ca3b32b4b459e7a99048ae96712618b
+%setup -q -n binder-%{version}
 
 %build
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
