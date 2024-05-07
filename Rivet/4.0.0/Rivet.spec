@@ -5,11 +5,11 @@
 
 Name:           Rivet
 Version:        4.0.0
-Release:        1003%{?dist}
+Release:        1004%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
-#Patch0:         patch-Rivet-0.txt
+Patch0:         patch-Rivet-0.txt
 
 Prefix: %{_prefix}
 Summary:        Robust Independent Validation of Experiment and Theory
