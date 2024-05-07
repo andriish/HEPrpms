@@ -265,4 +265,3 @@ de9d74c29d794a4dcd528e6cec3e2895  Professor/2.4.2/rpmbuild/SOURCES/professor-pro
 204a28656cb7fccac1a4f000b4bf5036  highfive/2.3.1/rpmbuild/SOURCES/highfive-2.3.1.tar.gz
 e0bdbe7739b5e92d5bba62a52ab60f43  binder/1.4.1/rpmbuild/SOURCES/v1.4.1.tar.gz
 423bac94105e306be0612b6182a0d31f  Rivet/4.0.0/rpmbuild/SOURCES/Rivet-4.0.0.tar.gz
-423bac94105e306be0612b6182a0d31f  Rivet/4.0.0/rpmbuild/SOURCES/Rivet-4.0.0.tar.gz
