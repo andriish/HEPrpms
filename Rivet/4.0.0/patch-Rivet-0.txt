@@ -1,12 +1,13 @@
-diff -Naur ORIG/configure.ac PATCHED/configure.ac
---- ORIG/configure.ac	2023-04-26 11:30:50.689079690 +0200
-+++ PATCHED/configure.ac	2023-04-26 11:30:50.689079690 +0200
-@@ -358,7 +358,7 @@
-   AC_SUBST(PYTHON_FULL_VERSION)
-   AC_SUBST(PYTHON_MAJOR_VERSION)
-   #RIVET_PYTHONPATH=$pythondir
--  RIVET_PYTHONPATH=`$PYTHON -c "from __future__ import print_function; import sysconfig; print(sysconfig.get_path('platlib', 'posix_user', vars={'userbase' : '$prefix'}))"`
-+  RIVET_PYTHONPATH=`$PYTHON -c "from __future__ import print_function; import sysconfig; print(sysconfig.get_path('platlib', vars={'platbase': '$prefix', 'base': '$prefix'}))"`
-   AC_SUBST(RIVET_PYTHONPATH)
-   AC_MSG_NOTICE(Rivet Python lib will be installed to $RIVET_PYTHONPATH)
-   if test -z "$PYTHON"; then
+diff -Naur ORIG/src/Core/AnalysisHandler.cc PATCHED/src/Core/AnalysisHandler.cc
+--- ORIG/src/Core/AnalysisHandler.cc	2024-02-29 15:03:34.000000000 +0100
++++ PATCHED/src/Core/AnalysisHandler.cc	2024-05-07 10:55:27.600701332 +0200
+@@ -1418,7 +1418,8 @@
+     output.reserve(raos.size() * numWeights() * (includeraw ? 2 : 1) + 1); // plus one for beaminfo
+ 
+     // Identify an index ordering so that default weight is written out first
+-    vector<size_t> order{ (size_t)_customDefaultWeightIdx };
++    vector<size_t> order;
++    if (_customDefaultWeightIdx>=0) order.push_back((size_t)_customDefaultWeightIdx );
+     for (int i = 0, N = (int)numWeights(); i < N; ++i) {
+       if (i != _customDefaultWeightIdx) order.push_back(i);
+     }
