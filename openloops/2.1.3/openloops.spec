@@ -6,7 +6,7 @@
 
 Name:           openloops
 Version:        2.1.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
 Source0:        https://gitlab.com/openloops/OpenLoops/-/archive/OpenLoops-%{version}/OpenLoops-OpenLoops-%{version}.tar.gz
@@ -272,14 +272,41 @@ sed -i  's@.*process_lib_dir.*@process_lib_dir = /usr/'%_lib'/openloops/proclib@
 cp -r ./openloops  $RPM_BUILD_ROOT/usr/bin/openloops
 cp -r ./lib  $RPM_BUILD_ROOT/usr/%_lib/openloops
 cp -r ./pyol  $RPM_BUILD_ROOT/usr/%_lib/openloops
+mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src
+
+mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/collier
+cp -r  lib_src/collier/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/collier
+
+mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/cuttools
+cp -r  lib_src/cuttools/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/cuttools
+
+mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/olcommon
+cp -r  lib_src/olcommon/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/olcommon
+
+mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/oneloop
+cp -r  lib_src/oneloop/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/oneloop
+
+mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/openloops
+cp -r  lib_src/openloops/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/openloops
+
+
+mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/rambo
+cp -r  lib_src/rambo/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/rambo
+
+mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/trred
+cp -r  lib_src/trred/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/trred
+
 
 
 %files -n %{libname}
 %doc README COPYING
 %{_bindir}/%{name}
 %{_libdir}/*
+%_includedir/openloops/*
 
 %changelog
+* Fri May 10 2024 Andrii Verbytskyi 2.1.3
+- add modules
 * Fri Jan 19 2024 Andrii Verbytskyi 2.1.3
 - Update to 2.1.3
 * Sat Mar 13 2021 Andrii Verbytskyi 2.1.2
