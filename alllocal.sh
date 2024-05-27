@@ -4,6 +4,7 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+Herwig:7.3.0
 #Rivet:4.0.0
 #binder:1.4.1
 #rapgap:3.4.0
@@ -14,7 +15,7 @@ declare -a BUILDLIST=(
 #Rivet:4.0.0
 #fjcontrib:1.054
 #binder:1.4.1
-openloops:2.1.3
+#openloops:2.1.3
 #COCOA:0.1.1
 #HEPrpms:2023.12.30
 #whizard:3.1.4

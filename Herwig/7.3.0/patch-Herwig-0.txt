@@ -1,19 +1,6 @@
-diff -Naur ORIG/Decay/FormFactors/CzyzNucleonFormFactor.cc PATCHED/Decay/FormFactors/CzyzNucleonFormFactor.cc
---- ORIG/Decay/FormFactors/CzyzNucleonFormFactor.cc	2023-11-10 23:02:42.417868844 +0100
-+++ PATCHED/Decay/FormFactors/CzyzNucleonFormFactor.cc	2023-11-10 23:02:42.417868844 +0100
-@@ -38,6 +38,9 @@
-   // Magnetic moments
-   mup_ =  2.792847356;
-   mun_ = -1.9130427;
-+  // a and b parameters
-+  a_ = mup_-mun_-1;
-+  b_ = -mup_-mun_+1.;  
-   // set up the form factors
-   addFormFactor(2212,2212,2,2,2,1,1,1);
-   addFormFactor(2112,2112,2,2,2,1,1,1);
 diff -Naur ORIG/Looptools/Makefile.am PATCHED/Looptools/Makefile.am
---- ORIG/Looptools/Makefile.am	2023-11-07 00:38:23.389575564 +0100
-+++ PATCHED/Looptools/Makefile.am	2023-11-07 00:38:23.390575579 +0100
+--- ORIG/Looptools/Makefile.am	2023-11-06 12:52:27.507653828 +0100
++++ PATCHED/Looptools/Makefile.am	2023-11-06 12:52:27.508653828 +0100
 @@ -49,18 +49,18 @@
  
  libHwLooptoolsXFC_la_SOURCES = $(theXFCSOURCES)
@@ -41,8 +28,8 @@ diff -Naur ORIG/Looptools/Makefile.am PATCHED/Looptools/Makefile.am
  
  EXTRA_PROGRAMS = tester
 diff -Naur ORIG/Looptools/Makefile.in PATCHED/Looptools/Makefile.in
---- ORIG/Looptools/Makefile.in	2023-11-07 00:38:23.389575564 +0100
-+++ PATCHED/Looptools/Makefile.in	2023-11-07 00:38:23.390575579 +0100
+--- ORIG/Looptools/Makefile.in	2023-11-06 12:52:27.507653828 +0100
++++ PATCHED/Looptools/Makefile.in	2023-11-06 12:52:27.508653828 +0100
 @@ -236,10 +236,7 @@
  am__v_at_1 = 
  DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/Config -I$(top_builddir)/PDF
@@ -164,8 +151,8 @@ diff -Naur ORIG/Looptools/Makefile.in PATCHED/Looptools/Makefile.in
  	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
  	tags tags-am uninstall uninstall-am
 diff -Naur ORIG/m4/fastjet.m4 PATCHED/m4/fastjet.m4
---- ORIG/m4/fastjet.m4	2023-11-07 00:38:23.390575579 +0100
-+++ PATCHED/m4/fastjet.m4	2023-11-07 00:38:23.391575594 +0100
+--- ORIG/m4/fastjet.m4	2023-11-06 12:52:27.508653828 +0100
++++ PATCHED/m4/fastjet.m4	2023-11-06 12:52:27.509653828 +0100
 @@ -40,7 +40,7 @@
     save_LIBS="$LIBS"
  
@@ -185,8 +172,8 @@ diff -Naur ORIG/m4/fastjet.m4 PATCHED/m4/fastjet.m4
        CREATE_FASTJET="create"
        AC_MSG_RESULT(yes)
 diff -Naur ORIG/m4/herwig.m4 PATCHED/m4/herwig.m4
---- ORIG/m4/herwig.m4	2023-11-07 00:38:23.390575579 +0100
-+++ PATCHED/m4/herwig.m4	2023-11-07 00:38:23.391575594 +0100
+--- ORIG/m4/herwig.m4	2023-11-06 12:52:27.508653828 +0100
++++ PATCHED/m4/herwig.m4	2023-11-06 12:52:27.509653828 +0100
 @@ -351,30 +351,10 @@
        ${with_njet}/lib/libnjet2.dylib,
        [have_njet=lib], [have_njet=no])])
@@ -275,8 +262,8 @@ diff -Naur ORIG/m4/herwig.m4 PATCHED/m4/herwig.m4
          CREATE_GOSAM_CONTRIB="create"
          INSERT_GOSAM_CONTRIB="insert"
 diff -Naur ORIG/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc PATCHED/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc
---- ORIG/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc	2023-11-07 00:38:23.389575564 +0100
-+++ PATCHED/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc	2023-11-07 00:38:23.391575594 +0100
+--- ORIG/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc	2023-11-06 12:52:27.507653828 +0100
++++ PATCHED/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc	2023-11-06 12:52:27.509653828 +0100
 @@ -150,7 +150,7 @@
    // specific input file at gosamSetupInFileName. If the GoSam input file
    // does not exist yet at gosamSetupInFileName the python script will get 
@@ -296,8 +283,8 @@ diff -Naur ORIG/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc PATCHED/
      // cmd += " --makelinkfrom=contract ";
      cmd += " --makelinkfrom="+gosamPath+"/"+name()+".OLPContract.lh";
 diff -Naur ORIG/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc PATCHED/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc
---- ORIG/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc	2023-11-07 00:38:23.390575579 +0100
-+++ PATCHED/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc	2023-11-07 00:38:23.391575594 +0100
+--- ORIG/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc	2023-11-06 12:52:27.507653828 +0100
++++ PATCHED/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc	2023-11-06 12:52:27.509653828 +0100
 @@ -257,7 +257,7 @@
    params<<"\n$MTA$ "    <<std::setiosflags(ios::scientific)   << getParticleData(ParticleID::tauplus)->hardProcessMass() /GeV <<flush;
  
@@ -317,8 +304,8 @@ diff -Naur ORIG/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc PA
    cmd +=" --model "+theMGmodel;
    cmd +=" --runpath "+factory()->runStorage()+"/MadGraphAmplitudes ";
 diff -Naur ORIG/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in PATCHED/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in
---- ORIG/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in	2023-11-07 00:38:23.390575579 +0100
-+++ PATCHED/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in	2023-11-07 00:38:23.391575594 +0100
+--- ORIG/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in	2023-11-06 12:52:27.507653828 +0100
++++ PATCHED/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in	2023-11-06 12:52:27.509653828 +0100
 @@ -130,7 +130,7 @@
  parser = OptionParser()
  parser.add_option("-a", "--buildpath", dest="buildpath",help="Do not use this script. Only for Herwig internal use. ")
@@ -376,8 +363,8 @@ diff -Naur ORIG/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in PATCHED/Ma
  
  
 diff -Naur ORIG/MatrixElement/Matchbox/External/Makefile.am PATCHED/MatrixElement/Matchbox/External/Makefile.am
---- ORIG/MatrixElement/Matchbox/External/Makefile.am	2023-11-07 00:38:23.390575579 +0100
-+++ PATCHED/MatrixElement/Matchbox/External/Makefile.am	2023-11-07 00:38:23.391575594 +0100
+--- ORIG/MatrixElement/Matchbox/External/Makefile.am	2023-11-06 12:52:27.508653828 +0100
++++ PATCHED/MatrixElement/Matchbox/External/Makefile.am	2023-11-06 12:52:27.509653828 +0100
 @@ -27,7 +27,7 @@
  pkglib_LTLIBRARIES += HwMatchboxVBFNLO.la
  endif
