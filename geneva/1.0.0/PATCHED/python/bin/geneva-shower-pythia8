@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+#-------------------------------------------------------------------------------
+# Author(s):
+#    Simone Alioli, Frank Tackmann
+#
+# Copyright:
+#    Copyright (C) 2017, 2018 Geneva Collaboration
+#
+#    This file is part of the Geneva MC framework. Geneva is distributed under
+#    the terms of the GNU General Public License version 3 (GPLv3), see the
+#    COPYING file that comes with this distribution for details.
+#    Please respect the academic usage guidelines in the GUIDELINES file.
+#
+# Description:
+#    Wrapper script to call Geneva's shower_pythia8 main function.
+#-------------------------------------------------------------------------------
+
+import sys
+import os
+
+try:
+   import genevapylib
+except ImportError:
+   sys.exit("[ERROR] Could not find the genevapylib package.\n"
+            + "Is your PYTHONPATH set correctly?\n"
+            + "Run 'source " + os.path.dirname(__file__) + os.sep
+            + "geneva-env.sh' to update it.")
+
+try:
+   import genevapylib.cpp_extensions as cpp
+except ImportError as error:
+   sys.exit("[ERROR] {0}: {1}\n".format(error.__class__.__name__, error)
+            + "[ERROR] Could not load the genevapylib package.\n"
+            + "Please ensure all required Python modules are available.")
+
+
+def main(argv):
+   return cpp.shower_pythia8(os.path.basename(__file__), " ".join(argv))
+
+#-------------------------------------------------------------------------------
+if __name__ == "__main__":
+   sys.exit(main(sys.argv[1:]))

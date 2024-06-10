@@ -1,0 +1,108 @@
+#!/usr/bin/env python
+#-------------------------------------------------------------------------------
+# Author(s):
+#    Christian Bauer, Simone Alioli
+#
+# Copyright:
+#    Copyright (C) 2016 LBNL, CERN
+#
+#    This file is part of the Geneva MC framework. Geneva is distributed under
+#    the terms of the GNU General Public License version 3 (GPLv3), see the
+#    COPYING file that comes with this distribution for details.
+#    Please respect the academic usage guidelines in the GUIDELINES file.
+#
+# Description:
+#    Script for jobs submission to NERSC cluster using SLURM scheduling
+#-------------------------------------------------------------------------------
+
+import sys
+import os
+import argparse
+
+try:
+   import genevapylib
+except ImportError:
+   sys.exit("[ERROR] Could not find the genevapylib package.\n"
+            + "Is your PYTHONPATH set correctly?\n"
+            + "Run 'source " + os.path.dirname(__file__) + os.sep
+            + "geneva-env.sh' to update it.")
+
+try:
+   import genevapylib.SubmitNersc as nersc
+   from genevapylib.utils import run_command, check_options
+   from genevapylib.config import geneva_bin_path
+except ImportError as error:
+   sys.exit("[ERROR] {0}: {1}\n".format(error.__class__.__name__, error)
+            + "[ERROR] Could not load the genevapylib package.\n"
+            + "Please ensure all required Python modules are available.")
+
+
+def parse_args(argv):
+   parser = argparse.ArgumentParser(description = "Runs a python executable on the NERSC clusters.")
+   optional = parser._action_groups.pop()
+   parser.add_argument("run_name",
+                       help = "name for the run", metavar = '<run_name>')
+   parser.add_argument("python_executable",
+                       help = "python executable to run", metavar = '<python_executable>')
+   parser.add_argument("command_line",
+                       help = "command line arguments for the python executable in quotation marks", metavar = '<command_line>')
+   required = parser.add_argument_group('required arguments')
+   required.add_argument("-n", "--num-runs", required = True, type = int,
+                         help = "number of parallel runs", metavar = '<runs>')
+   optional.add_argument("-m", "--machine", default = "edison",
+                         help = "machine to submit to [edison]", metavar = '{edison, cori-haswell, cori-knl}')
+   optional.add_argument("-q", "--queue", default="regular",
+                         help = "queue to submit to [regular]", metavar = '{regular, premium, debug}')
+   optional.add_argument("-t", type = int, default = 2880, dest = 'max_time',
+                         help = "maximum run time in minutes [2880]", metavar = '<minutes>')
+   optional.add_argument("-d", "--dry-run", action = "store_true",
+                         help = "only print out commands without submitting jobs [off]")
+   optional.add_argument("-w", "--wait",
+                         help = "wait for <job_id> to be finished before starting [off]", metavar = '<job_id>')
+   optional.add_argument("-l", "--license", nargs='+',
+                         help = "file system license {SCRATCH, scratch1-3, project}", metavar = '<license>')
+   parser._action_groups.append(optional)
+   return parser.parse_args(argv)
+
+def main(argv):
+   args = parse_args(argv)
+
+   nersc.checkHostName(args.machine)
+   nersc.checkQueue(args.machine, args.queue)
+   timestring = nersc.getTimeString(args.machine, args.queue, args.max_time)
+   numCores = args.num_runs
+   numNodes = nersc.getNumNodes(args.machine, numCores)
+   executable = os.path.join(sys.path[0], os.path.basename(args.python_executable))
+   if not os.path.isfile(executable):
+      print "Could not find executable: " + executable
+      sys.exit(1)
+   command = ["srun", "-n", str(numCores), executable]
+   options = []
+   for i in args.command_line.split():
+      options.append(str(i))
+   options.append("--mpi")
+   options.append("--quiet")
+   options.append("--num-runs")
+   options.append(str(args.num_runs))
+   check_options(executable, " ".join(options))
+   command += options
+
+   slurmfile = "submit" + args.run_name + ".sl"
+   if os.path.isfile(slurmfile):
+      print "SLURM file "+slurmfile+" already present. Select different runname."
+      sys.exit(1)
+   else:
+      nersc.writeSlurmFile(slurmfile, args.machine, args.queue, args.license, numNodes, timestring, command)
+
+   batchline="sbatch "
+   if args.wait:
+      batchline+=" -d afterany:"+str(args.wait)+" "
+   batchline+=slurmfile
+   if (not args.dry_run):
+      run_command(batchline)
+   else:
+      print batchline
+
+#-------------------------------------------------------------------------------
+if __name__ == "__main__":
+   sys.exit(main(sys.argv[1:]))

@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+#-------------------------------------------------------------------------------
+# Author(s):
+#    Simone Alioli, Frank Tackmann
+#
+# Copyright:
+#    Copyright (C) 2017, 2018 Geneva Collaboration
+#
+#    This file is part of the Geneva MC framework. Geneva is distributed under
+#    the terms of the GNU General Public License version 3 (GPLv3), see the
+#    COPYING file that comes with this distribution for details.
+#    Please respect the academic usage guidelines in the GUIDELINES file.
+#
+# Description:
+#    Wrapper script to call Geneva's generate_events main function.
+#-------------------------------------------------------------------------------
+
+import sys
+import os
+import argparse
+
+try:
+   import genevapylib
+except ImportError:
+   sys.exit("[ERROR] Could not find the genevapylib package.\n"
+            + "Is your PYTHONPATH set correctly?\n"
+            + "Run 'source " + os.path.dirname(__file__) + os.sep
+            + "geneva-env.sh' to update it.")
+
+try:
+   import genevapylib.cpp_extensions as cpp
+except ImportError as error:
+   sys.exit("[ERROR] {0}: {1}\n".format(error.__class__.__name__, error)
+            + "[ERROR] Could not load the genevapylib package.\n"
+            + "Please ensure all required Python modules are available.")
+
+
+def parse_args(argv):
+   parser = argparse.ArgumentParser(description =
+      "Runs the main Geneva program.\
+      This is called by the 'geneva generate ...' and 'geneva setup ...' commands\
+      and normally should not be used directly.", prefix_chars = '+')
+   parser.add_argument('option', nargs = '+',
+                       help = 'Geneva option and value', metavar = '--<option> <value>')
+   return parser.parse_args(argv)
+
+def main(argv):
+   parse_args(argv)
+   return cpp.generate_events(os.path.basename(__file__), " ".join(argv))
+
+#-------------------------------------------------------------------------------
+if __name__ == "__main__":
+   sys.exit(main(sys.argv[1:]))

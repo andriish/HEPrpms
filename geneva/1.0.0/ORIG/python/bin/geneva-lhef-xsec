@@ -1,0 +1,96 @@
+#!/usr/bin/env python
+#-------------------------------------------------------------------------------
+# Author(s):
+#    Simone Alioli, Frank Tackmann
+#
+# Copyright:
+#    Copyright (C) 2017, 2018 Geneva Collaboration
+#
+#    This file is part of the Geneva MC framework. Geneva is distributed under
+#    the terms of the GNU General Public License version 3 (GPLv3), see the
+#    COPYING file that comes with this distribution for details.
+#    Please respect the academic usage guidelines in the GUIDELINES file.
+#
+# Description:
+#    Script to calculate xsec from lhef files
+#-------------------------------------------------------------------------------
+
+import sys
+import os
+import argparse
+import json
+
+try:
+   import genevapylib
+except ImportError:
+   sys.exit("[ERROR] Could not find the genevapylib package.\n"
+            + "Is your PYTHONPATH set correctly?\n"
+            + "Run 'source " + os.path.dirname(__file__) + os.sep
+            + "geneva-env.sh' to update it.")
+
+try:
+   import genevapylib.process as process
+   import genevapylib.Lhef as lhef
+   import genevapylib.utils as utils
+except ImportError as error:
+   sys.exit("[ERROR] {0}: {1}\n".format(error.__class__.__name__, error)
+            + "[ERROR] Could not load the genevapylib package.\n"
+            + "Please ensure all required Python modules are available.")
+
+is_parallelized = True
+"""bool: Indicates that the script is parallelized."""
+
+
+def parse_args(argv):
+   parser = argparse.ArgumentParser(description =
+      "Calculates the cross section separately for events of the given multiplicity <mult>\n"
+      "and events with larger multiplicity from all given <file>.lhe[.gz] files.",
+      formatter_class = argparse.RawDescriptionHelpFormatter)
+   optional = parser._action_groups.pop()
+   parser.add_argument("infiles", nargs = '+',
+                       help = '(zipped) LHEF files to use', metavar = '<file>.lhe[.gz]')
+   required = parser.add_argument_group('required arguments')
+   required.add_argument("--multiplicity", type = int, required = True,
+                         help = "multiplicity of events to calculate the cross section", metavar = '<mult>')
+   required.add_argument("--outfile", required = True,
+                         help = "file to write the result (may include a path)", metavar = '<outfile>')
+   optional.add_argument("--mpi", action = 'store_true', default = False,
+                         help = "parallelize with MPI [off])")
+   parser._action_groups.append(optional)
+   return parser.parse_args(argv)
+
+def main(argv):
+   args = parse_args(argv)
+
+   process.init(args.mpi)
+
+   infiles = None
+   if process.master:
+      # Skip files that don't exist.
+      infiles = list(filter(utils.check_file_exists, args.infiles))
+
+      if not infiles:
+         process.signal_error("No input files, that seemed a bit too easy ...", False)
+
+   process.exit_if_error()
+
+   try:
+      if process.mpi:
+         infiles = process.mpi.bcast(infiles)
+         xsInfo = lhef.getXSInfoMPI(infiles, args.multiplicity)
+      else:
+         xsInfo = lhef.getXSInfoSingleCore(infiles, args.multiplicity)
+
+      # Write the result to the given outfile.
+      if process.master:
+         process.log("Writing cross section information to file: " + args.outfile)
+         with utils.open_outfile(args.outfile) as out:
+            json.dump(xsInfo.__dict__, out)
+   except Exception:
+      process.signal_error("Could not obtain cross section information.")
+
+   return process.return_value()
+
+#-------------------------------------------------------------------------------
+if __name__ == "__main__":
+   sys.exit(main(sys.argv[1:]))

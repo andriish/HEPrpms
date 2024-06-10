@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-SHERPA-MC:2.2.16
+geneva:1.0.0
+#SHERPA-MC:2.2.16
 #Herwig:7.3.0
 #Rivet:4.0.0
 #binder:1.4.1

@@ -1,3 +1,9 @@
+%define libname     geneva
+%define libnamedev  geneva-devel
+%define libnamedoc  geneva-doc
+%undefine _py3_shebang_s
+%undefine _py3_shebang_P
+
 Name:           geneva
 Version:        1.0.0
 Release:        1%{?dist}
@@ -15,7 +21,9 @@ BuildRequires:  lhapdf-devel
 BuildRequires:  python3-devel
 BuildRequires:  gcc-c++
 
-
+%if %{?fedora}%{!?fedora:0} >= 39
+BuildRequires: python3-rpm-macros
+%endif
 
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  pythia8-devel HepMC HepMC-devel 
@@ -47,22 +55,32 @@ develop programs which make use of %{name}.
 The library documentation is available on header files.
 
 
-%package  doc
-Summary:        Documentation for %{name}
-Provides:       %{name}-doc = %{version}-%{release}
-%description doc
-%{libnamedoc} contains the documentation for %{name}.
+%package -n python3-%{name}
+Summary:   %{name}  Python 3 bindings
+%{?python_provide:%python_provide python3-%{name}}
+%description -n python3-%{name}
+This package provides the Python 3 bindings for %{name}
 
 
 %prep
 %setup -q -n geneva-public-1.0-RC3
-#patch0 -p1
+%patch0 -p1
+sed -i 's@DESTINATION\ \"lib@DESTINATION\ \"lib64@g' python/CMakeLists.txt 
+sed -i 's@DESTINATION\ lib@DESTINATION\ lib64@g' src/CMakeLists.txt packages/*/CMakeLists.txt
+
 
 %build
 rm -rf external/fastjet/ external/hepmc/ external/lhapdf/ external/openloops/ external/pythia8/ external/rivet/
 
+%if %{?fedora}%{!?fedora:0} >= 39
+%py3_shebang_fix  ./python
+%py3_shebang_fix  ./python/bin/geneva*
+%else
+pathfix.py -pn -i %{__python3}  ./python
+pathfix.py -pn -i %{__python3}  ./python/bin/geneva*
+%endif
 
-%cmake -S . -B BUILD -DDgeneva_enable_python=ON \
+%cmake  -DDgeneva_enable_python=ON \
       -Dgeneva_enable_hepmc=OFF \
       -Dgeneva_enable_lhapdf=ON \
       -Dgeneva_enable_openloops=ON \
@@ -70,21 +88,29 @@ rm -rf external/fastjet/ external/hepmc/ external/lhapdf/ external/openloops/ ex
       -Dopenloops_ROOT=/usr   \
       -Dlhapdf_ROOT=/usr
 
+%cmake_build
+
+
+%install
+%cmake_install
+
+%if %{?fedora}%{!?fedora:0} >= 39
+%py3_shebang_fix  %{buildroot}/%_bindir/geneva*
+%else
+pathfix.py -pn -i %{__python3} %{buildroot}/%_bindir/geneva*
+%endif
 
 %files -n %{libname}
-/usr/%_lib/*
+%{_bindir}/*
+%_libdir/libGene*
+%_libdir/python*/site-packages/*
+%{_datadir}/Geneva
 
 %files -n %{libnamedev}
-%{_includedir}/*
-%{_datadir}/*.*
-%{_datadir}/%{name}/cmake/*
+%{_includedir}/Geneva/*
 
-%files -n  %{libnamedoc}
-%{_datadir}/%{name}/AUTHORS
-%{_datadir}/%{name}/COPYING
-%{_datadir}/%{name}/validation/*
-%{_prefix}/share/doc/geneva/guide.ps
-%{_prefix}/share/doc/geneva/*md
+%files  -n python3-%{name}
+%{python3_sitearch}/*
 
 
 %changelog

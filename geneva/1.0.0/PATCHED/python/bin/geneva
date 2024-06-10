@@ -1,0 +1,225 @@
+#!/usr/bin/env python
+#-------------------------------------------------------------------------------
+# Author(s):
+#    Christian Bauer, Simone Alioli, Frank Tackmann
+#
+# Copyright:
+#    Copyright (C) 2017, 2018 Geneva Collaboration
+#
+#    This file is part of the Geneva MC framework. Geneva is distributed under
+#    the terms of the GNU General Public License version 3 (GPLv3), see the
+#    COPYING file that comes with this distribution for details.
+#    Please respect the academic usage guidelines in the GUIDELINES file.
+#
+# Description:
+#    Main script to drive Geneva
+#-------------------------------------------------------------------------------
+
+import sys
+import os
+import argparse
+
+try:
+   import genevapylib
+except ImportError:
+   sys.exit("[ERROR] Could not find the genevapylib package.\n"
+            + "Is your PYTHONPATH set correctly?\n"
+            + "Run 'source " + os.path.dirname(__file__) + os.sep
+            + "geneva-env.sh' to update it.")
+
+try:
+   import genevapylib.process as process
+   from genevapylib.CommandProvider import getCommandProvider
+   from genevapylib.execute import execute
+   from genevapylib.config import geneva_use_pythia8
+   from genevapylib.config import geneva_use_hepmc
+   from genevapylib.config import geneva_use_rivet
+   import genevapylib.cpp_extensions as cpp
+except ImportError as error:
+   sys.exit("[ERROR] {0}: {1}\n".format(error.__class__.__name__, error)
+            + "[ERROR] Could not load the genevapylib package.\n"
+            + "Please ensure all required Python modules are available.")
+
+is_parallelized = True
+"""bool: Indicates that the script is parallelized."""
+
+
+def parse_args(argv):
+   """Defines and parses the options of geneva
+   """
+   parser = argparse.ArgumentParser(description = "Runs the Geneva event generator.")
+
+   subparsers = parser.add_subparsers(dest = 'stage', help = "Available run stages:")
+
+   base_subparser = argparse.ArgumentParser(add_help = False)
+   base_subparser.add_argument("--start-seed", type = int, default = 1,
+                               help = "first random number seed [1]", metavar = '<seed>')
+   base_subparser.add_argument("--num-runs", type = int, default = 1,
+                               help = "number of parallel runs [1]", metavar = '<runs>')
+   base_subparser.add_argument("--mpi", action = 'store_true',
+                               help = "parallelize runs with MPI [off]")
+   base_subparser.add_argument("--dry-run", action = 'store_true',
+                               help = "only print out commands without executing them [off]")
+   base_subparser.add_argument("--quiet", action = 'store_true',
+                               help = "suppress all print output except errors [off]")
+
+   #Subparser for setup stage
+   parser_setup = subparsers.add_parser('setup', parents = [base_subparser],
+                                        description = "Performs setup runs to prepare main generation.",
+                                        help = "perform setup run to prepare main generation")
+   optional = parser_setup._action_groups.pop()
+   parser_setup.add_argument("option_file", type = valid_filename,
+                             help = "Geneva option file", metavar = '<option_file>')
+   required = parser_setup.add_argument_group('required arguments')
+   required.add_argument("--points", type = int, required = True,
+                         help = "number of points among all runs used during the setup stage",
+                         metavar = '<points>')
+   required.add_argument("--iterations", type = int, required = True,
+                         help = "number of iterations to set up integration grids", metavar = '<iterations>')
+   optional.add_argument("--extra-options", default = "",
+                         help = "extra options (only for power users)", metavar = '<options...>')
+   parser_setup._action_groups.append(optional)
+
+   #Subparser for generate stage
+   parser_gen = subparsers.add_parser('generate', parents = [base_subparser],
+                                      description = "Runs the main calculation to generate LHEF events.",
+                                      help = "run main calculation to generate LHEF events")
+   parser_gen.add_argument("option_file", type = valid_filename,
+                           help = "Geneva option file", metavar = '<option_file>')
+   parser_gen.add_argument("--extra-options", default = "",
+                           help = "extra options (only for power users)", metavar = '<options>')
+
+   #Subparser for reweight stage
+   parser_reweight = subparsers.add_parser('reweight', parents = [base_subparser],
+                                           description = "Reweights the generated LHEF events.",
+                                           help = "reweight generated LHEF events")
+   optional = parser_reweight._action_groups.pop()
+   parser_reweight.add_argument("option_file", type = valid_filename,
+                                help = "Geneva option file", metavar = '<option_file>')
+   required = parser_reweight.add_argument_group('required arguments')
+   required.add_argument("--sigma-below", type = float, nargs = 3, required = True,
+                         help = "target cross sections below the resolution cutoff",
+                         metavar= ('<central>', '<up>', '<down>'))
+   parser_reweight._action_groups.append(optional)
+
+   if geneva_use_pythia8:
+      #Subparser for analyze-lhef stage
+      parser_analyzelhef = subparsers.add_parser('analyze-lhef', parents = [base_subparser],
+                                                 description = "Analyzes the LHEF events.",
+                                                 help = "analyze LHEF events")
+      parser_analyzelhef.add_argument("option_file", type = valid_filename, help = "Geneva option file")
+      parser_analyzelhef.add_argument("--outpath", default = "analyze",
+                                      help = "output path for the report files [analyze]", metavar = '<path>')
+      parser_analyzelhef.add_argument("--max-time", type = int, default = 0,
+                                      help = "maximum runtime in minutes [0 = unused]", metavar = '<minutes>')
+      parser_analyzelhef.add_argument("--max-events", type = int, default = 0,
+                                      help = "maximum number of events to analyze [0 = unused]", metavar = '<num>')
+      parser_analyzelhef.add_argument("--no-enforce-lhef-options", action = 'store_true',
+                                      help = "do not enforce consistency with options in the LHEF header (use with care) [off]")
+
+      #Subparser for shower stage
+      parser_shower = subparsers.add_parser('shower', parents = [base_subparser],
+                                            description = "Showers the LHEF events with Pythia8.",
+                                            help = "shower LHEF events with Pythia8")
+      parser_shower.add_argument("option_file", type = valid_filename,
+                                 help = "Geneva option file", metavar = '<option_file>')
+      parser_shower.add_argument("pythia_options", type = valid_filename,
+                                 help = "Pythia8 option file", metavar = '<pythia_options>')
+      parser_shower.add_argument("--outpath", default = "shower",
+                                 help = "output path for .hepmc[.gz] and report files [shower]", metavar = '<path>')
+      parser_shower.add_argument("--shower-tag", default = "",
+                                 help = "extra tag to append to output files [""]", metavar = '<shower_tag>')
+      parser_shower.add_argument("--max-time", type = int, default = 0,
+                                 help="maximum runtime in minutes [0 = unused]", metavar = '<minutes>')
+      parser_shower.add_argument("--max-events", type = int, default = 0,
+                                 help = "maximum number of events to shower [0 = unused]", metavar = '<num>')
+      parser_shower.add_argument("--no-enforce-lhef-options", action = 'store_true',
+                                 help = "do not enforce consistency with options in the LHEF header (use with care) [off]")
+      if geneva_use_hepmc:
+         parser_shower.add_argument("--no-hepmc", action = 'store_true',
+                                    help = "do not write out HepMC files [off]")
+      else:
+         parser_shower.add_argument("--no-hepmc", action = 'store_true', default = True,
+                                    help = "do not write out HepMC files [on]")
+
+   #Subparser for analyze-rivet stage
+   if geneva_use_rivet:
+      parser_rivet = subparsers.add_parser('analyze-rivet', parents = [base_subparser],
+                                           help = "analyze (compressed) HepMC files with Rivet",
+                                           description =
+                                           "Analyzes (compressed) HepMC files with Rivet.\
+                                            The files to operate on are constructed as\
+                                            <filestem>_<s>.hepmc[.gz], where <s> runs over the range\
+                                            of seeds [<seed>, <last>]. Gzipped files are used\
+                                            when zlib is enabled.")
+      optional = parser_rivet._action_groups.pop()
+      parser_rivet.add_argument("filestem",
+                                help = "the filestem to use (may include a path)", metavar = '<filestem>')
+      required = parser_rivet.add_argument_group('required arguments')
+      required.add_argument("-a", action = "append", required = True, dest = "analyses",
+                            help = "add one or more Rivet <analysis> to perform",
+                            metavar = '<analysis> [-a <analysis>]')
+      optional.add_argument("--last-seed", type = int, default = 0,
+                            help = "last seed to consider [0 = automatic]", metavar = '<last>')
+      optional.add_argument("--outpath", default = "rivet",
+                            help = "path for the Rivet output [rivet]", metavar = '<path>')
+      optional.add_argument("--analysis-path", default = "",
+                            help = "additional search path for Rivet analyses [""]", metavar = '<path>')
+      optional.add_argument("--rivet-tag", default = "",
+                            help = "extra tag to append to output files [""]", metavar = '<rivet_tag>')
+      optional.add_argument("--num-weights", type = int, default = 1,
+                            help = "analyze the first <num> weights in the HepMC files [1]", metavar = '<num>')
+      optional.add_argument("--max-time", type = int, default = 0,
+                            help="maximum runtime in minutes [0 = unused]", metavar = '<minutes>')
+      optional.add_argument("--max-events", type = int, default = 0,
+                            help = "maximum number of events to analyze [0 = unused]", metavar = '<num>')
+      parser_rivet._action_groups.append(optional)
+
+   return parser.parse_args(argv)
+
+def valid_filename(x):
+   """
+   'Type' for argparse - checks that file exists but does not open.
+   """
+   if not os.path.exists(x):
+      # argparse uses the ArgumentTypeError to give a rejection message like:
+      # error: argument input: x does not exist
+      raise argparse.ArgumentTypeError("{0} does not exist".format(x))
+   return x
+
+
+def main(argv):
+   args = parse_args(argv)
+
+   process.init(args.mpi, args.quiet)
+
+   commands = None
+   while process.master:
+      if not args.quiet:
+         print(cpp.get_banner())
+
+      try:
+         commands = getCommandProvider(args).getAllCommands(args)
+      except Exception:
+         process.signal_error("Failed to generate list of commands to execute.")
+         break
+
+      if not commands:
+         process.signal_exit("No commands to execute. That was easy ...")
+         break
+
+      if args.dry_run:
+         print("List of commands to execute:\n")
+         from pprint import pprint
+         pprint(commands)
+         process.signal_exit()
+      break
+
+   process.exit_if_signal()
+
+   execute(commands, args.quiet)
+
+
+#-------------------------------------------------------------------------------
+if __name__ == "__main__":
+   sys.exit(main(sys.argv[1:]))

@@ -1,0 +1,29 @@
+#-------------------------------------------------------------------------------
+# Author(s):
+#    Frank Tackmann
+#
+# Copyright:
+#    Copyright (C) 2017 CERN, DESY
+#
+#    This file is part of the Geneva MC framework. Geneva is distributed under
+#    the terms of the GNU General Public License version 3 (GPLv3), see the
+#    COPYING file that comes with this distribution for details.
+#    Please respect the academic usage guidelines in the GUIDELINES file.
+#
+# Description:
+#    runtime configuration for Geneva python package configured by cmake
+#-------------------------------------------------------------------------------
+
+from distutils.util import strtobool
+
+geneva_use_zlib = strtobool("@geneva_USE_ZLIB@")
+geneva_use_pythia8 = strtobool("@geneva_USE_PYTHIA8@")
+geneva_use_hepmc = strtobool("@geneva_USE_HEPMC@")
+geneva_use_rivet = strtobool("@geneva_USE_RIVET@")
+
+import os
+
+def getEnvironment():
+   env = os.environ.copy()
+   @REPLACE_DYLD_LIBRARY_PATH@
+   return env

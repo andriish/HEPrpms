@@ -1,0 +1,220 @@
+#!/usr/bin/env python
+#-------------------------------------------------------------------------------
+# Author(s):
+#    Christian Bauer, Simone Alioli, Frank Tackmann
+#
+# Copyright:
+#    Copyright (C) 2017, 2018 Geneva Collaboration
+#
+#    This file is part of the Geneva MC framework. Geneva is distributed under
+#    the terms of the GNU General Public License version 3 (GPLv3), see the
+#    COPYING file that comes with this distribution for details.
+#    Please respect the academic usage guidelines in the GUIDELINES file.
+#
+# Description:
+#    Script to reweight events
+#-------------------------------------------------------------------------------
+
+import sys
+import os
+import argparse
+
+from itertools import groupby
+from operator import itemgetter
+
+try:
+   import genevapylib
+except ImportError:
+   sys.exit("[ERROR] Could not find the genevapylib package.\n"
+            + "Is your PYTHONPATH set correctly?\n"
+            + "Run 'source " + os.path.dirname(__file__) + os.sep
+            + "geneva-env.sh' to update it.")
+
+try:
+   import genevapylib.process as process
+   import genevapylib.Lhef as lhef
+   from genevapylib.ReweightEventMultiplicity import reweight
+   import genevapylib.utils as utils
+except ImportError as error:
+   sys.exit("[ERROR] {0}: {1}\n".format(error.__class__.__name__, error)
+            + "[ERROR] Could not load the genevapylib package.\n"
+            + "Please ensure all required Python modules are available.")
+
+is_parallelized = True
+"""bool: Indicates that the script is parallelized."""
+
+
+def parse_args(argv):
+   parser = argparse.ArgumentParser(description =
+      "Used by the 'geneva reweight ...' command and normally does not need to be used directly.\n"
+      "\n"
+      "Reweights the events with multiplicity <mult> in all <file>.lhe[.gz] files\n"
+      "to the target cross sections <central> <up> <down>.\n"
+      "\n"
+      "If successful, the input files are replaced by the reweighted result.\n"
+      "If --keep is specified, the original files are kept with '-orig' appended.",
+      formatter_class = argparse.RawDescriptionHelpFormatter)
+   optional = parser._action_groups.pop()
+   parser.add_argument("infiles", nargs = '+',
+                       help = '(zipped) LHEF files to reweight', metavar = '<file>.lhe[.gz]')
+   required = parser.add_argument_group('required arguments')
+   required.add_argument("--target", type = float, nargs = 3, required = True,
+                         help = "target cross sections to reweight to",
+                         metavar = ('<central>','<up>','<down>'))
+   required.add_argument("--multiplicity", type = int, required = True,
+                         help = "multiplicity of events to reweight", metavar = '<mult>')
+   required.add_argument("--num-weights", type = int, required = True,
+                         help = "number of weights", metavar = '<num>')
+   required.add_argument("--up-weight", type = int, required = True,
+                         help = "position of the weight to reweight with the <up> variation", metavar = '<pos>')
+   required.add_argument("--down-weight", type = int, required = True,
+                         help = "position of the weight to reweight with the <down> variation", metavar = '<pos>')
+   optional.add_argument("--keep", action = 'store_true',
+                         help = "keep original files [off]")
+   optional.add_argument("--mpi", action = 'store_true',
+                         help = "parallelize with MPI [off]")
+   parser._action_groups.append(optional)
+   return parser.parse_args(argv)
+
+def main(argv):
+   args = parse_args(argv)
+
+   process.init(args.mpi)
+
+   # some sanity checks
+   infiles = None
+   if process.master:
+      if (args.up_weight > args.num_weights) or (args.down_weight > args.num_weights):
+         process.signal_error("Not enough weights in input.", False)
+
+      if (args.up_weight < 2) or (args.down_weight < 2):
+         process.signal_error("First weight is reserved for central value.", False)
+
+      if args.num_weights < 1:
+         process.signal_error("Number of weights must be >= 1.", False)
+
+      # Skip files that don't exist.
+      infiles = list(filter(utils.check_file_exists, args.infiles))
+
+      if not infiles:
+         process.signal_error("No input files, that seemed a bit too easy ...", False)
+
+   process.exit_if_error()
+
+   # Get the cross section from the LHEF files.
+   try:
+      if process.mpi:
+         infiles = process.mpi.bcast(infiles)
+         xsInfo = lhef.getXSInfoMPI(infiles, args.multiplicity)
+      else:
+         xsInfo = lhef.getXSInfoSingleCore(infiles, args.multiplicity)
+
+      if process.master:
+         renorm_fac = xsInfo.numEventsInFile / (1.0*xsInfo.numEvents)
+         rwgt_fac_central = args.target[0] / xsInfo.sigmaBelow
+         rwgt_fac_up = args.target[1] / xsInfo.sigmaBelowUp
+         rwgt_fac_down = args.target[2] / xsInfo.sigmaBelowDown
+         xsec_fac = xsInfo.value/(xsInfo.sigmaBelow+xsInfo.sigmaAbove)
+
+         option_string = "--target {0[0]} {0[1]} {0[2]}".format(args.target) \
+                         + " --multiplicity {0}".format(args.multiplicity) \
+                         + " --num-weights {0}".format(args.num_weights) \
+                         + " --up-weight {0}".format(args.up_weight) \
+                         + " --down-weight {0}".format(args.down_weight)
+         if args.keep:
+            option_string += " --keep"
+
+         seeds=[]
+         for infile in infiles:
+            start = infile.rfind('_') + 1
+            end = infile.find('.lhe', start)
+            seeds.append(int(infile[start:end]))
+
+         seeds.sort()
+         seedlist = []
+         for k, g in groupby(enumerate(seeds), lambda i_x: i_x[0]-i_x[1]):
+            seedlist.append(list(map(itemgetter(1),g)))
+         seedstr=""
+         for s in seedlist:
+            seedstr += str(s[0])
+            if len(s)>1:
+               seedstr += "-" + str(s[-1])
+            seedstr += " "
+
+         extraLog = ["\n"]
+         extraLog.append("  ### Begin Combined Runs Information\n")
+         extraLog.append("  #   random seeds : "+seedstr+"\n")
+         extraLog.append("  #   number of events in files : "+str(xsInfo.numEventsInFile)+"\n")
+         extraLog.append("  #   weights normalized to total cross section : true\n")
+         extraLog.append("  #   normalization factor : "+str(renorm_fac*xsec_fac)+"\n")
+         extraLog.append("  ##  Total Cross Section\n")
+         extraLog.append("  #   number of processed events : "+str(xsInfo.numEvents)+"\n")
+         extraLog.append("  #   sum of processed weights : "+str(xsInfo.sumWeights)+"\n")
+         extraLog.append("  #   sum of processed weights squared : "+str(xsInfo.sumWeightsSq)+"\n")
+         extraLog.append("  #   total cross section value [pb] : "+str(xsInfo.value)+"\n")
+         extraLog.append("  #   total cross section error [pb] : "+str(xsInfo.error)+"\n")
+         extraLog.append("  ### End Combined Runs Information\n\n")
+         extraLog.append("  ### Begin Reweighting Information\n")
+         extraLog.append("  #   random seeds : "+seedstr+"\n")
+         extraLog.append("  #   number of events in files : "+str(xsInfo.numEventsInFile)+"\n")
+         extraLog.append("  #   weights normalized to total cross section : true\n")
+         extraLog.append("  #   reweighted with command \"" + option_string + "\" \n")
+         extraLog.append("  #   cross section info format    (below, above, total)\n")
+         extraLog.append("  #   central before reweighing:   ({0}, {1}, {2})\n".format(xsInfo.sigmaBelow*xsec_fac,  xsInfo.sigmaAbove*xsec_fac, xsInfo.value))
+         extraLog.append("  #   vary up before reweighing:   ({0}, {1}, {2})\n".format(xsInfo.sigmaBelowUp*xsec_fac, xsInfo.sigmaAboveUp*xsec_fac, (xsInfo.sigmaBelowUp+xsInfo.sigmaAboveUp)*xsec_fac))
+         extraLog.append("  #   vary down before reweighing: ({0}, {1}, {2})\n".format(xsInfo.sigmaBelowDown*xsec_fac, xsInfo.sigmaAboveDown*xsec_fac, (xsInfo.sigmaBelowDown+xsInfo.sigmaAboveDown)*xsec_fac))
+         extraLog.append("  #   central after reweighing:    ({0}, {1}, {2})\n".format(args.target[0], xsInfo.sigmaAbove*xsec_fac, args.target[0]+xsInfo.sigmaAbove*xsec_fac))
+         extraLog.append("  #   vary up after reweighing:    ({0}, {1}, {2})\n".format(args.target[1], xsInfo.sigmaAboveUp*xsec_fac, args.target[1]+xsInfo.sigmaAboveUp*xsec_fac))
+         extraLog.append("  #   vary down after reweighing:  ({0}, {1}, {2})\n".format(args.target[2], xsInfo.sigmaAboveDown*xsec_fac, args.target[2]+xsInfo.sigmaAboveDown*xsec_fac))
+         extraLog.append("  ##  Total Cross Section\n")
+         extraLog.append("  #   number of processed events : "+str(xsInfo.numEvents)+"\n")
+         extraLog.append("  #   total cross section value [pb] : "+str(args.target[0]+xsInfo.sigmaAbove*xsec_fac)+"\n")
+         extraLog.append("  #   total cross section error [pb] : "+str((xsInfo.error/xsInfo.value)*(args.target[0]+xsInfo.sigmaAbove*xsec_fac))+"\n")
+         extraLog.append("  ### End Reweighting Information\n")
+
+         # include both the xsec reweighting and the normalization
+         rwgt_fac_central *= renorm_fac
+         rwgt_fac_up *= renorm_fac
+         rwgt_fac_down *= renorm_fac
+         xsec_fac *= renorm_fac
+      else:
+         rwgt_fac_central = None
+         rwgt_fac_up = None
+         rwgt_fac_down = None
+         xsec_fac = None
+         extraLog = None
+
+   except Exception:
+      process.signal_error("Could not obtain cross section information.")
+
+   process.exit_if_error("Could not reweight files.")
+
+   try:
+      # Remove duplicate input files.
+      infiles = list(set(infiles))
+      if process.mpi:
+         process.check_size(len(infiles))
+
+         rwgt_fac_central = process.mpi.bcast(rwgt_fac_central)
+         rwgt_fac_up = process.mpi.bcast(rwgt_fac_up)
+         rwgt_fac_down = process.mpi.bcast(rwgt_fac_down)
+         xsec_fac = process.mpi.bcast(xsec_fac)
+         extraLog = process.mpi.bcast(extraLog)
+
+         if process.rank < len(infiles):
+            infile = infiles[process.rank]
+            reweight(infile, args.multiplicity, args.num_weights, args.up_weight, args.down_weight,
+                     rwgt_fac_central, rwgt_fac_up, rwgt_fac_down, xsec_fac, extraLog, args.keep)
+      else:
+         for infile in infiles:
+            reweight(infile, args.multiplicity, args.num_weights, args.up_weight, args.down_weight,
+                     rwgt_fac_central, rwgt_fac_up, rwgt_fac_down, xsec_fac, extraLog, args.keep)
+   except Exception:
+      process.signal_error("Unexpected error.")
+
+   process.exit_if_error("Could not reweight one ore more files.")
+   return process.return_value()
+
+#-------------------------------------------------------------------------------
+if __name__ == "__main__":
+   sys.exit(main(sys.argv[1:]))

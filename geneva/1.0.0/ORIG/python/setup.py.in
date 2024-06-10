@@ -1,0 +1,54 @@
+#-------------------------------------------------------------------------------
+# Author(s):
+#    Simone Alioli, Frank Tackmann
+#
+# Copyright:
+#    Copyright (C) 2017, 2018 Geneva Collaboration
+#
+#    This file is part of the Geneva MC framework. Geneva is distributed under
+#    the terms of the GNU General Public License version 3 (GPLv3), see the
+#    COPYING file that comes with this distribution for details.
+#    Please respect the academic usage guidelines in the GUIDELINES file.
+#
+# Description:
+#    setuptools configuration for Geneva python package configured by cmake
+#-------------------------------------------------------------------------------
+
+import os
+from setuptools import setup, Extension
+
+os.environ["CC"] = '@CMAKE_CXX_COMPILER@'
+os.environ["CXX"] = '@CMAKE_CXX_COMPILER@'
+
+cpp_extensions = Extension('genevapylib.cpp_extensions',
+   include_dirs = [
+@geneva_PYTHON_INCLUDE_DIRS@
+],
+   libraries = ['GenevaWrapper'],
+   library_dirs = ['@CMAKE_LIBRARY_OUTPUT_DIRECTORY@'],
+   sources = ['@CMAKE_CURRENT_SOURCE_DIR@/extensions.cpp'],
+   extra_compile_args = [
+@geneva_PYTHON_EXTRA_COMPILE_ARGS@
+],
+   language = "c++")
+
+setup (name = 'genevapylib',
+       version = '@geneva_PYTHON_VERSION@',
+       description = "Python drivers and utilities for running Geneva",
+       author = 'Simone Alioli',
+       author_email = 'simone.alioli@cern.ch',
+       url = 'https://geneva.physics.lbl.gov',
+       ext_modules = [cpp_extensions],
+       package_dir = {'':'@CMAKE_CURRENT_SOURCE_DIR@'},
+       packages = ['genevapylib'],
+       scripts = [
+@geneva_PYTHON_SCRIPTS@
+],
+       zip_safe = False,
+       classifiers=[
+            'License :: OSI Approved :: GNU General Public License (GPL)',
+            'Operating System :: Unix',
+            'Programming Language :: Python',
+            'Topic :: Scientific/Engineering',
+            'Topic :: Scientific/Engineering :: Physics',
+            ])
