@@ -6,7 +6,7 @@
 
 Name:           geneva
 Version:        1.0.0
-Release:        1%{?dist}
+Release:        6%{?dist}
 License:        GPLv3
 Url:            https://gitlab.desy.de/geneva
 Source0:        https://gitlab.desy.de/geneva/geneva-public/-/archive/1.0-RC3/geneva-public-1.0-RC3.tar.gz
@@ -85,7 +85,7 @@ pathfix.py -pn -i %{__python3}  ./python/bin/geneva*
       -Dgeneva_enable_lhapdf=ON \
       -Dgeneva_enable_openloops=ON \
       -Dgeneva_enable_pythia8=OFF \
-      -Dopenloops_ROOT=/usr   \
+      -Dopenloops_ROOT=/usr/lib64/openloops/   \
       -Dlhapdf_ROOT=/usr
 
 %cmake_build
@@ -93,6 +93,8 @@ pathfix.py -pn -i %{__python3}  ./python/bin/geneva*
 
 %install
 %cmake_install
+%cmake_build --target beamfunc-install-data
+mv share/Geneva/beamfunc %{buildroot}/%{_datadir}/Geneva
 
 %if %{?fedora}%{!?fedora:0} >= 39
 %py3_shebang_fix  %{buildroot}/%_bindir/geneva*

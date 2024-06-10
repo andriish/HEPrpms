@@ -18,7 +18,7 @@ import os
 import shutil
 
 from . import process
-from config import geneva_use_zlib
+from .config import geneva_use_zlib
 
 if geneva_use_zlib:
    import gzip

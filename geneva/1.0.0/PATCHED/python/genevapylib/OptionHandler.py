@@ -14,7 +14,7 @@
 #    Definition of class OptionHandler
 #-------------------------------------------------------------------------------
 
-import cpp_extensions as cpp
+from . import cpp_extensions as cpp
 from .utils import format_tag, format_path
 
 

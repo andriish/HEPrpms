@@ -16,7 +16,7 @@
 
 import os
 import sys
-import imp
+from importlib.machinery import SourceFileLoader
 import shutil
 
 from . import process
@@ -55,7 +55,7 @@ def load_executable(executable):
    try:
       tmp = sys.dont_write_bytecode
       sys.dont_write_bytecode = True
-      return imp.load_source(os.path.basename(executable), executable)
+      return SourceFileLoader(os.path.basename(executable), executable).load_module()
    finally:
       sys.dont_write_bytecode = tmp
 

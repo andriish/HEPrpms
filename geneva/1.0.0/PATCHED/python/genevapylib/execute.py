@@ -33,7 +33,7 @@ import subprocess
 import io
 
 from . import process
-import config
+from . import config
 from . import utils
 
 

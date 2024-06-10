@@ -16,7 +16,7 @@
 
 import os
 
-from config import geneva_use_zlib
+from .config import geneva_use_zlib
 from .utils import format_tag, join_paths, get_filenames
 
 if geneva_use_zlib:

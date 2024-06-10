@@ -16,7 +16,7 @@
 
 import math as m
 
-from config import geneva_use_zlib
+from .config import geneva_use_zlib
 from . import process
 
 if geneva_use_zlib:
