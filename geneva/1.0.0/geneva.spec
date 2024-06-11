@@ -6,7 +6,7 @@
 
 Name:           geneva
 Version:        1.0.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 License:        GPLv3
 Url:            https://gitlab.desy.de/geneva
 Source0:        https://gitlab.desy.de/geneva/geneva-public/-/archive/1.0-RC3/geneva-public-1.0-RC3.tar.gz
