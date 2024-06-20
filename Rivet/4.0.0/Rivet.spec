@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        4.0.0
-Release:        1006%{?dist}
+Release:        1007%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 #Source0:        https://rivet.hepforge.org/downloads/{name}-{version}.tar.gz
@@ -109,7 +109,11 @@ pathfix.py -pn -i %{__python3}  bin/rivet*
 pathfix.py -pn -i %{__python3}  bin/make-*
 %endif
 %configure  --disable-doxygen --with-yoda=$(yoda-config --prefix ) --with-hepmc3=$(HepMC3-config --prefix) --with-fjcontrib=/usr --with-fastjet=$(fastjet-config --prefix)
-make %{?_smp_mflags}
+%if %{?rhel}%{!?rhel:0} == 8
+make %{?_smp_mflags} LDLIBS=-lstdc++fs
+%else
+make %{?_smp_mflags} 
+%endif
 %endif
 
 
