@@ -7,7 +7,7 @@
 
 Name:           hztool
 Version:        4.3.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv2
 Url:            http://www.hztool.fr
 Source0:        https://hztool.hepforge.org/downloads/%{name}-4.3.2.tar.gz
@@ -33,7 +33,7 @@ experimental result using the four-vector final state from Monte Carlo generator
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 autoreconf --force --install --verbose .
