@@ -2,7 +2,7 @@
 Summary: Lightweight C++11 multithreading tasking system featuring thread-pool, task-groups, and lock-free task queue
 Name: PTL
 Version: 2.3.3
-Release: 1002%{?dist}
+Release: 1003%{?dist}
 License: MIT
 Prefix: %{_prefix}
 Source: https://github.com/jrmadsen/PTL/archive/v%{version}.tar.gz
@@ -25,7 +25,7 @@ PTL Lightweight C++11 multithreading tasking system featuring thread-pool, task-
 
 %prep 
 %setup -q -n PTL-%{version}
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 %cmake     -DPTL_INSTALL_INCLUDEDIR=%{_includedir} -DPTL_INSTALL_LIBDIR=%{_libdir}

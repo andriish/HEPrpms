@@ -2,7 +2,7 @@
 Summary: Unified Grahics System
 Name: ugs
 Version: 2.10e
-Release: 5%{?dist}
+Release: 6%{?dist}
 #Copyright: Free <= obsolete keyword for rpm 4.x
 License: Free
 Source: https://ftp.riken.jp/iris/ugs/ugs.tar.gz
@@ -32,8 +32,8 @@ PostScript, X Window System, and Tektronics 4010 are supported.
 
 %prep
 %setup -n ugs -q
-%patch0 -p1
-%patch1 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
 
 %build
 xmkmf -a
