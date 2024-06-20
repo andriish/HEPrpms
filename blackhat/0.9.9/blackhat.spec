@@ -5,7 +5,7 @@
 
 Name:           blackhat
 Version:        0.9.9
-Release:        6%{?dist}
+Release:        7%{?dist}
 License:        Unknown
 Url:            http://www.blackhat.hepforge.org
 Source0:        https://www.hepforge.org/archive/blackhat/%{name}-%{version}.tar.gz
@@ -60,11 +60,11 @@ the %{name} library
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
+%patch  -P 2 -p1
 %if 0%{?suse_version}
-%patch3 -p1
+%patch -P 3 -p1
 %endif
 
 %build
