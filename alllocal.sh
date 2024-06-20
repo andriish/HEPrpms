@@ -4,8 +4,6 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-tmdlib:2.2.11
-applgrid:1.6.36
 #cernlib:2024.06.12.0
 #MG5_aMC:3.5.4
 #Delphes:3.5.1pre10
