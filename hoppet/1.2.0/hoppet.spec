@@ -3,7 +3,7 @@
 
 Name:          hoppet
 Version:       1.2.0
-Release:       6%{?dist}
+Release:       7%{?dist}
 License:       GPL
 Prefix:        %{_prefix}
 Summary:       Higher Order Perturbative Parton Evolution Toolkit
@@ -34,6 +34,9 @@ with contributions from Juan Rojo, Frederic Dreyer and Alexander Karlberg.
 %if 0%{?suse_version}
 ./configure --prefix=%{buildroot}/%{_prefix} --libdir=%{buildroot}/%_libdir "FFLAGS=%{optflags} -fPIC" 
 %endif
+sed -i 's/--libdir=.*$//g' example_f90/Makefile
+sed -i 's/--libdir=.*$//g' benchmarking/test_acc/Makefile
+sed -i 's/--libdir=.*$//g' benchmarking/Makefile
 
 make %{?_smp_mflags}
 

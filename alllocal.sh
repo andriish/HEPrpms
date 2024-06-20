@@ -4,11 +4,12 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-cernlib:2024.06.12.0
+#cernlib:2024.06.12.0
 #MG5_aMC:3.5.4
 #Delphes:3.5.1pre10
 #geneva:1.0.0
 #SHERPA-MC:2.2.16
+hoppet:1.2
 #Herwig:7.3.0
 #Rivet:4.0.0
 #binder:1.4.1
