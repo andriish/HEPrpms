@@ -4,7 +4,9 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-Delphes:3.5.1pre10
+cernlib:2024.06.12.0
+#MG5_aMC:3.5.4
+#Delphes:3.5.1pre10
 #geneva:1.0.0
 #SHERPA-MC:2.2.16
 #Herwig:7.3.0
@@ -208,7 +210,7 @@ Delphes:3.5.1pre10
 #hevea:2.32  
 #cascade:2.35
 #HJets:1.3
-#hoppet:1.2.0
+hoppet:1.2.0
 #hztool:4.3.2
 #iminuit:1.3.6  
 #iminuit:2.6.1  

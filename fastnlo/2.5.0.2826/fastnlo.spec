@@ -1,6 +1,6 @@
 Name: fastnlo
 Version: 2.5.0.2826
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPL
 Prefix: %{_prefix}
 Summary: Fast pQCD calculations for PDF fits.
@@ -10,15 +10,15 @@ URL:     https://fastnlo.hepforge.org/
 
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires: gcc-gfortran gcc-c++ lhapdf-devel lhapdf   root root-core 
-BuildRequires: qcdnum qcdnum-devel hoppet YODA YODA-devel fastjet fastjet-devel  zlib zlib-devel
+BuildRequires: qcdnum qcdnum-devel hoppet  fastjet fastjet-devel  zlib zlib-devel
 BuildRequires: autoconf automake libtool tex(latex) swig doxygen texlive-epstopdf ghostscript
-Requires:      YODA qcdnum fastjet 
+Requires:     qcdnum fastjet 
 %endif
 %if 0%{?suse_version}
 BuildRequires: gcc-fortran gcc-c++ LHAPDF-devel libLHAPDF   root6 root6-libs root6-devel 
-BuildRequires: qcdnum qcdnum-devel hoppet YODA YODA-devel fastjet fastjet-devel  pkgconfig(zlib) zlib-devel
+BuildRequires: qcdnum qcdnum-devel hoppet fastjet fastjet-devel  pkgconfig(zlib) zlib-devel
 BuildRequires: autoconf automake libtool tex(latex) swig doxygen texlive-epstopdf ghostscript
-Requires:      YODA qcdnum fastjet 
+Requires:      qcdnum fastjet 
 %endif
 
 
@@ -62,11 +62,11 @@ for observables in hadron-induced processes.
 
 sed -i 's|\#\$(DEPDIR)/fastnlo_wrap.Plo:|\$(DEPDIR)/fastnlo_wrap.Plo:|g' pyext/Makefile.in
 %if 0%{?rhel} 
-%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root --with-yoda --with-fastjet --with-qcdnum --enable-pyext3 
+%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum --enable-pyext3 
 %endif
 
 %if 0%{?suse_version} || 0%{?fedora}
-%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root --with-yoda --with-fastjet --with-qcdnum  
+%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum  
 %endif
 
 make %{?_smp_mflags}
@@ -97,6 +97,8 @@ mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch
 ldconfig 
 
 %changelog
+* Wed Jun 20 2024 Andrii Verbytskyi 2.5.0
+- Drop YODA support
 * Fri Aug 12 2022 Andrii Verbytskyi 2.5.0
 - Use Python3
 * Mon Nov 15 2021 Andrii Verbytskyi 2.5.0
