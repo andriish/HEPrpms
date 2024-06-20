@@ -8,7 +8,7 @@
 
 Name:           Herwig
 Version:        7.3.0
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 
 Summary:        Herwig is a multi-purpose particle physics event generator.
 License:        GPLv3
@@ -104,7 +104,7 @@ The library documentation is available on header files.
 
 %prep
 %setup -q 
-%patch0 -p 1
+%patch -P 0 -p 1
 
 %build
 
