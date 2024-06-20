@@ -4,7 +4,7 @@
 
 Name:           ThePEG
 Version:        2.3.0
-Release:        1002%{?dist}
+Release:        1003%{?dist}
 License:        GPLv3
 Url:            http://www.hepforge.org/archive/thepeg
 Source0:        https://thepeg.hepforge.org/downloads/%{name}-%{version}.tar.bz2
@@ -70,11 +70,9 @@ The library documentation is available on header files.
 
 %prep
 %setup -q
-%patch1 -p1
+%patch -P 1  -p1
 
 %build
-
-
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 touch configure.ac
