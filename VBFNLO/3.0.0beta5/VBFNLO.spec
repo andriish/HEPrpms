@@ -2,7 +2,7 @@
 Summary:  A parton level Monte Carlo for processes with electroweak bosons
 Name: VBFNLO
 Version: 3.0.0beta5
-Release: 7%{?dist}
+Release: 8%{?dist}
 License: GPLv2
 Source: https://github.com/vbfnlo/vbfnlo/archive/v%{version}.tar.gz
 URL:    https://www.itp.kit.edu/vbfnlo/wiki/doku.php
@@ -30,8 +30,8 @@ level with the full top-quark and bottom-quark mass dependence in a generic two
 Higgs doublet model.
 
 %prep 
-%setup -q -n vbfnlo-%{version}
-%patch1 -p 1
+%setup  -n vbfnlo-%{version}
+%patch -P 1 -p 1
 
 %build 
 
