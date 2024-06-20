@@ -269,3 +269,6 @@ e0bdbe7739b5e92d5bba62a52ab60f43  binder/1.4.1/rpmbuild/SOURCES/v1.4.1.tar.gz
 69a94dc42e0c2ab3590f23a0d78659c4  SHERPA-MC/2.2.16/rpmbuild/SOURCES/SHERPA-MC-2.2.16.tar.gz
 57b91768402ba1df08c983eaafe71021  binder/1.4.2/rpmbuild/SOURCES/v1.4.2.tar.gz
 fc080d84f4227ea5a927599f99b54702  geneva/1.0.0/rpmbuild/SOURCES/geneva-public-1.0-RC3.tar.gz
+6340fabc1628f35fc276c0555a7c5e37  SHERPA-MC/2.2.16/rpmbuild/SOURCES/SHERPA-MC-2.2.16.tar.gz
+3022202e6327978d172c21363e08968d  MG5_aMC/3.5.4/rpmbuild/SOURCES/MG5_aMC_v3.5.4.tar.gz
+55c5d718459056cdf93e9f77b488a58d  cernlib/2024.06.12.0/rpmbuild/SOURCES/cernlib-cernlib-2024.06.12.0-free.tar.gz
