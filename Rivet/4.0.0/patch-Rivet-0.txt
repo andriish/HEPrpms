@@ -1,6 +1,22 @@
+diff -Naur ORIG/configure.ac PATCHED/configure.ac
+--- ORIG/configure.ac	2024-02-29 13:37:03.000000000 +0100
++++ PATCHED/configure.ac	2024-06-20 23:10:02.596276733 +0200
+@@ -128,9 +128,9 @@
+ fi
+ hepmc_version=`./conftest`
+ if test x$hepmc_version != x; then
+-  let hepmc_major=[`echo "$hepmc_version" | cut -d. -f1 | sed -e 's/^0*//'`]
+-  let hepmc_minor=[`echo "$hepmc_version" | cut -d. -f2 | sed -e 's/^0*//'`]
+-  let hepmc_third=[`echo "$hepmc_version" | cut -d. -f3 | sed -e 's/^0*//'`]
++  let hepmc_major=[`echo "$hepmc_version" | cut -d. -f1 | sed -e 's/^0//'`]
++  let hepmc_minor=[`echo "$hepmc_version" | cut -d. -f2 | sed -e 's/^0//'`]
++  let hepmc_third=[`echo "$hepmc_version" | cut -d. -f3 | sed -e 's/^0//'`]
+ fi
+ rm -f conftest conftest.cpp conftest.cc conftest.C
+ HEPMC_VERSION=$hepmc_major$hepmc_minor$hepmc_third
 diff -Naur ORIG/src/Core/AnalysisHandler.cc PATCHED/src/Core/AnalysisHandler.cc
---- ORIG/src/Core/AnalysisHandler.cc	2024-02-29 15:03:34.000000000 +0100
-+++ PATCHED/src/Core/AnalysisHandler.cc	2024-05-07 10:55:27.600701332 +0200
+--- ORIG/src/Core/AnalysisHandler.cc	2024-05-10 09:52:13.186004642 +0200
++++ PATCHED/src/Core/AnalysisHandler.cc	2024-05-10 09:52:13.187004658 +0200
 @@ -1418,7 +1418,8 @@
      output.reserve(raos.size() * numWeights() * (includeraw ? 2 : 1) + 1); // plus one for beaminfo
  

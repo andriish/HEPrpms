@@ -32,7 +32,7 @@ FF has been published in Z. Phys. C46 (1990) 425
 
 %prep 
 %setup -q
-%patch - P 0 -p1
+%patch -P 0 -p1
 
 %build
 sed -i 's@clang++@@' configure

@@ -8,7 +8,9 @@ Version:        4.0.0
 Release:        1006%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
-Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
+#Source0:        https://rivet.hepforge.org/downloads/{name}-{version}.tar.gz
+#Source0:        https://gitlab.com/hepcedar/rivet/-/archive/ca0d57ca8b0028981b0e1cdacca4dfab34507779/rivet-ca0d57ca8b0028981b0e1cdacca4dfab34507779.tar.gz
+Source0:        https://gitlab.com/andriish/rivet/-/archive/1e3655635e39ba663d3411683f3802231b41dcf1/rivet-1e3655635e39ba663d3411683f3802231b41dcf1.tar.gz
 Patch0:         patch-Rivet-0.txt
 
 Prefix: %{_prefix}
@@ -84,10 +86,15 @@ The library documentation is available on header files.
 
 
 %prep
-%setup -q -n %{name}-%{version}
+#setup -q -n #{name}-#{version}
+%setup -q -n rivet-1e3655635e39ba663d3411683f3802231b41dcf1
 %patch -P 0 -p1
 
 %build
+
+#autoreconf --force --install --verbose .
+autoreconf -i 
+#automake -a --force
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 export PYTHON=%{_bindir}/python3

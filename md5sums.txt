@@ -274,3 +274,5 @@ fc080d84f4227ea5a927599f99b54702  geneva/1.0.0/rpmbuild/SOURCES/geneva-public-1.
 55c5d718459056cdf93e9f77b488a58d  cernlib/2024.06.12.0/rpmbuild/SOURCES/cernlib-cernlib-2024.06.12.0-free.tar.gz
 9ead07335c2f69a38423fecaf97175aa  applgrid/1.6.36/rpmbuild/SOURCES/applgrid-1.6.36.tgz
 97e977dd0b7e7f7c081f0883ff1fb708  tmdlib/2.2.11/rpmbuild/SOURCES/tmdlib-2.2.11.tar.gz
+3236dcd40ef949c0d5e5eb35cf3925d5  Rivet/4.0.0/rpmbuild/SOURCES/rivet-ca0d57ca8b0028981b0e1cdacca4dfab34507779.tar.gz
+02a81bee641c40e9a7877f64bcc48448  Rivet/4.0.0/rpmbuild/SOURCES/rivet-1e3655635e39ba663d3411683f3802231b41dcf1.tar.gz
