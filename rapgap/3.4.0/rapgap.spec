@@ -36,8 +36,8 @@ according to the HEP common standards. In ep it can describe all
 
 
 %prep
-%setup -q -n rapgap-v%{version}
-%patch0 -p1
+%setup  -n rapgap-v%{version}
+%patch -P 0 -p1
 
 %build
 

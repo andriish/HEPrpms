@@ -6,7 +6,7 @@
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.1.4
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
@@ -122,7 +122,7 @@ python-%{name} contains python bindings for %{name}.
 
 %prep 
 %setup -q
-%patch0 -p1
+%patch -P 0 -p1
 
 %build 
 

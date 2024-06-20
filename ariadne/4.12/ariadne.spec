@@ -1,6 +1,6 @@
 Name:          ariadne
 Version:       4.12
-Release:       7%{?dist}
+Release:       8%{?dist}
 Summary:       Multipurpose Monte Carlo Event Generator for High Energy physics.
 License:       Public domain as stated by Leif 
 URL:           http://home.thep.lu.se/~leif/ariadne
@@ -22,7 +22,7 @@ A Program for Simulation of QCD-Cascades Implementing the Colour Dipole Model
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 make %{?_smp_mflags}  libar4.so "FFLAGS=%{optflags} -fPIC" "LDFLAGS=%{build_ldflags}"

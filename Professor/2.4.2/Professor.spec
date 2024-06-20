@@ -4,7 +4,7 @@
 
 Name:           Professor
 Version:        2.4.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        Unknown
 Url:            http://professor.hepforge.org/
 Source0:        https://gitlab.com/hepcedar/professor/-/archive/professor-%{version}/professor-professor-%{version}.tar.gz
@@ -37,8 +37,8 @@ BuildRequires: python3-rpm-macros
  on Identified Particles and Precision Event Shape Data" (Z. Phys., C73 (1996) 11-60).
 
 %prep
-%setup -q -n professor-professor-%{version}
-%patch0 -p1
+%setup  -n professor-professor-%{version}
+%patch -P 0 -p1
 
 
 %build

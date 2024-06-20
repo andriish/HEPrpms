@@ -6,7 +6,7 @@
 
 Name:           TAUOLA
 Version:        1.1.8
-Release:        6%{?dist}
+Release:        7%{?dist}
 License:        Unknown
 Url:            http://tauolapp.web.cern.ch/tauolapp
 Source0:        https://tauolapp.web.cern.ch/tauolapp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
@@ -65,7 +65,7 @@ develop programs which make use of %{name}.
 
 %prep
 %setup -qn %{name}
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 autoreconf -fisv

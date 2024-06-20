@@ -52,7 +52,7 @@ now accessed via TMDlib.
 
 %prep
 %setup -q -n cascade-%{version}
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 %if %{?fedora}%{!?fedora:0} >= 37
