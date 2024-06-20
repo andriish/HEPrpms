@@ -1,6 +1,6 @@
 Name:       pythia6
 Version:    6.4.28
-Release:    8%{?dist}
+Release:    9%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy Physics.
 
 License:    Unknown
@@ -25,8 +25,8 @@ multiple interactions, fragmentation and decay.
 
 
 %prep
-%setup -q -c   pythia-6.4.28
-%patch0 -p1
+%setup  -c   pythia-6.4.28
+%patch -P 0 -p1
 
 %build
 export FFLAGS="%{optflags} -fPIC"

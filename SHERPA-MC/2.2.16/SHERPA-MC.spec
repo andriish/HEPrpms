@@ -13,7 +13,7 @@
 
 Name:           SHERPA-MC
 Version:        2.2.16
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://sherpa.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -166,7 +166,7 @@ This package provides the Python 3 bindings for %{name}-openmpi
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P 0 -p1
 
 
 %build

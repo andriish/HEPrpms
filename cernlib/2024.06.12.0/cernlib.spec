@@ -41,7 +41,7 @@
 
 Name:          cernlib
 Version:       2024.06.12.0
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       General purpose CERN library
 Group:         Development/Libraries
 License:       GPL+ and LGPLv2+
@@ -283,7 +283,7 @@ Utilities for extracting sources from patchy cards and cradles.
 
 %prep
 %setup -q -c 
-%patch0 -p1
+%patch -P 0 -p1
 
 
 %build

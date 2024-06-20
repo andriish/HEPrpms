@@ -6,7 +6,7 @@
 
 Name:           EvtGen
 Version:        2.2.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv3
 Url:            http://evtgen.warwick.ac.uk
 Source0:        https://evtgen.hepforge.org/downloads/EvtGen-02.02.01.tar.gz
@@ -87,7 +87,7 @@ Provides:       %{name}-doc = %{version}-%{release}
 
 %prep
 %setup -q -n EvtGen/R02-02-01
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 mkdir -p build

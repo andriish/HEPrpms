@@ -7,7 +7,7 @@
 
 Name:           gosam
 Version:        2.1.1
-Release:        8%{?dist}
+Release:        9%{?dist}
 License:        GPLv3
 Url:            https://github.com/gudrunhe/gosam
 Source0:        https://github.com/gudrunhe/gosam/releases/download/2.1.1/gosam-2.1.1-4b98559.tar.gz
@@ -43,7 +43,7 @@ diagrams, can be reduced using either D-dimensionalintegrand-level
 
 %prep
 %setup -q -n gosam-2.1.1-4b98559
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 
