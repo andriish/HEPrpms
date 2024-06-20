@@ -110,7 +110,7 @@ pathfix.py -pn -i %{__python3}  bin/make-*
 %endif
 %configure  --disable-doxygen --with-yoda=$(yoda-config --prefix ) --with-hepmc3=$(HepMC3-config --prefix) --with-fjcontrib=/usr --with-fastjet=$(fastjet-config --prefix)
 %if %{?rhel}%{!?rhel:0} == 8
-make %{?_smp_mflags} LDLIBS=-lstdc++fs
+make %{?_smp_mflags} LDLIBS=-lstdc++fs LDFLAGS=-lstdc++fs
 %else
 make %{?_smp_mflags} 
 %endif
