@@ -1,7 +1,7 @@
 Summary: A  keyword-driven  interface  designed  to  produce physics  graphs  with  minimal specifications
 Name: topdrawer
 Version: 1.4e
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: Free
 Source: https://ftp.riken.jp/iris/topdrawer/topdrawer.tar.gz
 URL:    https://ribf.riken.jp/comp/doc/topdrawer/
@@ -31,7 +31,7 @@ developed by R.B. Chaffee at SLAC.
 
 %prep
 %setup -n topdrawer -q
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 xmkmf -a

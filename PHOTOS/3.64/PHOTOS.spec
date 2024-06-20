@@ -61,7 +61,7 @@ develop programs which make use of %{name}.
 
 %prep
 %setup -qn %{name}
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 autoreconf -fisv
