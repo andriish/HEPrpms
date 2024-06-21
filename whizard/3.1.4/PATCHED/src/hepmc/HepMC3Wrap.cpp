@@ -237,11 +237,11 @@ extern "C" void gen_vertex_delete( GenVertex* v ) {
 }
 
 extern "C" void gen_vertex_add_particle_in( GenVertex* v, GenParticle* p ) {
-  v->add_particle_in( p );
+  v->add_particle_in( GenParticlePtr(p) );
 }
 
 extern "C" void gen_vertex_add_particle_out( GenVertex* v, GenParticle* p ) {
-  v->add_particle_out( p );
+  v->add_particle_out( GenParticlePtr(p) );
 }
 
 extern "C" bool gen_vertex_is_valid( GenVertex* v ) {
