@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        4.0.0
-Release:        1007%{?dist}
+Release:        1008%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 #Source0:        https://rivet.hepforge.org/downloads/{name}-{version}.tar.gz
@@ -135,6 +135,7 @@ find %{buildroot}/%{_libdir}/ -name "*.la" -delete
 rm -fr %{buildroot}/%_libdir/python*/site-packages/__pycache__  
 rm -fr %{buildroot}/%_libdir/python*/site-packages/easy-install.pth
 rm -fr %{buildroot}/%_libdir/python*/site-packages/site.py
+sed -i 's/-spec[^[:blank:]]*//g' %{buildroot}/%{_bindir}/rivet-build
 
 %files 
 %{_bindir}/*
