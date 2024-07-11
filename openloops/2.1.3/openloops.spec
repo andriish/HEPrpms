@@ -6,7 +6,7 @@
 
 Name:           openloops
 Version:        2.1.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
 Source0:        https://gitlab.com/openloops/OpenLoops/-/archive/OpenLoops-%{version}/OpenLoops-OpenLoops-%{version}.tar.gz
@@ -273,6 +273,7 @@ cp -r ./openloops  $RPM_BUILD_ROOT/usr/bin/openloops
 cp -r ./lib  $RPM_BUILD_ROOT/usr/%_lib/openloops
 cp -r ./pyol  $RPM_BUILD_ROOT/usr/%_lib/openloops
 mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src
+cp  ./include/*.h $RPM_BUILD_ROOT/%_includedir
 
 mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/collier
 cp -r  lib_src/collier/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/collier
@@ -303,6 +304,7 @@ cp -r  lib_src/trred/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/trred
 %{_bindir}/%{name}
 %{_libdir}/*
 %_includedir/openloops/*
+%_includedir/openloops.h
 
 %changelog
 * Fri May 10 2024 Andrii Verbytskyi 2.1.3
