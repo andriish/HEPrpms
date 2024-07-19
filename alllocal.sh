@@ -4,6 +4,7 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+highfive:2.9.0
 #Rivet:4.0.0
 #cernlib:2024.06.12.0
 #MG5_aMC:3.5.4
@@ -36,7 +37,7 @@ declare -a BUILDLIST=(
 #OK cascade:3.3.3
 #OK binder:1.4.0
 #OK cernlib:2023.10.31.0
-geant4:11.2.1
+#geant4:11.2.1
 #No iminuit:2.23.0
 #OK LCIO:02.20.02
 #OK pybind11:2.11.1
@@ -212,7 +213,7 @@ geant4:11.2.1
 #hevea:2.32  
 #cascade:2.35
 #HJets:1.3
-hoppet:1.2.0
+#hoppet:1.2.0
 #hztool:4.3.2
 #iminuit:1.3.6  
 #iminuit:2.6.1  
