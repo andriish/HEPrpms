@@ -6,7 +6,7 @@
 
 Name:           EvtGen
 Version:        2.2.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        GPLv3
 Url:            http://evtgen.warwick.ac.uk
 Source0:        https://evtgen.hepforge.org/downloads/EvtGen-02.02.01.tar.gz
@@ -148,9 +148,14 @@ mv %{buildroot}%{_datadir}/EvtGen/*.*  %{buildroot}%{_datadir}/
 %{_datadir}/%{name}/AUTHORS
 %{_datadir}/%{name}/COPYING
 %{_datadir}/%{name}/validation/*
+%if %{?rhel}%{!?rhel:0}  || %{?fedora}%{!?fedora:0}
 %{_prefix}/share/doc/EvtGen/guide.ps
 %{_prefix}/share/doc/EvtGen/*md
-
+%endif
+%if 0%{?suse_version}
+%{_prefix}/share/doc/packages/EvtGen/guide.ps
+%{_prefix}/share/doc/packages/EvtGen/*md
+%endif
 
 %changelog
 * Tue Jul 12 2022 Andrii Verbytskyi 2.2.0
