@@ -3,7 +3,7 @@
 %endif
 Name:           apfel
 Version:        3.1.1
-Release:        1003%{?dist}
+Release:        1004%{?dist}
 License:        GPL
 Url:            https://github.com/scarrazza/apfel
 Source:         https://github.com/scarrazza/apfel/archive/refs/tags/%{version}.tar.gz
@@ -71,7 +71,7 @@ pathfix.py -pn -i %{__python3}  bin/apfel.in
 %endif
 %if 0%{?suse_version}
 /usr/share/APFEL/*
-/usr/share/doc/apfel/*
+/usr/share/doc/packages/apfel/*
 %endif
 
 %files devel
