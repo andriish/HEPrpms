@@ -295,7 +295,7 @@ diff -Naur ORIG/m4/fastjet.m4 PATCHED/m4/fastjet.m4
        AC_MSG_RESULT(yes)
 diff -Naur ORIG/m4/herwig.m4 PATCHED/m4/herwig.m4
 --- ORIG/m4/herwig.m4	2023-11-06 23:38:23.390575579 +0000
-+++ PATCHED/m4/herwig.m4	2023-11-06 23:38:23.391575594 +0000
++++ PATCHED/m4/herwig.m4	2024-07-20 19:50:31.673332777 +0000
 @@ -351,30 +351,10 @@
        ${with_njet}/lib/libnjet2.dylib,
        [have_njet=lib], [have_njet=no])])
@@ -383,3 +383,21 @@ diff -Naur ORIG/m4/herwig.m4 PATCHED/m4/herwig.m4
          LOAD_GOSAM_CONTRIB="library"
          CREATE_GOSAM_CONTRIB="create"
          INSERT_GOSAM_CONTRIB="insert"
+@@ -737,15 +733,8 @@
+    AC_PATH_PROG(pythiaconfig, pythia8-config, no, ${with_pythia}/bin)
+ fi
+ 
+-if test "${pythiaconfig}" = "no"; then
+-   AC_MSG_CHECKING(Pythia)
+-   AC_MSG_RESULT(no);
+-   PYTHIA8LIB=
+-#   $2
+-else
+-   PYTHIA8DATA=`${pythiaconfig} --datadir`/xmldoc
+-   PYTHIA8LIB="-L`${pythiaconfig} --libdir` -lpythia8"
+-fi
++PYTHIA8DATA=`find ${with_pythia}/share  -type d -name xmldoc`
++PYTHIA8LIB="${with_pythia}/lib ${with_pythia}/lib64 -lpythia8"
+ 
+ AC_SUBST(PYTHIA8DATA)
+ AC_SUBST(PYTHIA8LIB)

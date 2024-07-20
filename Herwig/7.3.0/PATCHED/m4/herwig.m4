@@ -733,15 +733,8 @@ else
    AC_PATH_PROG(pythiaconfig, pythia8-config, no, ${with_pythia}/bin)
 fi
 
-if test "${pythiaconfig}" = "no"; then
-   AC_MSG_CHECKING(Pythia)
-   AC_MSG_RESULT(no);
-   PYTHIA8LIB=
-#   $2
-else
-   PYTHIA8DATA=`${pythiaconfig} --datadir`/xmldoc
-   PYTHIA8LIB="-L`${pythiaconfig} --libdir` -lpythia8"
-fi
+PYTHIA8DATA=`find ${with_pythia}/share  -type d -name xmldoc`
+PYTHIA8LIB="${with_pythia}/lib ${with_pythia}/lib64 -lpythia8"
 
 AC_SUBST(PYTHIA8DATA)
 AC_SUBST(PYTHIA8LIB)
