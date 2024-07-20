@@ -1,6 +1,6 @@
 Name:        rapgap
 Version:    3.4.0
-Release:    4%{?dist}
+Release:    5%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy Physics
 
 License:    Unknown
