@@ -10,14 +10,14 @@ Source0:        https://github.com/iLCSoft/LCIO/archive/v02-22.tar.gz
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 Requires: root 
-BuildRequires: root root-core root-tpython
+BuildRequires: root root-core root-tpython git
 BuildRequires: zlib  ncurses-libs
 BuildRequires: python3 python3-devel gcc-gfortran
 %endif
 
 
 %if 0%{?suse_version}
-Requires: root6-config root6-libs  root6-utils nlohmann_json-devel
+Requires: root6-config root6-libs  root6-utils nlohmann_json-devel git
 BuildRequires: root6-config root6-libs root6-devel root6  root6-utils nlohmann_json-devel
 BuildRequires: pkgconfig(zlib) 
 BuildRequires: python python-devel gcc-fortran
