@@ -201,10 +201,13 @@ set(rapgapmycern_la_SOURCES  abend.F  besi0.F  expint.F  ranlux.F  rnpssn.F
                        binomi.F kerset.F
                          )
 list(TRANSFORM rapgapmycern_la_SOURCES PREPEND "${PROJECT_SOURCE_DIR}/misc/")
-add_library(rapgapmycern SHARED ${rapgapmycern_la_SOURCES})
+add_library(rapgapmycern SHARED ${rapgapmycern_la_SOURCES} src/rapgap/rndm.F src/rapgap/draprn.F  )
 target_include_directories(rapgapmycern PRIVATE ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS rapgapmycern DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 set_target_properties(rapgapmycern PROPERTIES LINKER_LANGUAGE Fortran SOVERSION 0)
+
+target_link_libraries(rapgapbases rapgapmycern)
+
 #PYTHIA6 ###############################################################
 if (NOT RAPGAP_EXTERNAL_PYTHIA6)
   set( libpythia_la_SOURCES  
@@ -249,6 +252,7 @@ if (NOT RAPGAP_EXTERNAL_PYTHIA6)
   list(TRANSFORM libpythia_la_SOURCES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/pythia6428/")
   add_library(rapgappythia6 SHARED ${libpythia_la_SOURCES})
   set_target_properties(rapgappythia6 PROPERTIES LINKER_LANGUAGE Fortran SOVERSION 0)
+  target_link_libraries(rapgappythia6 ${LHAPDF_LIBRARIES})
   set(PYTHIA6_LIBRARIES rapgappythia6)
   install(TARGETS rapgappythia6 DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 endif()
@@ -274,8 +278,9 @@ if (NOT RAPGAP_EXTERNAL_ARIADNE)
 		arcomp.f        arexma.f        arinqq.f        arniqq.f        arqq2o.f        arstor.f        arzcms.f artest.f
 )
   list(TRANSFORM librapgapariadne_la_SOURCES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/ariadne412/")
-  add_library(rapgapariadne SHARED ${librapgapariadne_la_SOURCES})
+  add_library(rapgapariadne SHARED ${librapgapariadne_la_SOURCES}   src/rapgap/pydata.f)  
   set_target_properties(rapgapariadne PROPERTIES LINKER_LANGUAGE Fortran SOVERSION 0)
+   target_link_libraries(rapgapariadne ${PYTHIA6_LIBRARIES})
   set(ARIADNE_LIBRARIES rapgapariadne)
   install(TARGETS rapgapariadne DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 endif()
@@ -310,7 +315,7 @@ set(librapgap33_sources
         rapgap/diffr5.F   rapgap/fxnb.F      rapgap/pqcd.F      rapgap/rgupevnt.F  
         rapgap/diffr6.F   rapgap/gadap.F     rapgap/pqcdi.F     rapgap/rgupinit.F  
         rapgap/diffr7.F   rapgap/gadap2.F    rapgap/pqcdqqb.F   rapgap/rlu.F  
-        rapgap/diffr8.F   rapgap/gadapf.F    rapgap/pqpm.F      rapgap/rndm.F  
+        rapgap/diffr8.F   rapgap/gadapf.F    rapgap/pqpm.F      
         rapgap/dir1.F     rapgap/graini.F    rapgap/prodiff.F    
         rapgap/dir2.F     rapgap/grawq2.F    rapgap/ptime.F     rapgap/steer.F  
         rapgap/dir3.F     rapgap/h1rn.F      rapgap/rggamm.F    rapgap/usdiffr.F  
@@ -321,7 +326,7 @@ set(librapgap33_sources
         rapgap/difxvq.F   rapgap/difxv1.F  
         rapgap/dir99.F    rapgap/xpqhf.F  
         rapgap/dot.F      rapgap/rasspa.F  
-        rapgap/dot1.F     rapgap/rgstfe.F    rapgap/draprn.F 
+        rapgap/dot1.F     rapgap/rgstfe.F    
         rapgap/rapgen.F   rapgap/intga.F     rapgap/rgstfu.F  
         util/Ctq4Pdfm.F   util/Ctq6Pdfm.F   util/minuts.F  
         util/Ctq5Pdfm.F   util/getintPDF.F  util/strpriv.F  
@@ -426,7 +431,7 @@ set_target_properties(rapgap33 PROPERTIES LINKER_LANGUAGE Fortran SOVERSION 0)
 ##RAPGAP BIN ##########################################################
 set(rapgap33_SOURCES  
             rapgap/rgmain-hepmc.F  rapgap/drn.F  rapgap/pyr.F rapgap/pyname.F 
-            rapgap/upinit.F   rapgap/upevnt.F rapgap/pydata.f )
+            rapgap/upinit.F   rapgap/upevnt.F  )
 list(TRANSFORM rapgap33_SOURCES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/src/")
 add_executable(rapgap ${rapgap33_SOURCES} ${ariadne_SOURCES} ${conv_source})
 target_include_directories(rapgap PRIVATE ${PROJECT_SOURCE_DIR}/include   ${LHAPDF_INCLUDE_DIR})

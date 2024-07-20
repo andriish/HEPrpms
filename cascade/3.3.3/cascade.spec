@@ -1,6 +1,6 @@
 Name:       cascade
 Version:    3.3.3
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy physics
 
 License:    GPLv2
@@ -25,13 +25,13 @@ Requires:       fastjet tmdlib  pythia8
 %if 0%{?suse_version}
 BuildRequires:  autoconf automake libtool gcc-fortran libHepMC4 HepMC2-devel libLHAPDF LHAPDF-devel 
 BuildRequires:  libHepMC3-3  HepMC3-devel  Rivet-devel Rivet YODA YODA-devel 
-BuildRequires:  texlive-palatino texlive-helvetic texlive-courier tex(latex) ghostscript tex(sectsty.sty) tex(cite.sty) tex(lineno.sty)
+BuildRequires:  texlive-palatino texlive-helvetic texlive-courier tex(latex) ghostscript tex(sectsty.sty) tex(cite.sty) tex(lineno.sty) tex(sectsty.sty)
 Requires:       libHepMC4 libLHAPDF libHepMC3-3 Rivet YODA libHepMC4 
 BuildRequires:  gsl gsl-devel zlib zlib-devel unzip
 Requires:       gsl zlib
 BuildRequires:  fastjet-devel fastjet gcc-c++ gcc-fortran tmdlib tmdlib-devel libpythia8 pythia-devel
 Requires:       fastjet tmdlib libpythia8
-BuildRequires:  root6-config root6-libs root6-devel root6
+BuildRequires:  root6-config root6-libs root6-devel root6 nlohmann_json-devel
 %endif
 
 Prefix: %{_prefix}
@@ -61,7 +61,7 @@ now accessed via TMDlib.
 %if 0%{?suse_version}
 #-Wl,--as-needed -Wl,--no-undefined -Wl,-z,now
 #export LDFLAGS="-Wl,--allow-shlib-undefined -Wl,--no-as-needed "
-%cmake -DCMAKE_EXE_LINKER_FLAGS=" " -DCMAKE_MODULE_LINKER_FLAGS=" " -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--allow-shlib-undefined -Wl,--no-as-needed "
+%cmake -DCMAKE_EXE_LINKER_FLAGS=" " -DCMAKE_MODULE_LINKER_FLAGS=" " -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--allow-shlib-undefined -Wl,--no-as-needed " -DCMAKE_CXX_STANDARD=17
 %else
 %cmake -DCMAKE_SKIP_RPATH:BOOL=YES -DCMAKE_CXX_STANDARD=17
 %endif

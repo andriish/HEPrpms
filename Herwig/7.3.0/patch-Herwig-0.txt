@@ -1,6 +1,6 @@
 diff -Naur ORIG/Looptools/Makefile.am PATCHED/Looptools/Makefile.am
---- ORIG/Looptools/Makefile.am	2023-11-06 12:52:27.507653828 +0100
-+++ PATCHED/Looptools/Makefile.am	2023-11-06 12:52:27.508653828 +0100
+--- ORIG/Looptools/Makefile.am	2023-11-06 23:38:23.389575564 +0000
++++ PATCHED/Looptools/Makefile.am	2023-11-06 23:38:23.390575579 +0000
 @@ -49,18 +49,18 @@
  
  libHwLooptoolsXFC_la_SOURCES = $(theXFCSOURCES)
@@ -28,8 +28,8 @@ diff -Naur ORIG/Looptools/Makefile.am PATCHED/Looptools/Makefile.am
  
  EXTRA_PROGRAMS = tester
 diff -Naur ORIG/Looptools/Makefile.in PATCHED/Looptools/Makefile.in
---- ORIG/Looptools/Makefile.in	2023-11-06 12:52:27.507653828 +0100
-+++ PATCHED/Looptools/Makefile.in	2023-11-06 12:52:27.508653828 +0100
+--- ORIG/Looptools/Makefile.in	2023-11-06 23:38:23.389575564 +0000
++++ PATCHED/Looptools/Makefile.in	2023-11-06 23:38:23.390575579 +0000
 @@ -236,10 +236,7 @@
  am__v_at_1 = 
  DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/Config -I$(top_builddir)/PDF
@@ -150,9 +150,131 @@ diff -Naur ORIG/Looptools/Makefile.in PATCHED/Looptools/Makefile.in
  	maintainer-clean-generic mostlyclean mostlyclean-compile \
  	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
  	tags tags-am uninstall uninstall-am
+diff -Naur ORIG/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc PATCHED/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc
+--- ORIG/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc	2023-11-06 23:38:23.389575564 +0000
++++ PATCHED/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc	2023-11-06 23:38:23.391575594 +0000
+@@ -150,7 +150,7 @@
+   // specific input file at gosamSetupInFileName. If the GoSam input file
+   // does not exist yet at gosamSetupInFileName the python script will get 
+   // it from src/defaults/ before making the replacements.
+-  string cmd = "python "+bindir_+"/gosam2herwig ";
++  string cmd = "gosam2herwig ";
+   cmd+=" --usrinfile="+gosamSetupInFileNameInterface;
+   cmd+=" --infile="+gosamSetupInFileName+".tbu";
+   cmd+=" --definfile="+pkgdatadir_+"/defaults/setup.gosam.in";
+@@ -541,7 +541,7 @@
+     string cmd = GoSamPrefix_+"/bin/gosam.py --olp --output-file=" + contract + " --config=" + 
+       gosamSetupInFileName+".tbu" + " --destination=" + gosamSourcePath + " " + order + " > " + cwd + folderMatchboxBuild + "gosam-amplitudes.log 2>&1";
+     std::system(cmd.c_str());
+-    cmd = "python "+bindir_+"/gosam2herwig ";
++    cmd = "gosam2herwig ";
+     cmd += " --makelink ";
+     // cmd += " --makelinkfrom=contract ";
+     cmd += " --makelinkfrom="+gosamPath+"/"+name()+".OLPContract.lh";
+diff -Naur ORIG/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc PATCHED/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc
+--- ORIG/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc	2023-11-06 23:38:23.390575579 +0000
++++ PATCHED/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc	2023-11-06 23:38:23.391575594 +0000
+@@ -257,7 +257,7 @@
+   params<<"\n$MTA$ "    <<std::setiosflags(ios::scientific)   << getParticleData(ParticleID::tauplus)->hardProcessMass() /GeV <<flush;
+ 
+   
+-  string cmd = "python " + bindir_ + "/mg2herwig ";
++  string cmd = "mg2herwig ";
+   cmd +=" --buildpath "+mgProcLibPath();
+   cmd += !theProcessPath.empty() ? " --absolute-links" : "";
+   cmd +=" --model "+theMGmodel;
+@@ -299,7 +299,7 @@
+   std::system(cmd.c_str());
+   
+   
+-  cmd = "python " + bindir_ + "/mg2herwig ";
++  cmd = "mg2herwig ";
+   cmd +=" --buildpath "+mgProcLibPath();
+   cmd +=" --model "+theMGmodel;
+   cmd +=" --runpath "+factory()->runStorage()+"/MadGraphAmplitudes ";
+diff -Naur ORIG/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in PATCHED/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in
+--- ORIG/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in	2023-11-06 23:38:23.390575579 +0000
++++ PATCHED/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in	2023-11-06 23:38:23.391575594 +0000
+@@ -130,7 +130,7 @@
+ parser = OptionParser()
+ parser.add_option("-a", "--buildpath", dest="buildpath",help="Do not use this script. Only for Herwig internal use. ")
+ parser.add_option("-b", "--build", action="store_true", dest="build", default=True,help="Do not use this script. Only for Herwig internal use.")
+-parser.add_option("-c", "--madgraph", dest="madgraph",help="Do not use this script. Only for Herwig internal use.")
++parser.add_option("-c", "--madgraph", dest="madgraph",default="",help="Do not use this script. Only for Herwig internal use.")
+ parser.add_option("-d", "--runpath", dest="runpath",help="Do not use this script. Only for Herwig internal use.")
+ parser.add_option("-e", "--model", dest="model",help="Do not use this script. Only for Herwig internal use.")
+ parser.add_option("-f", "--orderas", dest="orderas",help="Do not use this script. Only for Herwig internal use.")
+@@ -152,7 +152,25 @@
+ cachedir = os.path.abspath(options.cacheprefix)
+ mkdir_p(cachedir)
+ 
++if os.path.isfile(options.madgraph+"/mg5_aMC"):
++ print ("Found MadGraph in "+options.madgraph+"/mg5_aMC")
++else:
++ print ("Updating the Madgraph search path to "+os.path.dirname(os.path.abspath(__file__)))
++ if os.path.isfile(os.path.dirname(os.path.abspath(__file__))+"/mg5_aMC"):
++  options.madgraph=os.path.dirname(os.path.abspath(__file__))
++  print ("After the update found MadGraph in "+options.madgraph+"/mg5_aMC") 
++ else:
++  print ("MadGraph not found")
+ 
++if os.path.isdir(options.datadir):
++ print ("Found Herwig data directory in "+options.datadir)
++else:
++ print ("Updating the Herwig data directory search path to "+os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","share","Herwig"))
++ if os.path.isdir(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","share","Herwig")):
++  options.datadir=os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","share","Herwig")
++  print ("After the update found Herwig data directory in "+options.datadir) 
++ else:
++  print ("Herwig data directory not found")
+ #MG_TMP = tempfile.mkdtemp(prefix='MG_tmp_',dir=cachedir)
+ MG_TMP = os.path.join(cachedir, 'MG_tmp')
+ mkdir_p(MG_TMP)
+@@ -188,7 +206,7 @@
+   file.close()
+ elif  options.model.startswith("/"):
+ 
+-  os.system("python %s/write_param_card.py " % options.model)
++  os.system(str(sys.executable)+" %s/write_param_card.py " % options.model)
+ 
+ 
+ 
+@@ -231,10 +249,7 @@
+ 
+ Bornlist,Virtlist=fillprocs(options.model,options.orderas,options.orderew,int(MGVersion))
+ 
+-if sys.version_info[0] == 2 and MGVersion == "3" :
+-    os.system("python3 "+options.madgraph+"/mg5_aMC proc.dat")
+-else:
+-    os.system("python "+options.madgraph+"/mg5_aMC proc.dat")
++os.system( str(sys.executable)+" "+options.madgraph+"/mg5_aMC proc.dat")
+ 
+ 
+ 
+diff -Naur ORIG/MatrixElement/Matchbox/External/Makefile.am PATCHED/MatrixElement/Matchbox/External/Makefile.am
+--- ORIG/MatrixElement/Matchbox/External/Makefile.am	2023-11-06 23:38:23.390575579 +0000
++++ PATCHED/MatrixElement/Matchbox/External/Makefile.am	2023-11-06 23:38:23.391575594 +0000
+@@ -27,7 +27,7 @@
+ pkglib_LTLIBRARIES += HwMatchboxVBFNLO.la
+ endif
+ 
+-HwMatchboxVBFNLO_la_LDFLAGS = $(AM_LDFLAGS) -module -version-info 6:0:0
++HwMatchboxVBFNLO_la_LDFLAGS = $(AM_LDFLAGS) -module -version-info 5:0:0
+ HwMatchboxVBFNLO_la_CPPFLAGS = $(AM_CPPFLAGS)
+ HwMatchboxVBFNLO_la_CPPFLAGS += -I$(VBFNLOINCLUDE)
+ HwMatchboxVBFNLO_la_CPPFLAGS += -DVBFNLOLIB=$(VBFNLOLIB)
+@@ -77,7 +77,7 @@
+ pkglib_LTLIBRARIES += HwMatchboxMadGraph.la
+ endif
+ 
+-HwMatchboxMadGraph_la_LDFLAGS = $(AM_LDFLAGS) -module -version-info 6:0:0
++HwMatchboxMadGraph_la_LDFLAGS = $(AM_LDFLAGS) -Wl,-z,lazy -module -version-info 6:0:0
+ 
+ HwMatchboxMadGraph_la_SOURCES = \
+ MadGraph/MadGraphAmplitude.cc
 diff -Naur ORIG/m4/fastjet.m4 PATCHED/m4/fastjet.m4
---- ORIG/m4/fastjet.m4	2023-11-06 12:52:27.508653828 +0100
-+++ PATCHED/m4/fastjet.m4	2023-11-06 12:52:27.509653828 +0100
+--- ORIG/m4/fastjet.m4	2023-11-06 23:38:23.390575579 +0000
++++ PATCHED/m4/fastjet.m4	2023-11-06 23:38:23.391575594 +0000
 @@ -40,7 +40,7 @@
     save_LIBS="$LIBS"
  
@@ -172,8 +294,8 @@ diff -Naur ORIG/m4/fastjet.m4 PATCHED/m4/fastjet.m4
        CREATE_FASTJET="create"
        AC_MSG_RESULT(yes)
 diff -Naur ORIG/m4/herwig.m4 PATCHED/m4/herwig.m4
---- ORIG/m4/herwig.m4	2023-11-06 12:52:27.508653828 +0100
-+++ PATCHED/m4/herwig.m4	2023-11-06 12:52:27.509653828 +0100
+--- ORIG/m4/herwig.m4	2023-11-06 23:38:23.390575579 +0000
++++ PATCHED/m4/herwig.m4	2023-11-06 23:38:23.391575594 +0000
 @@ -351,30 +351,10 @@
        ${with_njet}/lib/libnjet2.dylib,
        [have_njet=lib], [have_njet=no])])
@@ -261,125 +383,3 @@ diff -Naur ORIG/m4/herwig.m4 PATCHED/m4/herwig.m4
          LOAD_GOSAM_CONTRIB="library"
          CREATE_GOSAM_CONTRIB="create"
          INSERT_GOSAM_CONTRIB="insert"
-diff -Naur ORIG/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc PATCHED/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc
---- ORIG/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc	2023-11-06 12:52:27.507653828 +0100
-+++ PATCHED/MatrixElement/Matchbox/External/GoSam/GoSamAmplitude.cc	2023-11-06 12:52:27.509653828 +0100
-@@ -150,7 +150,7 @@
-   // specific input file at gosamSetupInFileName. If the GoSam input file
-   // does not exist yet at gosamSetupInFileName the python script will get 
-   // it from src/defaults/ before making the replacements.
--  string cmd = "python "+bindir_+"/gosam2herwig ";
-+  string cmd = "gosam2herwig ";
-   cmd+=" --usrinfile="+gosamSetupInFileNameInterface;
-   cmd+=" --infile="+gosamSetupInFileName+".tbu";
-   cmd+=" --definfile="+pkgdatadir_+"/defaults/setup.gosam.in";
-@@ -541,7 +541,7 @@
-     string cmd = GoSamPrefix_+"/bin/gosam.py --olp --output-file=" + contract + " --config=" + 
-       gosamSetupInFileName+".tbu" + " --destination=" + gosamSourcePath + " " + order + " > " + cwd + folderMatchboxBuild + "gosam-amplitudes.log 2>&1";
-     std::system(cmd.c_str());
--    cmd = "python "+bindir_+"/gosam2herwig ";
-+    cmd = "gosam2herwig ";
-     cmd += " --makelink ";
-     // cmd += " --makelinkfrom=contract ";
-     cmd += " --makelinkfrom="+gosamPath+"/"+name()+".OLPContract.lh";
-diff -Naur ORIG/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc PATCHED/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc
---- ORIG/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc	2023-11-06 12:52:27.507653828 +0100
-+++ PATCHED/MatrixElement/Matchbox/External/MadGraph/MadGraphAmplitude.cc	2023-11-06 12:52:27.509653828 +0100
-@@ -257,7 +257,7 @@
-   params<<"\n$MTA$ "    <<std::setiosflags(ios::scientific)   << getParticleData(ParticleID::tauplus)->hardProcessMass() /GeV <<flush;
- 
-   
--  string cmd = "python " + bindir_ + "/mg2herwig ";
-+  string cmd = "mg2herwig ";
-   cmd +=" --buildpath "+mgProcLibPath();
-   cmd += !theProcessPath.empty() ? " --absolute-links" : "";
-   cmd +=" --model "+theMGmodel;
-@@ -299,7 +299,7 @@
-   std::system(cmd.c_str());
-   
-   
--  cmd = "python " + bindir_ + "/mg2herwig ";
-+  cmd = "mg2herwig ";
-   cmd +=" --buildpath "+mgProcLibPath();
-   cmd +=" --model "+theMGmodel;
-   cmd +=" --runpath "+factory()->runStorage()+"/MadGraphAmplitudes ";
-diff -Naur ORIG/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in PATCHED/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in
---- ORIG/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in	2023-11-06 12:52:27.507653828 +0100
-+++ PATCHED/MatrixElement/Matchbox/External/MadGraph/mg2herwig.in	2023-11-06 12:52:27.509653828 +0100
-@@ -130,7 +130,7 @@
- parser = OptionParser()
- parser.add_option("-a", "--buildpath", dest="buildpath",help="Do not use this script. Only for Herwig internal use. ")
- parser.add_option("-b", "--build", action="store_true", dest="build", default=True,help="Do not use this script. Only for Herwig internal use.")
--parser.add_option("-c", "--madgraph", dest="madgraph",help="Do not use this script. Only for Herwig internal use.")
-+parser.add_option("-c", "--madgraph", dest="madgraph",default="",help="Do not use this script. Only for Herwig internal use.")
- parser.add_option("-d", "--runpath", dest="runpath",help="Do not use this script. Only for Herwig internal use.")
- parser.add_option("-e", "--model", dest="model",help="Do not use this script. Only for Herwig internal use.")
- parser.add_option("-f", "--orderas", dest="orderas",help="Do not use this script. Only for Herwig internal use.")
-@@ -152,7 +152,25 @@
- cachedir = os.path.abspath(options.cacheprefix)
- mkdir_p(cachedir)
- 
-+if os.path.isfile(options.madgraph+"/mg5_aMC"):
-+ print ("Found MadGraph in "+options.madgraph+"/mg5_aMC")
-+else:
-+ print ("Updating the Madgraph search path to "+os.path.dirname(os.path.abspath(__file__)))
-+ if os.path.isfile(os.path.dirname(os.path.abspath(__file__))+"/mg5_aMC"):
-+  options.madgraph=os.path.dirname(os.path.abspath(__file__))
-+  print ("After the update found MadGraph in "+options.madgraph+"/mg5_aMC") 
-+ else:
-+  print ("MadGraph not found")
- 
-+if os.path.isdir(options.datadir):
-+ print ("Found Herwig data directory in "+options.datadir)
-+else:
-+ print ("Updating the Herwig data directory search path to "+os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","share","Herwig"))
-+ if os.path.isdir(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","share","Herwig")):
-+  options.datadir=os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","share","Herwig")
-+  print ("After the update found Herwig data directory in "+options.datadir) 
-+ else:
-+  print ("Herwig data directory not found")
- #MG_TMP = tempfile.mkdtemp(prefix='MG_tmp_',dir=cachedir)
- MG_TMP = os.path.join(cachedir, 'MG_tmp')
- mkdir_p(MG_TMP)
-@@ -188,7 +206,7 @@
-   file.close()
- elif  options.model.startswith("/"):
- 
--  os.system("python %s/write_param_card.py " % options.model)
-+  os.system(str(sys.executable)+" %s/write_param_card.py " % options.model)
- 
- 
- 
-@@ -231,10 +249,7 @@
- 
- Bornlist,Virtlist=fillprocs(options.model,options.orderas,options.orderew,int(MGVersion))
- 
--if sys.version_info[0] == 2 and MGVersion == "3" :
--    os.system("python3 "+options.madgraph+"/mg5_aMC proc.dat")
--else:
--    os.system("python "+options.madgraph+"/mg5_aMC proc.dat")
-+os.system( str(sys.executable)+" "+options.madgraph+"/mg5_aMC proc.dat")
- 
- 
- 
-diff -Naur ORIG/MatrixElement/Matchbox/External/Makefile.am PATCHED/MatrixElement/Matchbox/External/Makefile.am
---- ORIG/MatrixElement/Matchbox/External/Makefile.am	2023-11-06 12:52:27.508653828 +0100
-+++ PATCHED/MatrixElement/Matchbox/External/Makefile.am	2023-11-06 12:52:27.509653828 +0100
-@@ -27,7 +27,7 @@
- pkglib_LTLIBRARIES += HwMatchboxVBFNLO.la
- endif
- 
--HwMatchboxVBFNLO_la_LDFLAGS = $(AM_LDFLAGS) -module -version-info 6:0:0
-+HwMatchboxVBFNLO_la_LDFLAGS = $(AM_LDFLAGS) -module -version-info 5:0:0
- HwMatchboxVBFNLO_la_CPPFLAGS = $(AM_CPPFLAGS)
- HwMatchboxVBFNLO_la_CPPFLAGS += -I$(VBFNLOINCLUDE)
- HwMatchboxVBFNLO_la_CPPFLAGS += -DVBFNLOLIB=$(VBFNLOLIB)
-@@ -77,7 +77,7 @@
- pkglib_LTLIBRARIES += HwMatchboxMadGraph.la
- endif
- 
--HwMatchboxMadGraph_la_LDFLAGS = $(AM_LDFLAGS) -module -version-info 6:0:0
-+HwMatchboxMadGraph_la_LDFLAGS = $(AM_LDFLAGS) -Wl,-z,lazy -module -version-info 6:0:0
- 
- HwMatchboxMadGraph_la_SOURCES = \
- MadGraph/MadGraphAmplitude.cc
