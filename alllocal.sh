@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-highfive:2.9.0
+LCIO:02.22.00
+#highfive:2.9.0
 #Rivet:4.0.0
 #cernlib:2024.06.12.0
 #MG5_aMC:3.5.4
