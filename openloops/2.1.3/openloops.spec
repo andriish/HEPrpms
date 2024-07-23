@@ -6,10 +6,11 @@
 
 Name:           openloops
 Version:        2.1.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
 Source0:        https://gitlab.com/openloops/OpenLoops/-/archive/OpenLoops-%{version}/OpenLoops-OpenLoops-%{version}.tar.gz
+Patch0:         patch-openloops-0.txt
 Prefix:         %{_prefix}
 Summary:        Automated calculation of one-loop amplitudes 
 BuildRequires:  autoconf
@@ -44,6 +45,7 @@ BuildRequires: python3-devel python3-scons
 
 %prep
 %setup -qn OpenLoops-OpenLoops-%{version}
+%patch -P 0 -p1
 
 %build
 sed -i  's@.*process_lib_dir.*@process_lib_dir = /usr/'%_lib'/openloops/proclib@g'  pyol/config/default.cfg
@@ -269,34 +271,38 @@ sed -i  's@.*process_lib_dir.*@process_lib_dir = '$RPM_BUILD_ROOT'/usr/'%_lib'/o
 
 sed -i  's@.*process_lib_dir.*@process_lib_dir = /usr/'%_lib'/openloops/proclib@g'  pyol/config/default.cfg
 
-cp -r ./openloops  $RPM_BUILD_ROOT/usr/bin/openloops
-cp -r ./lib  $RPM_BUILD_ROOT/usr/%_lib/openloops
-cp -r ./pyol  $RPM_BUILD_ROOT/usr/%_lib/openloops
+mkdir -p $RPM_BUILD_ROOT/%{_bindir}
+mkdir -p $RPM_BUILD_ROOT/%{_libdir}/openloops
+sed -i  's@.*process_lib_dir.*@process_lib_dir = '$RPM_BUILD_ROOT%{_libdir}'/openloops/proclib@g'  pyol/config/default.cfg
+./openloops libinstall pptt
+sed -i  's@.*process_lib_dir.*@process_lib_dir = '%{_libdir}'/openloops/proclib@g'  pyol/config/default.cfg
+sed -i  's@^LIBDIR=.*@LIBDIR=\"../lib64/openloops/lib\"@' openloops
+sed -i  's@^PROCLIBDIR=.*@PROCLIBDIR=\"../'%_lib'/openloops/proclib\"@' openloops
+sed -i  's@^PYOLBINDIR=.*@PYOLBINDIR=\"../'%_lib'/openloops/pyol/bin\"@' openloops
+sed -i  's@^PYOLMODDIR=.*@PYOLMODDIR=\"../'%_lib'/openloops/pyol/tools\"@' openloops
+sed -i  's@^INCDIR=.*@INCDIR=\"../include\"@' openloops
+chmod +x ./openloops
+cp -r ./openloops  $RPM_BUILD_ROOT/%{_bindir}/openloops
+cp    ./SConstruct $RPM_BUILD_ROOT/%{_libdir}/openloops
+ln -s  %{_bindir}/scons $RPM_BUILD_ROOT/%{_libdir}/openloops/scons
+cp -r ./lib  $RPM_BUILD_ROOT/%{_libdir}/openloops
+cp -r ./pyol  $RPM_BUILD_ROOT/%{_libdir}/openloops
 mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src
-cp  ./include/*.h $RPM_BUILD_ROOT/%_includedir
-
+cp  ./include/*.h $RPM_BUILD_ROOT/usr/include
 mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/collier
 cp -r  lib_src/collier/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/collier
-
 mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/cuttools
 cp -r  lib_src/cuttools/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/cuttools
-
 mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/olcommon
 cp -r  lib_src/olcommon/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/olcommon
-
 mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/oneloop
 cp -r  lib_src/oneloop/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/oneloop
-
-mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/openloops
+mkdir -p $RPM_BUILD_ROOT//%_includedir/openloops/lib_src/openloops
 cp -r  lib_src/openloops/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/openloops
-
-
 mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/rambo
 cp -r  lib_src/rambo/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/rambo
-
 mkdir -p $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/trred
 cp -r  lib_src/trred/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/trred
-
 
 
 %files -n %{libname}
