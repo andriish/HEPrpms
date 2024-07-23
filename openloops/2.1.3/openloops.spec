@@ -69,8 +69,7 @@ scons
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/%_lib/openloops
 sed -i  's@.*process_lib_dir.*@process_lib_dir = '$RPM_BUILD_ROOT'/usr/'%_lib'/openloops/proclib@g'  pyol/config/default.cfg
-./openloops libinstall pptt
-# ppttj eett eettj ppll  ppllj  tbw ppjj ppjjj   ppln pplnj pptt ppttj  pplljj pplljjj pphll2 pph2 pphj2   pptln  pptw pptwj  pplla   ppllaj   pplla_ew   ppllaj_ew   compile_extra=1;
+./openloops libinstall pptt ppttj eett eettj ppll  ppllj  tbw ppjj ppjjj   ppln pplnj pptt ppttj  pplljj pplljjj pphll2 pph2 pphj2   pptln  pptw pptwj  pplla   ppllaj   pplla_ew   ppllaj_ew   compile_extra=1;
 
 #tbln
 #tbln_ew
