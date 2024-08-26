@@ -37,6 +37,14 @@ install:
 	cp lib/*  $(DESTDIR)$(LIBDIR)/
 	mkdir -p  $(DESTDIR)$(PREFIX)/share/doc/MC-TESTER/
 	cp -r analyze $(DESTDIR)$(PREFIX)/share/doc/MC-TESTER/
+	cp src/TDecayMode.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
+	cp src/TDecayResult.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
+	cp src/TUserAnalysis.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
+	cp src/UserEventAnalysis.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
+	cp src/UserTreeAnalysis.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
+	cp src/Generate.h $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
+	cp src/MCTester-F77.h $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
+
 
 make.inc:
 	@echo ""

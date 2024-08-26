@@ -1,6 +1,6 @@
 Name:           MC-TESTER
 Version:        1.25.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 License:        MIT
 Url:            http://mc-tester.web.cern.ch/MC-TESTER/
 Source0:        https://gitlab.cern.ch/cvsmctst/mc-tester/-/archive/v1.25.1/mc-tester-v%{version}.tar.gz
