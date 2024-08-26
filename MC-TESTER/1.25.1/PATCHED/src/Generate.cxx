@@ -122,11 +122,11 @@ void MC_Initialize()
         bufline += Setup::UserTreeAnalysis;
         bufline += ".C+";
         gSystem->AddIncludePath("-I${MCTESTERLOCATION}/include/");
-        gSystem->AddLinkedLibs("-L${MCTESTERLOCATION}/lib -L${MCTESTERLOCATION}/lib64 -lMCTester");
-        gSystem->AddLinkedLibs("-L${MCTESTERLOCATION}/lib -L${MCTESTERLOCATION}/lib64 -lHEPEvent");
-        gSystem->AddLinkedLibs("-L${MCTESTERLOCATION}/lib -L${MCTESTERLOCATION}/lib64  -lHepMCEvent");
-        gSystem->AddLinkedLibs("-L${HEPMCLOCATION}/lib  -L${HEPMCLOCATION}/lib64  -lHepMC");
-        gSystem->AddLinkedLibs("-L${HEPMC3LOCATION}/lib -L${HEPMC3LOCATION}/lib64 -lHepMC3");
+        gSystem->AddLinkedLibs("-L${MCTESTERLOCATIONLIB} -lMCTester");
+        gSystem->AddLinkedLibs("-L${MCTESTERLOCATIONLIB} -lHEPEvent");
+        gSystem->AddLinkedLibs("-L${MCTESTERLOCATIONLIB}  -lHepMCEvent");
+        gSystem->AddLinkedLibs("-L${HEPMCLOCATIONLIB}  -lHepMC");
+        gSystem->AddLinkedLibs("-L${HEPMC3LOCATIONLIB} -lHepMC3");
         gROOT->ProcessLine(bufline.c_str());
 
         userTreeAnalysis=new TMethodCall(Setup::UserTreeAnalysis,
