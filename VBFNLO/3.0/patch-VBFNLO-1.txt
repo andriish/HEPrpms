@@ -1,0 +1,136 @@
+diff -Naur ORIG/amplitudes/vvj/Makefile.am PATCHED/amplitudes/vvj/Makefile.am
+--- ORIG/amplitudes/vvj/Makefile.am	2024-09-17 12:41:21.019681376 +0200
++++ PATCHED/amplitudes/vvj/Makefile.am	2024-09-17 12:41:21.020681369 +0200
+@@ -51,7 +51,7 @@
+ mg2_duZZdu.F 
+ endif
+ 
+-libvvj_la_FFLAGS = $(AM_FFLAGS)
++libvvj_la_FFLAGS = $(AM_FFLAGS) -std=legacy
+ 
+ if WITH_NLO
+ libvvj_la_FFLAGS += -DWITH_NLO
+@@ -61,8 +61,3 @@
+ libvvj_la_FFLAGS += -DWITH_MADGRAPH
+ endif
+ 
+-$(top_builddir)/include/%.mod: libvvj_la-%.lo
+-	$(MAKE) $^
+-
+-include $(top_srcdir)/Makefile.dependencylist
+-EXTRA_DIST = Makefile.dep
+diff -Naur ORIG/amplitudes/vvjj/Makefile.am PATCHED/amplitudes/vvjj/Makefile.am
+--- ORIG/amplitudes/vvjj/Makefile.am	2024-09-17 12:41:21.019681376 +0200
++++ PATCHED/amplitudes/vvjj/Makefile.am	2024-09-17 12:41:21.020681369 +0200
+@@ -88,8 +88,8 @@
+ VBF_PENT_ABE_CURRENT.F
+ endif
+ 
+-libvbf_la_FFLAGS = $(AM_FFLAGS)
+-libvbf_la_CPPFLAGS = $(AM_CPPFLAGS)
++libvbf_la_FFLAGS = $(AM_FFLAGS) -std=legacy
++libvbf_la_CPPFLAGS = $(AM_CPPFLAGS) 
+ 
+ if WITH_LOOPTOOLS
+ libvbf_la_FFLAGS += -DWITH_LT
+@@ -123,7 +123,7 @@
+ toww_kk.F \
+ towz_kk.F \
+ tozz_kk.F 
+-libvbf_la_FFLAGS += -DWITH_KK
++libvbf_la_FFLAGS += -DWITH_KK -std=legacy
+ libvbf_la_CPPFLAGS += $(GSLINCLUDE)
+ libvbf_la_LIBADD = $(GSLLIBS)
+ endif
+diff -Naur ORIG/loops/Diagrams/HexBox/aq/Cross/Makefile.am PATCHED/loops/Diagrams/HexBox/aq/Cross/Makefile.am
+--- ORIG/loops/Diagrams/HexBox/aq/Cross/Makefile.am	2024-09-17 12:41:21.019681376 +0200
++++ PATCHED/loops/Diagrams/HexBox/aq/Cross/Makefile.am	2024-09-17 12:41:21.020681369 +0200
+@@ -1,6 +1,6 @@
+ noinst_LTLIBRARIES = libDiagramsAQCross.la
+ 
+-libDiagramsAQCross_la_FFLAGS = $(AM_FFLAGS)
++libDiagramsAQCross_la_FFLAGS = $(AM_FFLAGS)  -std=legacy
+ 
+ ## fix memory leak with gfortran 4.8
+ libDiagramsAQCross_la_FFLAGS +=$(GFORTRAN_48_FIX_LOOPS)
+diff -Naur ORIG/loops/Diagrams/HexBox/aq/Dire/Makefile.am PATCHED/loops/Diagrams/HexBox/aq/Dire/Makefile.am
+--- ORIG/loops/Diagrams/HexBox/aq/Dire/Makefile.am	2024-09-17 12:41:21.020681369 +0200
++++ PATCHED/loops/Diagrams/HexBox/aq/Dire/Makefile.am	2024-09-17 12:41:21.020681369 +0200
+@@ -1,6 +1,6 @@
+ noinst_LTLIBRARIES = libDiagramsAQDire.la
+ 
+-libDiagramsAQDire_la_FFLAGS = $(AM_FFLAGS)
++libDiagramsAQDire_la_FFLAGS = $(AM_FFLAGS)  -std=legacy
+ 
+ ## fix memory leak with gfortran 4.8
+ libDiagramsAQDire_la_FFLAGS +=$(GFORTRAN_48_FIX_LOOPS)
+diff -Naur ORIG/loops/Integrals/FF/Makefile.am PATCHED/loops/Integrals/FF/Makefile.am
+--- ORIG/loops/Integrals/FF/Makefile.am	2024-09-17 12:41:21.020681369 +0200
++++ PATCHED/loops/Integrals/FF/Makefile.am	2024-09-17 12:41:21.020681369 +0200
+@@ -63,7 +63,7 @@
+ 		ff/ffxli2.f \
+ 		ff/ffxxyz.f
+ 
+-libFF_la_FFLAGS = $(AM_FCFLAGS) -I$(builddir)/ff 
++libFF_la_FFLAGS = $(AM_FCFLAGS) -I$(builddir)/ff -std=legacy
+ 
+ FFdir = $(pkgdatadir)/ff
+ dist_FF_DATA = ff/fferr.dat ff/ffwarn.dat 
+@@ -100,7 +100,7 @@
+ # same as above with generated files
+ nodist_libFFquad_la_SOURCES = $(nodist_libFF_la_SOURCES:.f=.quad.F) $(dist_libFF_la_SOURCES:.f=.quad.F) 
+ 
+-libFFquad_la_FFLAGS = $(AM_FCFLAGS) -I$(builddir)/ff $(QUADFCFLAGS)
++libFFquad_la_FFLAGS = $(AM_FCFLAGS) -I$(builddir)/ff $(QUADFCFLAGS) -std=legacy
+ 
+ BUILT_SOURCES += $(nodist_libFFquad_la_SOURCES)
+ endif
+diff -Naur ORIG/loops/Integrals/Makefile.am PATCHED/loops/Integrals/Makefile.am
+--- ORIG/loops/Integrals/Makefile.am	2024-09-17 12:41:21.020681369 +0200
++++ PATCHED/loops/Integrals/Makefile.am	2024-09-17 12:41:21.020681369 +0200
+@@ -27,7 +27,7 @@
+ scalarints.F
+ endif
+ 
+-libIntegrals_la_FFLAGS = $(AM_FFLAGS)
++libIntegrals_la_FFLAGS = $(AM_FFLAGS) -std=legacy
+ 
+ if WITH_QUAD
+ libIntegrals_la_FFLAGS += -DWITH_QUAD
+diff -Naur ORIG/loops/Utilities/utilities.F PATCHED/loops/Utilities/utilities.F
+--- ORIG/loops/Utilities/utilities.F	2024-06-20 17:55:45.000000000 +0200
++++ PATCHED/loops/Utilities/utilities.F	2024-09-17 14:55:21.909270175 +0200
+@@ -156,7 +156,7 @@
+       write(*,'(A6,E30.22,E30.22)') 'C0 =',C0
+       do i1=1,2
+          do i2=1,indx_C(i1)
+-      write(*,'(A7,2I2,A2,E30.22,E30.22)') Cij//'(',i2,i1,')=',QCMPLX(CijR(i2,i1),CijI(i2,i1))
++      write(*,'(A7,2I2,A2,E30.22,E30.22)') Cij//'(',i2,i1,')=',DCMPLX(CijR(i2,i1),CijI(i2,i1))
+          enddo
+       enddo
+       return
+diff -Naur ORIG/src/Makefile.am PATCHED/src/Makefile.am
+--- ORIG/src/Makefile.am	2024-09-17 12:41:21.020681369 +0200
++++ PATCHED/src/Makefile.am	2024-09-17 12:41:21.020681369 +0200
+@@ -3,7 +3,7 @@
+ vbfnlo_LDADD = $(top_builddir)/lib/libVBFNLO.la \
+                $(top_builddir)/loops/libVBFNLOLoops.la \
+                $(top_builddir)/utilities/libVBFNLOUtilities.la
+-vbfnlo_FFLAGS = $(AM_FFLAGS)
++vbfnlo_FFLAGS = $(AM_FFLAGS) -fPIC
+ 
+ if WITH_LOOPS
+ vbfnlo_SOURCES += FFini.F90
+diff -Naur ORIG/utilities/instabilities.F PATCHED/utilities/instabilities.F
+--- ORIG/utilities/instabilities.F	2024-09-17 14:05:32.594352384 +0200
++++ PATCHED/utilities/instabilities.F	2024-09-17 14:04:30.263775181 +0200
+@@ -327,8 +327,8 @@
+                   endif
+                   print*
+                   print*
+-               endif
+ #endif               
++               endif
+             endif
+          endif
+ c     stop
