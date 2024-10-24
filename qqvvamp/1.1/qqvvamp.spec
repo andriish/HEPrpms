@@ -12,6 +12,7 @@ BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  ginac-devel
 BuildRequires:  cln-devel
+BuildRequires:  libquadmath-devel
 
 Requires:       ginac
 Requires:       cln
@@ -24,6 +25,7 @@ Summary:        Development files for qqvvamp
 Requires:       %{name} = %{version}-%{release}
 Requires:       ginac-devel
 Requires:       cln-devel
+BuildRequires:  libquadmath-devel
 
 %description devel
 This package contains the header files and libraries needed to develop applications that use qqvvamp.
