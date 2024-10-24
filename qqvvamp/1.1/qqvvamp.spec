@@ -46,6 +46,7 @@ This package contains the header files and libraries needed to develop applicati
 
 %files devel
 %{_includedir}/qqvvamp.h
+%{_datadir}/cmake/qqvvamp
 
 %changelog
 * Thu Oct 24 2024 Your Name <you@example.com> - 1.0.0-1
