@@ -1,12 +1,13 @@
 Summary: A  keyword-driven  interface  designed  to  produce physics  graphs  with  minimal specifications
 Name: topdrawer
 Version: 1.4e
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: Free
 Source: https://ftp.riken.jp/iris/topdrawer/topdrawer.tar.gz
 URL:    https://ribf.riken.jp/comp/doc/topdrawer/
 #Patch: ugs-24bit-color.patch
 Patch0:  topdrawer_OSX_fix.patch
+Patch1:  patch-topdrawer-0.txt
 Prefix: %{_prefix}
 BuildRequires: f2c ugs imake  
 BuildRequires: libX11-devel libXt-devel  libSM-devel libICE-devel libXext-devel
@@ -32,6 +33,7 @@ developed by R.B. Chaffee at SLAC.
 %prep
 %setup -n topdrawer -q
 %patch -P 0 -p1
+%patch -P 1 -p1
 
 %build
 xmkmf -a

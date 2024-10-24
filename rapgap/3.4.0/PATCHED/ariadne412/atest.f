@@ -10,8 +10,8 @@ C...are linked from the JETSET/PYTHIA library. This routine should never
 C...be called.
       EXTERNAL PYDATA
       EXTERNAL LUDATA
-      CALL LUDATA
-      CALL PYDATA
+C      CALL LUDATA
+C      CALL PYDATA
 
       RETURN
       END
