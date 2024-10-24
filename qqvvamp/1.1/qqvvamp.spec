@@ -11,10 +11,10 @@ Patch0:         patch-0.txt
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  ginac-devel
-BuildRequires:  cnl-devel
+BuildRequires:  cln-devel
 
 Requires:       ginac
-Requires:       cnl
+Requires:       cln
 
 %description
 qqvvamp is a package for symbolic computation and numerical analysis.
@@ -23,7 +23,7 @@ qqvvamp is a package for symbolic computation and numerical analysis.
 Summary:        Development files for qqvvamp
 Requires:       %{name} = %{version}-%{release}
 Requires:       ginac-devel
-Requires:       cnl-devel
+Requires:       cln-devel
 
 %description devel
 This package contains the header files and libraries needed to develop applications that use qqvvamp.
