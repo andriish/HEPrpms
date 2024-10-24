@@ -279,3 +279,5 @@ fc080d84f4227ea5a927599f99b54702  geneva/1.0.0/rpmbuild/SOURCES/geneva-public-1.
 adea94203351ad50518fa3cf661c3788  geant4/11.2.1/rpmbuild/SOURCES/geant4-v11.2.1.tar.gz
 2d63bbc518362e5b928f19f122504f05  highfive/2.9.0/rpmbuild/SOURCES/highfive-2.9.0.tar.gz
 514312715e6d6632534e4455991d629d  LCIO/02.22.00/rpmbuild/SOURCES/v02-22.tar.gz
+073b1b6d8ff745d6e3df7049109923ab  ggvvamp/1.0/rpmbuild/SOURCES/ggvvamp-1.0.tar.gz
+2c47d4be514d9ecbe6fde1eb195258e8  qqvvamp/1.1/rpmbuild/SOURCES/qqvvamp-1.1.tar.gz

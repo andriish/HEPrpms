@@ -1,3 +1,3 @@
 #!/bin/bash
 set -x
-diff -Naur ORIG/ PATCHED/  > patch-qcdloop-0.txt
+diff -Naur ORIG/ PATCHED/  > patch-0.txt

@@ -6,7 +6,7 @@ Summary:        qqvvamp package from vvamp.hepforge.org
 License:        GPL
 URL:            https://vvamp.hepforge.org/
 Source0:        http://www.hepforge.org/archive/vvamp/%{name}-%{version}.tar.gz
-Patch0:         qqvvamp-fix.patch
+Patch0:         patch-0.txt
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -31,6 +31,7 @@ This package contains the header files and libraries needed to develop applicati
 %prep
 %setup -q
 %patch0 -p1
+sed -i 's/lst/LST/g' p0002.cpp
 
 %build
 %cmake .
