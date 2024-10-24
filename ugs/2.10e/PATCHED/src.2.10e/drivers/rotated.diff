@@ -1,0 +1,125 @@
+--- rotated.c.orig	Fri Sep 19 17:59:13 1997
++++ rotated.c	Sat Sep 20 01:39:13 1997
+@@ -30,6 +30,7 @@
+ #include <math.h>
+ #include "rotated.h"
+ 
++#define  round(a)  (int)(((a)<0.0)?(a)-.5:(a)+.5)
+ 
+ /* ---------------------------------------------------------------------- */
+ 
+@@ -421,10 +422,7 @@
+     Pixmap bitmap_to_paint;
+     
+     /* return early for NULL/empty strings */
+-    if(text==NULL)
+-        return 0;
+-    
+-    if(strlen(text)==0)
++    if(text==NULL || *text=='\0')
+ 	return 0;
+ 
+     /* manipulate angle to 0<=angle<360 degrees */
+@@ -444,10 +442,10 @@
+     /* get a rotated bitmap */
+     item=XRotRetrieveFromCache(dpy, font, angle, text, align);
+     if(item==NULL)
+-	return NULL;
++	return 0;
+     
+     /* this gc has similar properties to the user's gc */
+-    my_gc=XCreateGC(dpy, drawable, NULL, 0);
++    my_gc=XCreateGC(dpy, drawable, (unsigned long) 0, 0);
+     XCopyGC(dpy, gc, GCForeground|GCBackground|GCFunction|GCPlaneMask,
+ 	    my_gc);
+ 
+@@ -473,8 +471,8 @@
+         hot_x=(float)item->max_width/2*style.magnify;
+     
+     /* pre-calculate sin and cos */
+-    sin_angle=sin(angle);
+-    cos_angle=cos(angle);
++    sin_angle = (float) round(sin((double) angle)*1000.0) / 1000.0;
++    cos_angle = (float) round(cos((double) angle)*1000.0) / 1000.0;
+     
+     /* rotate hot_x and hot_y around bitmap centre */
+     hot_xp= hot_x*cos_angle - hot_y*sin_angle;
+@@ -504,7 +502,7 @@
+ 	
+ 	empty_stipple=XCreatePixmap(dpy, drawable, 1, 1, 1);
+ 	
+-	depth_one_gc=XCreateGC(dpy, empty_stipple, NULL, 0);
++	depth_one_gc=XCreateGC(dpy, empty_stipple, (unsigned long) 0, 0);
+ 	XSetForeground(dpy, depth_one_gc, 0);
+ 	XFillRectangle(dpy, empty_stipple, depth_one_gc, 0, 0, 2, 2);
+ 
+@@ -560,7 +558,7 @@
+ 					 item->cols_out, item->rows_out, 1);
+ 
+ 		/* create a GC */
+-		depth_one_gc=XCreateGC(dpy, new_bitmap, NULL, 0);
++		depth_one_gc=XCreateGC(dpy, new_bitmap, (unsigned long) 0, 0);
+ 		XSetForeground(dpy, depth_one_gc, 1);
+ 		XSetBackground(dpy, depth_one_gc, 0);
+ 
+@@ -664,7 +662,7 @@
+     DEBUG_PRINT1("**\nHorizontal text.\n");
+ 
+     /* this gc has similar properties to the user's gc (including stipple) */
+-    my_gc=XCreateGC(dpy, drawable, NULL, 0);
++    my_gc=XCreateGC(dpy, drawable, (unsigned long) 0, 0);
+     XCopyGC(dpy, gc,
+ 	    GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle|
+ 	    GCTileStipXOrigin|GCTileStipYOrigin|GCPlaneMask, my_gc);
+@@ -868,7 +866,7 @@
+ 				   item->cols_out, item->rows_out, 1);
+ 	
+ 	/* depth one gc */
+-	depth_one_gc=XCreateGC(dpy, item->bitmap, NULL, 0);
++	depth_one_gc=XCreateGC(dpy, item->bitmap, (unsigned long) 0, 0);
+ 	XSetBackground(dpy, depth_one_gc, 0);
+ 	XSetForeground(dpy, depth_one_gc, 1);
+ 
+@@ -976,7 +974,7 @@
+ 			 item->cols_in, item->rows_in, 1);
+     
+     /* create a GC for the bitmap */
+-    font_gc=XCreateGC(dpy, canvas, NULL, 0);
++    font_gc=XCreateGC(dpy, canvas, (unsigned long) 0, 0);
+     XSetBackground(dpy, font_gc, 0);
+     XSetFont(dpy, font_gc, font->fid);
+     
+@@ -987,8 +985,8 @@
+     XSetForeground(dpy, font_gc, 1);
+     
+     /* pre-calculate sin and cos */
+-    sin_angle=sin(angle);
+-    cos_angle=cos(angle);
++    sin_angle = (float) round(sin((double) angle)*1000.0) / 1000.0;
++    cos_angle = (float) round(cos((double) angle)*1000.0) / 1000.0;
+     
+     /* text background will be drawn using XFillPolygon */
+     item->corners_x=
+@@ -1100,8 +1098,9 @@
+     dj=0.5-(float)item->rows_out/2;
+ 
+     /* where abouts does text actually lie in rotated image? */
+-    if(angle==0 || angle==M_PI/2 || 
+-       angle==M_PI || angle==3*M_PI/2) {
++    /* check angle within 0.5 degrees (0.008 radians) */
++    if(fabs((double)angle)<0.008 || fabs((double)angle-M_PI/2)<0.008 || 
++       fabs((double)angle-M_PI)<0.008 || fabs((double)angle-3*M_PI/2)<0.008) {
+ 	xl=0;
+ 	xr=(float)item->cols_out;
+ 	xinc=0;
+@@ -1519,8 +1518,8 @@
+     rows_in=nl*height;
+     
+     /* pre-calculate sin and cos */
+-    sin_angle=sin(angle);
+-    cos_angle=cos(angle);
++    sin_angle = (float) round(sin((double) angle)*1000.0) / 1000.0;
++    cos_angle = (float) round(cos((double) angle)*1000.0) / 1000.0;
+     
+     /* y position */
+     if(align==TLEFT || align==TCENTRE || align==TRIGHT)

@@ -1,0 +1,32 @@
+#########################################################
+#       Makefile for UGS on a generic Unix system.      #
+#########################################################
+
+#  19940428	KREYMER@FNAL.GOV
+#  Created 
+
+LIB = ../../ugs.a
+
+ifneq ($(strip $(RAN)),)
+RANLIB = $(RAN) $(LIB)
+endif
+
+.f.o: ;\
+	$(F77) -c      $*.f  ;\
+	$(AR)  $(LIB)  $*.o  ;\
+	$(RANLIB)
+
+.c.o: ;\
+	$(CC)  -c      $*.c  ;\
+	$(AR)  $(LIB)  $*.o  ;\
+	$(RANLIB)
+
+ugs.a: \
+postscr.o  \
+epsf.o     \
+tek4010.o  \
+xwindow.o  \
+xwindowc.o \
+; \
+	ls -lF $(LIB)
+
