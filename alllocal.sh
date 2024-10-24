@@ -13,7 +13,7 @@ declare -a BUILDLIST=(
 #highfive:2.9.0
 #Rivet:4.0.0
 #cernlib:2024.06.12.0
-MG5_aMC:3.5.6
+#MG5_aMC:3.5.6
 #Delphes:3.5.1pre10
 #geneva:1.0.0
 #SHERPA-MC:2.2.16
@@ -262,7 +262,7 @@ MG5_aMC:3.5.6
 #tmdlib:2.2.0  
 #cascade:2.2.01
 #topdrawer:1.4e
-#ugs:2.10e
+ugs:2.10e
 #VBFNLO:3.0.0beta5
 #whizard:2.8.5
 #whizard:3.0.0

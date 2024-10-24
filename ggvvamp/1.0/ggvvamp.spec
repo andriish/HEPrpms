@@ -32,7 +32,7 @@ This package contains the header files and libraries needed to develop applicati
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 %cmake .
