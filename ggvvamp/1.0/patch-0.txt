@@ -1,0 +1,1111 @@
+diff -Naur ORIG/cmake/Modules/FindCLN.cmake PATCHED/cmake/Modules/FindCLN.cmake
+--- ORIG/cmake/Modules/FindCLN.cmake	1970-01-01 01:00:00.000000000 +0100
++++ PATCHED/cmake/Modules/FindCLN.cmake	2024-10-24 16:52:13.941757362 +0200
+@@ -0,0 +1,141 @@
++# CLN_FOUND		CLN has been successfully found
++# CLN_INCLUDE_DIR       the include directories
++# CLN_LIBRARIES         CLN library and its dependencies (if any)
++
++if (CLN_INCLUDE_DIR AND CLN_LIBRARIES)
++	set(CLN_FIND_QUIETLY TRUE)
++endif()
++
++function(_cl_get_version _out_major _out_minor _out_patch _cl_version_h)
++	file(STRINGS ${_cl_version_h} _cl_vinfo REGEX "^#define[\t ]+CL_VERSION_.*")
++	if (NOT _cl_vinfo)
++		message(FATAL_ERROR "include file ${_cl_version_h} does not exist")
++	endif()
++	string(REGEX REPLACE "^.*CL_VERSION_MAJOR[ \t]+([0-9]+).*" "\\1" ${_out_major} "${_cl_vinfo}")
++	string(REGEX REPLACE "^.*CL_VERSION_MINOR[ \t]+([0-9]+).*" "\\1" ${_out_minor} "${_cl_vinfo}")
++	string(REGEX REPLACE "^.*CL_VERSION_PATCHLEVEL[ \t]+([0-9]+).*" "\\1" ${_out_patch} "${_cl_vinfo}")
++	if (NOT ${_out_major} MATCHES "[0-9]+")
++		message(FATAL_ERROR "failed to determine CL_VERSION_MAJOR, "
++			            "expected a number, got ${${_out_major}}")
++	endif()
++	if (NOT ${_out_minor} MATCHES "[0-9]+")
++		message(FATAL_ERROR "failed to determine CL_VERSION_MINOR, "
++			            "expected a number, got ${${_out_minor}}")
++	endif()
++	if (NOT ${_out_patch} MATCHES "[0-9]+")
++		message(FATAL_ERROR "failed to determine CL_VERSION_PATCHLEVEL, "
++			            "expected a number, got ${${_out_patch}}")
++	endif()
++	message(STATUS "found CLN [${_cl_version_h}], version ${${_out_major}}.${${_out_minor}}.${${_out_patch}}")
++	set(${_out_major} ${${_out_major}} PARENT_SCOPE)
++	set(${_out_minor} ${${_out_minor}} PARENT_SCOPE)
++	set(${_out_patch} ${${_out_patch}} PARENT_SCOPE)
++endfunction()
++
++set(CLN_FOUND)
++set(CLN_INCLUDE_DIR)
++set(CLN_LIBRARIES)
++
++include(FindPkgConfig)
++if (PKG_CONFIG_FOUND)
++	pkg_check_modules(_cln cln)
++endif()
++
++find_path(CLN_INCLUDE_DIR NAMES cln/cln.h
++			  HINTS ${_cln_INCLUDE_DIRS}
++				$ENV{CLN_DIR}/include)
++find_library(CLN_LIBRARIES NAMES libcln cln
++			   HINTS ${_cln_LIBRARY_DIR}
++			         ${_cln_LIBRARY_DIRS}
++				 $ENV{CLN_DIR}/lib)
++
++if (CLN_INCLUDE_DIR)
++	_cl_get_version(CLN_VERSION_MAJOR
++			CLN_VERSION_MINOR
++			CLN_VERSION_PATCHLEVEL
++			${CLN_INCLUDE_DIR}/cln/version.h)
++	set(CLN_VERSION ${CLN_VERSION_MAJOR}.${CLN_VERSION_MINOR}.${CLN_VERSION_PATCHLEVEL})
++	# Check if the version reported by pkg-config is the same
++	# as the one read from the header. This prevents us from
++	# picking the wrong version of CLN (say, if several versions
++	# are installed)
++	if (_cln_FOUND AND NOT CLN_VERSION VERSION_EQUAL _cln_VERSION)
++		if (NOT CLN_FIND_QUIETLY)
++			message(ERROR "pkg-config and version.h disagree, "
++				      "${_cln_VERSION} vs ${CLN_VERSION}, "
++				      "please check your installation")
++		endif()
++		set(CLN_LIBRARIES CLN-NOTFOUND)
++		set(CLN_INCLUDE_DIR CLN-NOTFOUND)
++		set(CLN_LIBRARY_DIRS)
++		set(CLN_VERSION)
++	endif()
++endif()
++
++# Check if the version embedded into the library is the same as the one in the headers.
++if (CLN_INCLUDE_DIR AND CLN_LIBRARIES AND NOT CMAKE_CROSSCOMPILING)
++	include(CheckCXXSourceRuns)
++	set(_save_required_includes ${CMAKE_REQUIRED_INCLUDES})
++	set(_save_required_libraries ${CMAKE_REQUIRED_LIBRARIES})
++	set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${CLN_INCLUDE_DIR})
++	set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${CLN_LIBRARIES})
++	check_cxx_source_runs("
++		#include <cln/version.h>
++		int main() {
++			return (CL_VERSION_MAJOR == cln::version_major) &&
++			       (CL_VERSION_MINOR == cln::version_minor) &&
++			       (CL_VERSION_PATCHLEVEL == cln::version_patchlevel) ? 0 : 1;
++		}
++		"
++		_cl_version_matches)
++	set(CMAKE_REQUIRED_LIBRARIES ${_save_required_libraries})
++	set(CMAKE_REQUIRED_INCLUDES ${_save_required_includes})
++	if (NOT _cl_version_matches)
++		if (NOT CLN_FIND_QUIETLY)
++			message(ERROR "header (version differs from the library one, "
++				      "please check your installation.")
++		endif()
++		set(CLN_INCLUDE_DIR CLN-NOTFOUND)
++		set(CLN_LIBRARIES CLN-NOTFOUND)
++		set(CLN_LIBRARY_DIRS)
++		set(CLN_VERSION)
++	endif()
++endif()
++
++if (CLN_LIBRARIES AND CLN_INCLUDE_DIR)
++	set(_cln_library_dirs)
++	foreach(_l ${CLN_LIBRARIES})
++		get_filename_component(_d "${_l}" PATH)
++		list(APPEND _cln_library_dirs "${_d}")
++	endforeach()
++	list(REMOVE_DUPLICATES _cln_library_dirs)
++	set(CLN_LIBRARY_DIRS ${_cln_library_dirs})
++endif()
++
++include(FindPackageHandleStandardArgs)
++FIND_PACKAGE_HANDLE_STANDARD_ARGS(CLN REQUIRED_VARS CLN_LIBRARIES CLN_INCLUDE_DIR
++				      VERSION_VAR CLN_VERSION)
++
++if (CLN_FOUND AND NOT TARGET cln::cln)
++	set(_found_shared_libcln FALSE)
++	get_filename_component(_libcln_suffix ${CLN_LIBRARIES} EXT)
++	if (_libcln_suffix STREQUAL ${CMAKE_STATIC_LIBRARY_SUFFIX})
++		# XXX: msvc uses the same suffix for both static and import libraries
++		add_library(cln::cln STATIC IMPORTED)
++	else()
++		set(_found_shared_libcln TRUE)
++		add_library(cln::cln SHARED IMPORTED)
++	endif()
++	set_target_properties(cln::cln PROPERTIES
++		INTERFACE_INCLUDE_DIRECTORIES ${CLN_INCLUDE_DIR}
++	)
++	if (WIN32 AND _found_shared_libcln)
++		set_target_properties(cln::cln PROPERTIES
++			IMPORTED_IMPLIB ${CLN_LIBRARIES}
++		)
++	else()
++		set_target_properties(cln::cln PROPERTIES
++			IMPORTED_LOCATION ${CLN_LIBRARIES}
++		)
++	endif()
++endif()
+diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
+--- ORIG/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ PATCHED/CMakeLists.txt	2024-10-24 16:52:22.733689953 +0200
+@@ -0,0 +1,117 @@
++cmake_minimum_required(VERSION 3.10)
++project(ggvvamp LANGUAGES CXX)
++#Andrii Verbytskyi for VVamp project
++
++# Set the version number
++set(VERSION_MAJOR 1)
++set(VERSION_MINOR 0)
++set(VERSION_PATCH 1)
++
++# Define the library version
++set(LIB_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
++
++# Add cmake/Modules to the module path
++set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
++
++# Set the C++ standard
++set(CMAKE_CXX_STANDARD 11)
++set(CMAKE_CXX_STANDARD_REQUIRED True)
++
++# Define the source files
++file(GLOB SOURCES
++"ggvvamp.cpp"
++"ggvvampprec.cpp"
++"p*.cpp"
++)
++
++# Find the GiNaC libraries
++find_package(GiNaC REQUIRED)
++# Determine if we are on an ARM architecture
++if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
++set(LIBQUADMATH )
++else()
++set(LIBQUADMATH quadmath)
++endif()
++
++
++# Include GNUInstallDirs for standardized installation directories
++include(GNUInstallDirs)
++
++# Options to build static, shared, or both libraries
++option(BUILD_SHARED_LIBS "Build shared libraries" ON)
++option(BUILD_STATIC_LIBS "Build static libraries" OFF)
++
++# Create the library targets based on options
++if(BUILD_SHARED_LIBS)
++add_library(ggvvamp SHARED ${SOURCES})
++set_target_properties(ggvvamp PROPERTIES VERSION ${LIB_VERSION} SOVERSION 1)
++target_link_libraries(ggvvamp ginac::ginac ${LIBQUADMATH})
++target_include_directories(ggvvamp
++PUBLIC
++$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
++$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
++)
++install(TARGETS ggvvamp
++EXPORT ggvvampTargets
++ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++)
++endif()
++
++if(BUILD_STATIC_LIBS)
++add_library(ggvvamp_static STATIC ${SOURCES})
++set_target_properties(ggvvamp_static PROPERTIES OUTPUT_NAME "ggvvamp")
++target_link_libraries(ggvvamp_static ginac::ginac ${LIBQUADMATH})
++target_include_directories(ggvvamp_static
++PUBLIC
++$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
++$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
++)
++install(TARGETS ggvvamp_static
++EXPORT ggvvampTargets
++ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++)
++endif()
++
++# Define the executable sources
++set(EXEC_SOURCES evalcmdlinegg.cpp)
++
++# Create the executables
++if(BUILD_SHARED_LIBS)
++add_executable(evalcmdlinegg ${EXEC_SOURCES})
++target_link_libraries(evalcmdlinegg ggvvamp ginac::ginac ${LIBQUADMATH})
++endif()
++
++if(BUILD_STATIC_LIBS)
++add_executable(evalcmdlinegg_static ${EXEC_SOURCES})
++target_link_libraries(evalcmdlinegg_static ggvvamp_static ginac::ginac ${LIBQUADMATH})
++set_target_properties(evalcmdlinegg_static PROPERTIES OUTPUT_NAME "evalcmdlinegg-static")
++endif()
++
++# Installation of headers
++install(FILES ${CMAKE_SOURCE_DIR}/ggvvamp.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++
++# Create and install the CMake config file
++include(CMakePackageConfigHelpers)
++write_basic_package_version_file(
++"${CMAKE_CURRENT_BINARY_DIR}/ggvvampConfigVersion.cmake"
++VERSION ${LIB_VERSION}
++COMPATIBILITY AnyNewerVersion
++)
++
++file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/ggvvampConfig.cmake" "
++@PACKAGE_INIT@
++include(CMakeFindDependencyMacro)
++include(\"\${CMAKE_CURRENT_LIST_DIR}/ggvvampTargets.cmake\")
++")
++
++# Export the targets to a file
++install(EXPORT ggvvampTargets
++FILE ggvvampTargets.cmake
++NAMESPACE ggvvamp::
++DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/ggvvamp
++)
++install(FILES
++"${CMAKE_CURRENT_BINARY_DIR}/ggvvampConfig.cmake"
++"${CMAKE_CURRENT_BINARY_DIR}/ggvvampConfigVersion.cmake"
++DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/ggvvamp
++)
+\ No newline at end of file
+diff -Naur ORIG/ggvvamp.h PATCHED/ggvvamp.h
+--- ORIG/ggvvamp.h	2024-10-24 16:53:53.868991202 +0200
++++ PATCHED/ggvvamp.h	2024-10-24 16:53:15.037288932 +0200
+@@ -26,10 +26,16 @@
+ #endif
+ 
+ #ifdef QUAD_PRECISION
++#ifdef __ARM_ARCH 
++typedef _Float128 quadtype;
++#define quadmath_snprintf snprintf
++#define strtoflt128  strtof128
++#else
+ extern "C" {
+ #include <quadmath.h>
+ }
+ typedef __float128 quadtype;
++#endif
+ #include <ostream>
+ #endif
+ 
+diff -Naur ORIG/p0002.cpp PATCHED/p0002.cpp
+--- ORIG/p0002.cpp	2024-10-24 17:05:20.720653827 +0200
++++ PATCHED/p0002.cpp	2024-10-24 17:07:07.534807218 +0200
+@@ -1,5 +1,11 @@
+ #include "ggvvamp.h"
+ #include <ginac/ginac.h>
++#include <ginac/version.h>
++#if (GINACLIB_MAJOR_VERSION  == 1) && (GINACLIB_MINOR_VERSION  > 7 )
++#define LST(a,b) lst{a,b}
++#else
++#define LST(a,b) lst(a,b)
++#endif
+ 
+ using namespace GiNaC;
+ 
+@@ -697,407 +703,407 @@
+ r[695] = r[56]*r[628];
+ r[696] = r[57]*r[628];
+ // calculate multiple polylogarithms
+-r[697] = n(Li(lst(2,2),lst(tonumeric(r[39]),tonumeric(r[203]))));
+-r[698] = n(Li(lst(2,2),lst(tonumeric(r[39]),tonumeric(r[530]))));
+-r[699] = n(Li(lst(2,2),lst(tonumeric(r[39]),tonumeric(r[686]))));
+-r[700] = n(Li(lst(2,2),lst(tonumeric(r[39]),tonumeric(r[412]))));
+-r[701] = n(Li(lst(2,2),lst(tonumeric(r[42]),tonumeric(r[189]))));
+-r[702] = n(Li(lst(2,2),lst(tonumeric(r[42]),tonumeric(r[486]))));
+-r[703] = n(Li(lst(2,2),lst(tonumeric(r[42]),tonumeric(r[690]))));
+-r[704] = n(Li(lst(2,2),lst(tonumeric(r[42]),tonumeric(r[411]))));
+-r[705] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[17]))));
+-r[706] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[20]))));
+-r[707] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[220]))));
+-r[708] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[224]))));
+-r[709] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[81]))));
+-r[710] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[82]))));
+-r[711] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[423]))));
+-r[712] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[421]))));
+-r[713] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[189]))));
+-r[714] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[381]))));
+-r[715] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[203]))));
+-r[716] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[404]))));
+-r[717] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[180]))));
+-r[718] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[212]))));
+-r[719] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[80]))));
+-r[720] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[567]))));
+-r[721] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[620]))));
+-r[722] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[581]))));
+-r[723] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[608]))));
+-r[724] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[16]))));
+-r[725] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[411]))));
+-r[726] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[412]))));
+-r[727] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[384]))));
+-r[728] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[385]))));
+-r[729] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[408]))));
+-r[730] = n(Li(lst(2,2),lst(tonumeric(r[29]),tonumeric(r[409]))));
+-r[731] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[361]))));
+-r[732] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[362]))));
+-r[733] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[376]))));
+-r[734] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[378]))));
+-r[735] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[11]))));
+-r[736] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[380]))));
+-r[737] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[13]))));
+-r[738] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[387]))));
+-r[739] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[389]))));
+-r[740] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[366]))));
+-r[741] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[14]))));
+-r[742] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[395]))));
+-r[743] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[397]))));
+-r[744] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[369]))));
+-r[745] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[133]))));
+-r[746] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[122]))));
+-r[747] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[405]))));
+-r[748] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[192]))));
+-r[749] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[204]))));
+-r[750] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[360]))));
+-r[751] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[624]))));
+-r[752] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[446]))));
+-r[753] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[613]))));
+-r[754] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[458]))));
+-r[755] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[500]))));
+-r[756] = n(Li(lst(2,2),lst(tonumeric(r[70]),tonumeric(r[511]))));
+-r[757] = n(Li(lst(2,2),lst(tonumeric(r[178]),tonumeric(r[382]))));
+-r[758] = n(Li(lst(2,2),lst(tonumeric(r[210]),tonumeric(r[406]))));
+-r[759] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[181]))));
+-r[760] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[213]))));
+-r[761] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[215]))));
+-r[762] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[207]))));
+-r[763] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[183]))));
+-r[764] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[195]))));
+-r[765] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[579]))));
+-r[766] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[566]))));
+-r[767] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[607]))));
+-r[768] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[611]))));
+-r[769] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[619]))));
+-r[770] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[623]))));
+-r[771] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[32]))));
+-r[772] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[113]))));
+-r[773] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[36]))));
+-r[774] = n(Li(lst(2,2),lst(tonumeric(r[10]),tonumeric(r[153]))));
+-r[775] = n(Li(lst(2,2),lst(tonumeric(r[312]),tonumeric(r[558]))));
+-r[776] = n(Li(lst(2,2),lst(tonumeric(r[312]),tonumeric(r[597]))));
+-r[777] = n(Li(lst(2,2),lst(tonumeric(r[312]),tonumeric(r[586]))));
+-r[778] = n(Li(lst(2,2),lst(tonumeric(r[312]),tonumeric(r[531]))));
+-r[779] = n(Li(lst(2,2),lst(tonumeric(r[312]),tonumeric(r[686]))));
+-r[780] = n(Li(lst(2,2),lst(tonumeric(r[312]),tonumeric(r[414]))));
+-r[781] = n(Li(lst(2,2),lst(tonumeric(r[313]),tonumeric(r[549]))));
+-r[782] = n(Li(lst(2,2),lst(tonumeric(r[313]),tonumeric(r[591]))));
+-r[783] = n(Li(lst(2,2),lst(tonumeric(r[313]),tonumeric(r[551]))));
+-r[784] = n(Li(lst(2,2),lst(tonumeric(r[313]),tonumeric(r[485]))));
+-r[785] = n(Li(lst(2,2),lst(tonumeric(r[313]),tonumeric(r[690]))));
+-r[786] = n(Li(lst(2,2),lst(tonumeric(r[313]),tonumeric(r[413]))));
+-r[787] = n(Li(lst(2,2),lst(tonumeric(r[361]),tonumeric(r[558]))));
+-r[788] = n(Li(lst(2,2),lst(tonumeric(r[361]),tonumeric(r[599]))));
+-r[789] = n(Li(lst(2,2),lst(tonumeric(r[361]),tonumeric(r[484]))));
+-r[790] = n(Li(lst(2,2),lst(tonumeric(r[361]),tonumeric(r[13]))));
+-r[791] = n(Li(lst(2,2),lst(tonumeric(r[361]),tonumeric(r[686]))));
+-r[792] = n(Li(lst(2,2),lst(tonumeric(r[362]),tonumeric(r[549]))));
+-r[793] = n(Li(lst(2,2),lst(tonumeric(r[362]),tonumeric(r[593]))));
+-r[794] = n(Li(lst(2,2),lst(tonumeric(r[362]),tonumeric(r[14]))));
+-r[795] = n(Li(lst(2,2),lst(tonumeric(r[362]),tonumeric(r[532]))));
+-r[796] = n(Li(lst(2,2),lst(tonumeric(r[362]),tonumeric(r[690]))));
+-r[797] = n(Li(lst(2,2),lst(tonumeric(r[362]),tonumeric(r[167]))));
+-r[798] = n(Li(lst(2,2),lst(tonumeric(r[11]),tonumeric(r[121]))));
+-r[799] = n(Li(lst(2,2),lst(tonumeric(r[11]),tonumeric(r[132]))));
+-r[800] = n(Li(lst(2,2),lst(tonumeric(r[11]),tonumeric(r[520]))));
+-r[801] = n(Li(lst(2,2),lst(tonumeric(r[11]),tonumeric(r[508]))));
+-r[802] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[121]))));
+-r[803] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[390]))));
+-r[804] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[391]))));
+-r[805] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[647]))));
+-r[806] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[672]))));
+-r[807] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[432]))));
+-r[808] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[132]))));
+-r[809] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[398]))));
+-r[810] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[400]))));
+-r[811] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[648]))));
+-r[812] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[675]))));
+-r[813] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[520]))));
+-r[814] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[508]))));
+-r[815] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[439]))));
+-r[816] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[506]))));
+-r[817] = n(Li(lst(2,2),lst(tonumeric(r[326]),tonumeric(r[517]))));
+-r[818] = n(Li(lst(2,2),lst(tonumeric(r[91]),tonumeric(r[181]))));
+-r[819] = n(Li(lst(2,2),lst(tonumeric(r[91]),tonumeric(r[566]))));
+-r[820] = n(Li(lst(2,2),lst(tonumeric(r[91]),tonumeric(r[562]))));
+-r[821] = n(Li(lst(2,2),lst(tonumeric(r[91]),tonumeric(r[486]))));
+-r[822] = n(Li(lst(2,2),lst(tonumeric(r[91]),tonumeric(r[483]))));
+-r[823] = n(Li(lst(2,2),lst(tonumeric(r[91]),tonumeric(r[484]))));
+-r[824] = n(Li(lst(2,2),lst(tonumeric(r[91]),tonumeric(r[381]))));
+-r[825] = n(Li(lst(2,2),lst(tonumeric(r[91]),tonumeric(r[485]))));
+-r[826] = n(Li(lst(2,2),lst(tonumeric(r[91]),tonumeric(r[180]))));
+-r[827] = n(Li(lst(2,2),lst(tonumeric(r[91]),tonumeric(r[482]))));
+-r[828] = n(Li(lst(2,2),lst(tonumeric(r[12]),tonumeric(r[183]))));
+-r[829] = n(Li(lst(2,2),lst(tonumeric(r[12]),tonumeric(r[195]))));
+-r[830] = n(Li(lst(2,2),lst(tonumeric(r[12]),tonumeric(r[568]))));
+-r[831] = n(Li(lst(2,2),lst(tonumeric(r[12]),tonumeric(r[621]))));
+-r[832] = n(Li(lst(2,2),lst(tonumeric(r[12]),tonumeric(r[625]))));
+-r[833] = n(Li(lst(2,2),lst(tonumeric(r[12]),tonumeric(r[447]))));
+-r[834] = n(Li(lst(2,2),lst(tonumeric(r[327]),tonumeric(r[462]))));
+-r[835] = n(Li(lst(2,2),lst(tonumeric(r[327]),tonumeric(r[493]))));
+-r[836] = n(Li(lst(2,2),lst(tonumeric(r[327]),tonumeric(r[639]))));
+-r[837] = n(Li(lst(2,2),lst(tonumeric(r[327]),tonumeric(r[687]))));
+-r[838] = n(Li(lst(2,2),lst(tonumeric(r[327]),tonumeric(r[653]))));
+-r[839] = n(Li(lst(2,2),lst(tonumeric(r[116]),tonumeric(r[629]))));
+-r[840] = n(Li(lst(2,2),lst(tonumeric(r[116]),tonumeric(r[493]))));
+-r[841] = n(Li(lst(2,2),lst(tonumeric(r[116]),tonumeric(r[639]))));
+-r[842] = n(Li(lst(2,2),lst(tonumeric(r[116]),tonumeric(r[492]))));
+-r[843] = n(Li(lst(2,2),lst(tonumeric(r[116]),tonumeric(r[688]))));
+-r[844] = n(Li(lst(2,2),lst(tonumeric(r[116]),tonumeric(r[385]))));
+-r[845] = n(Li(lst(2,2),lst(tonumeric(r[380]),tonumeric(r[462]))));
+-r[846] = n(Li(lst(2,2),lst(tonumeric(r[380]),tonumeric(r[522]))));
+-r[847] = n(Li(lst(2,2),lst(tonumeric(r[13]),tonumeric(r[39]))));
+-r[848] = n(Li(lst(2,2),lst(tonumeric(r[13]),tonumeric(r[82]))));
+-r[849] = n(Li(lst(2,2),lst(tonumeric(r[13]),tonumeric(r[312]))));
+-r[850] = n(Li(lst(2,2),lst(tonumeric(r[13]),tonumeric(r[31]))));
+-r[851] = n(Li(lst(2,2),lst(tonumeric(r[13]),tonumeric(r[588]))));
+-r[852] = n(Li(lst(2,2),lst(tonumeric(r[13]),tonumeric(r[104]))));
+-r[853] = n(Li(lst(2,2),lst(tonumeric(r[13]),tonumeric(r[154]))));
+-r[854] = n(Li(lst(2,2),lst(tonumeric(r[13]),tonumeric(r[580]))));
+-r[855] = n(Li(lst(2,2),lst(tonumeric(r[13]),tonumeric(r[168]))));
+-r[856] = n(Li(lst(2,2),lst(tonumeric(r[126]),tonumeric(r[204]))));
+-r[857] = n(Li(lst(2,2),lst(tonumeric(r[126]),tonumeric(r[581]))));
+-r[858] = n(Li(lst(2,2),lst(tonumeric(r[329]),tonumeric(r[589]))));
+-r[859] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[425]))));
+-r[860] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[91]))));
+-r[861] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[34]))));
+-r[862] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[584]))));
+-r[863] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[104]))));
+-r[864] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[397]))));
+-r[865] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[36]))));
+-r[866] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[410]))));
+-r[867] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[580]))));
+-r[868] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[667]))));
+-r[869] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[522]))));
+-r[870] = n(Li(lst(2,2),lst(tonumeric(r[328]),tonumeric(r[414]))));
+-r[871] = n(Li(lst(2,2),lst(tonumeric(r[633]),tonumeric(r[113]))));
+-r[872] = n(Li(lst(2,2),lst(tonumeric(r[633]),tonumeric(r[654]))));
+-r[873] = n(Li(lst(2,2),lst(tonumeric(r[14]),tonumeric(r[42]))));
+-r[874] = n(Li(lst(2,2),lst(tonumeric(r[14]),tonumeric(r[81]))));
+-r[875] = n(Li(lst(2,2),lst(tonumeric(r[14]),tonumeric(r[313]))));
+-r[876] = n(Li(lst(2,2),lst(tonumeric(r[14]),tonumeric(r[556]))));
+-r[877] = n(Li(lst(2,2),lst(tonumeric(r[14]),tonumeric(r[105]))));
+-r[878] = n(Li(lst(2,2),lst(tonumeric(r[14]),tonumeric(r[115]))));
+-r[879] = n(Li(lst(2,2),lst(tonumeric(r[14]),tonumeric(r[569]))));
+-r[880] = n(Li(lst(2,2),lst(tonumeric(r[14]),tonumeric(r[167]))));
+-r[881] = n(Li(lst(2,2),lst(tonumeric(r[345]),tonumeric(r[178]))));
+-r[882] = n(Li(lst(2,2),lst(tonumeric(r[345]),tonumeric(r[555]))));
+-r[883] = n(Li(lst(2,2),lst(tonumeric(r[138]),tonumeric(r[567]))));
+-r[884] = n(Li(lst(2,2),lst(tonumeric(r[344]),tonumeric(r[32]))));
+-r[885] = n(Li(lst(2,2),lst(tonumeric(r[344]),tonumeric(r[389]))));
+-r[886] = n(Li(lst(2,2),lst(tonumeric(r[344]),tonumeric(r[35]))));
+-r[887] = n(Li(lst(2,2),lst(tonumeric(r[344]),tonumeric(r[553]))));
+-r[888] = n(Li(lst(2,2),lst(tonumeric(r[344]),tonumeric(r[105]))));
+-r[889] = n(Li(lst(2,2),lst(tonumeric(r[344]),tonumeric(r[386]))));
+-r[890] = n(Li(lst(2,2),lst(tonumeric(r[344]),tonumeric(r[94]))));
+-r[891] = n(Li(lst(2,2),lst(tonumeric(r[344]),tonumeric(r[569]))));
+-r[892] = n(Li(lst(2,2),lst(tonumeric(r[344]),tonumeric(r[666]))));
+-r[893] = n(Li(lst(2,2),lst(tonumeric(r[344]),tonumeric(r[510]))));
+-r[894] = n(Li(lst(2,2),lst(tonumeric(r[344]),tonumeric(r[413]))));
+-r[895] = n(Li(lst(2,2),lst(tonumeric(r[349]),tonumeric(r[12]))));
+-r[896] = n(Li(lst(2,2),lst(tonumeric(r[349]),tonumeric(r[626]))));
+-r[897] = n(Li(lst(2,2),lst(tonumeric(r[349]),tonumeric(r[653]))));
+-r[898] = n(Li(lst(2,2),lst(tonumeric(r[520]),tonumeric(r[474]))));
+-r[899] = n(Li(lst(2,2),lst(tonumeric(r[520]),tonumeric(r[475]))));
+-r[900] = n(Li(lst(2,2),lst(tonumeric(r[94]),tonumeric(r[213]))));
+-r[901] = n(Li(lst(2,2),lst(tonumeric(r[94]),tonumeric(r[579]))));
+-r[902] = n(Li(lst(2,2),lst(tonumeric(r[94]),tonumeric(r[575]))));
+-r[903] = n(Li(lst(2,2),lst(tonumeric(r[94]),tonumeric(r[32]))));
+-r[904] = n(Li(lst(2,2),lst(tonumeric(r[94]),tonumeric(r[530]))));
+-r[905] = n(Li(lst(2,2),lst(tonumeric(r[94]),tonumeric(r[533]))));
+-r[906] = n(Li(lst(2,2),lst(tonumeric(r[94]),tonumeric(r[532]))));
+-r[907] = n(Li(lst(2,2),lst(tonumeric(r[94]),tonumeric(r[404]))));
+-r[908] = n(Li(lst(2,2),lst(tonumeric(r[94]),tonumeric(r[531]))));
+-r[909] = n(Li(lst(2,2),lst(tonumeric(r[94]),tonumeric(r[212]))));
+-r[910] = n(Li(lst(2,2),lst(tonumeric(r[94]),tonumeric(r[529]))));
+-r[911] = n(Li(lst(2,2),lst(tonumeric(r[343]),tonumeric(r[15]))));
+-r[912] = n(Li(lst(2,2),lst(tonumeric(r[343]),tonumeric(r[467]))));
+-r[913] = n(Li(lst(2,2),lst(tonumeric(r[343]),tonumeric(r[612]))));
+-r[914] = n(Li(lst(2,2),lst(tonumeric(r[343]),tonumeric(r[659]))));
+-r[915] = n(Li(lst(2,2),lst(tonumeric(r[508]),tonumeric(r[472]))));
+-r[916] = n(Li(lst(2,2),lst(tonumeric(r[508]),tonumeric(r[473]))));
+-r[917] = n(Li(lst(2,2),lst(tonumeric(r[634]),tonumeric(r[153]))));
+-r[918] = n(Li(lst(2,2),lst(tonumeric(r[634]),tonumeric(r[660]))));
+-r[919] = n(Li(lst(2,2),lst(tonumeric(r[15]),tonumeric(r[215]))));
+-r[920] = n(Li(lst(2,2),lst(tonumeric(r[15]),tonumeric(r[207]))));
+-r[921] = n(Li(lst(2,2),lst(tonumeric(r[15]),tonumeric(r[582]))));
+-r[922] = n(Li(lst(2,2),lst(tonumeric(r[15]),tonumeric(r[609]))));
+-r[923] = n(Li(lst(2,2),lst(tonumeric(r[15]),tonumeric(r[614]))));
+-r[924] = n(Li(lst(2,2),lst(tonumeric(r[15]),tonumeric(r[459]))));
+-r[925] = n(Li(lst(2,2),lst(tonumeric(r[15]),tonumeric(r[122]))));
+-r[926] = n(Li(lst(2,2),lst(tonumeric(r[156]),tonumeric(r[630]))));
+-r[927] = n(Li(lst(2,2),lst(tonumeric(r[156]),tonumeric(r[640]))));
+-r[928] = n(Li(lst(2,2),lst(tonumeric(r[156]),tonumeric(r[495]))));
+-r[929] = n(Li(lst(2,2),lst(tonumeric(r[156]),tonumeric(r[492]))));
+-r[930] = n(Li(lst(2,2),lst(tonumeric(r[156]),tonumeric(r[691]))));
+-r[931] = n(Li(lst(2,2),lst(tonumeric(r[156]),tonumeric(r[409]))));
+-r[932] = n(Li(lst(2,2),lst(tonumeric(r[350]),tonumeric(r[466]))));
+-r[933] = n(Li(lst(2,2),lst(tonumeric(r[350]),tonumeric(r[640]))));
+-r[934] = n(Li(lst(2,2),lst(tonumeric(r[350]),tonumeric(r[495]))));
+-r[935] = n(Li(lst(2,2),lst(tonumeric(r[350]),tonumeric(r[692]))));
+-r[936] = n(Li(lst(2,2),lst(tonumeric(r[350]),tonumeric(r[659]))));
+-r[937] = n(Li(lst(2,2),lst(tonumeric(r[405]),tonumeric(r[466]))));
+-r[938] = n(Li(lst(2,2),lst(tonumeric(r[405]),tonumeric(r[510]))));
+-r[939] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[178]))));
+-r[940] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[210]))));
+-r[941] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[563]))));
+-r[942] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[616]))));
+-r[943] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[13]))));
+-r[944] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[387]))));
+-r[945] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[14]))));
+-r[946] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[395]))));
+-r[947] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[133]))));
+-r[948] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[577]))));
+-r[949] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[605]))));
+-r[950] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[122]))));
+-r[951] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[166]))));
+-r[952] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[169]))));
+-r[953] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[539]))));
+-r[954] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[537]))));
+-r[955] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[477]))));
+-r[956] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[499]))));
+-r[957] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[500]))));
+-r[958] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[502]))));
+-r[959] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[511]))));
+-r[960] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[512]))));
+-r[961] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[515]))));
+-r[962] = n(Li(lst(2,2),lst(tonumeric(r[38]),tonumeric(r[524]))));
+-r[963] = n(Li(lst(2,2),lst(tonumeric(r[192]),tonumeric(r[479]))));
+-r[964] = n(Li(lst(2,2),lst(tonumeric(r[204]),tonumeric(r[526]))));
+-r[965] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[79]))));
+-r[966] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[560]))));
+-r[967] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[573]))));
+-r[968] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[591]))));
+-r[969] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[597]))));
+-r[970] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[562]))));
+-r[971] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[575]))));
+-r[972] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[551]))));
+-r[973] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[555]))));
+-r[974] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[622]))));
+-r[975] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[586]))));
+-r[976] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[589]))));
+-r[977] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[610]))));
+-r[978] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[167]))));
+-r[979] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[168]))));
+-r[980] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[535]))));
+-r[981] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[541]))));
+-r[982] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[413]))));
+-r[983] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[414]))));
+-r[984] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[546]))));
+-r[985] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[653]))));
+-r[986] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[482]))));
+-r[987] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[654]))));
+-r[988] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[659]))));
+-r[989] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[529]))));
+-r[990] = n(Li(lst(2,2),lst(tonumeric(r[311]),tonumeric(r[660]))));
+-r[991] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[562]))));
+-r[992] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[575]))));
+-r[993] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[593]))));
+-r[994] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[599]))));
+-r[995] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[555]))));
+-r[996] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[622]))));
+-r[997] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[589]))));
+-r[998] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[610]))));
+-r[999] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[167]))));
+-r[1000] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[168]))));
+-r[1001] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[535]))));
+-r[1002] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[541]))));
+-r[1003] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[479]))));
+-r[1004] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[482]))));
+-r[1005] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[526]))));
+-r[1006] = n(Li(lst(2,2),lst(tonumeric(r[360]),tonumeric(r[529]))));
+-r[1007] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[121]))));
+-r[1008] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[390]))));
+-r[1009] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[432]))));
+-r[1010] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[132]))));
+-r[1011] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[398]))));
+-r[1012] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[520]))));
+-r[1013] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[508]))));
+-r[1014] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[439]))));
+-r[1015] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[505]))));
+-r[1016] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[506]))));
+-r[1017] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[507]))));
+-r[1018] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[517]))));
+-r[1019] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[518]))));
+-r[1020] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[519]))));
+-r[1021] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[509]))));
+-r[1022] = n(Li(lst(2,2),lst(tonumeric(r[106]),tonumeric(r[521]))));
+-r[1023] = n(Li(lst(2,2),lst(tonumeric(r[123]),tonumeric(r[91]))));
+-r[1024] = n(Li(lst(2,2),lst(tonumeric(r[123]),tonumeric(r[34]))));
+-r[1025] = n(Li(lst(2,2),lst(tonumeric(r[123]),tonumeric(r[201]))));
+-r[1026] = n(Li(lst(2,2),lst(tonumeric(r[123]),tonumeric(r[104]))));
+-r[1027] = n(Li(lst(2,2),lst(tonumeric(r[123]),tonumeric(r[349]))));
+-r[1028] = n(Li(lst(2,2),lst(tonumeric(r[123]),tonumeric(r[36]))));
+-r[1029] = n(Li(lst(2,2),lst(tonumeric(r[123]),tonumeric(r[166]))));
+-r[1030] = n(Li(lst(2,2),lst(tonumeric(r[123]),tonumeric(r[542]))));
+-r[1031] = n(Li(lst(2,2),lst(tonumeric(r[123]),tonumeric(r[515]))));
+-r[1032] = n(Li(lst(2,2),lst(tonumeric(r[123]),tonumeric(r[523]))));
+-r[1033] = n(Li(lst(2,2),lst(tonumeric(r[394]),tonumeric(r[471]))));
+-r[1034] = n(Li(lst(2,2),lst(tonumeric(r[394]),tonumeric(r[523]))));
+-r[1035] = n(Li(lst(2,2),lst(tonumeric(r[434]),tonumeric(r[113]))));
+-r[1036] = n(Li(lst(2,2),lst(tonumeric(r[434]),tonumeric(r[384]))));
+-r[1037] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[32]))));
+-r[1038] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[35]))));
+-r[1039] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[191]))));
+-r[1040] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[105]))));
+-r[1041] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[94]))));
+-r[1042] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[343]))));
+-r[1043] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[169]))));
+-r[1044] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[411]))));
+-r[1045] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[164]))));
+-r[1046] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[502]))));
+-r[1047] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[536]))));
+-r[1048] = n(Li(lst(2,2),lst(tonumeric(r[136]),tonumeric(r[476]))));
+-r[1049] = n(Li(lst(2,2),lst(tonumeric(r[402]),tonumeric(r[468]))));
+-r[1050] = n(Li(lst(2,2),lst(tonumeric(r[402]),tonumeric(r[476]))));
+-r[1051] = n(Li(lst(2,2),lst(tonumeric(r[522]),tonumeric(r[12]))));
+-r[1052] = n(Li(lst(2,2),lst(tonumeric(r[522]),tonumeric(r[617]))));
+-r[1053] = n(Li(lst(2,2),lst(tonumeric(r[522]),tonumeric(r[385]))));
+-r[1054] = n(Li(lst(2,2),lst(tonumeric(r[510]),tonumeric(r[604]))));
+-r[1055] = n(Li(lst(2,2),lst(tonumeric(r[510]),tonumeric(r[15]))));
+-r[1056] = n(Li(lst(2,2),lst(tonumeric(r[510]),tonumeric(r[409]))));
+-r[1057] = n(Li(lst(2,2),lst(tonumeric(r[441]),tonumeric(r[153]))));
+-r[1058] = n(Li(lst(2,2),lst(tonumeric(r[441]),tonumeric(r[408]))));
+-r[1059] = n(Li(lst(2,2),lst(tonumeric(r[166]),tonumeric(r[549]))));
+-r[1060] = n(Li(lst(2,2),lst(tonumeric(r[166]),tonumeric(r[82]))));
+-r[1061] = n(Li(lst(2,2),lst(tonumeric(r[166]),tonumeric(r[483]))));
+-r[1062] = n(Li(lst(2,2),lst(tonumeric(r[166]),tonumeric(r[13]))));
+-r[1063] = n(Li(lst(2,2),lst(tonumeric(r[166]),tonumeric(r[595]))));
+-r[1064] = n(Li(lst(2,2),lst(tonumeric(r[166]),tonumeric(r[686]))));
+-r[1065] = n(Li(lst(2,2),lst(tonumeric(r[169]),tonumeric(r[558]))));
+-r[1066] = n(Li(lst(2,2),lst(tonumeric(r[169]),tonumeric(r[14]))));
+-r[1067] = n(Li(lst(2,2),lst(tonumeric(r[169]),tonumeric(r[533]))));
+-r[1068] = n(Li(lst(2,2),lst(tonumeric(r[169]),tonumeric(r[600]))));
+-r[1069] = n(Li(lst(2,2),lst(tonumeric(r[169]),tonumeric(r[690]))));
+-r[1070] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[81]))));
+-r[1071] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[82]))));
+-r[1072] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[423]))));
+-r[1073] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[421]))));
+-r[1074] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[381]))));
+-r[1075] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[382]))));
+-r[1076] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[404]))));
+-r[1077] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[406]))));
+-r[1078] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[180]))));
+-r[1079] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[212]))));
+-r[1080] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[595]))));
+-r[1081] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[600]))));
+-r[1082] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[567]))));
+-r[1083] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[620]))));
+-r[1084] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[581]))));
+-r[1085] = n(Li(lst(2,2),lst(tonumeric(r[163]),tonumeric(r[608]))));
+-r[1086] = n(Li(lst(2,2),lst(tonumeric(r[477]),tonumeric(r[629]))));
+-r[1087] = n(Li(lst(2,2),lst(tonumeric(r[477]),tonumeric(r[349]))));
+-r[1088] = n(Li(lst(2,2),lst(tonumeric(r[500]),tonumeric(r[206]))));
+-r[1089] = n(Li(lst(2,2),lst(tonumeric(r[643]),tonumeric(r[410]))));
+-r[1090] = n(Li(lst(2,2),lst(tonumeric(r[643]),tonumeric(r[580]))));
+-r[1091] = n(Li(lst(2,2),lst(tonumeric(r[643]),tonumeric(r[470]))));
+-r[1092] = n(Li(lst(2,2),lst(tonumeric(r[511]),tonumeric(r[194]))));
+-r[1093] = n(Li(lst(2,2),lst(tonumeric(r[644]),tonumeric(r[386]))));
+-r[1094] = n(Li(lst(2,2),lst(tonumeric(r[644]),tonumeric(r[569]))));
+-r[1095] = n(Li(lst(2,2),lst(tonumeric(r[644]),tonumeric(r[469]))));
+-r[1096] = n(Li(lst(2,2),lst(tonumeric(r[524]),tonumeric(r[630]))));
+-r[1097] = n(Li(lst(2,2),lst(tonumeric(r[524]),tonumeric(r[343]))));
++r[697] = n(Li(LST(2,2),LST(tonumeric(r[39]),tonumeric(r[203]))));
++r[698] = n(Li(LST(2,2),LST(tonumeric(r[39]),tonumeric(r[530]))));
++r[699] = n(Li(LST(2,2),LST(tonumeric(r[39]),tonumeric(r[686]))));
++r[700] = n(Li(LST(2,2),LST(tonumeric(r[39]),tonumeric(r[412]))));
++r[701] = n(Li(LST(2,2),LST(tonumeric(r[42]),tonumeric(r[189]))));
++r[702] = n(Li(LST(2,2),LST(tonumeric(r[42]),tonumeric(r[486]))));
++r[703] = n(Li(LST(2,2),LST(tonumeric(r[42]),tonumeric(r[690]))));
++r[704] = n(Li(LST(2,2),LST(tonumeric(r[42]),tonumeric(r[411]))));
++r[705] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[17]))));
++r[706] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[20]))));
++r[707] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[220]))));
++r[708] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[224]))));
++r[709] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[81]))));
++r[710] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[82]))));
++r[711] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[423]))));
++r[712] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[421]))));
++r[713] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[189]))));
++r[714] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[381]))));
++r[715] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[203]))));
++r[716] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[404]))));
++r[717] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[180]))));
++r[718] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[212]))));
++r[719] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[80]))));
++r[720] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[567]))));
++r[721] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[620]))));
++r[722] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[581]))));
++r[723] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[608]))));
++r[724] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[16]))));
++r[725] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[411]))));
++r[726] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[412]))));
++r[727] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[384]))));
++r[728] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[385]))));
++r[729] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[408]))));
++r[730] = n(Li(LST(2,2),LST(tonumeric(r[29]),tonumeric(r[409]))));
++r[731] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[361]))));
++r[732] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[362]))));
++r[733] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[376]))));
++r[734] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[378]))));
++r[735] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[11]))));
++r[736] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[380]))));
++r[737] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[13]))));
++r[738] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[387]))));
++r[739] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[389]))));
++r[740] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[366]))));
++r[741] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[14]))));
++r[742] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[395]))));
++r[743] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[397]))));
++r[744] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[369]))));
++r[745] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[133]))));
++r[746] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[122]))));
++r[747] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[405]))));
++r[748] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[192]))));
++r[749] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[204]))));
++r[750] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[360]))));
++r[751] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[624]))));
++r[752] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[446]))));
++r[753] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[613]))));
++r[754] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[458]))));
++r[755] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[500]))));
++r[756] = n(Li(LST(2,2),LST(tonumeric(r[70]),tonumeric(r[511]))));
++r[757] = n(Li(LST(2,2),LST(tonumeric(r[178]),tonumeric(r[382]))));
++r[758] = n(Li(LST(2,2),LST(tonumeric(r[210]),tonumeric(r[406]))));
++r[759] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[181]))));
++r[760] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[213]))));
++r[761] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[215]))));
++r[762] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[207]))));
++r[763] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[183]))));
++r[764] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[195]))));
++r[765] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[579]))));
++r[766] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[566]))));
++r[767] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[607]))));
++r[768] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[611]))));
++r[769] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[619]))));
++r[770] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[623]))));
++r[771] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[32]))));
++r[772] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[113]))));
++r[773] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[36]))));
++r[774] = n(Li(LST(2,2),LST(tonumeric(r[10]),tonumeric(r[153]))));
++r[775] = n(Li(LST(2,2),LST(tonumeric(r[312]),tonumeric(r[558]))));
++r[776] = n(Li(LST(2,2),LST(tonumeric(r[312]),tonumeric(r[597]))));
++r[777] = n(Li(LST(2,2),LST(tonumeric(r[312]),tonumeric(r[586]))));
++r[778] = n(Li(LST(2,2),LST(tonumeric(r[312]),tonumeric(r[531]))));
++r[779] = n(Li(LST(2,2),LST(tonumeric(r[312]),tonumeric(r[686]))));
++r[780] = n(Li(LST(2,2),LST(tonumeric(r[312]),tonumeric(r[414]))));
++r[781] = n(Li(LST(2,2),LST(tonumeric(r[313]),tonumeric(r[549]))));
++r[782] = n(Li(LST(2,2),LST(tonumeric(r[313]),tonumeric(r[591]))));
++r[783] = n(Li(LST(2,2),LST(tonumeric(r[313]),tonumeric(r[551]))));
++r[784] = n(Li(LST(2,2),LST(tonumeric(r[313]),tonumeric(r[485]))));
++r[785] = n(Li(LST(2,2),LST(tonumeric(r[313]),tonumeric(r[690]))));
++r[786] = n(Li(LST(2,2),LST(tonumeric(r[313]),tonumeric(r[413]))));
++r[787] = n(Li(LST(2,2),LST(tonumeric(r[361]),tonumeric(r[558]))));
++r[788] = n(Li(LST(2,2),LST(tonumeric(r[361]),tonumeric(r[599]))));
++r[789] = n(Li(LST(2,2),LST(tonumeric(r[361]),tonumeric(r[484]))));
++r[790] = n(Li(LST(2,2),LST(tonumeric(r[361]),tonumeric(r[13]))));
++r[791] = n(Li(LST(2,2),LST(tonumeric(r[361]),tonumeric(r[686]))));
++r[792] = n(Li(LST(2,2),LST(tonumeric(r[362]),tonumeric(r[549]))));
++r[793] = n(Li(LST(2,2),LST(tonumeric(r[362]),tonumeric(r[593]))));
++r[794] = n(Li(LST(2,2),LST(tonumeric(r[362]),tonumeric(r[14]))));
++r[795] = n(Li(LST(2,2),LST(tonumeric(r[362]),tonumeric(r[532]))));
++r[796] = n(Li(LST(2,2),LST(tonumeric(r[362]),tonumeric(r[690]))));
++r[797] = n(Li(LST(2,2),LST(tonumeric(r[362]),tonumeric(r[167]))));
++r[798] = n(Li(LST(2,2),LST(tonumeric(r[11]),tonumeric(r[121]))));
++r[799] = n(Li(LST(2,2),LST(tonumeric(r[11]),tonumeric(r[132]))));
++r[800] = n(Li(LST(2,2),LST(tonumeric(r[11]),tonumeric(r[520]))));
++r[801] = n(Li(LST(2,2),LST(tonumeric(r[11]),tonumeric(r[508]))));
++r[802] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[121]))));
++r[803] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[390]))));
++r[804] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[391]))));
++r[805] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[647]))));
++r[806] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[672]))));
++r[807] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[432]))));
++r[808] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[132]))));
++r[809] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[398]))));
++r[810] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[400]))));
++r[811] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[648]))));
++r[812] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[675]))));
++r[813] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[520]))));
++r[814] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[508]))));
++r[815] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[439]))));
++r[816] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[506]))));
++r[817] = n(Li(LST(2,2),LST(tonumeric(r[326]),tonumeric(r[517]))));
++r[818] = n(Li(LST(2,2),LST(tonumeric(r[91]),tonumeric(r[181]))));
++r[819] = n(Li(LST(2,2),LST(tonumeric(r[91]),tonumeric(r[566]))));
++r[820] = n(Li(LST(2,2),LST(tonumeric(r[91]),tonumeric(r[562]))));
++r[821] = n(Li(LST(2,2),LST(tonumeric(r[91]),tonumeric(r[486]))));
++r[822] = n(Li(LST(2,2),LST(tonumeric(r[91]),tonumeric(r[483]))));
++r[823] = n(Li(LST(2,2),LST(tonumeric(r[91]),tonumeric(r[484]))));
++r[824] = n(Li(LST(2,2),LST(tonumeric(r[91]),tonumeric(r[381]))));
++r[825] = n(Li(LST(2,2),LST(tonumeric(r[91]),tonumeric(r[485]))));
++r[826] = n(Li(LST(2,2),LST(tonumeric(r[91]),tonumeric(r[180]))));
++r[827] = n(Li(LST(2,2),LST(tonumeric(r[91]),tonumeric(r[482]))));
++r[828] = n(Li(LST(2,2),LST(tonumeric(r[12]),tonumeric(r[183]))));
++r[829] = n(Li(LST(2,2),LST(tonumeric(r[12]),tonumeric(r[195]))));
++r[830] = n(Li(LST(2,2),LST(tonumeric(r[12]),tonumeric(r[568]))));
++r[831] = n(Li(LST(2,2),LST(tonumeric(r[12]),tonumeric(r[621]))));
++r[832] = n(Li(LST(2,2),LST(tonumeric(r[12]),tonumeric(r[625]))));
++r[833] = n(Li(LST(2,2),LST(tonumeric(r[12]),tonumeric(r[447]))));
++r[834] = n(Li(LST(2,2),LST(tonumeric(r[327]),tonumeric(r[462]))));
++r[835] = n(Li(LST(2,2),LST(tonumeric(r[327]),tonumeric(r[493]))));
++r[836] = n(Li(LST(2,2),LST(tonumeric(r[327]),tonumeric(r[639]))));
++r[837] = n(Li(LST(2,2),LST(tonumeric(r[327]),tonumeric(r[687]))));
++r[838] = n(Li(LST(2,2),LST(tonumeric(r[327]),tonumeric(r[653]))));
++r[839] = n(Li(LST(2,2),LST(tonumeric(r[116]),tonumeric(r[629]))));
++r[840] = n(Li(LST(2,2),LST(tonumeric(r[116]),tonumeric(r[493]))));
++r[841] = n(Li(LST(2,2),LST(tonumeric(r[116]),tonumeric(r[639]))));
++r[842] = n(Li(LST(2,2),LST(tonumeric(r[116]),tonumeric(r[492]))));
++r[843] = n(Li(LST(2,2),LST(tonumeric(r[116]),tonumeric(r[688]))));
++r[844] = n(Li(LST(2,2),LST(tonumeric(r[116]),tonumeric(r[385]))));
++r[845] = n(Li(LST(2,2),LST(tonumeric(r[380]),tonumeric(r[462]))));
++r[846] = n(Li(LST(2,2),LST(tonumeric(r[380]),tonumeric(r[522]))));
++r[847] = n(Li(LST(2,2),LST(tonumeric(r[13]),tonumeric(r[39]))));
++r[848] = n(Li(LST(2,2),LST(tonumeric(r[13]),tonumeric(r[82]))));
++r[849] = n(Li(LST(2,2),LST(tonumeric(r[13]),tonumeric(r[312]))));
++r[850] = n(Li(LST(2,2),LST(tonumeric(r[13]),tonumeric(r[31]))));
++r[851] = n(Li(LST(2,2),LST(tonumeric(r[13]),tonumeric(r[588]))));
++r[852] = n(Li(LST(2,2),LST(tonumeric(r[13]),tonumeric(r[104]))));
++r[853] = n(Li(LST(2,2),LST(tonumeric(r[13]),tonumeric(r[154]))));
++r[854] = n(Li(LST(2,2),LST(tonumeric(r[13]),tonumeric(r[580]))));
++r[855] = n(Li(LST(2,2),LST(tonumeric(r[13]),tonumeric(r[168]))));
++r[856] = n(Li(LST(2,2),LST(tonumeric(r[126]),tonumeric(r[204]))));
++r[857] = n(Li(LST(2,2),LST(tonumeric(r[126]),tonumeric(r[581]))));
++r[858] = n(Li(LST(2,2),LST(tonumeric(r[329]),tonumeric(r[589]))));
++r[859] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[425]))));
++r[860] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[91]))));
++r[861] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[34]))));
++r[862] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[584]))));
++r[863] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[104]))));
++r[864] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[397]))));
++r[865] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[36]))));
++r[866] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[410]))));
++r[867] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[580]))));
++r[868] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[667]))));
++r[869] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[522]))));
++r[870] = n(Li(LST(2,2),LST(tonumeric(r[328]),tonumeric(r[414]))));
++r[871] = n(Li(LST(2,2),LST(tonumeric(r[633]),tonumeric(r[113]))));
++r[872] = n(Li(LST(2,2),LST(tonumeric(r[633]),tonumeric(r[654]))));
++r[873] = n(Li(LST(2,2),LST(tonumeric(r[14]),tonumeric(r[42]))));
++r[874] = n(Li(LST(2,2),LST(tonumeric(r[14]),tonumeric(r[81]))));
++r[875] = n(Li(LST(2,2),LST(tonumeric(r[14]),tonumeric(r[313]))));
++r[876] = n(Li(LST(2,2),LST(tonumeric(r[14]),tonumeric(r[556]))));
++r[877] = n(Li(LST(2,2),LST(tonumeric(r[14]),tonumeric(r[105]))));
++r[878] = n(Li(LST(2,2),LST(tonumeric(r[14]),tonumeric(r[115]))));
++r[879] = n(Li(LST(2,2),LST(tonumeric(r[14]),tonumeric(r[569]))));
++r[880] = n(Li(LST(2,2),LST(tonumeric(r[14]),tonumeric(r[167]))));
++r[881] = n(Li(LST(2,2),LST(tonumeric(r[345]),tonumeric(r[178]))));
++r[882] = n(Li(LST(2,2),LST(tonumeric(r[345]),tonumeric(r[555]))));
++r[883] = n(Li(LST(2,2),LST(tonumeric(r[138]),tonumeric(r[567]))));
++r[884] = n(Li(LST(2,2),LST(tonumeric(r[344]),tonumeric(r[32]))));
++r[885] = n(Li(LST(2,2),LST(tonumeric(r[344]),tonumeric(r[389]))));
++r[886] = n(Li(LST(2,2),LST(tonumeric(r[344]),tonumeric(r[35]))));
++r[887] = n(Li(LST(2,2),LST(tonumeric(r[344]),tonumeric(r[553]))));
++r[888] = n(Li(LST(2,2),LST(tonumeric(r[344]),tonumeric(r[105]))));
++r[889] = n(Li(LST(2,2),LST(tonumeric(r[344]),tonumeric(r[386]))));
++r[890] = n(Li(LST(2,2),LST(tonumeric(r[344]),tonumeric(r[94]))));
++r[891] = n(Li(LST(2,2),LST(tonumeric(r[344]),tonumeric(r[569]))));
++r[892] = n(Li(LST(2,2),LST(tonumeric(r[344]),tonumeric(r[666]))));
++r[893] = n(Li(LST(2,2),LST(tonumeric(r[344]),tonumeric(r[510]))));
++r[894] = n(Li(LST(2,2),LST(tonumeric(r[344]),tonumeric(r[413]))));
++r[895] = n(Li(LST(2,2),LST(tonumeric(r[349]),tonumeric(r[12]))));
++r[896] = n(Li(LST(2,2),LST(tonumeric(r[349]),tonumeric(r[626]))));
++r[897] = n(Li(LST(2,2),LST(tonumeric(r[349]),tonumeric(r[653]))));
++r[898] = n(Li(LST(2,2),LST(tonumeric(r[520]),tonumeric(r[474]))));
++r[899] = n(Li(LST(2,2),LST(tonumeric(r[520]),tonumeric(r[475]))));
++r[900] = n(Li(LST(2,2),LST(tonumeric(r[94]),tonumeric(r[213]))));
++r[901] = n(Li(LST(2,2),LST(tonumeric(r[94]),tonumeric(r[579]))));
++r[902] = n(Li(LST(2,2),LST(tonumeric(r[94]),tonumeric(r[575]))));
++r[903] = n(Li(LST(2,2),LST(tonumeric(r[94]),tonumeric(r[32]))));
++r[904] = n(Li(LST(2,2),LST(tonumeric(r[94]),tonumeric(r[530]))));
++r[905] = n(Li(LST(2,2),LST(tonumeric(r[94]),tonumeric(r[533]))));
++r[906] = n(Li(LST(2,2),LST(tonumeric(r[94]),tonumeric(r[532]))));
++r[907] = n(Li(LST(2,2),LST(tonumeric(r[94]),tonumeric(r[404]))));
++r[908] = n(Li(LST(2,2),LST(tonumeric(r[94]),tonumeric(r[531]))));
++r[909] = n(Li(LST(2,2),LST(tonumeric(r[94]),tonumeric(r[212]))));
++r[910] = n(Li(LST(2,2),LST(tonumeric(r[94]),tonumeric(r[529]))));
++r[911] = n(Li(LST(2,2),LST(tonumeric(r[343]),tonumeric(r[15]))));
++r[912] = n(Li(LST(2,2),LST(tonumeric(r[343]),tonumeric(r[467]))));
++r[913] = n(Li(LST(2,2),LST(tonumeric(r[343]),tonumeric(r[612]))));
++r[914] = n(Li(LST(2,2),LST(tonumeric(r[343]),tonumeric(r[659]))));
++r[915] = n(Li(LST(2,2),LST(tonumeric(r[508]),tonumeric(r[472]))));
++r[916] = n(Li(LST(2,2),LST(tonumeric(r[508]),tonumeric(r[473]))));
++r[917] = n(Li(LST(2,2),LST(tonumeric(r[634]),tonumeric(r[153]))));
++r[918] = n(Li(LST(2,2),LST(tonumeric(r[634]),tonumeric(r[660]))));
++r[919] = n(Li(LST(2,2),LST(tonumeric(r[15]),tonumeric(r[215]))));
++r[920] = n(Li(LST(2,2),LST(tonumeric(r[15]),tonumeric(r[207]))));
++r[921] = n(Li(LST(2,2),LST(tonumeric(r[15]),tonumeric(r[582]))));
++r[922] = n(Li(LST(2,2),LST(tonumeric(r[15]),tonumeric(r[609]))));
++r[923] = n(Li(LST(2,2),LST(tonumeric(r[15]),tonumeric(r[614]))));
++r[924] = n(Li(LST(2,2),LST(tonumeric(r[15]),tonumeric(r[459]))));
++r[925] = n(Li(LST(2,2),LST(tonumeric(r[15]),tonumeric(r[122]))));
++r[926] = n(Li(LST(2,2),LST(tonumeric(r[156]),tonumeric(r[630]))));
++r[927] = n(Li(LST(2,2),LST(tonumeric(r[156]),tonumeric(r[640]))));
++r[928] = n(Li(LST(2,2),LST(tonumeric(r[156]),tonumeric(r[495]))));
++r[929] = n(Li(LST(2,2),LST(tonumeric(r[156]),tonumeric(r[492]))));
++r[930] = n(Li(LST(2,2),LST(tonumeric(r[156]),tonumeric(r[691]))));
++r[931] = n(Li(LST(2,2),LST(tonumeric(r[156]),tonumeric(r[409]))));
++r[932] = n(Li(LST(2,2),LST(tonumeric(r[350]),tonumeric(r[466]))));
++r[933] = n(Li(LST(2,2),LST(tonumeric(r[350]),tonumeric(r[640]))));
++r[934] = n(Li(LST(2,2),LST(tonumeric(r[350]),tonumeric(r[495]))));
++r[935] = n(Li(LST(2,2),LST(tonumeric(r[350]),tonumeric(r[692]))));
++r[936] = n(Li(LST(2,2),LST(tonumeric(r[350]),tonumeric(r[659]))));
++r[937] = n(Li(LST(2,2),LST(tonumeric(r[405]),tonumeric(r[466]))));
++r[938] = n(Li(LST(2,2),LST(tonumeric(r[405]),tonumeric(r[510]))));
++r[939] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[178]))));
++r[940] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[210]))));
++r[941] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[563]))));
++r[942] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[616]))));
++r[943] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[13]))));
++r[944] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[387]))));
++r[945] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[14]))));
++r[946] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[395]))));
++r[947] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[133]))));
++r[948] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[577]))));
++r[949] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[605]))));
++r[950] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[122]))));
++r[951] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[166]))));
++r[952] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[169]))));
++r[953] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[539]))));
++r[954] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[537]))));
++r[955] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[477]))));
++r[956] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[499]))));
++r[957] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[500]))));
++r[958] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[502]))));
++r[959] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[511]))));
++r[960] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[512]))));
++r[961] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[515]))));
++r[962] = n(Li(LST(2,2),LST(tonumeric(r[38]),tonumeric(r[524]))));
++r[963] = n(Li(LST(2,2),LST(tonumeric(r[192]),tonumeric(r[479]))));
++r[964] = n(Li(LST(2,2),LST(tonumeric(r[204]),tonumeric(r[526]))));
++r[965] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[79]))));
++r[966] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[560]))));
++r[967] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[573]))));
++r[968] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[591]))));
++r[969] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[597]))));
++r[970] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[562]))));
++r[971] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[575]))));
++r[972] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[551]))));
++r[973] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[555]))));
++r[974] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[622]))));
++r[975] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[586]))));
++r[976] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[589]))));
++r[977] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[610]))));
++r[978] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[167]))));
++r[979] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[168]))));
++r[980] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[535]))));
++r[981] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[541]))));
++r[982] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[413]))));
++r[983] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[414]))));
++r[984] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[546]))));
++r[985] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[653]))));
++r[986] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[482]))));
++r[987] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[654]))));
++r[988] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[659]))));
++r[989] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[529]))));
++r[990] = n(Li(LST(2,2),LST(tonumeric(r[311]),tonumeric(r[660]))));
++r[991] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[562]))));
++r[992] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[575]))));
++r[993] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[593]))));
++r[994] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[599]))));
++r[995] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[555]))));
++r[996] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[622]))));
++r[997] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[589]))));
++r[998] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[610]))));
++r[999] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[167]))));
++r[1000] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[168]))));
++r[1001] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[535]))));
++r[1002] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[541]))));
++r[1003] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[479]))));
++r[1004] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[482]))));
++r[1005] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[526]))));
++r[1006] = n(Li(LST(2,2),LST(tonumeric(r[360]),tonumeric(r[529]))));
++r[1007] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[121]))));
++r[1008] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[390]))));
++r[1009] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[432]))));
++r[1010] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[132]))));
++r[1011] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[398]))));
++r[1012] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[520]))));
++r[1013] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[508]))));
++r[1014] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[439]))));
++r[1015] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[505]))));
++r[1016] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[506]))));
++r[1017] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[507]))));
++r[1018] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[517]))));
++r[1019] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[518]))));
++r[1020] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[519]))));
++r[1021] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[509]))));
++r[1022] = n(Li(LST(2,2),LST(tonumeric(r[106]),tonumeric(r[521]))));
++r[1023] = n(Li(LST(2,2),LST(tonumeric(r[123]),tonumeric(r[91]))));
++r[1024] = n(Li(LST(2,2),LST(tonumeric(r[123]),tonumeric(r[34]))));
++r[1025] = n(Li(LST(2,2),LST(tonumeric(r[123]),tonumeric(r[201]))));
++r[1026] = n(Li(LST(2,2),LST(tonumeric(r[123]),tonumeric(r[104]))));
++r[1027] = n(Li(LST(2,2),LST(tonumeric(r[123]),tonumeric(r[349]))));
++r[1028] = n(Li(LST(2,2),LST(tonumeric(r[123]),tonumeric(r[36]))));
++r[1029] = n(Li(LST(2,2),LST(tonumeric(r[123]),tonumeric(r[166]))));
++r[1030] = n(Li(LST(2,2),LST(tonumeric(r[123]),tonumeric(r[542]))));
++r[1031] = n(Li(LST(2,2),LST(tonumeric(r[123]),tonumeric(r[515]))));
++r[1032] = n(Li(LST(2,2),LST(tonumeric(r[123]),tonumeric(r[523]))));
++r[1033] = n(Li(LST(2,2),LST(tonumeric(r[394]),tonumeric(r[471]))));
++r[1034] = n(Li(LST(2,2),LST(tonumeric(r[394]),tonumeric(r[523]))));
++r[1035] = n(Li(LST(2,2),LST(tonumeric(r[434]),tonumeric(r[113]))));
++r[1036] = n(Li(LST(2,2),LST(tonumeric(r[434]),tonumeric(r[384]))));
++r[1037] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[32]))));
++r[1038] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[35]))));
++r[1039] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[191]))));
++r[1040] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[105]))));
++r[1041] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[94]))));
++r[1042] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[343]))));
++r[1043] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[169]))));
++r[1044] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[411]))));
++r[1045] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[164]))));
++r[1046] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[502]))));
++r[1047] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[536]))));
++r[1048] = n(Li(LST(2,2),LST(tonumeric(r[136]),tonumeric(r[476]))));
++r[1049] = n(Li(LST(2,2),LST(tonumeric(r[402]),tonumeric(r[468]))));
++r[1050] = n(Li(LST(2,2),LST(tonumeric(r[402]),tonumeric(r[476]))));
++r[1051] = n(Li(LST(2,2),LST(tonumeric(r[522]),tonumeric(r[12]))));
++r[1052] = n(Li(LST(2,2),LST(tonumeric(r[522]),tonumeric(r[617]))));
++r[1053] = n(Li(LST(2,2),LST(tonumeric(r[522]),tonumeric(r[385]))));
++r[1054] = n(Li(LST(2,2),LST(tonumeric(r[510]),tonumeric(r[604]))));
++r[1055] = n(Li(LST(2,2),LST(tonumeric(r[510]),tonumeric(r[15]))));
++r[1056] = n(Li(LST(2,2),LST(tonumeric(r[510]),tonumeric(r[409]))));
++r[1057] = n(Li(LST(2,2),LST(tonumeric(r[441]),tonumeric(r[153]))));
++r[1058] = n(Li(LST(2,2),LST(tonumeric(r[441]),tonumeric(r[408]))));
++r[1059] = n(Li(LST(2,2),LST(tonumeric(r[166]),tonumeric(r[549]))));
++r[1060] = n(Li(LST(2,2),LST(tonumeric(r[166]),tonumeric(r[82]))));
++r[1061] = n(Li(LST(2,2),LST(tonumeric(r[166]),tonumeric(r[483]))));
++r[1062] = n(Li(LST(2,2),LST(tonumeric(r[166]),tonumeric(r[13]))));
++r[1063] = n(Li(LST(2,2),LST(tonumeric(r[166]),tonumeric(r[595]))));
++r[1064] = n(Li(LST(2,2),LST(tonumeric(r[166]),tonumeric(r[686]))));
++r[1065] = n(Li(LST(2,2),LST(tonumeric(r[169]),tonumeric(r[558]))));
++r[1066] = n(Li(LST(2,2),LST(tonumeric(r[169]),tonumeric(r[14]))));
++r[1067] = n(Li(LST(2,2),LST(tonumeric(r[169]),tonumeric(r[533]))));
++r[1068] = n(Li(LST(2,2),LST(tonumeric(r[169]),tonumeric(r[600]))));
++r[1069] = n(Li(LST(2,2),LST(tonumeric(r[169]),tonumeric(r[690]))));
++r[1070] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[81]))));
++r[1071] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[82]))));
++r[1072] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[423]))));
++r[1073] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[421]))));
++r[1074] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[381]))));
++r[1075] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[382]))));
++r[1076] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[404]))));
++r[1077] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[406]))));
++r[1078] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[180]))));
++r[1079] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[212]))));
++r[1080] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[595]))));
++r[1081] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[600]))));
++r[1082] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[567]))));
++r[1083] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[620]))));
++r[1084] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[581]))));
++r[1085] = n(Li(LST(2,2),LST(tonumeric(r[163]),tonumeric(r[608]))));
++r[1086] = n(Li(LST(2,2),LST(tonumeric(r[477]),tonumeric(r[629]))));
++r[1087] = n(Li(LST(2,2),LST(tonumeric(r[477]),tonumeric(r[349]))));
++r[1088] = n(Li(LST(2,2),LST(tonumeric(r[500]),tonumeric(r[206]))));
++r[1089] = n(Li(LST(2,2),LST(tonumeric(r[643]),tonumeric(r[410]))));
++r[1090] = n(Li(LST(2,2),LST(tonumeric(r[643]),tonumeric(r[580]))));
++r[1091] = n(Li(LST(2,2),LST(tonumeric(r[643]),tonumeric(r[470]))));
++r[1092] = n(Li(LST(2,2),LST(tonumeric(r[511]),tonumeric(r[194]))));
++r[1093] = n(Li(LST(2,2),LST(tonumeric(r[644]),tonumeric(r[386]))));
++r[1094] = n(Li(LST(2,2),LST(tonumeric(r[644]),tonumeric(r[569]))));
++r[1095] = n(Li(LST(2,2),LST(tonumeric(r[644]),tonumeric(r[469]))));
++r[1096] = n(Li(LST(2,2),LST(tonumeric(r[524]),tonumeric(r[630]))));
++r[1097] = n(Li(LST(2,2),LST(tonumeric(r[524]),tonumeric(r[343]))));
+ r[1098] = n(log(tonumeric(r[8])));
+ r[1099] = n(log(tonumeric(r[17])));
+ r[1100] = n(log(tonumeric(r[18])));
