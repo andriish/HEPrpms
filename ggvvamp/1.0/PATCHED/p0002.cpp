@@ -1,5 +1,11 @@
 #include "ggvvamp.h"
 #include <ginac/ginac.h>
+#include <ginac/version.h>
+#if (GINACLIB_MAJOR_VERSION  == 1) && (GINACLIB_MINOR_VERSION  > 7 )
+#define LST(a,b) lst{a,b}
+#else
+#define LST(a,b) lst(a,b)
+#endif
 
 using namespace GiNaC;
 
