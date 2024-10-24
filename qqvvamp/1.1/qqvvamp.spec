@@ -29,7 +29,7 @@ Requires:       cnl-devel
 This package contains the header files and libraries needed to develop applications that use qqvvamp.
 
 %prep
-%setup -q
+%setup -q -n qqvvamp-master
 %patch0 -p1
 
 %build
