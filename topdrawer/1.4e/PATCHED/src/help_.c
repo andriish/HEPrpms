@@ -217,7 +217,7 @@ static int pagelines;		/* count for builtin pager */
  * print a help message 
  * also print available subtopics, if subtopics is TRUE
  */
-help0(keyword, path, subtopics)
+int help0(keyword, path, subtopics)
 	char *keyword;		/* on this topic */
 	char *path;			/* from this file */
 	boolean *subtopics;	/* (in) - subtopics only? */
