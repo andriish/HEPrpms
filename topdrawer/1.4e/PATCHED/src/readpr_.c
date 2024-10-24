@@ -259,9 +259,9 @@ char *str;
 /* This function provides a centralized non-destructive backspace capability */
 /* M. Castro */
 
-backspace()
+int backspace()
 {
-	user_putc(BACKSPACE);
+	return user_putc(BACKSPACE);
 }
 	
 char *
@@ -1062,7 +1062,7 @@ read_line(prompt)
       }
     } else {
       /* normal line input */
-      register        i = start;
+      register  int      i = start;
       while ((input_line[i] = input_line[i + 2]) != (char) NULL)
 	i++;	/* yuck!  move everything down two characters */
 
