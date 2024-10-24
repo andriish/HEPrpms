@@ -2,7 +2,7 @@
 Summary: Unified Grahics System
 Name: ugs
 Version: 2.10e
-Release: 6%{?dist}
+Release: 7%{?dist}
 #Copyright: Free <= obsolete keyword for rpm 4.x
 License: Free
 Source: https://ftp.riken.jp/iris/ugs/ugs.tar.gz

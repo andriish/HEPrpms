@@ -39,7 +39,7 @@ The library documentation is available on header files.
 
 %prep
 %setup -q -n mc-tester-v%{version}
-%patch -P N -p1
+%patch -P 0 -p1
 
 
 %build
