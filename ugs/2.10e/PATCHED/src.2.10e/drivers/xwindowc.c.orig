@@ -1,0 +1,473 @@
+
+           /*  Unified Graphics Xwindow driver support */
+           /*  19940527          KREYMER@FNAL.GOV      */
+
+#include <stdio.h>
+#include <signal.h>
+#include <unistd.h>
+#include <X11/cursorfont.h>
+#include <X11/Intrinsic.h> 
+#include <X11/StringDefs.h>
+#include <X11/Shell.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xatom.h>
+#include "rotated.h"
+
+/* Basic elements */
+static Display       *dpy          ;
+static int            scr          ;
+static Window         wdw          ;
+static Pixmap         pxm          ;
+static Widget         toplevel     ;
+static Widget         pad          ;
+static GC             gc           ;
+static Status         status       ;
+static XButtonEvent   button       ;
+
+static GC             erase_gc     ;
+static Cursor         watch_cursor ;
+static unsigned short int
+                      disw, dish   ;
+
+/* Font handling */
+#define MAXFONT  500
+static int            fonts_count  ;
+static char         **fonts_list   ;
+static XFontStruct   *fonts_struct[MAXFONT];
+static unsigned long  fonts_height[MAXFONT];
+static int            fonts_width [MAXFONT];
+static int            font_num     ;
+static float          font_angle   ;
+
+/* Bitmap Cursors */
+static Cursor         cursor ;
+static Pixmap         bitmap_src, bitmap_mask ;
+static unsigned int   bitmap_width, bitmap_height ;
+static XColor         bitmap_foreground, 
+                      bitmap_background ;
+#include "cursor1.bmp"
+#include "cursor2.bmp"
+
+/* Icon Bitmap Data */
+static Pixmap         icon_pixmap ;
+#include "icon.bmp"
+
+/* application defaults */
+#include "defaults.h"
+
+/* Drawing elements & attributes */
+#define MAXELEM  5000
+typedef struct {
+   int head  ;    /* XY index of header ( +-length, color, width, style ) */
+   int last  ;    /* XY index of last data entry     */
+   int color ;    /* color           from [head].y   */
+   int width ;    /* line width      from [head+1].x */
+   int style ;    /* line style      from [head+1].y */
+   XPoint xy[MAXELEM] ; /* x y coordinate pairs      */
+} ELEM ;
+static ELEM  elem;
+static int            coloris      ;
+static int            widthis = 0  ;
+static int            styleis = 1  ;
+static int            n            ;
+
+/* Some common functions */
+void  fxdraw_()             ;
+void  fxclear_()            ;
+void  fxstyle_()            ;
+void  fxreset_()            ;
+void  start_rubber_band()   ;
+void  checkEventQueue()     ;
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxopen_ (int *xsiz, int *ysiz )
+{
+  Display      *display    ;
+  int           argc = 0   ;
+  XtAppContext  context    ;
+  XGCValues     values     ;
+
+  display = XOpenDisplay ( NULL ) ;
+  if (display == 0) {*xsiz = 0; return ; }  /*  could not open display */
+  fxreset_();
+  /* Initialize the X application */
+  toplevel = XtAppInitialize(&context, "Ugs", NULL, 0, 
+			     &argc, NULL, fallbackResources, NULL, 0 ) ;
+  pad = XtCreateManagedWidget("pad", widgetClass, toplevel, NULL, 0) ;
+  XtRealizeWidget(toplevel); /* realize prior to following func's */
+  dpy = XtDisplay (pad); wdw = XtWindow (pad); scr = XDefaultScreen(dpy);
+  /* Get the information the user has set for the widget */
+  XtVaGetValues (toplevel, XtNwidth      , &disw           , NULL) ;
+  XtVaGetValues (toplevel, XtNheight     , &dish           , NULL) ;
+  XtVaGetValues (toplevel, XtNbackground , &(app.color[8]) , NULL) ;
+  XtVaGetApplicationResources
+                (toplevel, &app, resources, XtNumber(resources), NULL);
+  *xsiz = disw ; *ysiz = dish ;
+  XQueryColors(dpy,DefaultColormap(dpy,scr),&app.color[1],8);
+  /* Create rubberband handlers */
+  XtAddEventHandler(pad, ButtonPressMask | ExposureMask, 
+		    FALSE, start_rubber_band, &button);
+  XForceScreenSaver (dpy, ScreenSaverReset ) ;
+  /* Create the Graphics Context */
+  values.foreground = app.color[1].pixel ;
+  values.background = app.color[8].pixel ;
+  coloris           = app.color[1].pixel ;
+  gc = XCreateGC (dpy, wdw, GCForeground | GCBackground, &values);
+  watch_cursor = XCreateFontCursor(dpy, XC_watch );
+  XRecolorCursor (dpy, watch_cursor, &app.color[5], &app.color[8]);
+  /* Create Pixmap for Exposure Event */
+  pxm = XCreatePixmap (dpy, wdw, disw, dish, XDefaultDepth(dpy, scr));
+  values.foreground = app.color[8].pixel ;
+  erase_gc = XCreateGC (dpy, wdw, GCForeground, &values);
+  XFillRectangle(dpy, pxm, erase_gc, 0, 0, disw, dish);
+  /* Define Pointer-Cursor */
+  status = XQueryBestCursor (dpy, wdw, bitmap1_width, bitmap1_height,
+			               &bitmap_width, &bitmap_height);
+  if (bitmap1_width  <= bitmap_width &&
+      bitmap1_height <= bitmap_height) {
+    bitmap_src  = XCreateBitmapFromData (dpy, wdw, bitmap1_bits, 
+					 bitmap1_width, bitmap1_height);
+    bitmap_mask = XCreateBitmapFromData (dpy, wdw, bitmap1_mask, 
+					 bitmap1_width, bitmap1_height);
+    cursor = XCreatePixmapCursor (dpy, bitmap_src, bitmap_mask,
+				  &app.color[1], &app.color[8], 
+				  bitmap1_hot, bitmap1_hot);
+  } 
+  else 
+  if (bitmap2_width  <= bitmap_width &&
+      bitmap2_height <= bitmap_height) {
+    bitmap_src  = XCreateBitmapFromData (dpy, wdw, bitmap2_bits, 
+					 bitmap2_width, bitmap2_height);
+    bitmap_mask = XCreateBitmapFromData (dpy, wdw, bitmap2_mask, 
+					 bitmap2_width, bitmap2_height);
+    cursor = XCreatePixmapCursor (dpy, bitmap_src, bitmap_mask,
+				  &app.color[1], &app.color[8], 
+				  bitmap2_hot, bitmap2_hot);
+  }
+  else
+    cursor = XCreateFontCursor(dpy, XC_crosshair);
+  /* Create Icon */
+  icon_pixmap = XCreateBitmapFromData (dpy, wdw, icon_bitmap,
+				       icon_width, icon_height);
+  XtVaSetValues (toplevel, XtNiconPixmap, icon_pixmap, NULL);
+  /* load Fonts */
+  fonts_list = XListFonts (dpy, *(app.fontpattern), MAXFONT,&fonts_count);
+  for (n=0 ; n < fonts_count ; n++) {
+    fonts_struct[n] = XLoadQueryFont (dpy, fonts_list[n]);
+    XGetFontProperty (fonts_struct[n], XA_X_HEIGHT, &fonts_height[n]);
+    /*fonts_height[n] *= 2;*/
+    fonts_width[n] = XTextWidth (fonts_struct[n], "0123456789", 10) / 10;
+  }
+  /* for Exposure Event Process */
+  signal (SIGALRM, checkEventQueue); alarm(1L);
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void start_rubber_band(Widget w, XButtonEvent *dummy, XEvent *event)
+{
+  switch ( event->type ) {
+  case ButtonPress: {
+    button = event->xbutton ;
+    break ;
+  }
+  case Expose: {
+    XEvent fake;
+    XCopyArea(dpy, pxm, wdw, gc, 0, 0, disw, dish, 0, 0 ) ;
+    XFlush(dpy) ;
+    /* Flush Exposure-Events in Queue */
+    while (XCheckWindowEvent (dpy, wdw, ExposureMask, &fake) != 0) {}
+    break ;
+  }
+  }
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxclose_ ()
+{
+  for (n = 0 ; n < fonts_count ; n++)
+    XUnloadFont (dpy, fonts_struct[n]->fid) ;
+  XFreePixmap (dpy, pxm) ;
+  XFreeCursor (dpy, cursor) ;
+  XFreeCursor (dpy, watch_cursor) ;
+  XFreeGC (dpy, erase_gc) ;
+  XFreeGC (dpy, gc) ;
+  XDestroyWindow (dpy, wdw) ;
+  XCloseDisplay (dpy) ;
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxcolor_ (int *color )
+{
+  XSetForeground (dpy, gc, ( coloris = app.color[*color].pixel ) ) ;
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxclear_()
+{
+  fxreset_();
+  XFillRectangle(dpy, pxm, erase_gc, 0, 0, disw, dish);
+  XClearWindow  (dpy, wdw ) ;
+  XFlush(dpy) ;
+  checkEventQueue();
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxreset_()
+{  /* Initialize the graphics buffer and other data  */
+  elem.head  = elem.last  = -1 ;
+  elem.color = elem.width = elem.style = -666 ;
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxdraw_()
+{
+  /*
+  if ( elem.last > MAXELEM-12 )
+    fprintf(stderr, "Too many elements (%d)\n", elem.last );
+  */
+  for (n = 0 ; n < elem.last ;
+       n = n + 2 + ( (elem.xy[n].x > 0) ? elem.xy[n].x : -elem.xy[n].x ) ) {
+    XSetForeground (dpy, gc, elem.xy[n].y ) ; /* color */
+    if ( elem.xy[n].x > 0 ) {
+      XDrawPoints (dpy, wdw, gc, &elem.xy[n+2], elem.xy[n].x, CoordModeOrigin);
+      XDrawPoints (dpy, pxm, gc, &elem.xy[n+2], elem.xy[n].x, CoordModeOrigin);
+    } else {
+      if ( elem.xy[n+1].y > 0 ) {
+	fxstyle_ (elem.xy[n+1].x, elem.xy[n+1].y ) ; /* width and style */
+	XDrawLines (dpy, wdw, gc,
+		    &elem.xy[n+2], -elem.xy[n].x, CoordModeOrigin);
+	XDrawLines (dpy, pxm, gc,
+		    &elem.xy[n+2], -elem.xy[n].x, CoordModeOrigin);
+      } else {
+	XFillPolygon (dpy, wdw, gc, &elem.xy[n+2], -elem.xy[n].x, 
+		      Nonconvex, CoordModeOrigin);
+	XFillPolygon (dpy, pxm, gc, &elem.xy[n+2], -elem.xy[n].x, 
+		      Nonconvex, CoordModeOrigin);
+      }
+    }
+  }
+  checkEventQueue() ;
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxelem_()
+{
+  for (n = 0 ; n < elem.last ;
+       n = n + 2 + ( (elem.xy[n].x > 0) ? elem.xy[n].x : -elem.xy[n].x ) ) {
+    printf (" Element %4i %8i %8i %8i %8i\n" ,
+	    n, elem.xy[n].x, elem.xy[n].y, elem.xy[n+1].x, elem.xy[n+1].y ) ;
+  }
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxline_(int *x, int *y, int *x2, int *y2 )
+{
+  if ( elem.last+8 > MAXELEM ) {fxdraw_() ; fxreset_() ;}
+  if  (coloris != elem.color            ||
+       widthis != elem.width            ||
+       styleis != elem.style            ||
+       *x      != elem.xy[elem.last].x  ||
+       *y      != elem.xy[elem.last].y  ||
+       elem.xy[elem.head].x >= 0 ) { /*  New Block  */
+    elem.head = ++elem.last          ; /*  New header past last data  */
+    elem.xy[elem.last  ].x = -1      ; /*  (-) data length            */
+    elem.xy[elem.last++].y = elem.color = coloris ; /*  color         */
+    elem.xy[elem.last  ].x = elem.width = widthis ; /*  width         */
+    elem.xy[elem.last++].y = elem.style = styleis ; /*  style         */
+    elem.xy[elem.last  ].x = *x      ; /*  initial coordinates        */
+    elem.xy[elem.last  ].y = *y      ;
+  }
+  elem.xy[++elem.last].x   = *x2  ; /*  new coordinates  */
+  elem.xy[  elem.last].y   = *y2  ;
+  elem.xy[  elem.head].x--        ; /* (-) bump length   */
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxpoint_(int *x, int *y )
+{
+  if ( elem.last+4 > MAXELEM ) {fxdraw_() ; fxreset_() ;}
+  if (coloris != elem.color ||
+      widthis != elem.width ||
+      elem.xy[elem.head].x <= 0 ) { /*  New block        */
+    elem.head = ++elem.last          ; /*  new header past last data  */
+    elem.xy[elem.last  ].x = 0       ; /*  data length                */
+    elem.xy[elem.last++].y = elem.color = coloris ;  /*  color        */
+    elem.xy[elem.last  ].x = elem.width = widthis ;  /*  width        */
+    elem.xy[elem.last  ].y = elem.style = styleis ;  /*  style        */
+  }
+  elem.xy[++elem.last].x = *x ; /*  new data point  */
+  elem.xy[  elem.last].y = *y ;
+  elem.xy[  elem.head].x++    ; /*  bump length */
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxpoly_(int *n, int *x, int *y )
+{
+  if ( elem.last +*n*2 +8 > MAXELEM ) {fxdraw_() ; fxreset_() ;}
+  elem.head = ++elem.last          ; /*  New header past last data  */
+  elem.xy[elem.last  ].x = 0       ; /*  (-) data length            */
+  elem.xy[elem.last++].y = elem.color = coloris ; /*  color         */
+  elem.xy[elem.last  ].x = elem.width = widthis ; /*  width         */
+  elem.xy[elem.last  ].y = elem.style = -1      ; /*  style         */
+  while (*n > 0 ) {
+    elem.xy[++elem.last].x = *x++ ;
+    elem.xy[  elem.last].y = *y++ ;
+    elem.xy[  elem.head].x--      ; --*n ;
+  }
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxsetfn_(int *req_size, int *height, int *width)
+{
+  font_num= -1 ;
+  *height = *width = 0 ;
+  for (n = 0 ; n < fonts_count ; n++) {
+    if ( *req_size >= fonts_width[n] && fonts_width[n] > *width ) {
+      *height = fonts_height[ font_num = n ] ;
+      *width  = fonts_width [ font_num     ] ;
+    }
+  }
+/*if (font_num != -1) XSetFont (dpy, gc, fonts_struct[font_num]->fid) ;*/
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxsetan_(int *angle) { font_angle = (float) *angle ; }
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxtext_(int *x, int *y, char *text, int text_len)
+{
+  char *t, s[512] ;
+  text_len = (text_len < 512) ? text_len : 512 ;
+  for (t = s ; text_len > 0 ; text_len--) *t++ = *text++ ; *t = '\0' ;
+  XRotDrawAlignedString (dpy, fonts_struct[font_num], font_angle, 
+                         wdw, gc, *x, *y, s, MLEFT) ;
+  XRotDrawAlignedString (dpy, fonts_struct[font_num], font_angle, 
+                         pxm, gc, *x, *y, s, MLEFT) ;
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxstyle_ (int width , int style )
+{
+  static char dashes [2] = {  6, 6 } ;         /* LineSolid */
+  static char dots   [2] = {  1, 4 } ;         /* LineOnOffDash */
+  static char dotdash[4] = {  4, 4 , 1, 4 } ;  /* LineDoubleDash */
+  switch (style) {
+  case  1 :
+    XSetLineAttributes (dpy, gc, width, LineSolid, CapButt, JoinMiter ) ;
+    break ;
+  case  2 : 
+    XSetLineAttributes (dpy, gc, width,	LineOnOffDash, CapButt, JoinMiter ) ;
+    XSetDashes (dpy, gc, 0, dashes,  2 ) ;
+    break ;
+  case  3 : 
+    XSetLineAttributes (dpy, gc, width,	LineOnOffDash, CapButt, JoinMiter ) ;
+    XSetDashes (dpy, gc, 0, dots,    2 ) ;
+    break ;
+  case  4 : 
+    XSetLineAttributes (dpy, gc, width,	LineDoubleDash, CapButt, JoinMiter ) ;
+    XSetDashes (dpy, gc, 0, dotdash, 4 ) ;
+    break ;
+  }
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxsetstyle_ (int *width , int *style )
+{
+  widthis = *width ;
+  styleis = *style ;
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxcursor_(int *x, int *y, int *i )
+{
+  XtAppContext context  =  XtWidgetToApplicationContext(pad) ;
+  button.type = ButtonRelease ;
+  XRaiseWindow (dpy, wdw ) ;
+  XDefineCursor (dpy, wdw, cursor ) ; XFlush (dpy) ;
+  while (button.type != ButtonPress) XtAppProcessEvent(context, XtIMAll) ; 
+  XUndefineCursor (dpy, wdw ) ; XFlush (dpy) ;
+  *x =        button.x ;
+  *y = dish - button.y ;
+  switch (button.button) {
+  case Button1: {*i = 'X' ; break ; }
+  case Button2: {*i = ' ' ; break ; }
+  case Button3: {*i = 'Q' ; break ; }
+  }
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxbell_()
+{
+  XBell (dpy,0); XFlush (dpy);
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void checkEventQueue()
+{
+  XtAppContext context  =  XtWidgetToApplicationContext(pad);
+  while ( XtAppPending(context)) XtAppProcessEvent(context, XtIMAll);
+  signal (SIGALRM, checkEventQueue); alarm(1L);
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxpause_()
+{
+  XtAppContext context = XtWidgetToApplicationContext(pad);
+  XFlush (dpy);
+  XDefineCursor (dpy, wdw, watch_cursor ) ; XFlush (dpy) ;
+  button.type = ButtonRelease ;
+  while (button.type != ButtonPress || button.button != Button3)
+    XtAppProcessEvent ( context , XtIMAll ) ;
+  XUndefineCursor (dpy, wdw ) ; XFlush (dpy) ;
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void fxloop_()
+{
+  XtAppContext context = XtWidgetToApplicationContext(pad);
+  XtAppMainLoop(context) ;
+}
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#ifdef SELFTEST
+main ()
+{
+    int   i, j, k, l  ;
+    int   px[4] = {200, 400, 400, 200} ;
+    int   py[4] = {200, 200, 400, 400} ;
+
+    printf (" opening \n") ;
+    i = 1000 ; j = 750 ; 
+    fxopen_( &i , &j )  ;
+    if ( i == 0 )
+      { printf ( " Cannot open display, exiting \n" ); return ; }
+
+    i = 5 ;
+    printf (" color \n") ;
+    fxcolor_ ( &i ) ;
+
+    i = 2 ; j = 4 ;
+    fxsetstyle_ ( &i , &j ) ;
+
+    i = 10 ; j = 10 ; k = 750 ; l = 550 ;
+    printf (" lining \n") ;
+    fxline_ ( &i, &j, &k, &l ) ;
+
+    i = 7 ;
+    printf (" color \n") ;
+    fxcolor_ ( &i ) ;
+
+    i = 2 ; j = 3 ;
+    printf(" style \n") ;
+    fxsetstyle_ ( &i , &j ) ;
+
+    j = 540 ; l = 10 ;
+    printf (" lining \n") ;
+    fxline_ ( &i, &j, &k, &l ) ;
+
+    i = 3 ;
+    printf (" color \n") ;
+    fxcolor_ ( &i ) ;
+
+    i = 2 ; j = 2 ;
+    printf(" style \n") ;
+    fxsetstyle_ ( &i , &j ) ;
+
+    i = 380 ; j = 10 ; k = 380 ; l = 540 ;
+    printf (" lining \n") ;
+    fxline_ ( &i, &j, &k, &l ) ;
+
+    i = 6 ;
+    printf (" color \n") ;
+    fxcolor_ ( &i ) ;
+
+    i = 4;
+    printf (" polygon \n") ;
+    fxpoly_( &i, px, py ) ;
+
+    printf (" drawing \n") ;
+    fxdraw_ () ;
+    printf (" pausing \n") ;
+    fxpause_ () ;
+}
+#endif /* SELFTEST */

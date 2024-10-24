@@ -1,0 +1,31 @@
+#
+# Imakefile for ugs/src/drivers
+#
+
+LIB      = ../../ugs.a
+
+#include "../../Imakefile.def"
+
+OBJ    = \
+postscr.o  \
+epsf.o     \
+tek4010.o  \
+xwindow.o  \
+xwindowc.o \
+rotated.o
+
+AllTarget($(LIB))
+
+$(LIB):: $(OBJ)
+	ls -lF $(LIB)
+
+DEPEND = xwindowc.c defaults.h rotated.h cursor1.bmp cursor2.bmp icon.bmp
+
+xwindowc.o:: $(DEPEND)
+
+rotated.o:: rotated.c rotated.h
+
+xwtest:: $(DEPEND) rotate.o
+	$(CC) -g -DSELFTEST -o xwtest\
+	xwindowc.c rotate.o $(LDPRELIB) $(XTOOLLIB) $(XLIB)
+
