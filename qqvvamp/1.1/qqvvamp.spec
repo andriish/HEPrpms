@@ -5,7 +5,7 @@ Summary:        qqvvamp package from vvamp.hepforge.org
 
 License:        GPL
 URL:            https://vvamp.hepforge.org/
-Source0:        http://www.hepforge.org/archive/vvamp/%{name}-%{version}.tar.gz
+Source0:        https://gitlab.cern.ch/averbyts/qqvvamp/-/archive/master/qqvvamp-master.tar.gz
 Patch0:         patch-0.txt
 
 BuildRequires:  cmake
