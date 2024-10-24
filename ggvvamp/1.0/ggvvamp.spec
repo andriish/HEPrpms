@@ -9,7 +9,7 @@ Source0:        https://www.hepforge.org/archive/vvamp/%{name}-%{version}.tar.gz
 Patch0:         patch-0.txt
 
 BuildRequires:  cmake
-BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  ginac-devel
 BuildRequires:  cln-devel
 BuildRequires:  libquadmath-devel

@@ -9,7 +9,7 @@ Source0:        https://gitlab.cern.ch/averbyts/qqvvamp/-/archive/master/qqvvamp
 Patch0:         patch-0.txt
 
 BuildRequires:  cmake
-BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  ginac-devel
 BuildRequires:  cln-devel
 BuildRequires:  libquadmath-devel
