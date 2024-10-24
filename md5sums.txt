@@ -282,3 +282,5 @@ adea94203351ad50518fa3cf661c3788  geant4/11.2.1/rpmbuild/SOURCES/geant4-v11.2.1.
 073b1b6d8ff745d6e3df7049109923ab  ggvvamp/1.0/rpmbuild/SOURCES/ggvvamp-1.0.tar.gz
 2c47d4be514d9ecbe6fde1eb195258e8  qqvvamp/1.1/rpmbuild/SOURCES/qqvvamp-1.1.tar.gz
 45864ac40eadf19fea765c427a4b05e4  qqvvamp/1.1/rpmbuild/SOURCES/qqvvamp-master.tar.gz
+744a8dc64241eed5f937422d740c883c  MG5_aMC/3.5.6/rpmbuild/SOURCES/MG5_aMC_v3.5.6.tar.gz
+7f3b4827fd08b406326784f47a97c7e2  LoopTools/2.16/rpmbuild/SOURCES/LoopTools-2.16.tar.gz

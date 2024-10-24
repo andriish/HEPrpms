@@ -4,8 +4,8 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-qqvvamp:1.1
-ggvvamp:1.0
+#qqvvamp:1.1
+#ggvvamp:1.0
 #MC-TESTER:1.25.1
 #openloops:2.1.3
 #Herwig:7.3.0
@@ -13,7 +13,7 @@ ggvvamp:1.0
 #highfive:2.9.0
 #Rivet:4.0.0
 #cernlib:2024.06.12.0
-#MG5_aMC:3.5.4
+MG5_aMC:3.5.6
 #Delphes:3.5.1pre10
 #geneva:1.0.0
 #SHERPA-MC:2.2.16

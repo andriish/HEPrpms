@@ -16,7 +16,7 @@
 
 // high precision versions can be disabled here
 // (reduces compilation times and file sizes)
-#define ARBITRARY_PRECISION
+//#define ARBITRARY_PRECISION
 #define QUAD_PRECISION
 #define DOUBLE_PRECISION
 
