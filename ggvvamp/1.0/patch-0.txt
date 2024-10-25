@@ -1,6 +1,6 @@
 diff -Naur ORIG/cmake/Modules/FindCLN.cmake PATCHED/cmake/Modules/FindCLN.cmake
 --- ORIG/cmake/Modules/FindCLN.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ PATCHED/cmake/Modules/FindCLN.cmake	2024-10-24 16:52:13.941757362 +0200
++++ PATCHED/cmake/Modules/FindCLN.cmake	2024-10-24 21:54:56.192179727 +0200
 @@ -0,0 +1,141 @@
 +# CLN_FOUND		CLN has been successfully found
 +# CLN_INCLUDE_DIR       the include directories
@@ -145,7 +145,7 @@ diff -Naur ORIG/cmake/Modules/FindCLN.cmake PATCHED/cmake/Modules/FindCLN.cmake
 +endif()
 diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
 --- ORIG/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ PATCHED/CMakeLists.txt	2024-10-24 16:52:22.733689953 +0200
++++ PATCHED/CMakeLists.txt	2024-10-24 21:54:56.192179727 +0200
 @@ -0,0 +1,117 @@
 +cmake_minimum_required(VERSION 3.10)
 +project(ggvvamp LANGUAGES CXX)
@@ -266,8 +266,17 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
 +)
 \ No newline at end of file
 diff -Naur ORIG/ggvvamp.h PATCHED/ggvvamp.h
---- ORIG/ggvvamp.h	2024-10-24 16:53:53.868991202 +0200
-+++ PATCHED/ggvvamp.h	2024-10-24 16:53:15.037288932 +0200
+--- ORIG/ggvvamp.h	2024-10-24 21:54:56.192179727 +0200
++++ PATCHED/ggvvamp.h	2024-10-24 23:23:04.545733224 +0200
+@@ -16,7 +16,7 @@
+ 
+ // high precision versions can be disabled here
+ // (reduces compilation times and file sizes)
+-#define ARBITRARY_PRECISION
++//#define ARBITRARY_PRECISION
+ #define QUAD_PRECISION
+ #define DOUBLE_PRECISION
+ 
 @@ -26,10 +26,16 @@
  #endif
  
@@ -285,9 +294,106 @@ diff -Naur ORIG/ggvvamp.h PATCHED/ggvvamp.h
  #include <ostream>
  #endif
  
+diff -Naur ORIG/ggvvampprec.cpp PATCHED/ggvvampprec.cpp
+--- ORIG/ggvvampprec.cpp	2023-01-06 01:13:06.267906113 +0100
++++ PATCHED/ggvvampprec.cpp	2023-01-06 01:28:36.838690630 +0100
+@@ -19,7 +19,7 @@
+ #include <ginac/ginac.h>
+ #include <cln/lfloat.h>
+ 
+-#if defined(DOUBLE_PRECISION) && defined(QUAD_PRECISION)
++#if defined(DOUBLE_PRECISION) || defined(QUAD_PRECISION)
+ 
+ using namespace std;
+ using namespace GiNaC;
+@@ -95,8 +95,10 @@
+ 
+ ggvvampprec::ggvvampprec(int Nf, IRscheme ir) :
+   maxrel(1e-6), maxabs(1e-50),
+-  d(Nf,ir), dx12(Nf,ir), dx34(Nf,ir), dx12x34(Nf,ir),
+-  q(Nf,ir), qx12(Nf,ir), qx34(Nf,ir), qx12x34(Nf,ir)
++  d(Nf,ir), dx12(Nf,ir), dx34(Nf,ir), dx12x34(Nf,ir)
++#ifdef QUAD_PRECISION
++  , q(Nf,ir), qx12(Nf,ir), qx34(Nf,ir), qx12x34(Nf,ir)
++#endif
+ #ifdef ARBITRARY_PRECISION
+   , a(Nf,ir), ax12(Nf,ir), ax34(Nf,ir), ax12x34(Nf,ir)
+ #endif
+@@ -149,8 +151,9 @@
+   bool recycle_coeff = false;
+ 
+   double dE[nEhel][nEcoeff+1][nloop][nreim];
++#ifdef QUAD_PRECISION  
+   quadtype qE[nEhel][nEcoeff+1][nloop][nreim];
+-
++#endif
+   Digits = maxdigits;
+   numeric s = tomanydigits(s_d);
+   numeric t = tomanydigits(t_d);
+diff -Naur ORIG/ggvvampprec.h PATCHED/ggvvampprec.h
+--- ORIG/ggvvampprec.h	2023-01-06 00:51:05.792859006 +0100
++++ PATCHED/ggvvampprec.h	2023-01-06 01:05:41.201825230 +0100
+@@ -17,7 +17,7 @@
+ 
+ // The code below assumes double and quad precision to be available.
+ // If required also other types could be used.
+-#if defined(DOUBLE_PRECISION) && defined(QUAD_PRECISION)
++#if defined(DOUBLE_PRECISION) || defined(QUAD_PRECISION)
+ 
+ // amplitude tensor coefficients for g g -> V V' with numerical precision control
+ /* The idea is to compare results obtained with different precision settings
+@@ -43,7 +43,9 @@
+ 
+ private:
+   ggvvamp<double>    d, dx12, dx34, dx12x34; // double precision evaluation
++#ifdef QUAD_PRECISION
+   ggvvamp<quadtype>  q, qx12, qx34, qx12x34; // quad precision evaluation
++#endif
+ #ifdef ARBITRARY_PRECISION
+   ggvvamp<cln::cl_F> a, ax12, ax34, ax12x34; // arbitrary precision evaluation
+ #endif
+diff -Naur ORIG/ggvvamp.xh PATCHED/ggvvamp.xh
+--- ORIG/ggvvamp.xh	2023-01-06 00:52:34.956077985 +0100
++++ PATCHED/ggvvamp.xh	2023-01-06 00:53:00.335424954 +0100
+@@ -3,7 +3,7 @@
+ 
+ void p0001(numtype ma2_n, numtype tn_n, numtype un_n, numtype mb2n_n, numtype x_n, numtype y_n, numtype z_n);
+ 
+-void p0002();  void p0003();  void p0004();  void p0005();  
++void p0002();  void p0003();  void p0004();  void p0005();  /*
+ void p0006();  void p0007();  void p0008();  void p0009();  void p0010();  
+ void p0011();  void p0012();  void p0013();  void p0014();  void p0015();  
+ void p0016();  void p0017();  void p0018();  void p0019();  void p0020();  
+@@ -495,4 +495,4 @@
+ void p2446();  void p2447();  void p2448();  void p2449();  void p2450();  
+ void p2451();  void p2452();  void p2453();  void p2454();  void p2455();  
+ void p2456();  void p2457();  void p2458();  void p2459();  void p2460();  
+-void p2461();  void p2462();  void p2463();  void p2464();  
++void p2461();  void p2462();  void p2463();  void p2464();  */
+diff -Naur ORIG/p0001.cpp PATCHED/p0001.cpp
+--- ORIG/p0001.cpp	2023-01-06 00:54:04.222298344 +0100
++++ PATCHED/p0001.cpp	2023-01-06 00:54:32.376683247 +0100
+@@ -16,7 +16,7 @@
+ // compute master integrals and algebraic expressions
+ p0003();
+ p0004();
+-p0005();
++p0005();/*
+ p0006();
+ p0007();
+ p0008();
+@@ -2475,7 +2475,7 @@
+ p2461();
+ p2462();
+ p2463();
+-p2464();
++p2464();*/
+ }
+ 
+ #include "ggvvamp.xi"
 diff -Naur ORIG/p0002.cpp PATCHED/p0002.cpp
---- ORIG/p0002.cpp	2024-10-24 17:05:20.720653827 +0200
-+++ PATCHED/p0002.cpp	2024-10-24 17:07:07.534807218 +0200
+--- ORIG/p0002.cpp	2024-10-24 21:54:56.192179727 +0200
++++ PATCHED/p0002.cpp	2024-10-24 21:54:56.193179744 +0200
 @@ -1,5 +1,11 @@
  #include "ggvvamp.h"
  #include <ginac/ginac.h>

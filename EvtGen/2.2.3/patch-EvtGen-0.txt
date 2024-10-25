@@ -1,0 +1,12 @@
+diff -Naur ORIG/cmake/Modules/FindPythia8.cmake PATCHED/cmake/Modules/FindPythia8.cmake
+--- ORIG/cmake/Modules/FindPythia8.cmake	2024-10-25 09:52:20.832411779 +0200
++++ PATCHED/cmake/Modules/FindPythia8.cmake	2024-10-25 09:52:20.832411779 +0200
+@@ -33,7 +33,7 @@
+           HINTS $ENV{PYTHIA8_ROOT_DIR}/include ${PYTHIA8_ROOT_DIR}/include
+           PATH_SUFFIXES include)
+ 
+-find_file(PYTHIA8_XML xmldoc PATH_SUFFIXES share/Pythia8
++find_file(PYTHIA8_XML xmldoc PATH_SUFFIXES share/Pythia8  share/doc/packages/pythia
+           HINTS ${PYTHIA8_INCLUDE_DIR}/.. $ENV{PYTHIA8_ROOT_DIR} ${PYTHIA8_ROOT_DIR})
+ 
+ mark_as_advanced(PYTHIA8_INCLUDE_DIR PYTHIA8_XML)

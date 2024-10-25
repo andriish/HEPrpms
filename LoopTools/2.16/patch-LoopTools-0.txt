@@ -1,6 +1,6 @@
 diff -Naur ORIG/makefile.in PATCHED/makefile.in
---- ORIG/makefile.in	2022-08-12 16:17:17.716386561 +0200
-+++ PATCHED/makefile.in	2022-08-12 16:17:17.716386561 +0200
+--- ORIG/makefile.in	2023-04-26 11:28:37.543205094 +0200
++++ PATCHED/makefile.in	2023-04-26 11:28:37.543205094 +0200
 @@ -44,18 +44,18 @@
  	cd $(BLD) && $(MAKE) $(ARGS) $@
  
@@ -29,3 +29,15 @@ diff -Naur ORIG/makefile.in PATCHED/makefile.in
  	}
  
  force: $(BLD)/timestamp
+diff -Naur ORIG/src/E/Ecoeffb.F PATCHED/src/E/Ecoeffb.F
+--- ORIG/src/E/Ecoeffb.F	2018-04-09 08:56:09.000000000 +0200
++++ PATCHED/src/E/Ecoeffb.F	2024-10-25 09:44:18.362096078 +0200
+@@ -46,7 +46,7 @@
+ 	serial = serial + 1
+ 	dump = ibits(debugkey, DebugE, 1) .ne. 0 .and.
+      &    serial .ge. debugfrom .and. serial .le. debugto
+-	if( dump ) call XDumpPara(5, para)
++	if( dump ) call XDumpPara(5, para,"")
+ 
+ 	m1 = M(1)
+ 	m2 = M(2)

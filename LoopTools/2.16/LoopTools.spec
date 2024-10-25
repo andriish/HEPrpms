@@ -37,7 +37,7 @@ FF has been published in Z. Phys. C46 (1990) 425
 %build
 sed -i 's@clang++@@' configure
 sed -i 's@clang@@' configure
-export FFLAGS="%{optflags} -fPIC"
+export FFLAGS="%{optflags} -fPIC -Wno-tabs -Wno-conversion"
 export CXXFLAGS="%{optflags} -fPIC"
 export CFLAGS="%{optflags} -fPIC"
 %configure
