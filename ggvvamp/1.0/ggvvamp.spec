@@ -45,8 +45,6 @@ export CXXFLAGS='%{optflags} -fno-var-tracking'
 %cmake_install
 
 %files
-%license LICENSE
-%doc README.md
 %{_libdir}/libggvvamp.so
 
 %files devel
