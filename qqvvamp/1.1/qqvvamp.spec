@@ -1,3 +1,4 @@
+%global debug_package %{nil}
 Name:           qqvvamp
 Version:        1.1
 Release:        1%{?dist}
@@ -35,6 +36,7 @@ This package contains the header files and libraries needed to develop applicati
 %patch -P 0 -p1
 
 %build
+export CXXFLAGS='%{optflags} -fno-var-tracking'
 %cmake .
 %cmake_build
 

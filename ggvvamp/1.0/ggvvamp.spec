@@ -22,6 +22,7 @@ ggvvamp is a package for symbolic computation and numerical analysis.
 
 %package devel
 Summary:        Development files for ggvvamp
+%global debug_package %{nil}
 Requires:       %{name} = %{version}-%{release}
 Requires:       ginac-devel
 Requires:       cln-devel
@@ -35,6 +36,7 @@ This package contains the header files and libraries needed to develop applicati
 %patch -P 0 -p1
 
 %build
+export CXXFLAGS='%{optflags} -fno-var-tracking'
 %cmake .
 %cmake_build
 
