@@ -1,6 +1,6 @@
 diff -Naur ORIG/cmake/Modules/FindPythia8.cmake PATCHED/cmake/Modules/FindPythia8.cmake
---- ORIG/cmake/Modules/FindPythia8.cmake	2024-10-25 09:52:20.832411779 +0200
-+++ PATCHED/cmake/Modules/FindPythia8.cmake	2024-10-25 09:52:20.832411779 +0200
+--- ORIG/cmake/Modules/FindPythia8.cmake	2024-10-25 10:16:22.690681455 +0200
++++ PATCHED/cmake/Modules/FindPythia8.cmake	2024-10-25 10:16:22.690681455 +0200
 @@ -33,7 +33,7 @@
            HINTS $ENV{PYTHIA8_ROOT_DIR}/include ${PYTHIA8_ROOT_DIR}/include
            PATH_SUFFIXES include)

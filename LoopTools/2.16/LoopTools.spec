@@ -1,10 +1,11 @@
 %undefine _debugsource_packages
+%global _lto_cflags %nil
 #Scripts fail to find debug infos because the library is static
 
 Summary: A package for evaluation of scalar and tensor one-loop integrals based on the FF package by G.J. van Oldenborgh
 Name: LoopTools
 Version: 2.16
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: LGPLv3
 Source: https://www.feynarts.de/looptools/LoopTools-%{version}.tar.gz
 Patch0:         patch-LoopTools-0.txt

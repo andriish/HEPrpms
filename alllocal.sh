@@ -5,7 +5,7 @@ export PATH=$PATH:$(pwd)
 #set -x 
 declare -a BUILDLIST=(
 #qqvvamp:1.1
-#ggvvamp:1.0
+ggvvamp:1.0
 #MC-TESTER:1.25.1
 #openloops:2.1.3
 #Herwig:7.3.0

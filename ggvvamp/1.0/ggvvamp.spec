@@ -1,3 +1,5 @@
+%global debug_package %{nil}
+%global _lto_cflags %nil
 Name:           ggvvamp
 Version:        1.0
 Release:        1%{?dist}
@@ -22,8 +24,6 @@ ggvvamp is a package for symbolic computation and numerical analysis.
 
 %package devel
 Summary:        Development files for ggvvamp
-%global debug_package %{nil}
-%global _lto_cflags %nil
 Requires:       %{name} = %{version}-%{release}
 Requires:       ginac-devel
 Requires:       cln-devel
