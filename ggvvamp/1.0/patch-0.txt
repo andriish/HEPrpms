@@ -267,16 +267,7 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
 \ No newline at end of file
 diff -Naur ORIG/ggvvamp.h PATCHED/ggvvamp.h
 --- ORIG/ggvvamp.h	2024-10-24 21:54:56.192179727 +0200
-+++ PATCHED/ggvvamp.h	2024-10-24 23:23:04.545733224 +0200
-@@ -16,7 +16,7 @@
- 
- // high precision versions can be disabled here
- // (reduces compilation times and file sizes)
--#define ARBITRARY_PRECISION
-+//#define ARBITRARY_PRECISION
- #define QUAD_PRECISION
- #define DOUBLE_PRECISION
- 
++++ PATCHED/ggvvamp.h	2024-10-25 10:31:33.096171890 +0200
 @@ -26,10 +26,16 @@
  #endif
  

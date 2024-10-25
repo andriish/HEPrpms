@@ -1092,16 +1092,7 @@ diff -Naur ORIG/p0002.cpp PATCHED/p0002.cpp
  r[1100] = n(log(tonumeric(r[18])));
 diff -Naur ORIG/qqvvamp.h PATCHED/qqvvamp.h
 --- ORIG/qqvvamp.h	2024-10-24 21:54:56.193179744 +0200
-+++ PATCHED/qqvvamp.h	2024-10-24 23:23:04.545733224 +0200
-@@ -16,7 +16,7 @@
- 
- // high precision versions can be disabled here
- // (reduces compilation times and file sizes)
--#define ARBITRARY_PRECISION
-+//#define ARBITRARY_PRECISION
- #define QUAD_PRECISION
- #define DOUBLE_PRECISION
- 
++++ PATCHED/qqvvamp.h	2024-10-25 10:31:26.960068224 +0200
 @@ -26,10 +26,17 @@
  #endif
  

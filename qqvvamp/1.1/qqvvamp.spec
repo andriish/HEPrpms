@@ -1,4 +1,5 @@
 %global debug_package %{nil}
+%global _lto_cflags %nil
 Name:           qqvvamp
 Version:        1.1
 Release:        1%{?dist}
