@@ -88,7 +88,12 @@ set_target_properties(evalcmdline_static PROPERTIES OUTPUT_NAME "evalcmdline-sta
 endif()
 
 # Installation of headers
-install(FILES ${CMAKE_SOURCE_DIR}/qqvvamp.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES 
+install(FILES 
+              ${CMAKE_SOURCE_DIR}/qqvvamp.h 
+              ${CMAKE_SOURCE_DIR}/qqvvamp.xh 
+              ${CMAKE_SOURCE_DIR}/qqvvampprec.h
+              DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # Create and install the CMake config file
 include(CMakePackageConfigHelpers)

@@ -88,7 +88,11 @@ set_target_properties(evalcmdlinegg_static PROPERTIES OUTPUT_NAME "evalcmdlinegg
 endif()
 
 # Installation of headers
-install(FILES ${CMAKE_SOURCE_DIR}/ggvvamp.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES 
+              ${CMAKE_SOURCE_DIR}/ggvvamp.h 
+              ${CMAKE_SOURCE_DIR}/ggvvamp.xh 
+              ${CMAKE_SOURCE_DIR}/ggvvampprec.h
+              DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # Create and install the CMake config file
 include(CMakePackageConfigHelpers)
