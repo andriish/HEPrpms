@@ -27,7 +27,7 @@ declare -a BUILDLIST=(
 #highfive:2.3.1
 #YODA:2.0.0
 #Rivet:4.0.0
-#fjcontrib:1.054
+#fjcontrib:1.056
 #binder:1.4.1
 #openloops:2.1.3
 #COCOA:0.1.1
@@ -73,7 +73,7 @@ declare -a BUILDLIST=(
 #collier:1.2.8
 #Professor:2.4.1
 #recola:1.4.4
-#EvtGen:2.2.1
+EvtGen:2.2.3
 #whizard:3.1.3
 
 #form:4.3.1
@@ -229,7 +229,7 @@ declare -a BUILDLIST=(
 #lhapdf-sets-Herwig:7.1.6
 #lhapdf-sets-whizard:2.8.3
 #lhapdf-sets-whizard:3.0.0
-#LoopTools:2.16
+LoopTools:2.16
 #MCFM:10.0  
 #cascade:9.1
 #MC-TESTER:1.25.0
@@ -261,7 +261,7 @@ declare -a BUILDLIST=(
 #ThePEG:2.2.2
 #tmdlib:2.2.0  
 #cascade:2.2.01
-topdrawer:1.4e
+#topdrawer:1.4e
 #ugs:2.10e
 #VBFNLO:3.0.0beta5
 #whizard:2.8.5
