@@ -45,7 +45,7 @@ export CXXFLAGS='%{optflags} -fno-var-tracking'
 %cmake_install
 
 %files
-%{_libdir}/libqqvvamp.so
+%{_libdir}/libqqvvamp*
 
 %files devel
 %{_includedir}/qqvvamp.h
