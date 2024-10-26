@@ -2,7 +2,7 @@
 %global _lto_cflags %nil
 Name:           ggvvamp
 Version:        1.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        ggvvamp package from vvamp.hepforge.org
 
 License:        GPL

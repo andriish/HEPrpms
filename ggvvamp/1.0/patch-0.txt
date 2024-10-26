@@ -145,8 +145,8 @@ diff -Naur ORIG/cmake/Modules/FindCLN.cmake PATCHED/cmake/Modules/FindCLN.cmake
 +endif()
 diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
 --- ORIG/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ PATCHED/CMakeLists.txt	2024-10-24 21:54:56.192179727 +0200
-@@ -0,0 +1,117 @@
++++ PATCHED/CMakeLists.txt	2024-10-26 01:36:02.346397849 +0200
+@@ -0,0 +1,121 @@
 +cmake_minimum_required(VERSION 3.10)
 +project(ggvvamp LANGUAGES CXX)
 +#Andrii Verbytskyi for VVamp project
@@ -237,7 +237,11 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
 +endif()
 +
 +# Installation of headers
-+install(FILES ${CMAKE_SOURCE_DIR}/ggvvamp.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++install(FILES 
++              ${CMAKE_SOURCE_DIR}/ggvvamp.h 
++              ${CMAKE_SOURCE_DIR}/ggvvamp.xh 
++              ${CMAKE_SOURCE_DIR}/ggvvampprec.h
++              DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 +
 +# Create and install the CMake config file
 +include(CMakePackageConfigHelpers)

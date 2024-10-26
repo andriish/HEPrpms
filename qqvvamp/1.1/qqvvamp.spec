@@ -2,7 +2,7 @@
 %global _lto_cflags %nil
 Name:           qqvvamp
 Version:        1.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        qqvvamp package from vvamp.hepforge.org
 
 License:        GPL
