@@ -2,7 +2,7 @@
 %global _lto_cflags %nil
 Name:           qqvvamp
 Version:        1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        qqvvamp package from vvamp.hepforge.org
 
 License:        GPL
@@ -48,7 +48,7 @@ export CXXFLAGS='%{optflags} -fno-var-tracking -mcmodel=medium'
 %{_libdir}/libqqvvamp*
 
 %files devel
-%{_includedir}/qqvvamp.h
+%{_includedir}/qq*
 %{_datadir}/cmake/qqvvamp
 
 %changelog

@@ -2,7 +2,7 @@
 %global _lto_cflags %nil
 Name:           ggvvamp
 Version:        1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ggvvamp package from vvamp.hepforge.org
 
 License:        GPL
@@ -48,7 +48,7 @@ export CXXFLAGS='%{optflags} -fno-var-tracking'
 %{_libdir}/libggvvamp*
 
 %files devel
-%{_includedir}/ggvvamp.h
+%{_includedir}/ggvv*
 %{_datadir}/cmake/ggvvamp
 
 %changelog
