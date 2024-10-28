@@ -89,7 +89,6 @@ endif()
 
 # Installation of headers
 install(FILES 
-install(FILES 
               ${CMAKE_SOURCE_DIR}/qqvvamp.h 
               ${CMAKE_SOURCE_DIR}/qqvvamp.xh 
               ${CMAKE_SOURCE_DIR}/qqvvampprec.h
