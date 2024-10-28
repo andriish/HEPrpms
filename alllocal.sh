@@ -4,8 +4,9 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+nlox:1.2.1
 #qqvvamp:1.1
-ggvvamp:1.0
+#ggvvamp:1.0
 #MC-TESTER:1.25.1
 #openloops:2.1.3
 #Herwig:7.3.0
@@ -73,7 +74,7 @@ ggvvamp:1.0
 #collier:1.2.8
 #Professor:2.4.1
 #recola:1.4.4
-EvtGen:2.2.3
+#EvtGen:2.2.3
 #whizard:3.1.3
 
 #form:4.3.1
