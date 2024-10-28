@@ -10,6 +10,7 @@ URL:            https://vvamp.hepforge.org/
 Source0:        nlox-1.2.1.tar.xz
 BuildRequires:  cmake
 BuildRequires:  gcc-gfortran
+BuildRequires:  gcc-c++
 BuildRequires:  python3
 BuildRequires:  libquadmath-devel
 
