@@ -46,8 +46,8 @@ BuildRequires:    texinfo git  MG5_aMC
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-BuildRequires:    python2 python2-devel
-Requires:         python2
+BuildRequires:    python3 python3-devel
+Requires:         python3
 Requires:  MCFM
 BuildRequires: MCFM
 %endif
