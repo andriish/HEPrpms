@@ -287,3 +287,4 @@ adea94203351ad50518fa3cf661c3788  geant4/11.2.1/rpmbuild/SOURCES/geant4-v11.2.1.
 51ed7fc2b50e0ac4f22e3896782c3a30  MC-TESTER/1.25.1/rpmbuild/SOURCES/mc-tester-v1.25.1.tar.gz
 d4474dba673134c6447befbeb3e3ced4  fjcontrib/1.056/rpmbuild/SOURCES/fjcontrib-1.056.tar.gz
 fd47d9c53d787a7ff3bee74f79d4be9f  EvtGen/2.2.3/rpmbuild/SOURCES/EvtGen-02.02.03.tar.gz
+184c05c42afc59aa478255303a07802f  SHERPA-MC/3.0.1/rpmbuild/SOURCES/sherpa-v3.0.1.tar.gz
