@@ -23,7 +23,7 @@ Summary:          Multipurpose Monte Carlo Event Generator for High Energy physi
 BuildRequires:    gcc-gfortran gcc-c++ root pythia8-devel pythia8   Rivet Rivet-devel cmake
 BuildRequires:    root-core root HepMC3-rootIO-devel HepMC3-devel HepMC3-search HepMC3-search-devel  HepMC3-rootIO HepMC3  
 BuildRequires:    autoconf automake libtool sqlite-devel sqlite subversion root-physics libzip-devel openmpi-devel
-BuildRequires:    openmpi environment-modules lhapdf-devel fastjet fastjet-devel  YODA-devel Rivet-devel zlib zlib-devel
+BuildRequires:    openmpi environment-modules lhapdf-devel fastjet fastjet-devel  YODA-devel Rivet-devel zlib zlib-devel openloops
 Requires:         lhapdf  HepMC3-rootIO HepMC3  sqlite root root-core openloops root Rivet YODA pythia8 openmpi fastjet  zlib
 Requires:         hztool libgfortran  recola qd openssl  HepMC3-search
 BuildRequires:    swig  recola qd qd-devel openssl-devel openssl
@@ -35,7 +35,7 @@ BuildRequires:    texinfo git
 BuildRequires:    gcc-fortran gcc-c++ pythia-devel libpythia8   Rivet Rivet-devel cmake
 BuildRequires:    root6-libs root6-devel root6-config root6 HepMC3-devel  libHepMC4  
 BuildRequires:    autoconf automake libtool sqlite-devel sqlite subversion  libzip-devel openmpi3-devel
-BuildRequires:    openmpi environment-modules LHAPDF-devel fastjet fastjet-devel  YODA-devel Rivet-devel zlib zlib-devel
+BuildRequires:    openmpi environment-modules LHAPDF-devel fastjet fastjet-devel  YODA-devel Rivet-devel zlib zlib-devel  openloops
 Requires:         libHepMC4 libLHAPDF libHepMC4  sqlite root6 root6-libs openloops Rivet YODA libpythia8 openmpi3 fastjet  zlib
 Requires:         hztool gcc-fortran  recola libqd0 openssl
 BuildRequires:    swig  recola libqd0 qd-devel openssl-devel openssl
