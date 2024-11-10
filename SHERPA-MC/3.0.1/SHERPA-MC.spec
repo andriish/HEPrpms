@@ -27,8 +27,8 @@ BuildRequires:    openmpi environment-modules lhapdf-devel fastjet fastjet-devel
 Requires:         lhapdf  HepMC3-rootIO HepMC3  sqlite root root-core openloops root Rivet YODA pythia8 openmpi fastjet  zlib
 Requires:         hztool libgfortran  recola qd openssl  HepMC3-search
 BuildRequires:    swig  recola qd qd-devel openssl-devel openssl
-Requires:         blackhat blackhat-data
-BuildRequires:    blackhat-devel blackhat
+Requires:         blackhat blackhat-data MG5_aMC
+BuildRequires:    blackhat-devel blackhat  MG5_aMC
 BuildRequires:    texinfo git
 %endif
 %if 0%{?suse_version}
@@ -40,16 +40,11 @@ Requires:         libHepMC4 libLHAPDF libHepMC4  sqlite root6 root6-libs openloo
 Requires:         hztool gcc-fortran  recola libqd0 openssl
 BuildRequires:    swig  recola libqd0 qd-devel openssl-devel openssl
 Requires:         blackhat blackhat-data libgfortran5
-BuildRequires:    blackhat-devel blackhat
-BuildRequires:    texinfo git
+BuildRequires:    blackhat-devel blackhat  MG5_aMC
+BuildRequires:    texinfo git  MG5_aMC
 %endif
 
-%if %{?rhel}%{!?rhel:0} == 7
-BuildRequires:    python python-devel
-Requires:         python
-Requires:  MCFM
-BuildRequires: MCFM
-%endif
+
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 BuildRequires:    python2 python2-devel
 Requires:         python2
@@ -162,7 +157,7 @@ chmod -x PDF/GRS/grsg99.f
   -DSHERPA_ENABLE_MPI:BOOL=OFF -DSHERPA_ENABLE_OPENLOOPS:BOOL=ON -DSHERPA_ENABLE_PYTHIA8:BOOL=ON -DSHERPA_ENABLE_PYTHON:BOOL=ON \
    -DSHERPA_ENABLE_RECOLA:BOOL=ON -DSHERPA_ENABLE_RIVET:BOOL=ON -DSHERPA_ENABLE_ROOT:BOOL=ON -DSHERPA_ENABLE_THREADING:BOOL=ON \
   -DSHERPA_ENABLE_UFO:BOOL=ON SHERPA_ENABLE_EWSUD:BOOL=ON \
-  -DSHERPA_ENABLE_GOSAM:BOOL=OFF SHERPA_ENABLE_MANUAL:BOOL=OFF
+  -DSHERPA_ENABLE_GOSAM:BOOL=OFF SHERPA_ENABLE_MANUAL:BOOL=OFF -S .
 
 
 %{_openmpi_load}
