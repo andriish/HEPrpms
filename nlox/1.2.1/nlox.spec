@@ -2,12 +2,12 @@
 %global _lto_cflags %nil
 Name:           nlox
 Version:        1.2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        nlox package 
 
 License:        GPL
-URL:            https://vvamp.hepforge.org/
-Source0:        nlox-1.2.1.tar.xz
+URL:            http://www.hep.fsu.edu/~nlox/
+Source0:        https://gitlab.cern.ch/averbyts/nlox/-/archive/1.2.2.atlas3/nlox-1.2.2.atlas3.zip
 BuildRequires:  cmake
 BuildRequires:  gcc-gfortran
 BuildRequires:  gcc-c++
@@ -21,11 +21,11 @@ nlox is a package .
 
 
 %prep
-%setup -q 
+%setup -q -n nlox-1.2.2.atlas3
 
 %build
 export CXXFLAGS='%{optflags} -fno-var-tracking -Wno-reorder -Wno-sign-compare -Wno-unused-variable'
-%cmake .  -DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir}/nlox -DCMAKE_VERBOSE_MAKEFILE=OFF -DNLOX_PROCESSES="pp_Wpttbar;pp_Wmttbar;pp_Zttbar_as3ae1;pp_ttbarepem_as3ae2"
+%cmake .  -DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir}/nlox -DNLOX_PROCPATHFINAL=%{_libdir}/nlox -DCMAKE_VERBOSE_MAKEFILE=OFF -DNLOX_PROCESSES="pp_Wpttbar;pp_Wmttbar;pp_Zttbar_as3ae1;pp_ttbarepem_as3ae2"
 %cmake_build
 
 %install
