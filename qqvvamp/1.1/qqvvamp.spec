@@ -37,7 +37,8 @@ This package contains the header files and libraries needed to develop applicati
 %patch -P 0 -p1
 
 %build
-export CXXFLAGS='%{optflags} -fno-var-tracking -mcmodel=medium'
+export CXXFLAGS='-O1 -fno-var-tracking -mcmodel=medium -fdata-sections -ffunction-sections'
+export LDFLAGS='-Wl,--as-needed'
 %cmake .
 %cmake_build
 

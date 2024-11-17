@@ -1,6 +1,6 @@
 diff -Naur ORIG/cmake/Modules/FindCLN.cmake PATCHED/cmake/Modules/FindCLN.cmake
 --- ORIG/cmake/Modules/FindCLN.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ PATCHED/cmake/Modules/FindCLN.cmake	2024-10-28 09:35:55.057584750 +0100
++++ PATCHED/cmake/Modules/FindCLN.cmake	2024-10-24 21:54:56.193179744 +0200
 @@ -0,0 +1,141 @@
 +# CLN_FOUND		CLN has been successfully found
 +# CLN_INCLUDE_DIR       the include directories
@@ -145,7 +145,7 @@ diff -Naur ORIG/cmake/Modules/FindCLN.cmake PATCHED/cmake/Modules/FindCLN.cmake
 +endif()
 diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
 --- ORIG/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ PATCHED/CMakeLists.txt	2024-10-29 09:59:51.126041009 +0100
++++ PATCHED/CMakeLists.txt	2024-10-28 22:22:56.466627334 +0100
 @@ -0,0 +1,121 @@
 +cmake_minimum_required(VERSION 3.10)
 +project(qqvvamp LANGUAGES CXX)
@@ -269,8 +269,8 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
 +DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/qqvvamp
 +)
 diff -Naur ORIG/p0002.cpp PATCHED/p0002.cpp
---- ORIG/p0002.cpp	2024-10-28 09:35:55.057584750 +0100
-+++ PATCHED/p0002.cpp	2024-10-28 09:35:55.057584750 +0100
+--- ORIG/p0002.cpp	2024-10-24 21:54:56.193179744 +0200
++++ PATCHED/p0002.cpp	2024-10-24 21:54:56.194179760 +0200
 @@ -1,5 +1,12 @@
  #include "qqvvamp.h"
  #include <ginac/ginac.h>
@@ -1094,8 +1094,8 @@ diff -Naur ORIG/p0002.cpp PATCHED/p0002.cpp
  r[1099] = n(log(tonumeric(r[17])));
  r[1100] = n(log(tonumeric(r[18])));
 diff -Naur ORIG/qqvvamp.h PATCHED/qqvvamp.h
---- ORIG/qqvvamp.h	2024-10-28 09:35:55.057584750 +0100
-+++ PATCHED/qqvvamp.h	2024-10-28 09:35:55.058584741 +0100
+--- ORIG/qqvvamp.h	2024-10-24 21:54:56.193179744 +0200
++++ PATCHED/qqvvamp.h	2024-10-25 10:31:26.960068224 +0200
 @@ -26,10 +26,17 @@
  #endif
  
