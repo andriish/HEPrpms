@@ -1,26 +1,16 @@
 ## Makefile for Professor 2.x
 
-VERSION := 2.4.2
+## Include the config
+include Makefile.inc
+
 DISTNAME := Professor-$(VERSION)
 $(info Building Professor $(VERSION))
 
-
 ## Default values for user-specifiable build variables
-
-SHELL := /bin/bash
-
-ifndef PREFIX
-  PREFIX := /usr/local
-endif
-
-CXXSTD := c++11
-
-ifndef CXX
-  CXX := g++
-endif
+# TODO: migrate to configure flags?
 
 ifndef CPPFLAGS
-  CPPFLAGS := -I/usr/include/eigen3
+  CPPFLAGS := $(EIGEN_CPPFLAGS)
 endif
 
 ifndef CXXFLAGS
@@ -119,6 +109,7 @@ pydeps:
 	@$(PYTHON) -m pip &> /dev/null || { echo "Python doesn't have pip support"; exit 1; }
 	@$(PYTHON) -c "import setuptools" &> /dev/null || { echo "Python setuptools needs to be installed: pip install setuptools"; exit 1; }
 	@$(PYTHON) -c "import cython" &> /dev/null || { echo "Cython needs to be installed: pip install Cython"; exit 1; }
+	@$(PYTHON) -c "import numpy" &> /dev/null || { echo "numpy needs to be installed: pip install numpy"; exit 1; }
 
 pyext: pydeps pyext/professor2/core.cpp $(wildcard pyext/professor2/*.py)
 	cd pyext/ && PROF_VERSION=$(VERSION) PROF_ROOT=$(PWD) $(PYTHON) -m pip install -vv ./
@@ -174,7 +165,7 @@ dist: all
 	rm -rf $(DISTNAME)
 	mkdir -p $(DISTNAME)
 	cp --parents \
-       README Makefile Makefile.mac \
+       README Makefile \
        $(LIBHEADERS) \
        $(LIBSOURCES) \
        $(BINPROGS) \

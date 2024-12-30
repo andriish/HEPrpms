@@ -9,10 +9,10 @@ fjcontrib:1.100
 MG5_aMC:3.5.7
 qcdloop:2.1.0
 Professor:2.5.0
-qd:2.3.24
-YODA:2.0.2
+#qd:2.3.24
+#YODA:2.0.2
 gosam:2.1.2
-cernlib:2024.09.16.0
+#cernlib:2024.09.16.0
 #SHERPA-MC:3.0.1
 #nlox:1.2.1
 #qqvvamp:1.1

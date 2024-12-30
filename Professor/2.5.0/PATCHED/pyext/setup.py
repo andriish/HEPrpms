@@ -23,7 +23,7 @@ ext = Extension("professor2.core",
                 runtime_library_dirs=[],
                 libraries=["Professor2"])
 
-v = os.environ.get("PROF_VERSION", "2.4.2")
+v = os.environ.get("PROF_VERSION", "2.5.0")
 setup(name = "professor2",
       version=v,
       ext_modules = [ext],

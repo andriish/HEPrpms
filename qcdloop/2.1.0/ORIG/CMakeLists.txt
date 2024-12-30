@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.12...3.31)
 
 # Disable the use of RPATHS - we probably are not
 # that interested in relocatable binaries and it
@@ -15,18 +15,42 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 project(qcdloop)
-
+include(GNUInstallDirs)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(VERSION "\"2.0.9\"")
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -march=nocona -mtune=haswell -fvisibility-inlines-hidden -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -fext-numeric-literals")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fPIC ${CMAKE_CXX_FLAGS}" CACHE STRING "debug compile flags" FORCE)
-set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-fsanitize=address" CACHE STRING "debug linker flags" FORCE)
+set(VERSION 2.1.0)
+
+# Set default CXXFLAGS but allow for environment override
+# c.f. https://cmake.org/cmake/help/v3.31/envvar/CXXFLAGS.html
+if (NOT CMAKE_CXX_FLAGS)
+  # c.f. https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html
+  if (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra -fvisibility-inlines-hidden -fmessage-length=0 -ftree-vectorize -fstack-protector-strong -O2 -pipe -fext-numeric-literals")
+  else()
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+  endif()
+else()
+  if (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
+    # Ensure -fext-numeric-literals is in CMAKE_CXX_FLAGS
+    string(FIND "${CMAKE_CXX_FLAGS}" "-fext-numeric-literals" _found_ext_numeric_literals)
+    if (_found_ext_numeric_literals EQUAL -1)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fext-numeric-literals" CACHE STRING "Update environment CXXFLAGS" FORCE)
+    endif()
+  endif()
+endif()
+
+# TODO: QCDLoop is currently only well tested on GNU, so other compiler
+# and linker defaults should be added as they become known
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address ${CMAKE_CXX_FLAGS}" CACHE STRING "debug CXXFLAGS" FORCE)
+  set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address" CACHE STRING "debug linker flags" FORCE)
+endif()
+
 set(prefix ${CMAKE_INSTALL_PREFIX})
-set(exec_prefix "${prefix}")
-set(includedir "${prefix}/include")
-set(libdir "${prefix}/lib")
+set(exec_prefix ${CMAKE_INSTALL_PREFIX})
+set(includedir ${CMAKE_INSTALL_INCLUDEDIR})
+set(libdir ${CMAKE_INSTALL_LIBDIR})
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/src/qcdloop/config.h.in"
@@ -42,7 +66,7 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/src/qcdloop.pc.in"
   "${PROJECT_SOURCE_DIR}/src/qcdloop.pc"
   )
-
+IF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
 set(QUADMATH_NAMES ${QUADMATH_NAMES} libquadmath.so quadmath)
 find_library(QUADMATH_LIBRARY
   NAMES ${QUADMATH_NAMES}
@@ -51,6 +75,8 @@ find_library(QUADMATH_LIBRARY
         /usr/local/lib /usr/x86_64-linux-gnu/*
         /usr/lib/gcc/x86_64-linux-gnu/*
         /usr/lib/gcc/x86_64-redhat-linux/*
+        /usr/lib/gcc/x86_64-pc-linux-gnu/*
+        "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
 )
 
 if(QUADMATH_LIBRARY)
@@ -69,7 +95,7 @@ else(QUADMATH_FOUND)
     message(FATAL_ERROR "Could not find QuadMath")
   endif(QUADMATH_FIND_REQUIRED)
 endif(QUADMATH_FOUND)
-
+endif()
 # libqcdloop configuration
 include_directories(src/qcdloop src)
 FILE(GLOB_RECURSE Headers "src/qcdloop/*.h")
@@ -86,13 +112,13 @@ add_library(qcdloop SHARED src/box.cc
                          ${Headers}
 )
 
-target_link_libraries(qcdloop)
+target_link_libraries(qcdloop ${QUADMATH_LIBRARY})
 install(FILES ${CMAKE_BINARY_DIR}/src/qcdloop-config
   DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
   GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-install(FILES ${PROJECT_SOURCE_DIR}/src/qcdloop.pc DESTINATION lib/pkgconfig)
-install(DIRECTORY src/qcdloop DESTINATION include)
-install(TARGETS qcdloop DESTINATION lib)
+install(FILES ${PROJECT_SOURCE_DIR}/src/qcdloop.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+install(DIRECTORY src/qcdloop DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(TARGETS qcdloop DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 # enable disable fortran/wrapper (to avoid name conflicts with ql1.x)
 option(ENABLE_FORTRAN_WRAPPER "Enable fortran wrapper" ON)

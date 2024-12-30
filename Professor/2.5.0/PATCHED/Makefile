@@ -1,9 +1,11 @@
 ## Makefile for Professor 2.x
 
+## Include the config
+include Makefile.inc
 VERSION := 2.4.2
+
 DISTNAME := Professor-$(VERSION)
 $(info Building Professor $(VERSION))
-
 
 ## Default values for user-specifiable build variables
 
@@ -110,6 +112,7 @@ lib/libProfessor2.so: $(LIBOBJECTS)
 obj/%.o: src/%.cc $(LIBHEADERS)
 	mkdir -p obj
 	$(CXX) -std=$(CXXSTD) -DPROF_VERSION="$(VERSION)" -I./ -I./include $(CPPFLAGS) $(CXXFLAGS) -c -fPIC $< -o $@
+
 obj/Version.o: src/Version.cc $(LIBHEADERS) Makefile
 	mkdir -p obj
 	$(CXX) -std=$(CXXSTD) -DPROF_VERSION="$(VERSION)" -Iinclude $(CPPFLAGS) $(CXXFLAGS) -c -fPIC $< -o $@
@@ -118,6 +121,7 @@ pydeps:
 #	@$(PYTHON) -m pip &> /dev/null || { echo "Python doesn't have pip support"; exit 1; }
 #	@$(PYTHON) -c "import setuptools" &> /dev/null || { echo "Python setuptools needs to be installed: pip install setuptools"; exit 1; }
 #	@$(PYTHON) -c "import cython" &> /dev/null || { echo "Cython needs to be installed: pip install Cython"; exit 1; }
+#	@$(PYTHON) -c "import numpy" &> /dev/null || { echo "numpy needs to be installed: pip install numpy"; exit 1; }
 
 pyext: pydeps pyext/professor2/core.cpp $(wildcard pyext/professor2/*.py)
 #	PROF_VERSION=$(VERSION) $(PYTHON) -m pip install -vv ./pyext/
@@ -173,7 +177,7 @@ dist: all
 	rm -rf $(DISTNAME)
 	mkdir -p $(DISTNAME)
 	cp --parents \
-       README Makefile Makefile.mac \
+       README Makefile \
        $(LIBHEADERS) \
        $(LIBSOURCES) \
        $(BINPROGS) \
