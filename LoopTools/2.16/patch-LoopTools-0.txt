@@ -1,6 +1,6 @@
 diff -Naur ORIG/makefile.in PATCHED/makefile.in
---- ORIG/makefile.in	2023-04-26 11:28:37.543205094 +0200
-+++ PATCHED/makefile.in	2023-04-26 11:28:37.543205094 +0200
+--- ORIG/makefile.in	2024-12-22 02:24:17.489899282 +0100
++++ PATCHED/makefile.in	2024-12-22 02:24:17.489899282 +0100
 @@ -44,18 +44,18 @@
  	cd $(BLD) && $(MAKE) $(ARGS) $@
  
@@ -30,8 +30,8 @@ diff -Naur ORIG/makefile.in PATCHED/makefile.in
  
  force: $(BLD)/timestamp
 diff -Naur ORIG/src/E/Ecoeffb.F PATCHED/src/E/Ecoeffb.F
---- ORIG/src/E/Ecoeffb.F	2024-10-25 10:16:22.690681455 +0200
-+++ PATCHED/src/E/Ecoeffb.F	2024-10-25 10:16:22.690681455 +0200
+--- ORIG/src/E/Ecoeffb.F	2024-12-22 02:24:17.489899282 +0100
++++ PATCHED/src/E/Ecoeffb.F	2024-12-22 02:24:17.489899282 +0100
 @@ -46,7 +46,7 @@
  	serial = serial + 1
  	dump = ibits(debugkey, DebugE, 1) .ne. 0 .and.

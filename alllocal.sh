@@ -4,8 +4,17 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+#fastjet:3.4.3
+fjcontrib:1.100
+MG5_aMC:3.5.7
+qcdloop:2.1.0
+Professor:2.5.0
+qd:2.3.24
+YODA:2.0.2
+gosam:2.1.2
+cernlib:2024.09.16.0
 #SHERPA-MC:3.0.1
-nlox:1.2.1
+#nlox:1.2.1
 #qqvvamp:1.1
 #ggvvamp:1.0
 #MC-TESTER:1.25.1
@@ -231,7 +240,7 @@ nlox:1.2.1
 #lhapdf-sets-Herwig:7.1.6
 #lhapdf-sets-whizard:2.8.3
 #lhapdf-sets-whizard:3.0.0
-LoopTools:2.16
+#LoopTools:2.16
 #MCFM:10.0  
 #cascade:9.1
 #MC-TESTER:1.25.0

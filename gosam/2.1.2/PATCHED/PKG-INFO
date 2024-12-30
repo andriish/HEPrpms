@@ -1,0 +1,29 @@
+Metadata-Version: 2.1
+Name: gosam
+Version: 2.1.2
+Summary: GoSam, An Automated One-Loop Matrix Element Generator
+Home-page: http://projects.hepforge.org/gosam/
+Download-URL: http://projects.hepforge.org/gosam/downloads/gosam-2.1.2+c307997.tar.gz
+Author: The GoSam (Golem and Samurai) Collaboration
+Author-email: gosam@hepforge.org
+Maintainer: The GoSam Collaboration
+Maintainer-email: gosam@hepforge.org
+License: GPLv3+
+Platform: POSIX
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Natural Language :: English
+Classifier: Operating System :: POSIX
+Classifier: Programming Language :: Fortran
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering :: Physics
+Provides: gosam (2.1.2)
+License-File: COPYING
+
+				GoSam is a matrix element generator for one-loop
+				amplitudes in quantum field theories.
+				
