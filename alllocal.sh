@@ -10,7 +10,7 @@ declare -a BUILDLIST=(
 #LATER Rivet:4.0.2
 #fastjet:3.4.3
 ### LATER 
-fjcontrib:1.100
+#fjcontrib:1.100
 #### BAD MG5_aMC:3.5.7
 #qcdloop:2.1.0
 #Professor:2.5.0
@@ -31,7 +31,7 @@ fjcontrib:1.100
 #Rivet:4.0.0
 #cernlib:2024.06.12.0
 #MG5_aMC:3.5.6
-#Delphes:3.5.1pre10
+Delphes:3.5.1pre11
 #geneva:1.0.0
 #SHERPA-MC:2.2.16
 #hoppet:1.2

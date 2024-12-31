@@ -303,3 +303,5 @@ d384c49b9ce75dae9b91f90c7991ff8f  gosam/2.1.2/rpmbuild/SOURCES/gosam-2.1.2+c3079
 1db7e17ececc6a4fb1039cfe8261a963  Rivet/4.0.2/rpmbuild/SOURCES/Rivet-4.0.2.tar.gz
 959f1e831594efe66e06cac40a57fb05  LCIO/02.22.02/rpmbuild/SOURCES/v02-22-02.tar.gz
 c49cf0ec1b52003a47ebb248089dfde5  geant4/11.3.0/rpmbuild/SOURCES/geant4-v11.3.0.tar.gz
+976917c1763bebeabe510314b775ae55  Delphes/3.5.1pre11/rpmbuild/SOURCES/3.5.1pre10.tar.gz
+6f62006d9a06a6f65514f4e0aa1dd485  Delphes/3.5.1pre11/rpmbuild/SOURCES/3.5.1pre11.tar.gz
