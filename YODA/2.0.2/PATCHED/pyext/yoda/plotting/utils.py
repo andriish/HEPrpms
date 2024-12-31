@@ -60,7 +60,7 @@ def pad(xprobe, xref, yvals, *args):
     """Helper method to pad yvals and yerrs with NaNs where they have
        fewer elements than the reference."""
     if xprobe.shape == xref.shape:
-        return yvals, *args
+        return (yvals, *args)
     padded_yvals = np.array([ yvals[x==xprobe][0] if x in xprobe else np.nan for x in xref ])
     args = [ np.array([ [errs[x==xprobe][0] if x in xprobe else \
                          np.nan for x in xref ] for errs in arg ]) for arg in args ]
@@ -214,7 +214,7 @@ def legendDefaults(refAO, xlims, ylims, logx, logy):
         if yvals[0] > ymid: # mv legend down
             anchor = anchor.replace('upper', 'lower')
             xypos = (1.00,0.03)
-        return *xypos, anchor, align
+        return (*xypos, anchor, align)
     elif len(yvals) == 2: # only two points on the canvas
         if np.sum(yvals > ymid) != 1:  # 2-by-2 matrix is diagonal
             if yvals[-1] > ymid: # mv legend to the left
@@ -224,7 +224,7 @@ def legendDefaults(refAO, xlims, ylims, logx, logy):
         else: # mv legend below curve
             # ToDo: extend y-axis range?
             xypos = (1.00,0.03)
-        return *xypos, anchor, align
+        return (*xypos, anchor, align)
     # split x-range into thirds
     xlo, xhi = splitRange(*xlims, 3, logx)
     xvals = refAO.xVals()
