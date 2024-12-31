@@ -290,3 +290,16 @@ fd47d9c53d787a7ff3bee74f79d4be9f  EvtGen/2.2.3/rpmbuild/SOURCES/EvtGen-02.02.03.
 184c05c42afc59aa478255303a07802f  SHERPA-MC/3.0.1/rpmbuild/SOURCES/sherpa-v3.0.1.tar.gz
 801e850d05950f760c8bef104459db5e  nlox/1.2.1/rpmbuild/SOURCES/nlox-1.2.2.atlas3.zip
 69347e4b3c5bb9ecf4014a7ea0f5c9c9  nlox/1.2.1/rpmbuild/SOURCES/nlox-1.2.2.atlas5.zip
+60379a7ed2fb6eb0077525e21454fb09  cernlib/2024.09.16.0/rpmbuild/SOURCES/cernlib-cernlib-2024.09.16.0-free.tar.gz
+c276a4acface6309ca6f991d08135ba7  fastjet/3.4.3/rpmbuild/SOURCES/fastjet-3.4.3.tar.gz
+0daa3b424b6586c63df96b438bb5191c  fjcontrib/1.100/rpmbuild/SOURCES/fjcontrib-1.100.tar.gz
+d384c49b9ce75dae9b91f90c7991ff8f  gosam/2.1.2/rpmbuild/SOURCES/gosam-2.1.2+c307997.tar.gz
+9503320a00e7c16b4ac1fd20749d3feb  LoopTools/2.16/rpmbuild/SOURCES/LoopTools-2.16.tar.gz
+68c93e7a3de3fa8132d26acaffa9c22b  Professor/2.5.0/rpmbuild/SOURCES/professor-professor-2.5.0.tar.gz
+43ce189bbd065ece4d1e7b1acee3b6bb  qcdloop/2.1.0/rpmbuild/SOURCES/2.1.0.tar.gz
+1c87515c90379693ada4bb804784b672  qd/2.3.24/rpmbuild/SOURCES/qd-2.3.24.tar.gz
+643cc4999873431ab4394550bed555a4  YODA/2.0.2/rpmbuild/SOURCES/YODA-2.0.2.tar.gz
+826671a35d9452ea287fada2595ab12c  whizard/3.1.5/rpmbuild/SOURCES/whizard-3.1.5.tar.gz
+1db7e17ececc6a4fb1039cfe8261a963  Rivet/4.0.2/rpmbuild/SOURCES/Rivet-4.0.2.tar.gz
+959f1e831594efe66e06cac40a57fb05  LCIO/02.22.02/rpmbuild/SOURCES/v02-22-02.tar.gz
+c49cf0ec1b52003a47ebb248089dfde5  geant4/11.3.0/rpmbuild/SOURCES/geant4-v11.3.0.tar.gz
