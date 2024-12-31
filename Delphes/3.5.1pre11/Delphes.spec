@@ -82,6 +82,7 @@ mkdir -p %{buildroot}/%{_includedir}/%{name}/
 
 mv %{buildroot}/%{_prefix}/cards      %{buildroot}/%{_pkgdocdir}/cards
 mv %{buildroot}/%{_prefix}/examples   %{buildroot}/%{_pkgdocdir}/examples
+mv %{buildroot}/%{_prefix}/lib/*pcm        %{buildroot}/%{_libdir}
 mv %{buildroot}/%{_prefix}/include/ExRootAnalysis  %{buildroot}/%{_includedir}/%{name}/
 mv %{buildroot}/%{_prefix}/include/modules  %{buildroot}/%{_includedir}/%{name}/
 mv %{buildroot}/%{_prefix}/include/display  %{buildroot}/%{_includedir}/%{name}/
