@@ -62,6 +62,11 @@ IF(${CMAKE_CXX_STANDARD} LESS 14)
   MESSAGE(FATAL_ERROR "DD4hep requires at least CXX Standard 14 to compile")
 ENDIF()
 
+if(DD4HEP_USE_TBB)
+  find_package(TBB REQUIRED CONFIG)
+  set(TBB_IMPORTED_TARGETS TBB::tbb)
+endif()
+
 ###############################
 # Define DD4hep build options #
 ###############################
@@ -131,7 +136,13 @@ DD4HEP_SETUP_ROOT_TARGETS()
 
 # Configure BOOST
 find_package(Boost 1.49 REQUIRED)
-DD4HEP_SETUP_BOOST_TARGETS()
+#link_libraries( "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:-lstdc++fs>" )
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  if (CXX_COMPILER_VERSION VERSION_LESS 9.1)
+    set(FS_LIBRARIES "-lstdc++fs")
+  endif()
+endif()
+#DD4HEP_SETUP_BOOST_TARGETS()
 
 # Configure Geant4
 if(DD4HEP_USE_GEANT4)
@@ -186,9 +197,7 @@ if(DD4HEP_USE_HEPMC3)
   endif()
 endif()
 
-if(DD4HEP_USE_TBB)
-  find_package(TBB REQUIRED CONFIG)
-endif()
+
 
 
 ######################
