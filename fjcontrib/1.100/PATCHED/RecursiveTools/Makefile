@@ -26,7 +26,14 @@ DEPENDS_ON =
 #------------------------------------------------------------------------
 
 CXXFLAGS+= $(shell $(FASTJETCONFIG) --cxxflags)
-LDFLAGS += -lm $(shell $(FASTJETCONFIG) --libs)
+LDFLAGS += $(shell $(FASTJETCONFIG) --libs)
+
+INCLUDE += -Iinclude/
+# loop over all entries in DEPENDS_ON and for each entry ENTRY
+# add -I../ENTRY to INCLUDE, -L../ENTRY to LDFLAGS and -lENTRY to LDFLAGS
+INCLUDE += $(foreach ENTRY,$(DEPENDS_ON),-I../$(ENTRY)/include)
+LDFLAGS += $(foreach ENTRY,$(DEPENDS_ON),-L../$(ENTRY) -l$(ENTRY))
+CXXFLAGS+= $(INCLUDE)
 
 OBJS  = $(SRCS:.cc=.o)
 EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
@@ -46,9 +53,6 @@ all: lib$(NAME).a lib$(NAME).so
 lib$(NAME).a: $(OBJS) 
 	ar cru lib$(NAME).a $(OBJS)
 	ranlib lib$(NAME).a
-lib$(NAME).so: $(OBJS) 
-	$(CXX) -shared -o lib$(NAME).so $(OBJS)
-
 lib$(NAME).so: $(OBJS) 
 	$(CXX) -shared -o lib$(NAME).so $(OBJS)
 
@@ -88,7 +92,7 @@ distclean: clean
 install: all
 	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
 	for header in $(INSTALLED_HEADERS); do\
-	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
 	done
 	$(install_DIR) $(DESTDIR)$(LIBDIR)
 	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)

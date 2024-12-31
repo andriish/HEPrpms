@@ -41,6 +41,7 @@ all: lib$(NAME).a  lib$(NAME).so
 lib$(NAME).a: $(OBJS) 
 	ar cru lib$(NAME).a $(OBJS)
 	ranlib lib$(NAME).a
+
 lib$(NAME).so: $(OBJS) 
 	$(CXX) -shared -o lib$(NAME).so $(OBJS)
 # building the examples

@@ -40,14 +40,12 @@ install_SCRIPT  = $(install_script) -c
 # compilation of the code (default target)
 all: lib$(NAME).a lib$(NAME).so
 
-lib$(NAME).a: $(OBJS) 
+lib$(NAME).a: $(OBJS)
 	ar cru lib$(NAME).a $(OBJS)
 	ranlib lib$(NAME).a
 lib$(NAME).so: $(OBJS) 
 	$(CXX) -shared -o lib$(NAME).so $(OBJS)
 
-lib$(NAME).so: $(OBJS) 
-	$(CXX) -shared -o  lib$(NAME).so $(OBJS)
 # building the examples
 examples: $(EXAMPLES) $(EXAMPLES2)
 

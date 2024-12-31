@@ -110,7 +110,7 @@ diff -Naur ./ORIG/ClusteringVetoPlugin/Makefile ./PATCHED/ClusteringVetoPlugin/M
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/CMPPlugin/Makefile ./PATCHED/CMPPlugin/Makefile
 --- ./ORIG/CMPPlugin/Makefile	2024-12-13 17:29:31.000000000 +0100
-+++ ./PATCHED/CMPPlugin/Makefile	2024-12-31 00:17:49.038704648 +0100
++++ ./PATCHED/CMPPlugin/Makefile	2024-12-31 01:51:16.130128424 +0100
 @@ -44,7 +44,7 @@
  EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
  
@@ -149,7 +149,7 @@ diff -Naur ./ORIG/CMPPlugin/Makefile ./PATCHED/CMPPlugin/Makefile
 +	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
  	for header in $(INSTALLED_HEADERS); do\
 -	  $(install_HEADER) include/fastjet/contrib/$$header $(PREFIX)/include/fastjet/contrib/;\
-+	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
  	done
 -	$(install_DIR) $(PREFIX)/lib
 -	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
@@ -444,7 +444,7 @@ diff -Naur ./ORIG/FlavorCone/Makefile ./PATCHED/FlavorCone/Makefile
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/GenericSubtractor/Makefile ./PATCHED/GenericSubtractor/Makefile
 --- ./ORIG/GenericSubtractor/Makefile	2024-12-30 22:41:04.123343342 +0100
-+++ ./PATCHED/GenericSubtractor/Makefile	2024-12-30 22:41:04.124343358 +0100
++++ ./PATCHED/GenericSubtractor/Makefile	2024-12-31 01:45:53.587623836 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -453,7 +453,7 @@ diff -Naur ./ORIG/GenericSubtractor/Makefile ./PATCHED/GenericSubtractor/Makefil
  CXX=g++
  CXXFLAGS= -O3 -Wall -g
  install_script = $(SHELL) ../utils/install-sh
-@@ -29,18 +30,19 @@
+@@ -29,18 +30,20 @@
  EXAMPLES_SRCS = $(EXAMPLES:=.cc)
  
  install_HEADER  = $(install_script) -c -m 644
@@ -470,13 +470,13 @@ diff -Naur ./ORIG/GenericSubtractor/Makefile ./PATCHED/GenericSubtractor/Makefil
  lib$(NAME).a: $(OBJS) 
  	ar cru lib$(NAME).a $(OBJS)
  	ranlib lib$(NAME).a
--
+ 
 +lib$(NAME).so: $(OBJS) 
 +	$(CXX) -shared -o lib$(NAME).so $(OBJS)
  # building the examples
  examples: $(EXAMPLES)
  
-@@ -61,16 +63,17 @@
+@@ -61,16 +64,17 @@
  	rm -f *~ *.o
  
  distclean: clean
@@ -501,7 +501,7 @@ diff -Naur ./ORIG/GenericSubtractor/Makefile ./PATCHED/GenericSubtractor/Makefil
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/IFNPlugin/Makefile ./PATCHED/IFNPlugin/Makefile
 --- ./ORIG/IFNPlugin/Makefile	2024-12-13 17:29:29.000000000 +0100
-+++ ./PATCHED/IFNPlugin/Makefile	2024-12-31 00:24:24.890324178 +0100
++++ ./PATCHED/IFNPlugin/Makefile	2024-12-31 01:51:45.154623763 +0100
 @@ -44,7 +44,7 @@
  EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
  
@@ -511,7 +511,7 @@ diff -Naur ./ORIG/IFNPlugin/Makefile ./PATCHED/IFNPlugin/Makefile
  install_DIR     = $(install_script) -d
  install_DATA    = $(install_script) -c -m 644
  install_PROGRAM = $(install_script) -c -s
-@@ -53,12 +53,13 @@
+@@ -53,11 +53,13 @@
  .PHONY: clean distclean examples check install
  
  # compilation of the code (default target)
@@ -521,13 +521,12 @@ diff -Naur ./ORIG/IFNPlugin/Makefile ./PATCHED/IFNPlugin/Makefile
  lib$(NAME).a: $(OBJS) 
  	ar cru lib$(NAME).a $(OBJS)
  	ranlib lib$(NAME).a
--
 +lib$(NAME).so: $(OBJS) 
 +	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ 
  # building the examples
  examples: $(EXAMPLES)
- 
-@@ -79,16 +80,17 @@
+@@ -79,16 +81,17 @@
  	rm -f *~ *.o
  
  distclean: clean
@@ -540,7 +539,7 @@ diff -Naur ./ORIG/IFNPlugin/Makefile ./PATCHED/IFNPlugin/Makefile
 +	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
  	for header in $(INSTALLED_HEADERS); do\
 -	  $(install_HEADER) include/fastjet/contrib/$$header $(PREFIX)/include/fastjet/contrib/;\
-+	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
  	done
 -	$(install_DIR) $(PREFIX)/lib
 -	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
@@ -745,7 +744,7 @@ diff -Naur ./ORIG/KTClusCXX/Makefile ./PATCHED/KTClusCXX/Makefile
  depend:
 diff -Naur ./ORIG/LundPlane/Makefile ./PATCHED/LundPlane/Makefile
 --- ./ORIG/LundPlane/Makefile	2024-12-31 00:01:21.182185478 +0100
-+++ ./PATCHED/LundPlane/Makefile	2024-12-31 00:01:22.860213534 +0100
++++ ./PATCHED/LundPlane/Makefile	2024-12-31 01:55:17.079240519 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -795,7 +794,7 @@ diff -Naur ./ORIG/LundPlane/Makefile ./PATCHED/LundPlane/Makefile
 +	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
  	for header in $(INSTALLED_HEADERS); do\
 -	  $(install_HEADER) include/fastjet/contrib/$$header $(PREFIX)/include/fastjet/contrib/;\
-+	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
  	done
 -	$(install_DIR) $(PREFIX)/lib
 -	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
@@ -807,13 +806,13 @@ diff -Naur ./ORIG/LundPlane/Makefile ./PATCHED/LundPlane/Makefile
  	makedepend -Y -- -Iinclude -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/Makefile.in ./PATCHED/Makefile.in
 --- ./ORIG/Makefile.in	2024-12-31 00:04:39.841507473 +0100
-+++ ./PATCHED/Makefile.in	2024-12-31 00:04:38.478484682 +0100
++++ ./PATCHED/Makefile.in	2024-12-31 01:47:15.257017618 +0100
 @@ -63,11 +63,11 @@
  fragile_SHARED_SRC_LIST=@FRAGILE_SHARED_SRC_LIST@
  fragile_SHARED_INCLUDES=@FRAGILE_SHARED_INCLUDES@
  libfastjetcontribfragile.@DYNLIBEXT@: $(fragile_SHARED_SRC_LIST)
 -	$(CXX) @DYNLIBOPT@ -fPIC -DPIC $(CXXFLAGS) `$(FASTJETCONFIG) --cxxflags --libs` $(fragile_SHARED_INCLUDES) $(fragile_SHARED_SRC_LIST) -o libfastjetcontribfragile.@DYNLIBEXT@
-+	$(CXX) @DYNLIBOPT@ -fPIC -DPIC $(CXXFLAGS) `$(FASTJETCONFIG) --cxxflags --libs | sed 's/-Wl,-rpath[^[:space:]]*//g' ` $(fragile_SHARED_SRC_LIST) -o libfastjetcontribfragile.@DYNLIBEXT@
++	$(CXX) @DYNLIBOPT@ -fPIC -DPIC $(CXXFLAGS) `$(FASTJETCONFIG) --cxxflags --libs | sed 's/-Wl,-rpath[^[:space:]]*//g' ` $(fragile_SHARED_INCLUDES) $(fragile_SHARED_SRC_LIST) -o libfastjetcontribfragile.@DYNLIBEXT@
  
  fragile-shared-install: fragile-shared
 -	utils/install-sh -c -m 755 libfastjetcontribfragile.@DYNLIBEXT@ $(PREFIX)/lib
@@ -825,7 +824,7 @@ diff -Naur ./ORIG/Makefile.in ./PATCHED/Makefile.in
  	rm -f libfastjetcontribfragile.@DYNLIBEXT@
 diff -Naur ./ORIG/Nsubjettiness/Makefile ./PATCHED/Nsubjettiness/Makefile
 --- ./ORIG/Nsubjettiness/Makefile	2024-12-31 00:01:43.004550374 +0100
-+++ ./PATCHED/Nsubjettiness/Makefile	2024-12-31 00:01:43.859564671 +0100
++++ ./PATCHED/Nsubjettiness/Makefile	2024-12-31 01:45:10.056880925 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -843,26 +842,22 @@ diff -Naur ./ORIG/Nsubjettiness/Makefile ./PATCHED/Nsubjettiness/Makefile
  install_DIR     = $(install_script) -d
  install_DATA    = $(install_script) -c -m 644
  install_PROGRAM = $(install_script) -c -s
-@@ -37,12 +38,16 @@
+@@ -37,11 +38,13 @@
  .PHONY: clean distclean examples check install
  
  # compilation of the code (default target)
 -all: lib$(NAME).a
 +all: lib$(NAME).a lib$(NAME).so
  
--lib$(NAME).a: $(OBJS)
-+lib$(NAME).a: $(OBJS) 
+ lib$(NAME).a: $(OBJS)
  	ar cru lib$(NAME).a $(OBJS)
  	ranlib lib$(NAME).a
 +lib$(NAME).so: $(OBJS) 
 +	$(CXX) -shared -o lib$(NAME).so $(OBJS)
  
-+lib$(NAME).so: $(OBJS) 
-+	$(CXX) -shared -o  lib$(NAME).so $(OBJS)
  # building the examples
  examples: $(EXAMPLES) $(EXAMPLES2)
- 
-@@ -69,16 +74,17 @@
+@@ -69,16 +72,17 @@
  	rm -f *~ *.o *.a
  
  distclean: clean
@@ -946,7 +941,7 @@ diff -Naur ./ORIG/QCDAwarePlugin/Makefile ./PATCHED/QCDAwarePlugin/Makefile
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/RecursiveTools/Makefile ./PATCHED/RecursiveTools/Makefile
 --- ./ORIG/RecursiveTools/Makefile	2024-12-31 00:02:29.441326912 +0100
-+++ ./PATCHED/RecursiveTools/Makefile	2024-12-31 00:02:32.717381691 +0100
++++ ./PATCHED/RecursiveTools/Makefile	2024-12-31 02:00:20.201413666 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -955,21 +950,7 @@ diff -Naur ./ORIG/RecursiveTools/Makefile ./PATCHED/RecursiveTools/Makefile
  CXX=g++
  CXXFLAGS= -O3 -Wall -g
  install_script = $(SHELL) ../utils/install-sh
-@@ -25,20 +26,13 @@
- #------------------------------------------------------------------------
- 
- CXXFLAGS+= $(shell $(FASTJETCONFIG) --cxxflags)
--LDFLAGS += $(shell $(FASTJETCONFIG) --libs)
--
--INCLUDE += -Iinclude/
--# loop over all entries in DEPENDS_ON and for each entry ENTRY
--# add -I../ENTRY to INCLUDE, -L../ENTRY to LDFLAGS and -lENTRY to LDFLAGS
--INCLUDE += $(foreach ENTRY,$(DEPENDS_ON),-I../$(ENTRY)/include)
--LDFLAGS += $(foreach ENTRY,$(DEPENDS_ON),-L../$(ENTRY) -l$(ENTRY))
--CXXFLAGS+= $(INCLUDE)
-+LDFLAGS += -lm $(shell $(FASTJETCONFIG) --libs)
- 
- OBJS  = $(SRCS:.cc=.o)
+@@ -38,7 +39,7 @@
  EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
  
  install_HEADER  = $(install_script) -c -m 644
@@ -978,7 +959,7 @@ diff -Naur ./ORIG/RecursiveTools/Makefile ./PATCHED/RecursiveTools/Makefile
  install_DIR     = $(install_script) -d
  install_DATA    = $(install_script) -c -m 644
  install_PROGRAM = $(install_script) -c -s
-@@ -47,11 +41,17 @@
+@@ -47,11 +48,14 @@
  .PHONY: clean distclean examples check install
  
  # compilation of the code (default target)
@@ -991,13 +972,10 @@ diff -Naur ./ORIG/RecursiveTools/Makefile ./PATCHED/RecursiveTools/Makefile
 +lib$(NAME).so: $(OBJS) 
 +	$(CXX) -shared -o lib$(NAME).so $(OBJS)
 +
-+lib$(NAME).so: $(OBJS) 
-+	$(CXX) -shared -o lib$(NAME).so $(OBJS)
-+
  
  # building the examples
  examples: $(EXAMPLES)
-@@ -82,17 +82,17 @@
+@@ -82,17 +86,17 @@
  	rm -f *~ *.o
  
  distclean: clean
@@ -1010,7 +988,7 @@ diff -Naur ./ORIG/RecursiveTools/Makefile ./PATCHED/RecursiveTools/Makefile
 +	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
  	for header in $(INSTALLED_HEADERS); do\
 -	  $(install_HEADER) include/fastjet/contrib/$$header $(PREFIX)/include/fastjet/contrib/;\
-+	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
  	done
 -	$(install_DIR) $(PREFIX)/lib
 -	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
@@ -1023,7 +1001,7 @@ diff -Naur ./ORIG/RecursiveTools/Makefile ./PATCHED/RecursiveTools/Makefile
  # DO NOT DELETE
 diff -Naur ./ORIG/ScJet/Makefile ./PATCHED/ScJet/Makefile
 --- ./ORIG/ScJet/Makefile	2024-12-30 22:41:04.123343342 +0100
-+++ ./PATCHED/ScJet/Makefile	2024-12-30 22:41:04.125343374 +0100
++++ ./PATCHED/ScJet/Makefile	2024-12-31 01:43:36.043285370 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -1041,7 +1019,7 @@ diff -Naur ./ORIG/ScJet/Makefile ./PATCHED/ScJet/Makefile
  install_DIR     = $(install_script) -d
  install_DATA    = $(install_script) -c -m 644
  install_PROGRAM = $(install_script) -c -s
-@@ -36,12 +37,13 @@
+@@ -36,11 +37,13 @@
  .PHONY: clean distclean examples check install
  
  # compilation of the code (default target)
@@ -1051,13 +1029,12 @@ diff -Naur ./ORIG/ScJet/Makefile ./PATCHED/ScJet/Makefile
  lib$(NAME).a: $(OBJS) 
  	ar cru lib$(NAME).a $(OBJS)
  	ranlib lib$(NAME).a
--
 +lib$(NAME).so: $(OBJS) 
 +	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ 
  # building the examples
  examples: $(EXAMPLES)
- 
-@@ -62,16 +64,17 @@
+@@ -62,16 +65,17 @@
  	rm -f *~ *.o
  
  distclean: clean

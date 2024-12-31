@@ -60,6 +60,7 @@ lib$(NAME).a: $(OBJS)
 	ranlib lib$(NAME).a
 lib$(NAME).so: $(OBJS) 
 	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+
 # building the examples
 examples: $(EXAMPLES)
 
@@ -86,7 +87,7 @@ distclean: clean
 install: all
 	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
 	for header in $(INSTALLED_HEADERS); do\
-	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
 	done
 	$(install_DIR) $(DESTDIR)$(LIBDIR)
 	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
