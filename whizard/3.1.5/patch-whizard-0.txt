@@ -1,0 +1,152 @@
+diff -Naur ORIG/m4/gosam.m4 PATCHED/m4/gosam.m4
+--- ORIG/m4/gosam.m4	2024-12-31 00:37:06.441042756 +0100
++++ PATCHED/m4/gosam.m4	2024-12-31 00:37:07.202055385 +0100
+@@ -68,7 +68,7 @@
+   else
+     AC_MSG_RESULT([no])
+     PATH=${GOSAM_DIR}/bin:$PATH
+-    LD_LIBRARY_PATH=${GOSAM_DIR}/lib:${GOSAM_DIR}/lib64:$LD_LIBRARY_PATH
++    LD_LIBRARY_PATH=${GOSAM_DIR}/lib:${GOSAM_DIR}/lib64:${GOSAM_DIR}/lib/gosam-contrib:${GOSAM_DIR}/lib64/gosam-contrib:$LD_LIBRARY_PATH
+   fi
+ 
+   WO_PROG_GOLEM()
+@@ -124,8 +124,8 @@
+ [dnl
+   unset GOLEM_DIR
+   if test -n "$with_golem"; then
+-    echo "Checking for golem in " ${with_golem}/lib
+-    WO_PATH_LIB(golem_lib, [golem], [libgolem.${SHRLIB_EXT}], ${with_golem}/lib:${with_golem}/lib64)
++    echo "Checking for golem in " ${with_golem}/lib:${with_golem}/lib64:${with_golem}/lib/gosam-contrib:${with_golem}/lib64/gosam-contrib
++    WO_PATH_LIB(golem_lib, [golem], [libgolem.${SHRLIB_EXT}], ${with_golem}/lib:${with_golem}/lib64:${with_golem}/lib/gosam-contrib:${with_golem}/lib64/gosam-contrib)
+   else
+     WO_PATH_LIB(golem_lib, [golem], [libgolem.${SHRLIB_EXT}], $LD_LIBRARY_PATH)
+   fi
+@@ -170,8 +170,8 @@
+ [dnl
+   unset NINJA_DIR
+   if test -n "$with_ninja"; then
+-    echo "Checking for ninja in " ${with_ninja}/lib
+-    WO_PATH_LIB(ninja_lib, [ninja], [libninja.${SHRLIB_EXT}], ${with_ninja}/lib:${with_ninja}/lib64)
++    echo "Checking for ninja in " ${with_ninja}/lib:${with_ninja}/lib64:${with_ninja}/lib/gosam-contrib:${with_ninja}/lib64/gosam-contrib
++    WO_PATH_LIB(ninja_lib, [ninja], [libninja.so], ${with_ninja}/lib:${with_ninja}/lib64:${with_ninja}/lib/gosam-contrib:${with_ninja}/lib64/gosam-contrib)
+   else
+     WO_PATH_LIB(ninja_lib, [ninja], [libninja.${SHRLIB_EXT}], $LD_LIBRARY_PATH)
+   fi
+@@ -186,8 +186,8 @@
+ [dnl
+   unset SAMURAI_DIR
+   if test -n "$with_samurai"; then
+-    echo "Checking for samurai in " ${with_samurai}/lib
+-    WO_PATH_LIB(samurai_lib, [samurai], [libsamurai.${SHRLIB_EXT}], ${with_samurai}/lib:${with_samurai}/lib64)
++    echo "Checking for samurai in " ${with_samurai}/lib:${with_samurai}/lib64/:${with_samurai}/lib/gosam-contrib:${with_samurai}/lib64/gosam-contrib
++    WO_PATH_LIB(samurai_lib, [samurai], [libsamurai.so], ${with_samurai}/lib:${with_samurai}/lib64/:${with_samurai}/lib/gosam-contrib:${with_samurai}/lib64/gosam-contrib)
+   else
+     WO_PATH_LIB(samurai_lib, [samurai], [libsamurai.${SHRLIB_EXT}], $LD_LIBRARY_PATH)
+   fi
+diff -Naur ORIG/m4/pythia8.m4 PATCHED/m4/pythia8.m4
+--- ORIG/m4/pythia8.m4	2024-12-31 00:28:07.261042714 +0100
++++ PATCHED/m4/pythia8.m4	2024-12-31 00:28:07.262042730 +0100
+@@ -46,14 +46,14 @@
+ [
+ dnl ckeck if a directory is specified for PYTHIA8
+ AC_ARG_WITH(pythia8,
+-            [AS_HELP_STRING([--with-pythia8=dir],
++            [AC_HELP_STRING([--with-pythia8=dir],
+                             [assume the given directory for PYTHIA8])])
+ 
+ dnl search for the pythia8-config script
+ if test "$with_pythia8" = ""; then
+    AC_PATH_PROG(pyconfig, pythia8-config, no)
+ else
+-   AC_PATH_PROG(pyconfig, pythia8-config, no, ${with_pythia8}/bin)
++   AC_PATH_PROG(pyconfig, pythia8-config, no)
+ fi
+ 
+ if test "${pyconfig}" = "no"; then
+@@ -76,13 +76,13 @@
+   save_CXXFLAGS="$CXXFLAGS"
+   save_LIBS="$LIBS"
+ 
+-  if test "$pythia8_has_noconfig" = "yes"; then
++ # if test "$pythia8_has_noconfig" = "yes"; then
+     CXXFLAGS="${CXXFLAGS} -I${with_pythia8}/include"
+     LIBS="${LIBS} -Wl,-rpath,${with_pythia8}/lib -Wl,-rpath,${with_pythia8}/lib64 -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+-  else
+-    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
+-    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
+-  fi
++#  else
++#    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
++#    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
++#  fi
+ 
+   AC_MSG_CHECKING([if PYTHIA8 is functional])
+   AC_LANG_PUSH(C++)
+@@ -98,13 +98,13 @@
+ 
+   AC_MSG_CHECKING([for PYTHIA8])
+   if test "${pyok}" = "yes"; then
+-     if test "$pythia8_has_noconfig" = "yes"; then
++#     if test "$pythia8_has_noconfig" = "yes"; then
+        PYTHIA8_CXXFLAGS="-I${with_pythia8}/include"
+        PYTHIA8_LIBS="-Wl,-rpath,${with_pythia8}/lib -Wl,-rpath,${with_pythia8}/lib64 -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+-     else
+-       PYTHIA8_CXXFLAGS="`${pyconfig} --cxxflags`"
+-       PYTHIA8_LIBS="-Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
+-     fi
++#     else
++#       PYTHIA8_CXXFLAGS="`${pyconfig} --cxxflags`"
++#       PYTHIA8_LIBS="-Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
++#     fi
+      AC_MSG_RESULT(yes)
+      $1
+   else
+@@ -117,13 +117,13 @@
+ 
+   save_CXXFLAGS="$CXXFLAGS"
+   save_LIBS="$LIBS"
+-  if test "$pythia8_has_noconfig" = "yes"; then
++#  if test "$pythia8_has_noconfig" = "yes"; then
+     CXXFLAGS="${CXXFLAGS} -Wl,-rpath,${with_pythia8}/lib -Wl,-rpath,${with_pythia8}/lib64 -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+     LIBS="${LIBS} -L${with_pythia8}/lib -L${with_pythia8}/lib64 -lpythia8"
+-  else
+-    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
+-    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
+-  fi
++#  else
++#    CXXFLAGS="${CXXFLAGS} `${pyconfig} --cxxflags`"
++#    LIBS="${LIBS} -Wl,-rpath,`${pyconfig} --libdir` `${pyconfig} --libs`"
++#  fi
+ 
+   AC_LINK_IFELSE([dnl
+     AC_LANG_PROGRAM([[#include "Pythia8/Pythia.h"]],
+diff -Naur ORIG/omega/scripts/ufo-sanitizer.in PATCHED/omega/scripts/ufo-sanitizer.in
+--- ORIG/omega/scripts/ufo-sanitizer.in	2024-12-31 00:28:07.261042714 +0100
++++ PATCHED/omega/scripts/ufo-sanitizer.in	2024-12-31 00:28:07.262042730 +0100
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python
++#! /usr/bin/python3
+ # ufo-sanitizer.py -- read UFO files and write them back out
+ ########################################################################
+ #
+diff -Naur ORIG/src/rng/dispatch_rng_sub.f90 PATCHED/src/rng/dispatch_rng_sub.f90
+--- ORIG/src/rng/dispatch_rng_sub.f90	2024-12-31 00:39:13.503151658 +0100
++++ PATCHED/src/rng/dispatch_rng_sub.f90	2024-12-31 00:39:14.567169318 +0100
+@@ -38,7 +38,7 @@
+ 
+ contains
+ 
+-  module subroutine dispatch_rng_factory &
++  subroutine dispatch_rng_factory &
+        (rng_factory, var_list, next_rng_seed)
+     class(rng_factory_t), allocatable, intent(inout) :: rng_factory
+     type(var_list_t), intent(in) :: var_list
+@@ -76,7 +76,7 @@
+     call rng_factory%init (s)
+   end subroutine dispatch_rng_factory
+ 
+-  module subroutine update_rng_seed_in_var_list (var_list, next_rng_seed)
++  subroutine update_rng_seed_in_var_list (var_list, next_rng_seed)
+     type(var_list_t), intent(inout), optional :: var_list
+     integer, intent(in) :: next_rng_seed
+     if (present (var_list)) then 

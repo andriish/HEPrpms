@@ -1,0 +1,21 @@
+Fixes these warnings:
+
+ddmod.f:1984:15:
+ 1984 |     real*8 dabs, dint
+      |               1
+Warning: Type specified for intrinsic function ‘dabs’ at (1) is ignored [-Wsurprising]
+ddmod.f:1984:21:
+ 1984 |     real*8 dabs, dint
+      |                     1
+Warning: Type specified for intrinsic function ‘dint’ at (1) is ignored [-Wsurprising]
+
+--- qd-2.3.24/fortran/ddmod.f.orig	2023-11-03 08:39:34.000000000 -0600
++++ qd-2.3.24/fortran/ddmod.f	2023-11-03 10:22:22.212372216 -0600
+@@ -1981,7 +1981,6 @@ end subroutine
+     character*16 ca, digits
+     parameter (digits = '0123456789')
+     integer i, is, k, n
+-    real*8 dabs, dint
+ 
+     intrinsic :: dabs, dint
+ 
