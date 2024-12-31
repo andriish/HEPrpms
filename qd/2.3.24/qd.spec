@@ -17,6 +17,7 @@ BuildRequires:	gcc-c++
 BuildRequires:	gcc-gfortran
 BuildRequires:	ghostscript-tools-dvipdf
 BuildRequires:	make
+BuildRequires:	autoconf
 BuildRequires:	tex(latex)
 
 %description
