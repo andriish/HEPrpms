@@ -21,7 +21,7 @@ INSTALLED_HEADERS=EnergyCorrelator.hh
 #------------------------------------------------------------------------
 
 CXXFLAGS+= $(shell $(FASTJETCONFIG) --cxxflags)
-LDFLAGS += -lm $(shell $(FASTJETCONFIG) --libs)
+LDFLAGS += $(shell $(FASTJETCONFIG) --libs)
 
 OBJS  = $(SRCS:.cc=.o)
 EXAMPLES_SRCS  = $(EXAMPLES:=.cc)

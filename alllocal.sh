@@ -4,14 +4,19 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+geant4:11.3.0
+#LCIO:02.22.02
+#whizard:3.1.5
+#LATER Rivet:4.0.2
 #fastjet:3.4.3
-fjcontrib:1.100
-MG5_aMC:3.5.7
-qcdloop:2.1.0
-Professor:2.5.0
+### LATER fjcontrib:1.100
+#### BAD MG5_aMC:3.5.7
+#qcdloop:2.1.0
+#Professor:2.5.0
 #qd:2.3.24
 #YODA:2.0.2
-gosam:2.1.2
+#gosam:2.1.2
+###################
 #cernlib:2024.09.16.0
 #SHERPA-MC:3.0.1
 #nlox:1.2.1

@@ -7,11 +7,14 @@
 #   configure --help
 # for information about how to use this script
 
+# load common setup
+. `dirname $0`/scripts/internal/common.sh
+
 #------------------------------------------------------------------------
 # the list of contribs supported by this script
 #------------------------------------------------------------------------
-all_contribs=`find . -mindepth 2 -maxdepth 2 -name VERSION -not -print \
-                 | sed 's/\.\///g;s/\/.*$//g' | grep -v "Template"`
+all_contribs=$(find . -mindepth 2 -maxdepth 2 -not -print \
+                 | grep -e VERSION -e FJCONTRIB.cfg | sort | sed 's/\.\///g;s/\/.*$//g' | grep -v "Template")
 
 #------------------------------------------------------------------------
 # default values prior to the arg parsing
@@ -105,6 +108,8 @@ is_in_list(){
 # first deal with the case where no argument is passed
 #[ $# -gt 0 ] || usage 1
 
+echo "Configuring fjcontrib version" `cat VERSION`
+
 # make sure Makefile.inc is absent
 makefileinc=".Makefile.inc"
 [ -e $makefileinc ] && rm $makefileinc && touch $makefileinc
@@ -167,6 +172,12 @@ if ! [ `command -v $fjconfig` ]; then
     exit 1 
 fi
 
+# write out full path to fastjet-config + version
+fjconfig=$(command -v $fjconfig)
+echo "Using $fjconfig, corresponding to fastjet version" $($fjconfig --version)
+echo
+
+
 # if prefix has not been set explicitly from command line, set it to
 # the one returned by 'fastjet-config --prefix'
 if [ "x"$prefix == "x" ] ; then 
@@ -183,6 +194,39 @@ echo "LIBDIR=$libdir" >> $makefileinc
 echo 'install_script = $(SHELL) ../utils/install-sh' >> $makefileinc
 echo 'check_script = ../utils/check.sh' >> $makefileinc
 
+
+#------------------------------------------------------------------------
+# check for C++11 support (needed as of version 1.047 of fjcontrib)
+# and add in options if needed
+#------------------------------------------------------------------------
+checkc11(){
+    fjcdir=$(pwd)
+    tmpdir=$(mktemp -d)
+    pushd $tmpdir > /dev/null
+    cp -p $fjcdir/scripts/c11check/Makefile $fjcdir/scripts/c11check/c11check.cc .
+    makeoutput=$(make FJCDIR=$fjcdir c11check 2>&1)
+    c11retcode=$?
+    popd > /dev/null
+    rm -rf $tmpdir
+    return $c11retcode
+}
+echo "Checking for c++11 support"
+checkc11
+if [ $? -ne 0 ]
+then 
+    echo "Adding compile-time flag to support c++11"
+    echo "Make sure you use c++11 when compiling/linking with fjcontrib"
+    echo "CXXFLAGS+=-std=c++11" >> $makefileinc
+    checkc11
+    if [ $? -ne 0 ]
+    then
+        echo "Failed to set up C++11 support. Error was"
+        echo "$makeoutput"
+        exit -1
+    fi
+else
+    echo "c++11 already supported with existing CXXFLAGS"
+fi
     
 #------------------------------------------------------------------------
 # construct the list of directories to recurse into
@@ -306,17 +350,25 @@ escaped_commandline="$(echo ${commandline} | sed -e 's/[\/&]/\\&/g')"
 # this is the list of all sources that go into libraries. It is quite
 # fragile and only intended for CMS's dirty shared-library hack.
 srclist=""; 
+fragile_include=""
 for contrib in $included_contribs 
 do 
-srclist="${srclist} "`grep "^SRCS=" ${contrib}/Makefile | sed 's/^SRCS=/ /' | sed 's/ \([^ ]\)/ '${contrib}'\/\1/g'`
+    srclist="${srclist} "`grep "^SRCS=" ${contrib}/Makefile | sed 's/^SRCS=/ /' | sed 's/ \([^ ]\)/ '${contrib}'\/\1/g'`
+    if [ -e $contrib/include ] ; then
+        fragile_include="${fragile_include} -I${contrib}/include"
+    fi
 done
 escaped_srclist="$(echo ${srclist} | sed -e 's/[\/&]/\\&/g')"
+escaped_fragile_include="$(echo ${fragile_include} | sed -e 's/[\/&]/\\&/g')"
 if [ "x"`uname` == "xDarwin" ] ;  then
     dynlibopt="-dynamiclib"
     dynlibext="dylib"
     dynlibpostproc="install_name_tool -id \\1 \\1"
 else 
-    dynlibopt="-shared"
+    #dynlibopt="-shared"
+    # the following more elaborate set of options requested by Alexander Puck Neuwirth
+    # for compatibility with gentoo, cf. https://github.com/fjcontrib/fjcontrib/issues/4
+    dynlibopt="-shared -Wl,--as-needed -Wl,-soname,fastjetcontribfragile.so.0"
     dynlibext="so"
     dynlibpostproc="" # some dummy command needed
 fi
@@ -329,9 +381,11 @@ sed -e "s/@CONTRIB_BUILD_LIST@/$escaped_built_list/g" \
     -e "s/template gets processed/was generated automatically/" \
     -e "s/@contrib_commandline@/$escaped_commandline/" \
     -e "s/@FRAGILE_SHARED_SRC_LIST@/$escaped_srclist/" \
+    -e "s/@FRAGILE_SHARED_INCLUDES@/$escaped_fragile_include/" \
     -e "s/@DYNLIBOPT@/$dynlibopt/g;s/@DYNLIBEXT@/$dynlibext/g" \
     -e "s/@DYNLIBPOSTPROC@ \(.*\)/$dynlibpostproc/g" \
     -e "s/any edits fit with the rest of the build system/you only edit Makefile.in/" Makefile.in > Makefile
+
 
 #------------------------------------------------------------------------
 # write output and config.log file
@@ -339,11 +393,78 @@ sed -e "s/@CONTRIB_BUILD_LIST@/$escaped_built_list/g" \
 # order contribs alphabetically (making sure we use LC_ALL=C")
 LC_ALL=C
 sorted_built_contribs=`echo $built_contribs | tr " " "\n" | sort | tr "\n" " "`
-#
+
+# build up the dependencies for the sub-directories
+fjversion=`$fjconfig --version`
+for contrib in $sorted_built_contribs
+do
+
+    if [[ -f $contrib/VERSION && -f $contrib/FJCONTRIB.cfg ]]; then
+        echo "ERROR: $contrib has both $contrib/VERSION and $contrib/FJCONTRIB.cfg files."
+        echo "Only one of these should be present. In newer contribs, please use FJCONTRIB.cfg"
+        exit 1
+    fi
+
+    get_dependencies $contrib dependencies min_versions min_fj_version
+    echo "Processing dependencies for $contrib"
+    # first, check if there's a minimal required FastJet version
+    if [ ! x$min_fj_version = x ]; then
+        if ! version_is_at_least ${fjversion} ${min_fj_version}; then
+	        echo "$contrib requires Fastjet $min_fj_version or higher. Fastjet $fjversion < $min_fj_version has been found."
+                echo Bailing out of the configure process
+                exit 1
+       fi
+    fi   
+    # then, check potential dependencies on other contribs
+    deps=""
+    for i in "${!dependencies[@]}"; do
+        echo "  ${dependencies[i]} (needs v>=${min_versions[i]})"
+        if ! item_is_in_list ${dependencies[i]} "${sorted_built_contribs}"; then
+            echo "    not in the list of built contribs"
+            echo Bailing out of the configure process
+            exit 1
+        fi
+        if [ -d ${dependencies[i]} ]; then
+            read_tag ${dependencies[i]} version dep_version
+            echo -n "    found ${dep_version}"
+            if version_is_at_least ${dep_version} ${min_versions[i]}; then
+                echo " (>= ${min_versions[i]})"
+            else
+                echo " (< ${min_versions[i]})"
+                echo The version of ${dependencies[i]} found is ${dep_version}, but at least ${min_versions[i]} is required
+                echo Bailing out of the configure process
+                exit 1
+            fi
+        else
+            echo "    not found"
+            echo Bailing out of the configure process
+            exit 1
+        fi
+        deps="$deps ${dependencies[i]}.all"
+    done
+    #deps=$(echo $dependencies | tr " " "\n")
+    #echo "Dependencies for $contrib: " $deps
+    #echo "Dependencies for $contrib: " $deps
+
+    cat >> Makefile <<EOF
+
+$contrib.all: $deps
+${TAB}+\$(SUBMAKE) -C $contrib
+
+$contrib.ex: $contrib.all
+${TAB}+\$(SUBMAKE) -C $contrib examples
+
+$contrib.check: $contrib.all
+${TAB}+\$(SUBMAKE) -C $contrib check
+
+$contrib.install: $contrib.all
+${TAB}+\$(SUBMAKE) -C $contrib install
+EOF
+done
+
+
 # output to screen
-#echo 
-echo "Configuring fjcontrib version" `cat VERSION`
-echo
+echo 
 echo -e "Enabled contribs: "
 for contrib in $sorted_built_contribs
 do
@@ -353,7 +474,8 @@ do
     else
         svninfo=""
     fi
-    printf "        %-22s v%-15s $svninfo\n" $contrib `cat $contrib/VERSION` 
+    read_tag $contrib version contribversion
+    printf "        %-30s v%-15s $svninfo\n" $contrib $contribversion
 done
 #
 # output to config.log
@@ -368,7 +490,8 @@ echo -e "The command line invocation was\n"                                >> co
 echo -e "    $0 $@\n"                                                      >> config.log
 for contrib in $sorted_built_contribs
 do
-    printf "        %-22s v%s\n" $contrib `cat $contrib/VERSION`           >> config.log
+    read_tag $contrib version contribversion
+    printf "        %-22s v%s\n" $contrib $contribversion                  >> config.log
 done
 echo -e "\nInstallation prefix: "$prefix"\n"                                 >> config.log
 echo -e "\nLibrary prefix: "$libdir"\n"                                 >> config.log

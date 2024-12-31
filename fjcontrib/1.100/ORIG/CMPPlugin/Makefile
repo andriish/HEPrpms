@@ -3,7 +3,9 @@
 FASTJETCONFIG=fastjet-config
 PREFIX=`$(FASTJETCONFIG) --prefix`
 CXX=g++
-CXXFLAGS= -O3 -Wall -g
+CXXFLAGS= -O3 -Wall -g -fPIC -DPIC -std=c++11
+# as compared to fjcontrib, these two scripts are to be found locally
+# change this if we integrate with fjcontrib
 install_script = $(SHELL) ../utils/install-sh
 check_script = ../utils/check.sh
 
@@ -14,18 +16,18 @@ check_script = ../utils/check.sh
 
 #------------------------------------------------------------------------
 # things that are specific to this contrib
-NAME=LundPlane
-SRCS=LundGenerator.cc LundWithSecondary.cc SecondaryLund.cc RecursiveLundEEGenerator.cc
-EXAMPLES=example example_secondary example_dpsi_collinear example_dpsi_slice
-INSTALLED_HEADERS=LundGenerator.hh LundWithSecondary.hh SecondaryLund.hh RecursiveLundEEGenerator.hh LundJSON.hh LundEEHelpers.hh LundPlane.hh
+NAME=CMPPlugin
+SRCS=CMPPlugin.cc
+EXAMPLES=example-CMP
+INSTALLED_HEADERS=CMPPlugin.hh
 # List here any dependencies on other contribs. Note that they 
 # must be listed (potentially with versioning constraints) also
 # in the FJCONTRIB.cfg file.
-DEPENDS_ON =
+DEPENDS_ON = IFNPlugin
 #------------------------------------------------------------------------
 
-CXXFLAGS+= $(shell $(FASTJETCONFIG) --cxxflags)
-LDFLAGS += -lm $(shell $(FASTJETCONFIG) --libs --plugins)
+CXXFLAGS+= $(shell $(FASTJETCONFIG) --cxxflags) 
+LDFLAGS += -lm $(shell $(FASTJETCONFIG) --libs)
 
 INCLUDE += -Iinclude/
 # loop over all entries in DEPENDS_ON and for each entry ENTRY
@@ -33,6 +35,10 @@ INCLUDE += -Iinclude/
 INCLUDE += $(foreach ENTRY,$(DEPENDS_ON),-I../$(ENTRY)/include)
 LDFLAGS += $(foreach ENTRY,$(DEPENDS_ON),-L../$(ENTRY) -l$(ENTRY))
 CXXFLAGS+= $(INCLUDE)
+
+# optionally, print out the INCLUDE and LDFLAGS variables
+# $(info INCLUDE=$(INCLUDE))
+# $(info LDFLAGS=$(LDFLAGS))
 
 OBJS  = $(SRCS:.cc=.o)
 EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
@@ -64,11 +70,7 @@ $(EXAMPLES): % : %.o all
 # check that everything went fine
 check: examples
 	@for prog in $(EXAMPLES); do\
-	  if [ "$${prog}" = "example_dpsi_collinear" ] || [ "$${prog}" = "example_dpsi_slice" ]; then \
-	    $(check_script) $${prog} ../data/single-ee-event.dat || exit 1; \
-	  else \
-	    $(check_script) $${prog} ../data/single-event.dat || exit 1; \
-	  fi; \
+	  $(check_script) $${prog} ../data/pythia8_Zq_vshort.dat -1 -1 || exit 1; \
 	done
 	@echo "All tests successful"
 
@@ -89,24 +91,4 @@ install: all
 	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
 
 depend:
-	makedepend -Y -- -Iinclude -- $(SRCS) $(EXAMPLES_SRCS)
-# DO NOT DELETE
-
-LundGenerator.o: include/fastjet/contrib/LundGenerator.hh
-LundWithSecondary.o: include/fastjet/contrib/LundWithSecondary.hh
-LundWithSecondary.o: include/fastjet/contrib/LundGenerator.hh
-LundWithSecondary.o: include/fastjet/contrib/SecondaryLund.hh
-SecondaryLund.o: include/fastjet/contrib/SecondaryLund.hh
-SecondaryLund.o: include/fastjet/contrib/LundGenerator.hh
-RecursiveLundEEGenerator.o: include/fastjet/contrib/RecursiveLundEEGenerator.hh
-RecursiveLundEEGenerator.o: include/fastjet/contrib/LundEEHelpers.hh
-example.o: include/fastjet/contrib/LundGenerator.hh
-example.o: include/fastjet/contrib/LundJSON.hh
-example.o: include/fastjet/contrib/LundGenerator.hh
-example_secondary.o: include/fastjet/contrib/LundWithSecondary.hh
-example_secondary.o: include/fastjet/contrib/LundGenerator.hh
-example_secondary.o: include/fastjet/contrib/SecondaryLund.hh
-example_dpsi_collinear.o: include/fastjet/contrib/RecursiveLundEEGenerator.hh
-example_dpsi_collinear.o: include/fastjet/contrib/LundEEHelpers.hh
-example_dpsi_slice.o: include/fastjet/contrib/RecursiveLundEEGenerator.hh
-example_dpsi_slice.o: include/fastjet/contrib/LundEEHelpers.hh
+	makedepend -Y -- -Iinclude  -- $(SRCS) $(EXAMPLES_SRCS)

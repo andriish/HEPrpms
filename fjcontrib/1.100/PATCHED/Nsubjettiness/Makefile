@@ -18,12 +18,12 @@ check_script = ../utils/check.sh
 NAME=Nsubjettiness
 SRCS=Nsubjettiness.cc Njettiness.cc NjettinessPlugin.cc XConePlugin.cc MeasureDefinition.cc ExtraRecombiners.cc AxesDefinition.cc TauComponents.cc
 EXAMPLES=example_basic_usage example_advanced_usage example_v1p0p3
-EXAMPLES2=example_advanced_usage_ee
+EXAMPLES2=  #example_advanced_usage_ee  (removed from testing protocol in version 2.3.0)
 INSTALLED_HEADERS=Nsubjettiness.hh Njettiness.hh NjettinessPlugin.hh XConePlugin.hh MeasureDefinition.hh ExtraRecombiners.hh AxesDefinition.hh TauComponents.hh
 #------------------------------------------------------------------------
 
 CXXFLAGS+= $(shell $(FASTJETCONFIG) --cxxflags)
-LDFLAGS += -lm $(shell $(FASTJETCONFIG) --libs)
+LDFLAGS += $(shell $(FASTJETCONFIG) --libs)
 
 OBJS  = $(SRCS:.cc=.o)
 EXAMPLES_SRCS  = $(EXAMPLES:=.cc)

@@ -1,8 +1,8 @@
 ## Makefile for Professor 2.x
 
 ## Include the config
-include Makefile.inc
-VERSION := 2.4.2
+#include Makefile.inc
+VERSION := 2.5.0
 
 DISTNAME := Professor-$(VERSION)
 $(info Building Professor $(VERSION))

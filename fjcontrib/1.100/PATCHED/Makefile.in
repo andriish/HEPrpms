@@ -6,7 +6,12 @@
 
 # installation setup
 SUBDIRS=@CONTRIB_BUILD_LIST@
+# the following create targets that we will use for
+# make all, make examples and make check
 SUBDIRS.all=$(SUBDIRS:=.all)
+SUBDIRS.ex=$(SUBDIRS:=.ex)
+SUBDIRS.check=$(SUBDIRS:=.check)
+SUBDIRS.install=$(SUBDIRS:=.install)
 
 # these will be overriden if the user specifies CXX or CXXFLAGS with configure
 # they will also be overriden by definitions in subsiduary Makefiles
@@ -25,21 +30,24 @@ SUBMAKE= $(MAKE) FJCONTRIB_SUBMAKE=1
 
 all: $(SUBDIRS.all)
 
-install: all $(SUBDIRS)
+install: $(SUBDIRS.install)
 
-examples clean: $(SUBDIRS)
+examples: $(SUBDIRS.ex)
+
+clean: $(SUBDIRS)
 
 distclean: $(SUBDIRS) fragile-shared-distclean
 
-check: check_init $(SUBDIRS)
+check: $(SUBDIRS.check)
 	@echo ""
-	@cat test_summary.tmp
+	@echo "Summary of tests" 
+	@echo "----------------" 
+	@cat test_summary.tmp | sort
 	@printf "\n%d out of %d tests passed\n\n" `grep "Success" test_summary.tmp | wc -l` `grep "^  " test_summary.tmp | wc -l`
+# if the number of tests passed is not equal to the number of tests run, exit with an error
+	@test `grep "Success" test_summary.tmp | wc -l` -eq `grep "^  " test_summary.tmp | wc -l` || (rm -f test_summary.tmp && exit 1)
 	@rm -f test_summary.tmp
 
-check_init:
-	@echo "Summary of tests" >  test_summary.tmp
-	@echo "----------------" >> test_summary.tmp
 
 # distclean removes the Makefile, but leaves in config.log
 distclean:
@@ -53,6 +61,7 @@ distclean:
 fragile-shared: libfastjetcontribfragile.@DYNLIBEXT@
 
 fragile_SHARED_SRC_LIST=@FRAGILE_SHARED_SRC_LIST@
+fragile_SHARED_INCLUDES=@FRAGILE_SHARED_INCLUDES@
 libfastjetcontribfragile.@DYNLIBEXT@: $(fragile_SHARED_SRC_LIST)
 	$(CXX) @DYNLIBOPT@ -fPIC -DPIC $(CXXFLAGS) `$(FASTJETCONFIG) --cxxflags --libs | sed 's/-Wl,-rpath[^[:space:]]*//g' ` $(fragile_SHARED_SRC_LIST) -o libfastjetcontribfragile.@DYNLIBEXT@
 
@@ -66,5 +75,5 @@ fragile-shared-distclean:
 $(SUBDIRS):
 	+$(SUBMAKE) -C $@ $(MAKECMDGOALS)
 
-$(SUBDIRS.all):
-	+$(SUBMAKE) -C $(basename $@)
+# $(SUBDIRS.all):
+# 	+$(SUBMAKE) -C $(basename $@)
