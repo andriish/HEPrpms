@@ -473,6 +473,7 @@ namespace Rivet {
     // Make a new sub-event: affects every analysis object
     MSG_DEBUG("Starting new sub-event");
     _eventCounter.get()->newSubEvent();
+    _fileCounter.get()->newSubEvent();
     for (const AnaHandle& a : analyses()) {
       for (const auto& ao : a->analysisObjects()) {
         ao.get()->newSubEvent();

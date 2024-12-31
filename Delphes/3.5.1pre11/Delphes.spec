@@ -7,6 +7,7 @@ Summary:    Delphes is a C++ framework, performing a fast multipurpose detector 
 License:    GPLv3
 URL:        https://cp3.irmp.ucl.ac.be/projects/delphes
 Source0:    https://github.com/delphes/delphes/archive/%{version}.tar.gz
+Patch0:         patch-Delphes-0.txt
 
 #The ROOT cmake file used by this project requires cmake 3.4.3
 BuildRequires:    cmake >= 3.4.3
@@ -62,22 +63,25 @@ This package provides HepMC manuals and examples.
 
 %prep
 %setup -q -n delphes-%{version}
-
+%patch -P 0 -p1
 
 %build
+%if %{?rhel}%{!?rhel:0} == 8
+%cmake -DSET_RPATH:BOOL=OFF -DCMAKE_CXX_STANDARD=17
+%else
 %cmake -DSET_RPATH:BOOL=OFF
+%endif
+
 %cmake_build
 
 %install
-%cmake_install
-
+%cmake_install 
 
 mkdir -p %{buildroot}/%{_pkgdocdir}
 mkdir -p %{buildroot}/%{_includedir}/%{name}/
 
 mv %{buildroot}/%{_prefix}/cards      %{buildroot}/%{_pkgdocdir}/cards
 mv %{buildroot}/%{_prefix}/examples   %{buildroot}/%{_pkgdocdir}/examples
-mv %{buildroot}/%{_prefix}/lib        %{buildroot}/%{_libdir}
 mv %{buildroot}/%{_prefix}/include/ExRootAnalysis  %{buildroot}/%{_includedir}/%{name}/
 mv %{buildroot}/%{_prefix}/include/modules  %{buildroot}/%{_includedir}/%{name}/
 mv %{buildroot}/%{_prefix}/include/display  %{buildroot}/%{_includedir}/%{name}/
@@ -99,5 +103,7 @@ mv %{buildroot}/%{_prefix}/include/TrackCovariance  %{buildroot}/%{_includedir}/
 
 
 %changelog
+* Mon Dec 30 2024 Andrii Verbytskyi 3.5.1pre11
+- Update to 3.5.1pre11
 * Thu Nov 28 2019 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 3.4.2-0
 - Initial
