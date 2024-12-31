@@ -30,6 +30,8 @@ BuildRequires:    HepMC3-devel  libHepMC4 python-devel boost-devel libboost_file
 %endif
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+BuildRequires:         root-hist-draw
+Requires:         root-hist-draw
 Requires:         root HepMC3 python tbb python3
 BuildRequires:    geant4-devel
 BuildRequires:    root root-core root-graf3d-eve root-graf3d-eve7 root-genvector root-geom root-gui root-mathcore root-mathmore root-tree root-physics root-gdml root-graf3d root-tpython  	root-gui-browserv7
