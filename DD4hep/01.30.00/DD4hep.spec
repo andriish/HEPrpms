@@ -69,16 +69,20 @@ This package provides the Python 3 bindings for %{name}
 %patch -P 0 -p1
 
 %build
+
 #TBB should be fixed
 %if  %{?rhel}%{!?rhel:0} == 8
-%cmake  -DBUILD_TESTING:BOOL=OFF -DDD4HEP_RELAX_PYVER:BOOL=ON  -H. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=OFF -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
-make -j 2
+export LDFLAGS="-lstdc++fs"
+%cmake  -DBUILD_TESTING:BOOL=OFF -DDD4HEP_RELAX_PYVER:BOOL=ON   -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=OFF -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
+%cmake_build
+#make -j 2
 #{?_smp_mflags}
 %endif
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8
-%cmake  -DBUILD_TESTING:BOOL=OFF -DDD4HEP_RELAX_PYVER:BOOL=ON -DCMAKE_SKIP_RPATH=ON -S. -B. -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
-make -j 2
+%cmake  -DBUILD_TESTING:BOOL=OFF -DDD4HEP_RELAX_PYVER:BOOL=ON -DCMAKE_SKIP_RPATH=ON -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
+#make -j 2
 #{?_smp_mflags}
+%cmake_build
 %endif 
 %if 0%{?suse_version}
 %cmake  -DBUILD_TESTING:BOOL=OFF  -DDD4HEP_RELAX_PYVER:BOOL=ON        -DDD4HEP_USE_HEPMC3=ON -DDD4HEP_USE_LCIO=ON -DLCIO_DIR=%{_libdir}/cmake -DDD4HEP_USE_XERCESC=ON -DDD4HEP_USE_TBB=ON  -DTBB_DIR=%{_libdir}/cmake/tbb/ -DDD4HEP_USE_GEANT4=ON -DCLHEP_DIR=%{_libdir}/$(clhep-config --version| tr ' ' '-')
