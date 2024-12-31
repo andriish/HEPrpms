@@ -130,8 +130,6 @@ sed -Ei "1{s|/usr/bin/env python|/usr/bin/python3|}" $RPM_BUILD_ROOT/usr/bin/*
 %endif
 
 %changelog
-* Wed Jan 12 2021 Andrii Verbytskyi 1.19
-- Bump to 1.19
 * Mon Nov 15 2021 Andrii Verbytskyi 1.18
 - Bump to 1.18
 * Wed Jul 28 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 
