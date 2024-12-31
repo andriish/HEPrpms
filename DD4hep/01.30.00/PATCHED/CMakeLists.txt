@@ -131,7 +131,32 @@ dd4hep_configure_output( OUTPUT "${PROJECT_BINARY_DIR}" INSTALL "${CMAKE_INSTALL
 ########################
 
 # Configure ROOT
-find_package (ROOT 6.08 REQUIRED CONFIG)
+find_package(nlohmann_json 3.6.1 REQUIRED)
+find_package (ROOT 6.08 REQUIRED 
+COMPONENTS
+Core
+EG
+Eve
+Gdml
+GenVector
+Geom
+Graf3d
+Gui
+Hist
+HistPainter
+MathCore
+Physics
+RCsg
+RGL
+Rint
+RIO
+ROOTEve
+ROOTGeomViewer
+ROOTHistDraw
+ROOTTPython
+Tree
+CONFIG
+)
 DD4HEP_SETUP_ROOT_TARGETS()
 
 # Configure BOOST
