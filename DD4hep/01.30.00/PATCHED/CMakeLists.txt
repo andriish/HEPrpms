@@ -89,6 +89,7 @@ option(BUILD_TESTING            "Enable and build tests"                        
 option(BUILD_SHARED_LIBS        "If OFF build STATIC Libraries"                 ON)
 option(DD4HEP_SET_RPATH         "Link libraries with built-in RPATH (run-time search path)" ON)
 option(DD4HEP_RELAX_PYVER       "Do not require exact python version match with ROOT" OFF)
+option(DD4HEP_ENABLE_PYTHON     "Enable Python" ON)
 
 SET(DD4HEP_BUILD_PACKAGES "DDRec DDDetectors DDCond DDAlign DDCAD DDDigi DDG4 DDEve UtilityApps"
   CACHE STRING "List of DD4hep packages to build")

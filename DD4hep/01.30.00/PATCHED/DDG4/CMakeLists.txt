@@ -53,7 +53,7 @@ dd4hep_add_plugin(DDG4Plugins
   )
 #---------------------------  Plugin library for the simulation framework  ---------
 
-if(TARGET Python::Python AND TARGET ROOT::ROOTTPython)
+if(TARGET Python::Python AND TARGET ROOT::ROOTTPython AND DD4HEP_ENABLE_PYTHON)
   dd4hep_print("|++> Python found, creating DDG4Python Dictionary")
   dd4hep_add_dictionary(G__DDG4Python
     SOURCES src/python/DDG4Python.C
