@@ -1,0 +1,103 @@
+##############################################################################
+# cmake configuration file for @CMAKE_PROJECT_NAME@
+#
+# returns following variables:
+#
+#   @CMAKE_PROJECT_NAME@_FOUND      : set to TRUE if @CMAKE_PROJECT_NAME@ found
+#   @CMAKE_PROJECT_NAME@_VERSION    : package version
+#   @CMAKE_PROJECT_NAME@_ROOT       : path to this @CMAKE_PROJECT_NAME@ installation
+#   @CMAKE_PROJECT_NAME@_LIBRARIES  : list of @CMAKE_PROJECT_NAME@ libraries
+#   @CMAKE_PROJECT_NAME@_INCLUDE_DIRS  : list of paths to be used with INCLUDE_DIRECTORIES
+#   @CMAKE_PROJECT_NAME@_LIBRARY_DIRS  : list of paths to be used with LINK_DIRECTORIES
+#
+# @author Jan Engels, Desy
+##############################################################################
+
+# Locate the @CMAKE_PROJECT_NAME@ install prefix. This CMake file is installed in two
+# different locations (root and "cmake" subdir) that we must disambiguate.
+get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
+get_filename_component(_lastdir "${_thisdir}" NAME)
+if (_lastdir STREQUAL "cmake")
+  get_filename_component(_thisdir "${_thisdir}" PATH)
+endif()
+
+set ( @CMAKE_PROJECT_NAME@_DIR                "${_thisdir}" )
+set ( @CMAKE_PROJECT_NAME@_ROOT               "${_thisdir}" )
+set ( @CMAKE_PROJECT_NAME@_VERSION            "@DD4hep_VERSION@" )
+set ( @CMAKE_PROJECT_NAME@_SOVERSION          "@DD4hep_SOVERSION@" )
+set ( DD4HEP_BUILD_DEBUG                       @DD4HEP_BUILD_DEBUG@ )
+set ( DD4HEP_USE_GEANT4                        @DD4HEP_USE_GEANT4@ )
+set ( DD4HEP_USE_CLHEP                         @DD4HEP_USE_CLHEP@ )
+set ( DD4HEP_USE_LCIO                          @DD4HEP_USE_LCIO@ )
+set ( DD4HEP_USE_EDM4HEP                       @DD4HEP_USE_EDM4HEP@ )
+set ( DD4HEP_USE_XERCESC                       @DD4HEP_USE_XERCESC@ )
+set ( DD4HEP_USE_TBB                           @DD4HEP_USE_TBB@ )
+set ( DD4HEP_USE_GEANT4_UNITS                  @DD4HEP_USE_GEANT4_UNITS@ )
+set ( DD4HEP_RELAX_PYVER                       @DD4HEP_RELAX_PYVER@ )
+set ( @CMAKE_PROJECT_NAME@_BUILD_CXX_STANDARD  @CMAKE_CXX_STANDARD@ )
+
+include ( ${@CMAKE_PROJECT_NAME@_DIR}/cmake/DD4hep.cmake )
+
+include(CMakeFindDependencyMacro)
+
+set (CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH} ${@CMAKE_PROJECT_NAME@_DIR}/cmake  )
+
+# ---------- include dirs -----------------------------------------------------
+set(@CMAKE_PROJECT_NAME@_INCLUDE_DIRS "")
+
+
+FIND_DEPENDENCY(Boost REQUIRED)
+
+if(DD4HEP_USE_GEANT4)
+  MESSAGE(STATUS "@CMAKE_PROJECT_NAME@ uses Geant4")
+  IF(DD4HEP_USE_CLHEP)
+    find_dependency(CLHEP REQUIRED CONFIG)
+    UNSET(CLHEP_INCLUDE_DIR)
+  ENDIF()
+  find_dependency(Geant4 10.2.2 REQUIRED gdml ui_all vis_all CONFIG)
+  DD4HEP_SETUP_GEANT4_TARGETS()
+endif()
+
+FIND_DEPENDENCY(ROOT REQUIRED CONFIG)
+DD4HEP_SETUP_ROOT_TARGETS()
+
+if(DD4HEP_USE_LCIO)
+  MESSAGE(STATUS "@CMAKE_PROJECT_NAME@ uses LCIO")
+  find_dependency(LCIO REQUIRED CONFIG)
+  DD4HEP_SETUP_LCIO_TARGETS()
+endif()
+
+if(DD4HEP_USE_TBB)
+  MESSAGE(STATUS "@CMAKE_PROJECT_NAME@ uses TBB")
+  find_dependency(TBB REQUIRED CONFIG)
+endif()
+
+if(NOT CMAKE_PROJECT_NAME STREQUAL @CMAKE_PROJECT_NAME@)
+  include("${@CMAKE_PROJECT_NAME@_ROOT}/cmake/@CMAKE_PROJECT_NAME@Config-targets.cmake")
+endif()
+
+# Backward compatible @CMAKE_PROJECT_NAME@_INCLUDE_DIRS and @CMAKE_PROJECT_NAME@_LIBRARIES variables
+GET_TARGET_PROPERTY(@CMAKE_PROJECT_NAME@_INCLUDE_DIRS DD4hep::@DD4HEP_SELECTED_PACKAGE@ INTERFACE_INCLUDE_DIRECTORIES)
+set(@CMAKE_PROJECT_NAME@_LIBRARIES DD4hep::@DD4HEP_SELECTED_PACKAGE@)
+
+# Backward compatible @CMAKE_PROJECT_NAME@_COMPONENT_LIBRARIES variable
+SET(@CMAKE_PROJECT_NAME@_COMPONENT_LIBRARIES)
+IF(@CMAKE_PROJECT_NAME@_FIND_COMPONENTS)
+  dd4hep_print( "|++> @CMAKE_PROJECT_NAME@: Looking for Components: ${@CMAKE_PROJECT_NAME@_FIND_COMPONENTS}" )
+  FOREACH(comp ${@CMAKE_PROJECT_NAME@_FIND_COMPONENTS})
+    IF(NOT TARGET DD4hep::${comp})
+      MESSAGE(FATAL_ERROR "|++> Did not find required component: ${comp}")
+    ENDIF()
+    LIST(APPEND @CMAKE_PROJECT_NAME@_COMPONENT_LIBRARIES DD4hep::${comp})
+  ENDFOREACH()
+ENDIF()
+
+#---- build with xercesc or tinyxml ?
+INCLUDE( ${@CMAKE_PROJECT_NAME@_DIR}/cmake/DD4hep_XML_setup.cmake )
+
+# ---------- final checking ---------------------------------------------------
+INCLUDE( FindPackageHandleStandardArgs )
+# set DD4HEP_FOUND to TRUE if all listed variables are TRUE and not empty
+FIND_PACKAGE_HANDLE_STANDARD_ARGS( @CMAKE_PROJECT_NAME@ DEFAULT_MSG @CMAKE_PROJECT_NAME@_DIR @CMAKE_PROJECT_NAME@_INCLUDE_DIRS @CMAKE_PROJECT_NAME@_LIBRARIES )
+
+SET( @CMAKE_PROJECT_NAME@_FOUND ${@CMAKE_PROJECT_NAME@_FOUND} )

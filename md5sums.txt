@@ -290,6 +290,7 @@ fd47d9c53d787a7ff3bee74f79d4be9f  EvtGen/2.2.3/rpmbuild/SOURCES/EvtGen-02.02.03.
 184c05c42afc59aa478255303a07802f  SHERPA-MC/3.0.1/rpmbuild/SOURCES/sherpa-v3.0.1.tar.gz
 801e850d05950f760c8bef104459db5e  nlox/1.2.1/rpmbuild/SOURCES/nlox-1.2.2.atlas3.zip
 69347e4b3c5bb9ecf4014a7ea0f5c9c9  nlox/1.2.1/rpmbuild/SOURCES/nlox-1.2.2.atlas5.zip
+494a505b1101f4c084831f64cc622d8c  DD4hep/01.30.00/rpmbuild/SOURCES/v01-30.tar.gz
 60379a7ed2fb6eb0077525e21454fb09  cernlib/2024.09.16.0/rpmbuild/SOURCES/cernlib-cernlib-2024.09.16.0-free.tar.gz
 c276a4acface6309ca6f991d08135ba7  fastjet/3.4.3/rpmbuild/SOURCES/fastjet-3.4.3.tar.gz
 0daa3b424b6586c63df96b438bb5191c  fjcontrib/1.100/rpmbuild/SOURCES/fjcontrib-1.100.tar.gz
