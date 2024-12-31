@@ -4,10 +4,11 @@
 
 Name:           YODA
 Version:        2.0.2
-Release:        1001
+Release:        1002
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
 Source0:        https://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
+Patch0:         patch-YODA-0.txt
 Prefix:         %{_prefix}
 Summary:        Plotting and histogramming tool
 BuildRequires:   autoconf binutils automake libtool  zlib-devel
@@ -79,6 +80,7 @@ python-%{name} contains python bindings for %{name}.
 
 %prep
 %setup -q
+%patch -P 0 -p1
 
 %if 0%{?suse_version}
 #FROM SUSE
