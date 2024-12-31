@@ -106,7 +106,9 @@ endif()
 
 # Generate DDCore plugins---------------------------------------------------------
 dd4hep_add_plugin(DDCorePlugins SOURCES src/plugins/*.cpp USES DDCore)
-
+if(FS_LIBRARIES)
+target_link_libraries(DDCorePlugins PRIVATE  ${FS_LIBRARIES})
+endif()
 # Graphics DDCore plugins---------------------------------------------------------
 dd4hep_add_plugin(DDCoreGraphics
   SOURCES src/graphics/*.cpp
