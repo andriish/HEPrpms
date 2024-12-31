@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        4.0.2
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz

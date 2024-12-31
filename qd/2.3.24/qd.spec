@@ -9,9 +9,9 @@ License:	BSD-3-Clause-LBNL
 URL:		https://www.davidhbailey.com/dhbsoftware/
 Source0:	https://www.davidhbailey.com/dhbsoftware/%{name}-%{version}.tar.gz
 # Fix LTO warnings about type mismatches
-Patch:		%{name}-lto.patch
+Patch0:		%{name}-lto.patch
 # Fix warnings about unused type specifications for intrinsic functions
-Patch:		%{name}-intrinsic.patch
+Patch1:		%{name}-intrinsic.patch
 
 BuildRequires:	gcc-c++
 BuildRequires:	gcc-gfortran
