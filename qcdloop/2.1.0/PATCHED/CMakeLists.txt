@@ -67,7 +67,7 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/src/qcdloop.pc"
   )
 IF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
-set(QUADMATH_NAMES ${QUADMATH_NAMES} libquadmath.so quadmath)
+set(QUADMATH_NAMES ${QUADMATH_NAMES} libquadmath.so libquadmath.so.0 quadmath)
 find_library(QUADMATH_LIBRARY
   NAMES ${QUADMATH_NAMES}
   PATHS /usr/lib64/atlas /usr/lib/atlas
