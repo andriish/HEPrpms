@@ -73,7 +73,7 @@ add_library(Delphes SHARED
   $<TARGET_OBJECTS:TrackCovariance>
 )
 
-target_link_libraries(Delphes ${ROOT_LIBRARIES})
+target_link_libraries(Delphes ${ROOT_LIBRARIES} ROOT::Geom)
 
 if(PYTHIA8_FOUND)
   target_link_libraries(Delphes ${PYTHIA8_LIBRARIES} ${CMAKE_DL_LIBS})
