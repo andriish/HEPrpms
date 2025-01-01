@@ -5,8 +5,6 @@
 %define libnamedev  SHERPA-MC-devel
 %define develnamestatic  SHERPA-MC-static-devel
 %define _unpackaged_files_terminate_build 0
-# Define a macro for calling ../configure instead of ./configure
-%global dconfigure %(printf %%s '%configure' | sed 's!\./configure!../configure!g')
 %global _missing_build_ids_terminate_build 0
 
 
@@ -34,9 +32,9 @@ BuildRequires:    texinfo git
 %if 0%{?suse_version}
 BuildRequires:    gcc-fortran gcc-c++ pythia-devel libpythia8   Rivet Rivet-devel cmake
 BuildRequires:    root6-libs root6-devel root6-config root6 HepMC3-devel  libHepMC4  
-BuildRequires:    autoconf automake libtool sqlite-devel sqlite subversion  libzip-devel openmpi3-devel
+BuildRequires:    autoconf automake libtool sqlite-devel sqlite subversion  libzip-devel openmpi4-devel
 BuildRequires:    openmpi environment-modules LHAPDF-devel fastjet fastjet-devel  YODA-devel Rivet-devel zlib zlib-devel  openloops
-Requires:         libHepMC4 libLHAPDF libHepMC4  sqlite root6 root6-libs openloops Rivet YODA libpythia8 openmpi3 fastjet  zlib
+Requires:         libHepMC4 libLHAPDF libHepMC4  sqlite root6 root6-libs openloops Rivet YODA libpythia8 openmpi4 fastjet  zlib
 Requires:         hztool gcc-fortran  recola libqd0 openssl
 BuildRequires:    swig  recola libqd0 qd-devel openssl-devel openssl
 Requires:         blackhat blackhat-data libgfortran5
