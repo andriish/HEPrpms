@@ -29,15 +29,3 @@ diff -Naur ORIG/makefile.in PATCHED/makefile.in
  	}
  
  force: $(BLD)/timestamp
-diff -Naur ORIG/src/E/Ecoeffb.F PATCHED/src/E/Ecoeffb.F
---- ORIG/src/E/Ecoeffb.F	2024-12-22 02:24:17.489899282 +0100
-+++ PATCHED/src/E/Ecoeffb.F	2024-12-22 02:24:17.489899282 +0100
-@@ -46,7 +46,7 @@
- 	serial = serial + 1
- 	dump = ibits(debugkey, DebugE, 1) .ne. 0 .and.
-      &    serial .ge. debugfrom .and. serial .le. debugto
--	if( dump ) call XDumpPara(5, para)
-+	if( dump ) call XDumpPara(5, para,"")
- 
- 	m1 = M(1)
- 	m2 = M(2)
