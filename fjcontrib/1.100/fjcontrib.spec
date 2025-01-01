@@ -1,6 +1,6 @@
 Name:           fjcontrib
 Version:        1.100
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPLv2+
 Url:            http://www.fjcontrib.fr
 Source0:        https://fastjet.hepforge.org/contrib/downloads/%{name}-%{version}.tar.gz
@@ -14,6 +14,7 @@ BuildRequires:  gcc-gfortran
 %endif
 %if 0%{?suse_version}
 BuildRequires:  gcc-fortran
+Obsoletes:      libfastjetcontribfragile
 %endif
 
 
