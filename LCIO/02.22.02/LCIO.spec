@@ -1,6 +1,6 @@
 Name:           LCIO
 Version:        2.22.02
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        LCIO (Linear Collider I/O) is a persistency framework and event data model for linear collider detector studies.
 
 Group:          Development/Tools
@@ -97,12 +97,14 @@ sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
 %cmake_install
 mkdir -p $RPM_BUILD_ROOT/%{python3_sitearch}
 mv $RPM_BUILD_ROOT/usr/python/* $RPM_BUILD_ROOT/%{python3_sitearch}
+cp $RPM_BUILD_ROOT/%{_libdir}/cmake/SIO/*cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/LCIO/
 %endif
 
 %if  0%{?suse_version}
 %cmake_install
 mkdir -p $RPM_BUILD_ROOT/%{python_sitearch}
 mv $RPM_BUILD_ROOT/usr/python/* $RPM_BUILD_ROOT/%{python_sitearch}
+cp $RPM_BUILD_ROOT/%{_libdir}/cmake/SIO/*cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/LCIO/
 %endif
 
 %post -p /sbin/ldconfig
