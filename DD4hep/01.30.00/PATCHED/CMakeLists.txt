@@ -225,7 +225,6 @@ endif()
 
 
 
-
 ######################
 # Set compiler flags #
 ######################
@@ -310,9 +309,7 @@ install(PROGRAMS ${CMAKE_BINARY_DIR}/bin/run_test.sh         DESTINATION ${CMAKE
 
 install(DIRECTORY cmake
   DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/DD4hep
-  FILES_MATCHING PATTERN "*.cmake"  PATTERN "run*.sh" 
-  PATTERN "thisdd4hep_package.sh.in" EXCLUDE
-  PATTERN "*.cpp" EXCLUDE
+  FILES_MATCHING PATTERN "*.cmake" PATTERN "thisdd4hep_package.sh.in" PATTERN "run*.sh" PATTERN "*.cpp"
   PATTERN ".svn" EXCLUDE
   )
 
@@ -336,7 +333,6 @@ display_std_variables()
 CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/cmake/DD4hepConfig.cmake.in
   ${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake @ONLY
   )
-
 INSTALL(FILES ${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/DD4hep )
 
 dd4hep_generate_package_configuration_files( ${CMAKE_PROJECT_NAME}Config.cmake )

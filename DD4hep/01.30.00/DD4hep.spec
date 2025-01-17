@@ -1,6 +1,6 @@
 Name:           DD4hep
 Version:        01.30.00
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        DD4hep (Detector Description for High Energy Physics)
 Group:          Development/Tools
 License:        Custom
