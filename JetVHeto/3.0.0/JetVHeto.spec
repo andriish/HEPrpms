@@ -1,7 +1,7 @@
 Summary:  A program to perform NNLL resummation for jet-veto efficiencies and cross sections in Higgs and Z-boson production
 Name: JetVHeto
 Version: 3.0.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv3
 Source: https://www.hepforge.org/downloads/JetVHeto/JetVHeto-%{version}.tgz
 URL:    https://jetvheto.hepforge.org/
@@ -11,6 +11,11 @@ Requires:      hoppet lhapdf chaplin
 BuildRequires: hoppet lhapdf-devel lhapdf chaplin
 BuildRequires: gcc-gfortran gcc-c++
 %endif
+%if 0%{?rhel} || 0%{?fedora}
+BuildRequires: yaml-cpp-devel 
+Requires: yaml-cpp 
+%endif
+
 %if 0%{?suse_version}
 Requires:      hoppet libLHAPDF chaplin
 BuildRequires: hoppet LHAPDF-devel libLHAPDF chaplin

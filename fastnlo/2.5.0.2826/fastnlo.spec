@@ -1,6 +1,6 @@
 Name: fastnlo
 Version: 2.5.0.2826
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPL
 Prefix: %{_prefix}
 Summary: Fast pQCD calculations for PDF fits.
@@ -13,6 +13,10 @@ BuildRequires: gcc-gfortran gcc-c++ lhapdf-devel lhapdf   root root-core
 BuildRequires: qcdnum qcdnum-devel hoppet  fastjet fastjet-devel  zlib zlib-devel
 BuildRequires: autoconf automake libtool tex(latex) swig doxygen texlive-epstopdf ghostscript
 Requires:     qcdnum fastjet 
+%endif
+%if 0%{?rhel} || 0%{?fedora}
+BuildRequires: yaml-cpp-devel 
+Requires: yaml-cpp 
 %endif
 %if 0%{?suse_version}
 BuildRequires: gcc-fortran gcc-c++ LHAPDF-devel libLHAPDF   root6 root6-libs root6-devel 

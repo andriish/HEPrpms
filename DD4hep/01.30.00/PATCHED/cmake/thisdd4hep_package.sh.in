@@ -1,0 +1,39 @@
+#################################################################################
+#
+#  Environment script for DD4hep examples - initializes DD4hep (and ROOT)
+#  for package: @PackageName@
+# 
+#  @author F.Gaede, DESY, 2013
+#  @author M.Frank, CERN, 2015
+#
+#################################################################################
+# Default of DD4hep is the primary installation directory
+if [ ! ${DD4hep_DIR} ]; then
+    export DD4hep_DIR=@DD4hep_ROOT@;
+fi;
+if [ @CLHEP_DIR@ ]; then
+    export CLHEP_DIR=@CLHEP_DIR@;
+fi;
+source ${DD4hep_DIR}/bin/thisdd4hep.sh;
+#
+SOURCE=${BASH_ARGV[0]}
+if [ "x$SOURCE" = "x" ]; then
+    SOURCE=${(%):-%N} # for zsh
+fi
+
+dd4hep_parse_this $SOURCE  @PackageName@;
+#
+#----PATH---------------------------------------------------------------------
+dd4hep_add_path    PATH ${THIS}/bin;
+#----PYTHONPATH---------------------------------------------------------------
+dd4hep_add_path    PYTHONPATH ${THIS}/@DD4HEP_PYTHON_INSTALL_DIR@;
+#----ROOT_INCLUDE_PATH--------------------------------------------------------
+dd4hep_add_path    ROOT_INCLUDE_PATH ${THIS}/include;
+#----LIBRARY_PATH-------------------------------------------------------------
+dd4hep_add_library_path ${THIS}/@CMAKE_INSTALL_LIBDIR@;
+# -- need to extend dynamic search path for all external libraries:
+if [ @External_LIBRARY_DIRS@ ]; then
+    for lp in @External_LIBRARY_DIRS@; do
+	dd4hep_add_library_path ${lp};
+    done;
+fi;

@@ -2,7 +2,7 @@
 * the five-point tensor coefficients via Passarino-Veltman decomposition
 * this file is part of LoopTools
 * written by M. Rauch
-* last modified 9 Apr 18 th
+* last modified 2 Nov 24 th
 
 #include "externals.h"
 #include "types.h"
@@ -46,7 +46,7 @@
 	serial = serial + 1
 	dump = ibits(debugkey, DebugE, 1) .ne. 0 .and.
      &    serial .ge. debugfrom .and. serial .le. debugto
-	if( dump ) call XDumpPara(5, para)
+	if( dump ) call XDumpPara(5, para, "Ecoeffb")
 
 	m1 = M(1)
 	m2 = M(2)

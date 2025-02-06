@@ -1,7 +1,7 @@
 %define debug_package %{nil}
 Name:           FeynHiggs
 Version:        2.19.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Fortran code for the (diagrammatic/EFT/hybrid) calculation of the masses, mixings and much more of the Higgs bosons
 License:        GPL
 Prefix:         %{_prefix}
@@ -49,7 +49,7 @@ export CC=gcc
 --64 \
 --native \
 --enable-full-g-2 \
---enable-slhapara  CXXFLAGS="%{optflags}  -fPIC" FFLAGS="%{optflags}  -fPIC" CFLAGS="%{optflags}  -fPIC"  LDFLAGS="%{build_ldflags}"
+--enable-slhapara  CXXFLAGS="%{optflags}  -fPIC" FFLAGS="%{optflags}  -fPIC -Wno-tabs" CFLAGS="%{optflags}  -fPIC"  LDFLAGS="%{build_ldflags}"
 
 %make_build
 
