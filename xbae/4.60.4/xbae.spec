@@ -81,6 +81,7 @@ done
 
 
 %build
+%global optflags %{optflags} -Wno-incompatible-pointer-types
 %configure --disable-static --disable-dependency-tracking
 make %{?_smp_mflags}
 
