@@ -96,11 +96,11 @@ develop programs which make use of %{name}.
 The library documentation is available on header files.
 
 #Yes, suse is stupid
-%if 0%{?suse_version}
+#if 0#{?suse_version}
 
-%debug_package
+#debug_package
 
-%endif
+#endif
 
 %prep
 %setup -q 
