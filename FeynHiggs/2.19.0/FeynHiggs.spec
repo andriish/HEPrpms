@@ -44,13 +44,14 @@ The Headers and modules for the FeynHiggs
 %build
 #Flags are not propagated
 export CC=gcc
-OPTFLAGS=$(echo %{optflags} | sed -e 's/-flto//g' -e 's/-fuse-linker-plugin//g' -e 's/-ffat-lto-objects//g')
+MYOPTFLAGS=$(echo %{optflags} | sed -e 's/-flto//g' -e 's/-fuse-linker-plugin//g' -e 's/-ffat-lto-objects//g')
+MYLDFLAGS=$(echo %{build_ldflags} | sed -e 's/-flto//g' -e 's/-fuse-linker-plugin//g' -e 's/-ffat-lto-objects//g')
 ./configure \
 --quad \
 --64 \
 --native \
 --enable-full-g-2 \
---enable-slhapara  CXXFLAGS="$OPTFLAGS -fPIC" FFLAGS="$OPTFLAGS  -fPIC -Wno-tabs" CFLAGS="$OPTFLAGS -fPIC"  LDFLAGS="%{build_ldflags}"
+--enable-slhapara  CXXFLAGS="$MYOPTFLAGS -fPIC" FFLAGS="$MYOPTFLAGS  -fPIC -Wno-tabs" CFLAGS="$MYOPTFLAGS -fPIC"  LDFLAGS="$MYLDFLAGS"
 
 %make_build
 
