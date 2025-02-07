@@ -75,11 +75,11 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 This package contains python bindings for %{name}.
 
 
-%if 0%{?suse_version}
+#if 0#{?suse_version}
 
-%debug_package
+#debug_package
 
-%endif
+#endif
 
 
 %prep
