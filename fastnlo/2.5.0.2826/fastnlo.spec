@@ -1,6 +1,6 @@
 Name: fastnlo
 Version: 2.5.0.2826
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPL
 Prefix: %{_prefix}
 Summary: Fast pQCD calculations for PDF fits.
@@ -30,7 +30,7 @@ Requires:      qcdnum fastjet
 BuildRequires: python3 python3-devel
 %endif
 %if 0%{?suse_version}
-BuildRequires: python python-devel
+BuildRequires: python3 python3-devel
 %endif
 
 
