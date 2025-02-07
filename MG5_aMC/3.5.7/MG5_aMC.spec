@@ -5,7 +5,7 @@
 
 Name:          MG5_aMC
 Version:       3.5.7
-Release:       2%{?dist}
+Release:       3%{?dist}
 
 Summary:       MG5_aMC is a multi-purpose particle physics event generator.
 License:       http://www.opensource.org/licenses/UoI-NCSA.php
@@ -87,6 +87,7 @@ rm -rf $RPM_BUILD_ROOT/%{python3_sitearch}/madgraph/VERSION
 cp VERSION $RPM_BUILD_ROOT/%{python3_sitearch}/madgraph
 %endif
 %if 0%{?suse_version}
+find . -name "*.py" -exec sed -i '1s|^#!/usr/bin/python$|#!/usr/bin/python3|' {} \;
 mkdir -p $RPM_BUILD_ROOT/%{python_sitearch}
 cp bin/* $RPM_BUILD_ROOT/%_bindir
 cp -r aloha vendor madgraph input Template MadSpin  mg5decay  models $RPM_BUILD_ROOT/%{python_sitearch}
