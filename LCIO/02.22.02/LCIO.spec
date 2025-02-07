@@ -21,7 +21,7 @@ BuildRequires: python3 python3-devel gcc-gfortran
 Requires: root6-config root6-libs  root6-utils nlohmann_json-devel git
 BuildRequires: root6-config root6-libs root6-devel root6  root6-utils nlohmann_json-devel git
 BuildRequires: pkgconfig(zlib) 
-BuildRequires: python python-devel gcc-fortran
+BuildRequires: python3 python3-devel gcc-fortran
 %endif
 
 Requires: zlib
