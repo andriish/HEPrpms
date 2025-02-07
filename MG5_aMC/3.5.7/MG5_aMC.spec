@@ -5,7 +5,7 @@
 
 Name:          MG5_aMC
 Version:       3.5.7
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       MG5_aMC is a multi-purpose particle physics event generator.
 License:       http://www.opensource.org/licenses/UoI-NCSA.php
@@ -38,7 +38,7 @@ Requires: python3 csh
 BuildRequires: python3 python3-devel 
 %endif
 %if 0%{?suse_version}
-Requires: python 
+Requires: python3
 BuildRequires: python3 python3-devel 
 %endif
 
