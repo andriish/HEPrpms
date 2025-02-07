@@ -50,7 +50,7 @@ OPTFLAGS=$(echo %{optflags} | sed -e 's/-flto//g' -e 's/-fuse-linker-plugin//g' 
 --64 \
 --native \
 --enable-full-g-2 \
---enable-slhapara  CXXFLAGS="$OPTFLAGS -fPIC" FFLAGS="$OPTFLAGS  -fPIC -Wno-tabs" CFLAGS=""$OPTFLAGS -fPIC"  LDFLAGS="%{build_ldflags}"
+--enable-slhapara  CXXFLAGS="$OPTFLAGS -fPIC" FFLAGS="$OPTFLAGS  -fPIC -Wno-tabs" CFLAGS="$OPTFLAGS -fPIC"  LDFLAGS="%{build_ldflags}"
 
 %make_build
 
