@@ -11,7 +11,7 @@
 
 Name:           SHERPA-MC
 Version:        3.0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://gitlab.com/sherpa-team/sherpa/-/archive/v%{version}/sherpa-v%{version}.tar.gz
@@ -147,6 +147,7 @@ This package provides the Python 2 bindings for %{name}-openmpi
 # Build serial version, dummy arguments
 chmod -x PDF/GRS/grsg99.f
 
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 %cmake -DSHERPA_ENABLE_ANALYSIS:BOOL=ON -DSHERPA_ENABLE_BINRELOC:BOOL=ON -DSHERPA_ENABLE_BLACKHAT:BOOL=ON \
 -DSHERPA_ENABLE_DIHIGGS:BOOL=OFF -DSHERPA_ENABLE_EXAMPLES:BOOL=ON  \
 -DSHERPA_ENABLE_GZIP:BOOL=ON -DSHERPA_ENABLE_HEPMC3:BOOL=ON -DSHERPA_ENABLE_HEPMC3_ROOT:BOOL=ON  \
@@ -183,7 +184,45 @@ cd ..
 %{_openmpi_unload}
 
 
+%else
+TOP=$(pwd)
+%cmake -DSHERPA_ENABLE_ANALYSIS:BOOL=ON -DSHERPA_ENABLE_BINRELOC:BOOL=ON -DSHERPA_ENABLE_BLACKHAT:BOOL=ON \
+-DSHERPA_ENABLE_DIHIGGS:BOOL=OFF -DSHERPA_ENABLE_EXAMPLES:BOOL=ON  \
+-DSHERPA_ENABLE_GZIP:BOOL=ON -DSHERPA_ENABLE_HEPMC3:BOOL=ON -DSHERPA_ENABLE_HEPMC3_ROOT:BOOL=ON  \
+-DSHERPA_ENABLE_INTERNAL_PDFS:BOOL=ON -DSHERPA_ENABLE_INSTALL_LIBZIP:BOOL=OFF -DSHERPA_ENABLE_INSTALL_LHAPDF:BOOL=OFF \
+ -DSHERPA_ENABLE_LHOLE:BOOL=ON -DSHERPA_ENABLE_MADLOOP:BOOL=ON -DSHERPA_ENABLE_MCFM:BOOL=ON \
+  -DSHERPA_ENABLE_MPI:BOOL=OFF -DSHERPA_ENABLE_OPENLOOPS:BOOL=ON -DSHERPA_ENABLE_PYTHIA8:BOOL=ON -DSHERPA_ENABLE_PYTHON:BOOL=ON \
+   -DSHERPA_ENABLE_RECOLA:BOOL=ON -DSHERPA_ENABLE_RIVET:BOOL=ON -DSHERPA_ENABLE_ROOT:BOOL=ON -DSHERPA_ENABLE_THREADING:BOOL=ON \
+  -DSHERPA_ENABLE_UFO:BOOL=ON -DSHERPA_ENABLE_EWSUD:BOOL=ON \
+  -DSHERPA_ENABLE_GOSAM:BOOL=OFF -DSHERPA_ENABLE_MANUAL:BOOL=OFF -S $TOP
+
+%cmake_build
+
+
+%{_openmpi_load}
+mkdir $TOP/$MPI_COMPILER; 
+cd $TOP/$MPI_COMPILER
+%cmake -DSHERPA_ENABLE_ANALYSIS:BOOL=ON -DSHERPA_ENABLE_BINRELOC:BOOL=ON -DSHERPA_ENABLE_BLACKHAT:BOOL=ON \
+-DSHERPA_ENABLE_DIHIGGS:BOOL=OFF -DSHERPA_ENABLE_EXAMPLES:BOOL=ON  \
+-DSHERPA_ENABLE_GZIP:BOOL=ON -DSHERPA_ENABLE_HEPMC3:BOOL=ON -DSHERPA_ENABLE_HEPMC3_ROOT:BOOL=ON  \
+-DSHERPA_ENABLE_INTERNAL_PDFS:BOOL=ON -DSHERPA_ENABLE_INSTALL_LIBZIP:BOOL=OFF -DSHERPA_ENABLE_INSTALL_LHAPDF:BOOL=OFF \
+ -DSHERPA_ENABLE_LHOLE:BOOL=ON -DSHERPA_ENABLE_MADLOOP:BOOL=ON -DSHERPA_ENABLE_MCFM:BOOL=ON \
+  -DSHERPA_ENABLE_MPI:BOOL=OFF -DSHERPA_ENABLE_OPENLOOPS:BOOL=ON -DSHERPA_ENABLE_PYTHIA8:BOOL=ON -DSHERPA_ENABLE_PYTHON:BOOL=ON \
+   -DSHERPA_ENABLE_RECOLA:BOOL=ON -DSHERPA_ENABLE_RIVET:BOOL=ON -DSHERPA_ENABLE_ROOT:BOOL=ON -DSHERPA_ENABLE_THREADING:BOOL=ON \
+  -DSHERPA_ENABLE_UFO:BOOL=ON -DSHERPA_ENABLE_EWSUD:BOOL=ON \
+  -DSHERPA_ENABLE_GOSAM:BOOL=OFF -DSHERPA_ENABLE_MANUAL:BOOL=OFF -S $TOP  \
+  -DCMAKE_INSTALL_PREFIX=$MPI_HOME
+%cmake_build
+cd $TOP
+%{_openmpi_unload}
+
+
+%endif
+
+
+
 %install
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 %cmake_install
 mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
 echo %{_libdir}/%{name} >   %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
@@ -201,6 +240,28 @@ cd ..
 
 rm -rf $RPM_BUILD_ROOT/usr/share/info/dir
 export QA_RPATHS=3
+%else
+TOP=$(pwd)
+%cmake_install
+mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
+echo %{_libdir}/%{name} >   %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
+%py3_shebang_fix %{buildroot}//usr/share/SHERPA-MC/plot_graphs
+
+
+%{_openmpi_load}
+cd $TOP/$MPI_COMPILER
+%cmake_install
+%py3_shebang_fix %{buildroot}/$MPI_HOME/share/SHERPA-MC/plot_graphs
+rm -rf %{buildroot}/$MPI_HOME/share
+cd ..
+%{_openmpi_unload}
+
+
+rm -rf $RPM_BUILD_ROOT/usr/share/info/dir
+export QA_RPATHS=3
+
+%endif
+
 
 %post -p /sbin/ldconfig    
 %postun -p /sbin/ldconfig
