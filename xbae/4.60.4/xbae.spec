@@ -70,8 +70,8 @@ developing applications that use %{name}.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1 -b .multilib
+%patch 0 -p1
+%patch 1 -p1 -b .multilib
 
 for file in COPYING ChangeLog NEWS; do
  iconv -f latin1 -t utf8 < $file > $file.utf8
