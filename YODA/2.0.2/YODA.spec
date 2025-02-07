@@ -72,11 +72,11 @@ python-%{name} contains python bindings for %{name}.
 %endif
 
 #Yes, suse is stupid
-%if 0%{?suse_version}
+#if 0{?suse_version}
 
-%debug_package
+#debug_package
 
-%endif
+#endif
 
 %prep
 %setup -q
