@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        4.0.2
-Release:        1003%{?dist}
+Release:        1004%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -93,7 +93,7 @@ The library documentation is available on header files.
 %build
 
 #autoreconf --force --install --verbose .
-autoreconf -i 
+autoreconf -i --force
 #automake -a --force
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
