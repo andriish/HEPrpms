@@ -1,10 +1,10 @@
 Name:          qcdnum
 Version:       18.00.0
-Release:       1%{?dist}
+Release:       2%{?dist}
 License:       GPLv3
 Prefix:        %{_prefix}
 Summary:       A very fast QCD evolution program written in FORTRAN77
-Source:        https://www.nikhef.nl/~h24/download/qcdnum180000.tar.gz
+Source:        https://qcdnum.mpp.mpg.de/qcdnum-files/download/qcdnum180000.tar.gz
 URL:           https://www.nikhef.nl/~h24/qcdnum/
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires: gcc-gfortran gcc-c++
