@@ -4,13 +4,13 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-tmdlib:2.2.11
+#tmdlib:2.2.11
 #Rivet:4.0.2
 #LoopTools:2.16
 #DD4hep:01.30.00
 #geant4:11.3.0
 #LCIO:02.22.02
-#whizard:3.1.5
+whizard:3.1.5
 #LATER Rivet:4.0.2
 #fastjet:3.4.3
 ### LATER 

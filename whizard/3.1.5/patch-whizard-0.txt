@@ -1,6 +1,6 @@
 diff -Naur ORIG/m4/gosam.m4 PATCHED/m4/gosam.m4
---- ORIG/m4/gosam.m4	2024-12-31 00:37:06.441042756 +0100
-+++ PATCHED/m4/gosam.m4	2024-12-31 00:37:07.202055385 +0100
+--- ORIG/m4/gosam.m4	2024-12-31 13:02:48.343348213 +0100
++++ PATCHED/m4/gosam.m4	2024-12-31 13:02:48.343348213 +0100
 @@ -68,7 +68,7 @@
    else
      AC_MSG_RESULT([no])
@@ -44,8 +44,8 @@ diff -Naur ORIG/m4/gosam.m4 PATCHED/m4/gosam.m4
      WO_PATH_LIB(samurai_lib, [samurai], [libsamurai.${SHRLIB_EXT}], $LD_LIBRARY_PATH)
    fi
 diff -Naur ORIG/m4/pythia8.m4 PATCHED/m4/pythia8.m4
---- ORIG/m4/pythia8.m4	2024-12-31 00:28:07.261042714 +0100
-+++ PATCHED/m4/pythia8.m4	2024-12-31 00:28:07.262042730 +0100
+--- ORIG/m4/pythia8.m4	2024-12-31 13:02:48.343348213 +0100
++++ PATCHED/m4/pythia8.m4	2024-12-31 13:02:48.343348213 +0100
 @@ -46,14 +46,14 @@
  [
  dnl ckeck if a directory is specified for PYTHIA8
@@ -121,8 +121,8 @@ diff -Naur ORIG/m4/pythia8.m4 PATCHED/m4/pythia8.m4
    AC_LINK_IFELSE([dnl
      AC_LANG_PROGRAM([[#include "Pythia8/Pythia.h"]],
 diff -Naur ORIG/omega/scripts/ufo-sanitizer.in PATCHED/omega/scripts/ufo-sanitizer.in
---- ORIG/omega/scripts/ufo-sanitizer.in	2024-12-31 00:28:07.261042714 +0100
-+++ PATCHED/omega/scripts/ufo-sanitizer.in	2024-12-31 00:28:07.262042730 +0100
+--- ORIG/omega/scripts/ufo-sanitizer.in	2024-12-31 13:02:48.343348213 +0100
++++ PATCHED/omega/scripts/ufo-sanitizer.in	2024-12-31 13:02:48.343348213 +0100
 @@ -1,4 +1,4 @@
 -#! /usr/bin/python
 +#! /usr/bin/python3
@@ -130,8 +130,8 @@ diff -Naur ORIG/omega/scripts/ufo-sanitizer.in PATCHED/omega/scripts/ufo-sanitiz
  ########################################################################
  #
 diff -Naur ORIG/src/rng/dispatch_rng_sub.f90 PATCHED/src/rng/dispatch_rng_sub.f90
---- ORIG/src/rng/dispatch_rng_sub.f90	2024-12-31 00:39:13.503151658 +0100
-+++ PATCHED/src/rng/dispatch_rng_sub.f90	2024-12-31 00:39:14.567169318 +0100
+--- ORIG/src/rng/dispatch_rng_sub.f90	2024-12-31 13:02:48.343348213 +0100
++++ PATCHED/src/rng/dispatch_rng_sub.f90	2024-12-31 13:02:48.343348213 +0100
 @@ -38,7 +38,7 @@
  
  contains
