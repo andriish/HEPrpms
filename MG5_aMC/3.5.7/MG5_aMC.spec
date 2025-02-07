@@ -39,7 +39,7 @@ BuildRequires: python3 python3-devel
 %endif
 %if 0%{?suse_version}
 Requires: python 
-BuildRequires: python python-devel python3-devel 
+BuildRequires: python3 python3-devel 
 %endif
 
 
