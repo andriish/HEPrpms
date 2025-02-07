@@ -1,6 +1,6 @@
 Name:           njet
 Version:        2.1.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPL
 Url:            https://bitbucket.org/njet
 Source0:        https://bitbucket.org/njet/njet/downloads/%{name}-%{version}.tar.gz
@@ -11,7 +11,7 @@ Requires:       python3
 %endif
 %if 0%{?suse_version}
 BuildRequires:  gcc-fortran gcc-c++  autoconf automake libtool  libqd0 qd-devel
-Requires:       python 
+Requires:       python3
 %endif
 
 Prefix: %{_prefix}
