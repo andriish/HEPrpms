@@ -1,4 +1,4 @@
-%global so_ver 11
+%global so_ver 13
 
 Name:             ginac
 Version:          1.8.8
