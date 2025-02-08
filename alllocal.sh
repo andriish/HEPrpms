@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-ginac:1.8.8
+Delphes:3.5.1pre12
+#ginac:1.8.8
 #tmdlib:2.2.11
 #Rivet:4.0.2
 #LoopTools:2.16
