@@ -24,7 +24,6 @@ Requires: cernlib == 2024.09.16.0
 Requires: chaplin == 1.2
 Requires: clhep-devel == 2.4.7.1
 Requires: clhep == 2.4.7.1
-#Requires: COCOA == 0.1.1
 Requires: collier == 1.2.8
 Requires: cuba-devel == 4.2.2
 Requires: cuba == 4.2.2
@@ -34,14 +33,14 @@ Requires: EvtGen-devel == 2.2.3
 Requires: EvtGen-doc == 2.2.3
 Requires: EvtGen == 2.2.3
 Requires: f90cache == 0.99c
-Requires: fastjet-devel == 3.4.2
-Requires: fastjet == 3.4.2
+Requires: fastjet-devel == 3.4.3
+Requires: fastjet == 3.4.3
 Requires: fastnlo-devel == 2.5.0.2826
 Requires: fastnlo == 2.5.0.2826
 Requires: FeynHiggs-devel == 2.19.0
 Requires: FeynHiggs == 2.19.0
-Requires: fjcontrib-devel == 1.056
-Requires: fjcontrib == 1.056
+Requires: fjcontrib-devel == 1.100
+Requires: fjcontrib == 1.100
 Requires: form-doc == 4.3.1
 Requires: form == 4.3.1
 Requires: geant321-gfortran == 2024.09.16.0
@@ -54,7 +53,7 @@ Requires: ggvvamp == 1.0
 Requires: golem95-devel == 1.3.3
 Requires: golem95 == 1.3.3
 Requires: gosam-contrib == 2.0.20200904
-Requires: gosam == 2.1.1
+Requires: gosam == 2.1.2
 Requires: HepPDT-devel == 3.04.01
 Requires: HepPDT-doc == 3.04.01
 Requires: HepPDT == 3.04.01
@@ -88,8 +87,8 @@ Requires: PTL-devel == 2.3.3
 Requires: PTL == 2.3.3
 Requires: pythia6 == 6.4.28
 Requires: python3-apfel == 3.1.1
-Requires: python3-fastjet == 3.4.2
-Requires: python3-LCIO == 2.20.02
+Requires: python3-fastjet == 3.4.3
+Requires: python3-LCIO == 2.22.02
 Requires: python3-YODA == 2.0.2
 Requires: qcdloop-devel == 2.1.0
 Requires: qcdloop == 2.1.0
