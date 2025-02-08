@@ -82,7 +82,7 @@ Requires: paw-gfortran == 2024.09.16.0
 Requires: PHOTOS-devel == 3.64
 Requires: PHOTOS-doc == 3.64
 Requires: PHOTOS == 3.64
-Requires: Professor == 2.4.2
+Requires: Professor == 2.5.0
 Requires: PTL-devel == 2.3.3
 Requires: PTL == 2.3.3
 Requires: pythia6 == 6.4.28
