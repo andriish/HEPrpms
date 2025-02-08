@@ -36,11 +36,11 @@ jobs:
       uses: actions/checkout@v3
     - name: Install
       run: |
-           dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
-           yum -y install epel-release
-           dnf -y copr enable averbyts/HEPrpms
+           dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git --disablerepo=epel-next
+           yum -y install epel-release --disablerepo=epel-next
+           dnf -y copr enable averbyts/HEPrpms 
            sh srpmsbuild.sh HEPrpms 2025.02.08 --build
-           dnf -y install HEPrpms/2025.02.08/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
+           dnf -y install HEPrpms/2025.02.08/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm --disablerepo=epel-next
 
   compilejobEPEL9: 
     name: HEPrpms_on_EPEL9
