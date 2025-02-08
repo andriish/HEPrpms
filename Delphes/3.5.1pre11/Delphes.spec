@@ -1,7 +1,7 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 Name:       Delphes
 Version:    3.5.1pre11
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Delphes is a C++ framework, performing a fast multipurpose detector response simulation. 
 
 License:    GPLv3
