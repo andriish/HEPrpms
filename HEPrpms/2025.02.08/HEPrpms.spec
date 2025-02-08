@@ -94,8 +94,7 @@ Requires: qcdnum-devel == 18.00.0
 Requires: qcdnum == 18.00.0
 Requires: qgraf == 3.6.7
 Requires: rapgap == 3.4.0
-Requires: recola2-SM == 2.2.3
-Requires: recola2 == 2.2.4
+
 Requires: recola == 1.4.4
 Requires: Rivet-devel == 4.0.2
 Requires: Rivet == 4.0.2
@@ -126,9 +125,17 @@ Requires: python3-SHERPA-MC-openmpi == 3.0.1
 Requires: python3-SHERPA-MC == 3.0.1
 Requires: python3-whizard == 3.1.5       										
 Requires: whizard == 3.1.5
-Requires: ggvvamp-devel == 1.0
-Requires: ggvvamp == 1.0
-Requires: nlox == 1.2.1
+
+##Fails
+#Requires: ggvvamp-devel == 1.0
+#Requires: ggvvamp == 1.0
+#Requires: nlox == 1.2.1
+
+##Conflicts
+#Requires: recola2-SM == 2.2.3
+#Requires: recola2 == 2.2.4
+
+
 %endif
 %if 0%{?suse_version}
 Requires: SHERPA-MC-common == 2.2.16
@@ -138,6 +145,15 @@ Requires: SHERPA-MC-openmpi == 2.2.16
 Requires: SHERPA-MC == 2.2.16
 Requires: python3-SHERPA-MC-openmpi == 2.2.16
 Requires: python3-SHERPA-MC == 2.2.16
+
+##Fails
+#Requires: ggvvamp-devel == 1.0
+#Requires: ggvvamp == 1.0
+#Requires: nlox == 1.2.1
+
+##Conflicts
+#Requires: recola2-SM == 2.2.3
+#Requires: recola2 == 2.2.4
 %endif
 
 

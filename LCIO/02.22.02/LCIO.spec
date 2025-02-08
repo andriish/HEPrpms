@@ -1,6 +1,6 @@
 Name:           LCIO
 Version:        2.22.02
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        LCIO (Linear Collider I/O) is a persistency framework and event data model for linear collider detector studies.
 
 Group:          Development/Tools
@@ -67,7 +67,7 @@ This package provides the Python 3 bindings for %{name}
 
 %prep
 %setup -q -n LCIO-02-22-02
-%patch 0 -p1
+%patch -P 0 -p1
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
 %endif
