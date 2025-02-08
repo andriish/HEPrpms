@@ -1,7 +1,7 @@
 %define debug_package %{nil}
 Name:           FeynHiggs
 Version:        2.19.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Fortran code for the (diagrammatic/EFT/hybrid) calculation of the masses, mixings and much more of the Higgs bosons
 License:        GPL
 Prefix:         %{_prefix}
@@ -46,12 +46,17 @@ The Headers and modules for the FeynHiggs
 export CC=gcc
 MYOPTFLAGS=$(echo %{optflags} | sed -e 's/-flto=auto//g' -e 's/-fuse-linker-plugin//g' -e 's/-ffat-lto-objects//g')
 MYLDFLAGS=$(echo %{build_ldflags} | sed -e 's/-flto=auto//g' -e 's/-fuse-linker-plugin//g' -e 's/-ffat-lto-objects//g')
+export CXXFLAGS="$MYOPTFLAGS -fPIC" 
+export  FFLAGS="$MYOPTFLAGS  -fPIC -Wno-tabs" 
+export FCLAGS="$MYOPTFLAGS  -fPIC -Wno-tabs" 
+export CFLAGS="$MYOPTFLAGS -fPIC"  
+export LDFLAGS="$MYLDFLAGS"
 ./configure \
 --quad \
 --64 \
 --native \
 --enable-full-g-2 \
---enable-slhapara  CXXFLAGS="$MYOPTFLAGS -fPIC" FFLAGS="$MYOPTFLAGS  -fPIC -Wno-tabs" FCLAGS="$MYOPTFLAGS  -fPIC -Wno-tabs" CFLAGS="$MYOPTFLAGS -fPIC"  LDFLAGS="$MYLDFLAGS"
+--enable-slhapara  
 
 %make_build
 

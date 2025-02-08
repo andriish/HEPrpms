@@ -27,8 +27,8 @@ Requires: clhep == 2.4.7.1
 Requires: collier == 1.2.8
 Requires: cuba-devel == 4.2.2
 Requires: cuba == 4.2.2
-Requires: Delphes-doc == 3.5.1pre11
-Requires: Delphes == 3.5.1pre11
+Requires: Delphes-doc == 3.5.1pre12
+Requires: Delphes == 3.5.1pre12
 Requires: EvtGen-devel == 2.2.3
 Requires: EvtGen-doc == 2.2.3
 Requires: EvtGen == 2.2.3
