@@ -1,5 +1,6 @@
 name: build
-on:
+on: 
+ workflow_dispatch:
 # push:
  schedule:
 #Every 2 days at midnight 
