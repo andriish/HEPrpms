@@ -37,8 +37,7 @@ Requires: fastjet-devel == 3.4.3
 Requires: fastjet == 3.4.3
 Requires: fastnlo-devel == 2.5.0.2826
 Requires: fastnlo == 2.5.0.2826
-Requires: FeynHiggs-devel == 2.19.0
-Requires: FeynHiggs == 2.19.0
+
 Requires: fjcontrib-devel == 1.100
 Requires: fjcontrib == 1.100
 Requires: form-doc == 4.3.1
@@ -116,13 +115,6 @@ Requires: YODA == 2.0.2
 Requires: python3-uproot4 == 4.3.3
 
 %if 0%{?rhel} || 0%{?fedora}
-Requires: SHERPA-MC-common == 3.0.1
-Requires: SHERPA-MC-devel == 3.0.1
-Requires: SHERPA-MC-openmpi-devel == 3.0.1
-Requires: SHERPA-MC-openmpi == 3.0.1
-Requires: SHERPA-MC == 3.0.1
-Requires: python3-SHERPA-MC-openmpi == 3.0.1
-Requires: python3-SHERPA-MC == 3.0.1
 Requires: python3-whizard == 3.1.5       										
 Requires: whizard == 3.1.5
 
@@ -130,6 +122,15 @@ Requires: whizard == 3.1.5
 #Requires: ggvvamp-devel == 1.0
 #Requires: ggvvamp == 1.0
 #Requires: nlox == 1.2.1
+#Requires: SHERPA-MC-common == 3.0.1
+#Requires: SHERPA-MC-devel == 3.0.1
+#Requires: SHERPA-MC-openmpi-devel == 3.0.1
+#Requires: SHERPA-MC-openmpi == 3.0.1
+#Requires: SHERPA-MC == 3.0.1
+#Requires: python3-SHERPA-MC-openmpi == 3.0.1
+#Requires: python3-SHERPA-MC == 3.0.1
+#Requires: FeynHiggs-devel == 2.19.0
+#Requires: FeynHiggs == 2.19.0
 
 ##Conflicts
 #Requires: recola2-SM == 2.2.3
