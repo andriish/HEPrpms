@@ -22,8 +22,8 @@ jobs:
            wget https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/repo/opensuse-tumbleweed/averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo
            sed -i 's/\$basearch/x86_64/g' averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo
            zypper --non-interactive addrepo averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo
-           sh srpmsbuild.sh HEPrpms 2023.12.30 --build
-           zypper --non-interactive --no-gpg-checks  --gpg-auto-import-keys install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
+           sh srpmsbuild.sh HEPrpms 2025.02.08 --build
+           zypper --non-interactive --no-gpg-checks  --gpg-auto-import-keys install HEPrpms/2025.02.08/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobEPEL8:
     name: HEPrpms_on_EPEL8
@@ -38,8 +38,8 @@ jobs:
            dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
            yum -y install epel-release
            dnf -y copr enable averbyts/HEPrpms
-           sh srpmsbuild.sh HEPrpms 2023.12.30 --build
-           dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
+           sh srpmsbuild.sh HEPrpms 2025.02.08 --build
+           dnf -y install HEPrpms/2025.02.08/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobEPEL9: 
     name: HEPrpms_on_EPEL9
@@ -54,40 +54,9 @@ jobs:
            dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
            yum -y install epel-release
            dnf -y copr enable averbyts/HEPrpms
-           sh srpmsbuild.sh HEPrpms 2023.12.30 --build
-           dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
+           sh srpmsbuild.sh HEPrpms 2025.02.08 --build
+           dnf -y install HEPrpms/2025.02.08/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
-
-
-  compilejobFedora38:
-    name: HEPrpms_on_Fedora38
-    runs-on: ubuntu-latest
-    container:
-        image: fedora:38
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Install 
-      run: |
-           dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
-           dnf -y copr enable averbyts/HEPrpms
-           sh srpmsbuild.sh HEPrpms 2023.12.30 --build
-           dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
-
-  compilejobFedora39:
-    name: HEPrpms_on_Fedora39
-    runs-on: ubuntu-latest
-    container:
-        image: fedora:39
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Install 
-      run: |
-           dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
-           dnf -y copr enable averbyts/HEPrpms
-           sh srpmsbuild.sh HEPrpms 2023.12.30 --build
-           dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
 
   compilejobFedora40:
     name: HEPrpms_on_Fedora40
@@ -101,5 +70,21 @@ jobs:
       run: |
            dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
            dnf -y copr enable averbyts/HEPrpms
-           sh srpmsbuild.sh HEPrpms 2023.12.30 --build
-           dnf -y install HEPrpms/2023.12.30/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
+           sh srpmsbuild.sh HEPrpms 2025.02.08 --build
+           dnf -y install HEPrpms/2025.02.08/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
+
+
+  compilejobFedora41:
+    name: HEPrpms_on_Fedora41
+    runs-on: ubuntu-latest
+    container:
+        image: fedora:41
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Install 
+      run: |
+           dnf -y install 'dnf-command(copr)' rpm-build which rpmdevtools git
+           dnf -y copr enable averbyts/HEPrpms
+           sh srpmsbuild.sh HEPrpms 2025.02.08 --build
+           dnf -y install HEPrpms/2025.02.08/rpmbuild/RPMS/x86_64/HEPrpms-*.rpm
