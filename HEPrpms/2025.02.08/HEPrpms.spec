@@ -48,8 +48,7 @@ Requires: geant4-data == 11.3.0
 Requires: geant4-devel == 11.3.0
 Requires: geant4-doc == 11.3.0
 Requires: geant4 == 11.3.0
-Requires: ggvvamp-devel == 1.0
-Requires: ggvvamp == 1.0
+
 Requires: golem95-devel == 1.3.3
 Requires: golem95 == 1.3.3
 Requires: gosam-contrib == 2.0.20200904
@@ -74,7 +73,6 @@ Requires: MC-TESTER == 1.25.1
 Requires: MG5_aMC == 3.5.7
 Requires: njet == 2.1.1
 Requires: nlojet++ == 4.1.3
-Requires: nlox == 1.2.1
 Requires: noweb == 2.13
 Requires: openloops == 2.1.3
 Requires: patchy-gfortran == 2024.09.16.0
@@ -126,8 +124,11 @@ Requires: SHERPA-MC-openmpi == 3.0.1
 Requires: SHERPA-MC == 3.0.1
 Requires: python3-SHERPA-MC-openmpi == 3.0.1
 Requires: python3-SHERPA-MC == 3.0.1
-Requires: python3-whizard == 3.1.5       
+Requires: python3-whizard == 3.1.5       										
 Requires: whizard == 3.1.5
+Requires: ggvvamp-devel == 1.0
+Requires: ggvvamp == 1.0
+Requires: nlox == 1.2.1
 %endif
 %if 0%{?suse_version}
 Requires: SHERPA-MC-common == 2.2.16
