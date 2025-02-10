@@ -174,11 +174,10 @@ export CFLAGS="$FC_OPTFLAGS -Wno-error -Wno-error=format-security "
     --enable-hoppet     --with-hoppet=/usr     \
     --enable-lcio       --with-lcio=/usr \
     --enable-pythia8    --with-pythia8=/usr \
-%if %{?fedora}%{!?fedora:0} < 41 || %{?rhel}%{!?rhel:0} >= 9
-    --enable-python             \
-%endif
     --enable-openloops  --with-openloops=/usr/%_lib/openloops  \
     --enable-looptools  --with-looptools=/usr  --with-mpi-lib=openmpi
+#    --enable-python             
+
 %else
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --disable-ocaml  \
