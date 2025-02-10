@@ -108,14 +108,14 @@ python%{python3_pkgversion}-%{name} contains python bindings for %{name}.
 %endif
 
 
-%if 0%{?suse_version}
-%package  -n python3-%{name}
-Summary:        python bindings for %{name}
-Provides:       python3-%{name} = %{version}-%{release}
+#if 0{?suse_version}
+#package  -n python3-#{name}
+#Summary:        python bindings for #{name}
+#Provides:       python3-#{name} = #{version}-#{release}
 
-%description -n python3-%{name}
-python-%{name} contains python bindings for %{name}.
-%endif
+#description -n python3-#{name}
+#python-#{name} contains python bindings for #{name}.
+#endif
 
 
 
@@ -130,9 +130,9 @@ python-%{name} contains python bindings for %{name}.
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 export PYTHON=%{_bindir}/python3
 %endif
-%if 0%{?suse_version}
-export PYTHON_VERSION=%{py3_ver}
-%endif
+#if 0#{?suse_version}
+#export PYTHON_VERSION=#{py3_ver}
+#endif
 ###
 autoreconf --force --install --verbose .
 
@@ -174,7 +174,9 @@ export CFLAGS="$FC_OPTFLAGS -Wno-error -Wno-error=format-security "
     --enable-hoppet     --with-hoppet=/usr     \
     --enable-lcio       --with-lcio=/usr \
     --enable-pythia8    --with-pythia8=/usr \
+%if %{?fedora}%{!?fedora:0} < 41 || %{?rhel}%{!?rhel:0} >= 9
     --enable-python             \
+%endif
     --enable-openloops  --with-openloops=/usr/%_lib/openloops  \
     --enable-looptools  --with-looptools=/usr  --with-mpi-lib=openmpi
 %else
@@ -217,10 +219,10 @@ export FCFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
     --enable-hoppet=yes     --with-hoppet=/usr     \
     --enable-lcio       --with-lcio=/usr \
     --enable-pythia8    --with-pythia8=/usr \
-    --enable-python     \
     --enable-openloops  --with-openloops=/usr/%_lib/openloops  \
     --enable-looptools  --with-looptools=/usr  --with-mpi-lib=openmpi
 
+#    --enable-python     
 ## cteq6l1, CT10
 %make_build
 %endif
@@ -241,16 +243,16 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 /usr/lib/mod/*
 /usr/include/*
 
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+%if %{?fedora}%{!?fedora:0} < 41 || %{?rhel}%{!?rhel:0} >= 8
 %files -n python%{python3_pkgversion}-%{name}
 %{python3_sitearch}/*
 %endif
 
 
-%if 0%{?suse_version}
-%files -n python3-%{name}
-/usr/%_lib/python*/site-packages/*
-%endif
+#if 0#{?suse_version}
+#files -n python3-#{name}
+#/usr/#_lib/python*/site-packages/*
+#endif
 
 
 %clean
