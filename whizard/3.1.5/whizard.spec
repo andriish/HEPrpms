@@ -242,7 +242,7 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 /usr/lib/mod/*
 /usr/include/*
 
-%if %{?fedora}%{!?fedora:0} < 41 || %{?rhel}%{!?rhel:0} >= 8
+%if %{?fedora}%{!?fedora:0}  || %{?rhel}%{!?rhel:0} >= 8
 %files -n python%{python3_pkgversion}-%{name}
 %{python3_sitearch}/*
 %endif
