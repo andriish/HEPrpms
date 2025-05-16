@@ -297,18 +297,18 @@ export FC=g77
 %else
 export FC=gfortran
 %endif
-cmake  -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF  -DCMAKE_Fortran_COMPILER=${FC} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+cmake  -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=gfortran -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF  -DCMAKE_Fortran_COMPILER=${FC} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %cmakeB
 %endif
 %if 0%{?fedora} || %{?rhel}%{!?rhel:0} >= 7
 export FC=gfortran
-%cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+%cmake -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=gfortran -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %cmakeB
 %endif
 
 %if 0%{?suse_version}
 export FC=gfortran
-%cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S ../cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+%cmake -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=gfortran -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S ../cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %cmake_build
 %endif
 
@@ -402,7 +402,7 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %dir %{_libdir}/cernlib/%{verdir}/lib
 %dir %{_libdir}/cernlib/%{verdir}/bin
 %{_libdir}/cernlib/%{verdir}/lib/*.so.*
-%{_datadir}/cernlib/%{verdatadir}/*dat
+#{_datadir}/cernlib/{verdatadir}/*dat
 %dir %{_datadir}/cernlib
 %dir %{_datadir}/cernlib/cmake
 %{_datadir}/cernlib/cmake/CERNLIBConfig.cmake
