@@ -22,7 +22,7 @@ project(CERNLIB LANGUAGES C Fortran )
 #The complicated way to set the version is used to assure the simple
 #replacement of version variable with sed will not break the CMakeLists.txt
 if (NOT __CL_VERSION__)
-  set(EXTERNAL_VERSION_STRING "2025.02.25")
+  set(EXTERNAL_VERSION_STRING "2025.04.04")
 else()
   set(EXTERNAL_VERSION_STRING "__CL_VERSION__.1")
 endif()
