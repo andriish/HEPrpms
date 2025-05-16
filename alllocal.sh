@@ -4,6 +4,7 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+cernlib:2025.04.04.0
 #Delphes:3.5.1pre12
 #ginac:1.8.8
 #tmdlib:2.2.11
@@ -22,7 +23,7 @@ declare -a BUILDLIST=(
 #qcdloop:2.1.0
 #Professor:2.5.0
 #qd:2.3.24
-YODA:2.0.3
+#YODA:2.0.3
 #gosam:2.1.2
 ###################
 #cernlib:2024.09.16.0
