@@ -9,10 +9,11 @@
 
 Name:           fastjet
 Version:        3.4.3
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 License:        GPLv2+
 URL:            http://www.fastjet.fr
 Source0:        https://www.fastjet.fr/repo/%{name}-%{version}.tar.gz
+Patch0:         patch-fastjet-0.txt
 Prefix:         %{_prefix}
 Summary:        Fast implementation of several recombination jet algorithms
 BuildRequires:  gcc-c++ 
@@ -84,6 +85,7 @@ This package contains python bindings for %{name}.
 
 %prep
 %setup -q -n %{name}-%{version}
+%patch -P 0 -p1
 %build
 %if 0%{?rhel} || 0%{?fedora}
 %if %{py3default}

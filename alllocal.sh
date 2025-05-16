@@ -4,7 +4,7 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-cernlib:2025.04.04.0
+#cernlib:2025.04.04.0
 #Delphes:3.5.1pre12
 #ginac:1.8.8
 #tmdlib:2.2.11
@@ -15,7 +15,7 @@ cernlib:2025.04.04.0
 #LCIO:02.22.02
 #whizard:3.1.5
 #LATER Rivet:4.0.2
-#fastjet:3.4.3
+fastjet:3.4.3
 ### LATER 
 #fjcontrib:1.100
 #### BAD 
