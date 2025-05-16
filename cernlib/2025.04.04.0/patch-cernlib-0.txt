@@ -1,43 +1,16 @@
 diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt
---- ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2025-05-16 22:35:53.230607809 +0200
-+++ PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2025-05-16 22:35:53.231607824 +0200
-@@ -33,7 +33,7 @@
- endif(CMAKE_BUILD_TYPE)
- set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
+--- ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2025-05-16 23:16:50.536189525 +0200
++++ PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2025-05-16 23:16:50.538189561 +0200
+@@ -72,7 +72,7 @@
+   endif()
+ endif()
  
 -set(CMAKE_VERBOSE_MAKEFILE FALSE)
 +set(CMAKE_VERBOSE_MAKEFILE ON)
  set(CMAKE_POSITION_INDEPENDENT_CODE FALSE)
- ###########################Options#####################################
- option(CERNLIB_USE_INTERNAL_XBAE          "Forces using internal XBAE." ON)
-@@ -44,12 +44,12 @@
- option(CERNLIB_POSITION_INDEPENDENT_CODE  "Position independent code for static libraries." OFF)
- option(CERNLIB_BUILD_SHARED               "Build shared libraries." OFF)
- option(CERNLIB_SHIFT                      "Build with dummy shift support." OFF)
--option(CERNLIB_GFLUKA                     "Build with GFluka." ON)
-+option(CERNLIB_GFLUKA                     "Build with GFluka." OFF)
- option(CERNLIB_FORCE_32                   "Force build of 32 bit libraries." OFF)
- option(CERNLIB_QPRINT                     "Debug print statements." OFF)
- option(CERNLIB_QDEBUG                     "More Debug print statements." OFF)
- option(CERNLIB_QDEVZE                     "Zebra developement." OFF)
--option(CERNLIB_NO_SUFFIX                  "Do not append suffixes to binaries." ON)
-+option(CERNLIB_NO_SUFFIX                  "Do not append suffixes to binaries." OFF)
- set(CERNLIB_BUILD_STATIC ON)  #This is always ON, but it is convenient to have it like this from the point of view of logic.
- ###########################Options handeling#####################################
  if (CERNLIB_QPRINT)
-@@ -336,11 +336,6 @@
- set(CMAKE_SHARED_LINKER_FLAGS  "")
- set(CMAKE_STATIC_LINKER_FLAGS  "")
- 
--if (APPLE)
-- set (CMAKE_EXE_LINKER_FLAGS  "-v -Wl,-ld_classic,-dead_strip")
-- set (CMAKE_EXE_LINKER_FLAGS_DEBUG  "-v -Wl,-ld_classic,-dead_strip")
--endif()
--
- set(CMAKE_EXE_LINKER_FLAGS_${CMAKE_BUILD_TYPE}  "")
- set(CMAKE_MODULE_LINKER_FLAGS_${CMAKE_BUILD_TYPE}  "")
- set(CMAKE_SHARED_LINKER_FLAGS_${CMAKE_BUILD_TYPE}  "")
-@@ -378,6 +373,9 @@
+   add_definitions(-DCERNLIB_QPRINT)
+@@ -413,6 +413,9 @@
    list(FILTER NEW_CMAKE_C_FLAGS  EXCLUDE REGEX "flto.*")
    list(FILTER NEW_CMAKE_C_FLAGS  EXCLUDE REGEX "ffat.*")
    list(FILTER NEW_CMAKE_C_FLAGS  EXCLUDE REGEX "-O3")
@@ -47,7 +20,7 @@ diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt PATCHED/cernlib
  #It would be nice to implement the filtering as well
  endif()
  list(JOIN NEW_CMAKE_C_FLAGS " " CMAKE_C_FLAGS_X )
-@@ -509,7 +507,7 @@
+@@ -557,7 +560,7 @@
  file(READ ${CMAKE_CURRENT_SOURCE_DIR}/pawlib/paw/programs/paw.script FILE_CONTENTS)
  string(REPLACE "\$drv " "\$drv${COMPSUFFIX} " FILE_CONTENTS "${FILE_CONTENTS}")
  string(REPLACE "\"/cern\"" "\"${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/cernlib\"" FILE_CONTENTS "${FILE_CONTENTS}")
@@ -57,8 +30,8 @@ diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt PATCHED/cernlib
  install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script  DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME paw${COMPSUFFIXBIN} COMPONENT libs)
  ########################################################################
 diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c PATCHED/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c
---- ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c	2025-05-16 22:35:53.230607809 +0200
-+++ PATCHED/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c	2025-05-16 22:35:53.231607824 +0200
+--- ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c	2025-05-16 23:16:50.538189561 +0200
++++ PATCHED/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c	2025-05-16 23:16:50.538189561 +0200
 @@ -29,6 +29,7 @@
  #include "higz/pilot.h"
  #if defined(CERNLIB_GIF)
