@@ -310,3 +310,4 @@ d0dc82297239ff5a1dda6081f3648d1c  qcdnum/18.00.00/rpmbuild/SOURCES/qcdnum180000.
 b6a7513120ba7aac4421f2525f0195c8  MG5_aMC/3.5.7/rpmbuild/SOURCES/MG5_aMC_v3.5.7.tar.gz
 e0bddec1d7915635599ea1679ad01238  ginac/1.8.8/rpmbuild/SOURCES/ginac-1.8.8.tar.bz2
 86d083bc5fe0b76ad280520efcae2e9a  Delphes/3.5.1pre12/rpmbuild/SOURCES/3.5.1pre12.tar.gz
+a1d85a1aeffa7434f6478bb8555e3f64  MG5_aMC/3.5.8/rpmbuild/SOURCES/MG5_aMC_v3.5.8.tar.gz
