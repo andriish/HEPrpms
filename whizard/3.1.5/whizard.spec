@@ -6,7 +6,7 @@
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.1.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
@@ -190,9 +190,9 @@ export CFLAGS="$FC_OPTFLAGS -Wno-error -Wno-error=format-security "
     --enable-hoppet     --with-hoppet=/usr     \
     --enable-lcio       --with-lcio=/usr \
     --enable-pythia8    --with-pythia8=/usr \
-    --enable-python     \
     --enable-openloops  --with-openloops=/usr/%_lib/openloops  \
     --enable-looptools  --with-looptools=/usr  --with-mpi-lib=openmpi
+#    --enable-python     
 %endif
 
 ## cteq6l1, CT10
@@ -242,10 +242,10 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 /usr/lib/mod/*
 /usr/include/*
 
-%if %{?fedora}%{!?fedora:0}  || %{?rhel}%{!?rhel:0} >= 8
-%files -n python%{python3_pkgversion}-%{name}
-%{python3_sitearch}/*
-%endif
+#if #{?fedora}#{!?fedora:0}  || #{?rhel}#{!?rhel:0} >= 8
+#files -n python#{python3_pkgversion}-#{name}
+#{python3_sitearch}/*
+#endif
 
 
 #if 0#{?suse_version}
