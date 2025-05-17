@@ -43,9 +43,9 @@ make clean
 %if 0%{?rhel} || 0%{?fedora}
 %if %{?fedora}%{!?fedora:0}  >= 31 || %{?rhel}%{!?rhel:0} > 8
 %if %{?fedora}%{!?fedora:0}  >= 42 
-make FC='gfortran -std=legacy  -fallow-argument-mismatch -fallow-invalid-boz -g' UGS=/usr/%_lib/libugs.a
+make FC='gfortran -std=legacy  -fallow-argument-mismatch -fallow-invalid-boz -g'  CC='gcc -std=gnu17' UGS=/usr/%_lib/libugs.a
 %else
-make FC='gfortran -std=legacy  -fallow-argument-mismatch -fallow-invalid-boz -g' CC='gcc -std=gnu17' UGS=/usr/%_lib/libugs.a
+make FC='gfortran -std=legacy  -fallow-argument-mismatch -fallow-invalid-boz -g' UGS=/usr/%_lib/libugs.a
 %endif
 %else
 make FC='gfortran -std=legacy  -g' UGS=/usr/%_lib/libugs.a
