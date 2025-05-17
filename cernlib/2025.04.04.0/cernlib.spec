@@ -402,7 +402,7 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %dir %{_libdir}/cernlib/%{verdir}/lib
 %dir %{_libdir}/cernlib/%{verdir}/bin
 %{_libdir}/cernlib/%{verdir}/lib/*.so.*
-#{_datadir}/cernlib/{verdatadir}/*dat
+%{_datadir}/cernlib/%{verdatadir}/*dat
 %dir %{_datadir}/cernlib
 %dir %{_datadir}/cernlib/cmake
 %{_datadir}/cernlib/cmake/CERNLIBConfig.cmake
