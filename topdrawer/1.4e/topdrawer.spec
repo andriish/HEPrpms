@@ -1,7 +1,7 @@
 Summary: A  keyword-driven  interface  designed  to  produce physics  graphs  with  minimal specifications
 Name: topdrawer
 Version: 1.4e
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: Free
 Source: https://ftp.riken.jp/iris/topdrawer/topdrawer.tar.gz
 URL:    https://ribf.riken.jp/comp/doc/topdrawer/
@@ -42,7 +42,11 @@ xmkmf -a
 make clean
 %if 0%{?rhel} || 0%{?fedora}
 %if %{?fedora}%{!?fedora:0}  >= 31 || %{?rhel}%{!?rhel:0} > 8
+%if %{?fedora}%{!?fedora:0}  >= 42 
 make FC='gfortran -std=legacy  -fallow-argument-mismatch -fallow-invalid-boz -g' UGS=/usr/%_lib/libugs.a
+%else
+make FC='gfortran -std=legacy  -fallow-argument-mismatch -fallow-invalid-boz -g' CC='gcc -std=gnu17' UGS=/usr/%_lib/libugs.a
+%endif
 %else
 make FC='gfortran -std=legacy  -g' UGS=/usr/%_lib/libugs.a
 %endif
