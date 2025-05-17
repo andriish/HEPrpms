@@ -13,9 +13,9 @@ declare -a BUILDLIST=(
 #DD4hep:01.30.00
 #geant4:11.3.0
 #LCIO:02.22.02
-#whizard:3.1.5
+whizard:3.1.6
 #LATER Rivet:4.0.2
-fastjet:3.4.3
+#fastjet:3.4.3
 ### LATER 
 #fjcontrib:1.100
 #### BAD 
