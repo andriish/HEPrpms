@@ -2622,7 +2622,9 @@ token()
 #endif
  
 #ifndef BSDTTY
-#include <termio.h>
+#include <termios.h>
+#include <sys/ioctl.h>
+
 #else
 //AV: Newer APPLE requires sys/ioctl_compat.h
 #include <sys/ioctl_compat.h>

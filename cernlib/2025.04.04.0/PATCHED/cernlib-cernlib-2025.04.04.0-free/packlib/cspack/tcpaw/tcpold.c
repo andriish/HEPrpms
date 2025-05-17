@@ -1862,7 +1862,9 @@ token()
 #endif
  
 #ifndef BSDTTY
-#include <termio.h>
+#include <termios.h>
+#include <sys/ioctl.h>
+
 #else
 #include <sgtty.h>
 #endif
