@@ -4,7 +4,7 @@
 
 Name:           cuba
 Version:        4.2.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A library for multidimensional numerical integration.
 License:        LGPLv3
 Prefix:         %{_prefix}
@@ -71,6 +71,9 @@ autoreconf -fi
 LDFLAGS=' '
 CXXFLAGS='-fcommon -g'
 CFLAGS='-fcommon -g'
+%endif
+%if %{?fedora}%{!?fedora:0} >= 41
+CFLAGS='-fcommon -g -std=gnu17' 
 %endif
 %configure
 #parallel build broken
