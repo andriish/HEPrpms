@@ -2,7 +2,7 @@
 Summary: Unified Grahics System
 Name: ugs
 Version: 2.10e
-Release: 7%{?dist}
+Release: 8%{?dist}
 #Copyright: Free <= obsolete keyword for rpm 4.x
 License: Free
 Source: https://ftp.riken.jp/iris/ugs/ugs.tar.gz
@@ -53,7 +53,11 @@ sed -i 's@\%LOC@LOC@g' src.2.10e/*.f
 sed -i 's@\%LOC@LOC@g' src.2.10e/*.F
 
 make clean
+%if %{?fedora}%{!?fedora:0} >= 41
+make CC='gcc -std=gnu17' 
+%else
 make
+%endif
 
 %install
 mkdir -p $RPM_BUILD_ROOT/usr/%_lib
