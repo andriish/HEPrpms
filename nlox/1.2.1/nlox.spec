@@ -2,7 +2,7 @@
 %global _lto_cflags %nil
 Name:           nlox
 Version:        1.2.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        nlox package 
 
 License:        GPL
@@ -25,6 +25,9 @@ nlox is a package .
 
 %build
 export CXXFLAGS='%{optflags} -fno-var-tracking -Wno-reorder -Wno-sign-compare -Wno-unused-variable'
+%if  %{?rhel}%{!?rhel:0} == 8
+ sed -i 's/-fallow-argument-mismatch//g' CMakeLists.txt
+%endif
 %cmake .  -DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir}/nlox  -DDEFAULT_NLOX_PATH=%{_libdir}/nlox -DCMAKE_VERBOSE_MAKEFILE=OFF -DNLOX_PROCESSES="pp_Wpttbar;pp_Wmttbar;pp_Zttbar_as3ae1;pp_ttbarepem_as3ae2"
 %cmake_build
 
