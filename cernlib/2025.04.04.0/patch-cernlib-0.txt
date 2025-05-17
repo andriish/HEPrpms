@@ -1,6 +1,15 @@
 diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt
 --- ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2025-05-16 23:16:50.536189525 +0200
-+++ PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2025-05-16 23:16:50.538189561 +0200
++++ PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2025-05-16 23:49:30.456343650 +0200
+@@ -22,7 +22,7 @@
+ #The complicated way to set the version is used to assure the simple
+ #replacement of version variable with sed will not break the CMakeLists.txt
+ if (NOT __CL_VERSION__)
+-  set(EXTERNAL_VERSION_STRING "2025.02.25")
++  set(EXTERNAL_VERSION_STRING "2025.04.04")
+ else()
+   set(EXTERNAL_VERSION_STRING "__CL_VERSION__.1")
+ endif()
 @@ -72,7 +72,7 @@
    endif()
  endif()
@@ -40,3 +49,16 @@ diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpal
  #include <X11/Xutil.h>
  #include <stdio.h>
  #include <stdlib.h>
+diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c PATCHED/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c
+--- ORIG/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c	2025-04-04 15:38:15.000000000 +0200
++++ PATCHED/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c	2025-05-17 20:37:16.050768732 +0200
+@@ -159,7 +159,8 @@
+ 
+ #ifdef TERMIO_SYSV
+ #include <sys/ioctl.h>
+-#include <termio.h>
++#include <termios.h>
++#include <sys/ioctl.h>
+ static struct termio   new_termio, old_termio;
+ #endif
+ 
