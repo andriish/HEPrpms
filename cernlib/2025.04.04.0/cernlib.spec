@@ -302,13 +302,17 @@ cmake  -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=-gfortran -
 %endif
 %if 0%{?fedora} || %{?rhel}%{!?rhel:0} >= 7
 export FC=gfortran
+%if %{?fedora}%{!?fedora:0} >= 41
+%cmake -DCMAKE_C_STANDARD=gnu17 -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=-gfortran -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+%else
 %cmake -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=-gfortran -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+%endif
 %cmakeB
 %endif
 
 %if 0%{?suse_version}
 export FC=gfortran
-%cmake -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=-gfortran -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S ../cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+%cmake -DCMAKE_C_STANDARD=gnu17 -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=-gfortran -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S ../cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %cmake_build
 %endif
 
