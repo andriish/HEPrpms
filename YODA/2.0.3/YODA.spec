@@ -4,7 +4,7 @@
 
 Name:           YODA
 Version:        2.0.3
-Release:        1001
+Release:        1002
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
 Source0:        https://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
@@ -90,6 +90,8 @@ sed -Ei "1{s|/usr/bin/python|/usr/bin/python3|}" bin/*
 sed -Ei "1{s|/usr/bin/env python|/usr/bin/python3|}" bin/*
 sed -Ei "1{s|/usr/bin/env python|/usr/bin/python3|}" tests/*test*
 sed -Ei "1{s|/usr/bin/env python|/usr/bin/python3|}" pyext/yoda/mktemplates
+sed -Ei "1{s|/usr/bin/python33|/usr/bin/python3|}" bin/*
+
 
 # FIX env BASED HASHBANGS
 sed -E -i "s|^#! /usr/bin/env bash|#! /bin/bash|" bin/yoda-config*
