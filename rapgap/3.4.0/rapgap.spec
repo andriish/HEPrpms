@@ -1,6 +1,6 @@
 Name:        rapgap
 Version:    3.4.0
-Release:    5%{?dist}
+Release:    6%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy Physics
 
 License:    Unknown
@@ -16,8 +16,8 @@ Requires:       fastjet zlib ariadne
 BuildRequires:  pythia8 pythia8-devel
 %endif
 %if 0%{?suse_version}
-BuildRequires:  gcc-fortran  libHepMC4 libHepMC3-3   HepMC3-devel HepMC2-devel libLHAPDF LHAPDF-devel  Rivet-devel Rivet YODA YODA-devel
-Requires:       gcc-fortran libHepMC4 libHepMC3-3 libLHAPDF   Rivet YODA
+BuildRequires:  gcc-fortran  libHepMC4 libHepMC3-4   HepMC3-devel HepMC2-devel libLHAPDF LHAPDF-devel  Rivet-devel Rivet YODA YODA-devel
+Requires:       gcc-fortran libHepMC4 libHepMC3-4 libLHAPDF   Rivet YODA
 BuildRequires:  fastjet-devel fastjet pkgconfig(zlib) zlib-devel unzip 
 Requires:       fastjet pkgconfig(zlib)  
 BuildRequires:   libpythia8 pythia-devel texlive-palatino texlive-helvetic texlive-courier tex(latex) ghostscript tex(sectsty.sty) tex(cite.sty)

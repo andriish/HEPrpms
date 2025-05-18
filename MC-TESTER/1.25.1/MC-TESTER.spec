@@ -1,6 +1,6 @@
 Name:           MC-TESTER
 Version:        1.25.1
-Release:        16%{?dist}
+Release:        17%{?dist}
 License:        MIT
 Url:            http://mc-tester.web.cern.ch/MC-TESTER/
 Source0:        https://gitlab.cern.ch/cvsmctst/mc-tester/-/archive/v1.25.1/mc-tester-v%{version}.tar.gz
@@ -14,8 +14,8 @@ Requires:       HepMC  HepMC3 root  root-core root-graf  root-hist
 BuildRequires:  HepMC HepMC-devel HepMC3 HepMC3-devel root  root-core root-graf  root-hist
 %endif
 %if 0%{?suse_version}
-Requires:       libHepMC4 libHepMC3-3  root6-config  root6-libs root6-devel root6
-BuildRequires:  libHepMC4 libHepMC3-3  root6-config  root6-libs root6-devel root6 HepMC2-devel HepMC3-devel
+Requires:       libHepMC4 libHepMC3-4  root6-config  root6-libs root6-devel root6
+BuildRequires:  libHepMC4 libHepMC3-4  root6-config  root6-libs root6-devel root6 HepMC2-devel HepMC3-devel
 BuildRequires:  unzip
 %endif
 
