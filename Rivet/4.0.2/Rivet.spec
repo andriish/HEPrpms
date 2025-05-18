@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        4.0.2
-Release:        1004%{?dist}
+Release:        1005%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -38,8 +38,8 @@ BuildRequires: python3-rpm-macros
 %if 0%{?suse_version}
 Requires:       pkgconfig(zlib) pkgconfig(gsl) highfive-devel hdf5
 BuildRequires:  pkgconfig(zlib) zlib-devel pkgconfig(gsl) gsl-devel  python3-setuptools
-Requires: libHepMC3-3 
-BuildRequires: HepMC3-devel libHepMC3-3 
+Requires: libHepMC3-4 
+BuildRequires: HepMC3-devel libHepMC3-4 
 %endif
 
 %if %{?rhel}%{!?rhel:0} >= 8

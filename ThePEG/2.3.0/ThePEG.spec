@@ -4,7 +4,7 @@
 
 Name:           ThePEG
 Version:        2.3.0
-Release:        1004%{?dist}
+Release:        1005%{?dist}
 License:        GPLv3
 Url:            http://www.hepforge.org/archive/thepeg
 Source0:        https://thepeg.hepforge.org/downloads/%{name}-%{version}.tar.bz2
@@ -28,8 +28,8 @@ BuildRequires:  autoconf automake    libtool    libquadmath0
 BuildRequires:  gsl gsl-devel fastjet fastjet-devel zlib-devel LHAPDF-devel  libboost_test-devel
 Requires:       MG5_aMC fjcontrib YODA
 BuildRequires:  MG5_aMC fjcontrib YODA YODA-devel
-Requires:       libHepMC3-3     HepMC3-devel  
-BuildRequires:  libHepMC3-3     HepMC3-devel 
+Requires:       libHepMC3-4     HepMC3-devel  
+BuildRequires:  libHepMC3-4     HepMC3-devel 
 %endif
 Requires:       Rivet >= 3.1.0  
 Requires:       Rivet-devel >= 3.1.0  
