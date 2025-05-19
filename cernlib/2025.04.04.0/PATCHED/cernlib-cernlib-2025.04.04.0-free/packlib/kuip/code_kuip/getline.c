@@ -159,7 +159,7 @@ static char typeahead_buffer[1024];
 
 #ifdef TERMIO_SYSV
 #include <sys/ioctl.h>
-#if (__GLIBC__ < 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 41)
+#if (__GLIBC__ < 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 40)
 #include <termio.h>
 #else
 #include <termios.h>

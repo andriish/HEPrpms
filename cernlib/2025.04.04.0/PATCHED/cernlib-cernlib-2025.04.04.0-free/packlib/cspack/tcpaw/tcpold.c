@@ -1862,7 +1862,7 @@ token()
 #endif
  
 #ifndef BSDTTY
-#if (__GLIBC__ < 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 41)
+#if (__GLIBC__ < 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 40)
 #include <termio.h>
 #else
 #include <termios.h>
