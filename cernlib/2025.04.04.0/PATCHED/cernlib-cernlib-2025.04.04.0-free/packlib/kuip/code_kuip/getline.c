@@ -159,8 +159,20 @@ static char typeahead_buffer[1024];
 
 #ifdef TERMIO_SYSV
 #include <sys/ioctl.h>
+#if (__GLIBC__ < 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 41)
+#include <termio.h>
+#else
 #include <termios.h>
 #include <sys/ioctl.h>
+struct termio {
+    unsigned short c_iflag;
+    unsigned short c_oflag;
+    unsigned short c_cflag;
+    unsigned short c_lflag;
+    unsigned char c_line;
+    unsigned char c_cc[8];
+};
+#endif
 static struct termio   new_termio, old_termio;
 #endif
 
