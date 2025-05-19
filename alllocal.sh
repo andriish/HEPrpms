@@ -4,6 +4,7 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+geant4:11.3.2
 #cernlib:2025.04.04.0
 #Delphes:3.5.1pre12
 #ginac:1.8.8
@@ -13,7 +14,7 @@ declare -a BUILDLIST=(
 #DD4hep:01.30.00
 #geant4:11.3.0
 #LCIO:02.22.02
-whizard:3.1.6
+#whizard:3.1.6
 #LATER Rivet:4.0.2
 #fastjet:3.4.3
 ### LATER 

@@ -314,3 +314,4 @@ a1d85a1aeffa7434f6478bb8555e3f64  MG5_aMC/3.5.8/rpmbuild/SOURCES/MG5_aMC_v3.5.8.
 5d386feaefafcf01609be30cdbda7f55  YODA/2.0.3/rpmbuild/SOURCES/YODA-2.0.3.tar.gz
 b59346f291792c78517d973fb56d2c93  cernlib/2025.04.04.0/rpmbuild/SOURCES/cernlib-cernlib-2025.04.04.0-free.tar.gz
 b063862d798a69785ef348c9ee992567  whizard/3.1.6/rpmbuild/SOURCES/whizard-3.1.6.tar.gz
+4268484161aa114e0598c79a96f00b83  geant4/11.3.2/rpmbuild/SOURCES/geant4-v11.3.2.tar.gz
