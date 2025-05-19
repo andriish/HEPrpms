@@ -9,7 +9,7 @@ Url:            https://github.com/scarrazza/apfel
 Source:         https://github.com/scarrazza/apfel/archive/refs/tags/%{version}.tar.gz
 Summary:        A PDF Evolution Library
 Prefix: %{_prefix}
-BuildRequires:  gcc-c++   cmake swig lhapdf-devel python3
+BuildRequires:  gcc-c++   cmake swig  python3
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
 BuildRequires: lhapdf-devel
 %endif
