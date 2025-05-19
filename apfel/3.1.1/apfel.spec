@@ -3,13 +3,16 @@
 %endif
 Name:           apfel
 Version:        3.1.1
-Release:        1004%{?dist}
+Release:        1005%{?dist}
 License:        GPL
 Url:            https://github.com/scarrazza/apfel
 Source:         https://github.com/scarrazza/apfel/archive/refs/tags/%{version}.tar.gz
 Summary:        A PDF Evolution Library
 Prefix: %{_prefix}
 BuildRequires:  gcc-c++   cmake swig lhapdf-devel python3
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
+BuildRequires: lhapdf-devel
+%endif
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: platform-python-devel 
 %endif
@@ -20,6 +23,7 @@ BuildRequires:  python3-devel gcc-gfortran
 %if 0%{?suse_version}
 BuildRequires:  gcc-fortran
 BuildRequires:  python3-devel python-rpm-macros
+BuildRequires:  LHAPDF-devel
 %endif
 
 %description 
