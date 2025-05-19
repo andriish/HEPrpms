@@ -7,7 +7,7 @@
 
 Name:           gosam
 Version:        2.1.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPLv3
 Url:            https://github.com/gudrunhe/gosam
 Source0:        https://github.com/gudrunhe/gosam/releases/download/2.1.2/gosam-2.1.2+c307997.tar.gz
@@ -25,7 +25,7 @@ BuildRequires: python3  python3-devel
 BuildRequires: gcc-gfortran python3-setuptools
 %endif
 %if 0%{?suse_version}
-BuildRequires: gcc-fortran python-rpm-macros
+BuildRequires: gcc-fortran python-rpm-macros python3-setuptools
 %endif
 
 %description
