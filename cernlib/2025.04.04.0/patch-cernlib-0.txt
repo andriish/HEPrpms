@@ -49,16 +49,3 @@ diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpal
  #include <X11/Xutil.h>
  #include <stdio.h>
  #include <stdlib.h>
-diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c PATCHED/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c
---- ORIG/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c	2025-04-04 15:38:15.000000000 +0200
-+++ PATCHED/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c	2025-05-17 20:37:16.050768732 +0200
-@@ -159,7 +159,8 @@
- 
- #ifdef TERMIO_SYSV
- #include <sys/ioctl.h>
--#include <termio.h>
-+#include <termios.h>
-+#include <sys/ioctl.h>
- static struct termio   new_termio, old_termio;
- #endif
- 
