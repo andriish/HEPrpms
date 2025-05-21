@@ -75,9 +75,6 @@
 #ifdef USG
 #ifdef LINUX
 #define CEOF EOF
-#if (__GLIBC__ < 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 40)
-# include <termio.h>
-#else
 #include <termios.h>
 #include <sys/ioctl.h>
 struct termio {
@@ -88,7 +85,6 @@ struct termio {
     unsigned char c_line;
     unsigned char c_cc[8];
 };
-#endif
 #else
 # include <sys/termio.h>
 #endif /* LINUX */

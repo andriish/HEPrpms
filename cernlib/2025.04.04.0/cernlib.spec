@@ -47,6 +47,7 @@ Group:         Development/Libraries
 License:       GPL+ and LGPLv2+
 URL:           http://cernlib.web.cern.ch/cernlib/
 Patch0:         patch-cernlib-0.txt
+Patch1:         patch-cernlib-1.txt
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 7
 BuildRequires: openssl-libs openssl-devel  lapack-devel blas-devel lapack blas
@@ -284,7 +285,9 @@ Utilities for extracting sources from patchy cards and cradles.
 %prep
 %setup -q -c 
 %patch -P 0 -p1
-
+%if %{?fedora}%{!?fedora:0} >= 42
+%patch -P 1 -p1
+%endif
 
 %build
 find cernlib-cernlib-%{version}-free -type f -name '.*' -exec rm -rf  {} \;

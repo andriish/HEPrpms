@@ -2,20 +2,54 @@
  * $Id$
  *
  * $Log$
- * Revision 1.2  2005/04/18 15:23:09  mclareni
+ * Revision 1.11  2006/12/07 13:26:48  mclareni
+ * Corrections for MacOSX on Intel
+ *
+ * Revision 1.10  2006/09/15 09:35:12  mclareni
+ * Submitted mods for gcc4/gfortran and MacOSX, corrected to work also on slc4 with gcc3.4 and 4.1
+ *
+ * Revision 1.9  2005/04/18 15:23:09  mclareni
  * Mods submitted by Kevin B. McCarty to fix insecure Cernlib uses of /tmp.
  *
- * Revision 1.1.1.1  1996/03/08 15:44:28  mclareni
+ * Revision 1.8  2005/03/21 13:01:38  mclareni
+ * Remove conflicting redefinitions of malloc, ioctl, etc. which fail with gcc 3.4.3.
+ *
+ * Revision 1.7  1999/09/15 16:19:46  mclareni
+ * Remove index definition, most compilers have it now
+ *
+ * Revision 1.6  1998/02/19 15:05:40  gunter
+ * Remove a NT mod in pure VMS code: _stat changed back to stat
+ *
+ * Revision 1.5  1997/10/23 13:26:19  mclareni
+ * NT mods
+ *
+ * Revision 1.3  1997/09/02 08:46:21  mclareni
+ * WINNT mods, mostly cpp defines
+ *
+ * Revision 1.2  1996/04/02 22:42:04  thakulin
+ * Make rexec function definition match the Solaris headers.
+ *
+ * Revision 1.1.1.1  1996/03/08 15:44:27  mclareni
  * Cspack
  *
  */
 #include "cspack/pilot.h"
-#if defined(CERNLIB_OLD)
+#if defined(__APPLE__)
+#include <unistd.h>
+#endif
+#if defined(CERNLIB_LINUX) && ! defined(CERNLIB_MACOSX)
+#define SHADOW_SUPPORT /* for Debian */
+#endif
+#if (!defined(CERNLIB_IBM))||defined(CERNLIB_TCPSOCK)
 /*N.B. Must define sequence TCPLOG if a log file is required, e.g.*/
 /*#define LOGFILE "disk$dd:-ben.socks-serv.log"*/ /* VMS    */
 /*#define LOGFILE "/user/brun/ben/serv.log"    */ /* Apollo */
 /*#define LOGFILE "/h0/psh/zs.log"             */ /* OS9    */
 /*#define LOGFILE "/var/log/serv.log"          */ /* example*/
+#if defined(CERNLIB_IBMMVS)
+#pragma nosequence
+#pragma options (ALIAS)
+#endif
  
 #if defined(CERNLIB__DOC)
 /*      TCP/IP PACKAGE FOR REMOTE-PAW AND SIMILAR APPLICATIONS.
@@ -25,9 +59,12 @@
                         ben@cernvax.cern.ch
  
          ------------------------------------------------------
-        | Version of:  Aug.30, 1991  (FOR CERN PROGRAM LIBRARY)|
+        | Version of:  Jun.08, 1997  (FOR CERN PROGRAM LIBRARY)|
          ------------------------------------------------------
  
+*****   THIS VERSION: The Windows Socket implmetation has been introduced
+                      08/06/97  Valery Fine (fine@mail.cern.ch, Dubna, JINR)
+
 *****   THIS VERSION: SecurID/ACE ADDED (Unicos6.0 Version)
                       Removed limit of 8-char passwords (from "getpass").
  
@@ -56,6 +93,42 @@
 /*#define NORUSERPASS */ /* (only to force use of std "ruserpass/getpass") */
 /*      END OF DEFINITIONS                                                 */
  
+#if defined(CERNLIB_QCDEC)
+ 
+/* TCPAW.C must be compiled with /NOPREFIX /STANDARD=VAXC
+   to avoid picking up the UCX socket routines. The following
+   defines are required to resolve the named routines from the
+   DECC$SHR shareable library.
+ 
+   .. unless you are using DEC C V4, in which case, use /PREFIX=ANSI
+ */
+ 
+#define chdir DECC$CHDIR
+#define close DECC$CLOSE
+#define cuserid DECC$CUSERID
+#define getpid DECC$GETPID
+#define read DECC$READ
+#define sleep DECC$SLEEP
+ 
+#define atoi DECC$ATOI
+#define ctime DECC$CTIME
+#define exit DECC$EXIT
+#define fclose DECC$FCLOSE
+#define fflush DECC$FFLUSH
+#define fgets DECC$FGETS
+#define fopen DECC$FOPEN
+#define getenv DECC$GETENV
+#define memset DECC$MEMSET
+#define perror DECC$PERROR
+#define strcmp DECC$STRCMP
+#define strcpy DECC$STRCPY
+#define strlen DECC$STRLEN
+#define strncmp DECC$STRNCMP
+#define time DECC$TIME
+#define tolower DECC$TOLOWER
+ 
+#endif
+ 
 #if defined(CERNLIB_IBMRT)
 #define IBMRT
 #endif
@@ -69,18 +142,37 @@
 #define OSK
 #endif
 #if defined(CERNLIB_SGI)||defined(CERNLIB_MIPS)
+#ifndef sgi
 #define sgi
+#endif /* sgi */
 #endif
 #if defined(CERNLIB_IBMVM)
-#define VM
+#define IBMVM
+#define IBM
+#endif
+#if defined(CERNLIB_IBMMVS)
+#define MVS
+#define IBMMVS
+#define IBM
 #endif
 #if (defined(CERNLIB_CRAY))&&(defined(CERNLIB_UNIX))&&(defined(CERNLIB_ACE))
 #define ACE
 #endif
  
-#ifdef  VM
-#include <tcpsock.h>
-#if defined(CERNLIB_IBMVM)
+ 
+ 
+#if defined(CERNLIB_IBMVM)||defined(CERNLIB_IBMMVS)
+#include "cspack/tcpsock.h"
+#endif
+ 
+#if defined(CERNLIB_IBMMVS)
+ 
+#define ssendstr   SSENSTR
+#define srecvstr   SRECSTR
+ 
+#endif
+
+#if defined(CERNLIB_IBM)
 #pragma csect(CODE,"TCPAWC")
 #pragma linkage(cinit,FORTRAN)
 #pragma linkage(isetup,FORTRAN)
@@ -93,13 +185,19 @@
 #pragma linkage(SSENSTR,FORTRAN)
 #pragma linkage(SRECSTR,FORTRAN)
 #pragma linkage(CMXLATE,OS)
+#ifdef  IBMVM
 #pragma linkage(CHPAS,OS)
 #pragma linkage(LNRD,OS)
 #pragma linkage(LNRDPAS,OS)
 #pragma linkage(GETUSR,OS)
 #pragma linkage(GETUNIQ,OS)
-#endif
-#endif /* VM */
+#endif /* IBMVM */
+#ifdef  IBMMVS
+#pragma linkage(GETINH,OS)
+#pragma linkage(JOBNAM,OS)
+#pragma linkage(SYSTEMF,FORTRAN) /* Normally in KERNLIB */
+#endif /* IBMMVS */
+#endif /* IBM */
  
 #ifdef cray
 #ifndef CRAYC
@@ -130,14 +228,30 @@
 #include <errno.h>
 #include <signal.h>
 #include <ctype.h>
- 
+
 #ifdef AUTHENT
 #ifndef OSK
-#ifndef VM
+ 
+#ifndef IBM
+#ifdef vms
+#include "sysreq/pwd_vms.h"
+#elif !defined(WIN32)
+#include <unistd.h>
+#include <sys/types.h>
 #include <pwd.h>
-#endif /* ^VM */
+#include <grp.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#endif /* vms */
+#endif /* ^IBM */
+ 
 #endif /* OSK */
 #endif /* AUTHENT */
+ 
+#if defined(linux_softland) || defined(SHADOW_SUPPORT)
+#include <shadow.h>
+#endif /* linux_softland */
  
 #ifdef CRAYFTN
 #include <fortran.h>
@@ -152,7 +266,7 @@
 #include <socket.h>
 #include <in.h>
 #else
-#ifdef sgi
+#if defined(sgi) && defined(irix3)
 #include <bsd/sys/types.h>
 #include <bsd/sys/socket.h>
 #include <bsd/netinet/in.h>
@@ -163,15 +277,27 @@
 #include <socket.h>
 #include <in.h>
 #else
-#ifdef  VM
-extern int CHPAS();
-extern char *LNRD();
-extern char *LNRDPAS();
-extern char *GETUSR();
-#define getlogin GETUSR
-extern int GETUNIQ();
-#define getpid GETUNIQ
-#define index strchr
+ 
+# ifdef  IBM
+ 
+#  ifdef  IBMVM
+     extern int CHPAS();
+     extern char *LNRD();
+     extern char *LNRDPAS();
+     extern char *GETUSR();
+#    define getlogin GETUSR
+     extern int GETUNIQ();
+#    define getpid GETUNIQ
+#  endif  /* IBMVM */
+ 
+#  ifdef IBMMVS
+     extern void GETINH();
+     extern void JOBNAM();
+#  endif   /* IBMMVS */
+ 
+/* #include <bsdtime.h> */
+/* #include <netdb.h> */
+ 
 #define ENOENT 67
 #define ECONNREFUSED 61
 #include <manifest.h>
@@ -182,20 +308,50 @@ extern int GETUNIQ();
 #include <in.h>
 #include <string.h>
 #else
+#ifdef _WIN32
+# include <io.h>
+# include <process.h>
+# include <winsock.h>
+#else
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#endif /* VM */
+#include <time.h>
+#ifndef IBMRT
+/*  this is a kludge, one ought to fix the "prototypes" in this file */
+#include <string.h>
+#include <stdlib.h> /* needed for linux gcc4 */
+#endif  /* IBMRT */
+#endif /* WIN32 */
+#endif /* IBM */
 #endif /* OSK */
 #endif /* sgi */
 #endif /* VMS */
  
-#ifdef sgi
+#if defined(sgi) && defined(irix3)
 #include <bsd/netdb.h>
 #else
+#ifndef _WIN32
 #include <netdb.h>
-#endif /* sgi */
+#endif /* WIN32 */
+#endif /* sgi,irix3  */
  
+#if defined(__osf__) && defined(__alpha)
+#include <sys/ioctl.h>
+#endif
+ 
+#ifndef SOCKET
+#define SOCKET int
+#endif
+
+#ifndef SOCKET_ERROR
+#define SOCKET_ERROR -1
+#endif
+
+#ifndef INVALID_SOCKET
+#define INVALID_SOCKET -1
+#endif
+
 #ifdef NOMEMSET
 #define memset(a,b,c) bzero(a,c)   /* in case "memset" unknown (BS) */
 #endif /* NOMEMSET */
@@ -226,6 +382,10 @@ static char *Prog_Name = "tcpaw";               /* CUSTOMIZE THIS.. */
 #endif /* SERVLOG */
 #endif /* DEBUG */
  
+#ifdef _WIN32
+#define LOGFILE "/tmp/PawServ.log"
+#endif
+
 #ifdef LOGFILE
 static FILE *logfile;
 #endif /* LOGFILE */
@@ -243,23 +403,78 @@ static FILE *logfile;
    static char clnthost[30];  /* client remote host name string */
    static char servhost[30];  /* server remote host name string */
    static unsigned short clntpport;    /* client local  port number */
-   static unsigned short servpport;    /* server remote port number */
+   /*AV unused static unsigned short servpport;*/    /* server remote port number */
    static long timevar;       /* contains time returned by timexx */
-   static int  ls = 0;        /* The server listen socket descriptor */
- 
+   static SOCKET  ls = 0;     /* The server listen socket descriptor */
+
+/* forward declarations */
+#ifdef CERNLIB_LINUX
+void reply(char*, char*, char*);
+void ruserpass(char*, char**, char**);
+int chpass(char*, char*);           /* For Unix and other "normal" people */
+int tsosub(char **, int,  char*, char*, char*, unsigned short*);
+int getstr(int, char*, int, char*);
+#endif
+
+#ifndef _WIN32 
    extern char *inet_ntoa();
-#ifndef VM
+#ifndef IBM
    extern int errno;
-#endif /* ^VM */
-   extern char *getenv(), *cuserid();
+#endif /* ^IBM */
+   extern char *getenv();
+/* for linux inet_addr is defined via a header file */
+#ifndef CERNLIB_LINUX
    unsigned long inet_addr();
+#endif
+#ifdef VMS
+   extern char *cuserid();
+#endif
+#else
+   void tcperror(char *comment)
+   {
+       LPVOID lpMsgBuf;
+       int isockerr = WSAGetLastError();
+       int iwinerr  = GetLastError();
+       WSASetLastError(0);
+ 
+       FormatMessage( 
+           FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+           NULL,
+           isockerr,
+           MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+           (LPTSTR) &lpMsgBuf,
+           0,
+           NULL 
+           );
+       if (!lpMsgBuf) 
+       {
+           FormatMessage( 
+           FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+           NULL,
+           iwinerr,
+           MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+           (LPTSTR) &lpMsgBuf,
+           0,
+           NULL 
+           );
+           if (!lpMsgBuf) lpMsgBuf = "No text explanation for this error";
+       }
+       fprintf(stderr," %s: sockerr=%d, winerror = %d \n \t - \t \"%s\" \n",
+           comment, isockerr,iwinerr, lpMsgBuf);
+       LocalFree(lpMsgBuf);
+   }
+   static int initwinsock= -1;
+   static WSADATA  WSAData;
+#endif /* WIN32 */
  
 #ifndef OSK
-#ifndef VM
+#ifndef IBM
+#ifndef CERNLIB_LINUX
    extern char *ctime();
-#endif /* ^VM */
+#endif
+#endif /* ^IBM */
  
-#ifndef VM
+#ifndef IBM
 /*  Note: INETD_SOCK_SETUP and INETD_SOCK_CLOSE are not needed for VM  ****/
  
 /*
@@ -300,7 +515,7 @@ int *out;
 #endif /* VMS */
  
 #ifdef AUTHENT
-        unsigned char idbuf[100];
+        char idbuf[100];
         char  usbuf[20], pwbuf[20];
         char *user = usbuf, *passwd = pwbuf;
         register int i, len;
@@ -309,9 +524,20 @@ int *out;
 #ifdef SOCKETS
         struct hostent *hp;             /* host info for remote host */
         struct sockaddr_in peeraddr_in; /* for peer socket address */
-        int    peerlen;
+        unsigned    peerlen;
 #endif /* SOCKETS */
- 
+
+#ifdef WIN32
+       if (initwinsock==-1) 
+       {
+           if (initwinsock = WSAStartup(MAKEWORD(1,1),&WSAData)) 
+           {
+               printf(" WSASetup %d \n",initwinsock);
+               return(-2);
+           }
+       }
+#endif /* WIN32 */
+
 #ifdef VMS
 /* Note: with newer VMS C compiler, cannot open LOGFILE before sys$assign! */
  
@@ -325,13 +551,14 @@ int *out;
 #endif /* VMS */
  
 #ifdef LOGFILE
-        while ((logfile = fopen(LOGFILE, "a")) == NULL) sleep(1);
+       logfile = fopen(LOGFILE, "a");
+       while ((logfile = fopen(LOGFILE, "a")) == NULL) sleep(1);
 #endif /* LOGFILE */
  
 #ifdef SOCKETS
         memset ((char *)&peeraddr_in, 0, sizeof(struct sockaddr_in));
         peerlen = sizeof(peeraddr_in);
-        if (getpeername(s, &peeraddr_in, &peerlen) < 0) {
+        if (getpeername(s, (struct sockaddr *)&peeraddr_in, &peerlen) == SOCKET_ERROR) {
 #ifdef LOGFILE
                 fprintf(logfile, "%s: getpeername failed\n", Prog_Name);
 #endif /* LOGFILE */
@@ -361,19 +588,25 @@ int *out;
  
         len = recv(s, idbuf, sizeof(idbuf), 0);
         if (len <= 0) {
-            reply("Bad id receive.\n", NULL);
+            reply("Bad id receive.\n", NULL, NULL);
             goto errout1;
         }
         idbuf[len-1]='\0';   /* SAFETY !! */
         if (--len > 0) for (i=0; i<len; i++) idbuf[i] = ~idbuf[i];
         if (sscanf((char *)idbuf, "%s %s", user, passwd) != 2) {
-            reply("Bad id record '%s'\n", idbuf);
+            reply("Bad id record '%s'\n", idbuf, NULL);
             goto errout1;
         }
 #ifdef VMS
         my_pw = getpwnam(cuserid(0));
-#endif /* VMS */
+        if (chpass(&s, user, passwd) <= 0) {
+#else
+#  ifndef _WIN32
         if (chpass(user, passwd) <= 0) {
+#  else
+        if (chpass(&s, user, passwd) <= 0)  {
+#  endif  /* WIN32 */
+#endif    /* VMS */
             goto errout1;
         }
   /* Successful authentication....... */
@@ -404,16 +637,16 @@ errout1:
  */
  
 int iclose(s)
-int *s;
+SOCKET *s;
 {
  
 #ifdef AUTHENT
 #ifndef VMS
-#ifdef  HPUX
+#  ifdef  HPUX
         setresuid(0,0,0); /* have to do this to allow an exit !!! */
-#else
+#  elif !defined(_WIN32)
         seteuid(0);       /* have to do this to allow an exit !!! */
-#endif /* HPUX */
+#  endif /* HPUX */
 #else
         setuic(my_pw->pw_uic);
 #endif /* VMS */
@@ -427,15 +660,20 @@ int *s;
         fclose(logfile);
 #endif /* LOGFILE */
  
-        if (*s != -1)
+        if (*s != INVALID_SOCKET)
 #ifdef VMS
             sys$dassgn(*s);
 #else
+#ifdef _WIN32
+            closesocket(*s);
+#else
             close(*s);
+#endif /* WIN32 */
 #endif /* VMS */
+         return 1;
 }
+#endif /* IBM */
 #endif /* OSK */
-#endif /* VM */
  
 /*
  *  SERVER_SOCK_SETUP  (or: "SSETUP")
@@ -454,15 +692,15 @@ int *s;
  
 #ifdef  OSK
 int ssetup(isock, osock)      /* OS9 */
-int *isock, *osock;
+SOCKET *isock, *osock;
 {
 #ifdef AUTHENT
-        unsigned char idbuf[100];
+        char idbuf[100];
         char  usbuf[20], pwbuf[20];
         char *user = usbuf, *passwd = pwbuf;
         register int i, len;
  
-        int s = 0;
+        SOCKET s = 0;
  
 #ifdef LOGFILE
         while ((logfile = fopen(LOGFILE, "a")) == NULL) sleep(1);
@@ -472,14 +710,14 @@ int *isock, *osock;
      format %s %s).         */
  
         len = recv(s, idbuf, sizeof(idbuf), 0);
-        if (len <= 0) {
-            reply("Bad id receive.\n", NULL);
+        if (len == SOCKET_ERROR) {
+            reply("Bad id receive.\n", NULL, NULL);
             goto errout1;
         }
         if (--len > 0) for (i=0; i<len; i++) idbuf[i] = ~idbuf[i];
         i = sscanf((char *)idbuf, "%s %s", user, passwd);
         if (i != 1 && i != 2) {   /* Allow any password, even null for OS9 */
-            reply("Bad id record '%s'\n", idbuf);
+            reply("Bad id record '%s'\n", idbuf, NULL);
             goto errout1;
         }
         if (chpass(user, passwd) <= 0) {
@@ -524,6 +762,30 @@ int   *port;                            /* VM */
  
         int s, addrlen;
         unsigned short sport = *port;   /* VM */
+
+#if defined ( _WIN32) && defined (AUTHENT)
+        char idbuf[100];
+        char  usbuf[20], pwbuf[20];
+        char *user = usbuf, *passwd = pwbuf;
+        register int i, len;
+#endif
+
+#ifdef _WIN32
+
+       if (initwinsock==-1) 
+       {
+           if (initwinsock = WSAStartup(MAKEWORD(1,1),&WSAData)) 
+           {
+               printf(" WSASetup %d \n",initwinsock);
+               return(-2);
+           }
+           else 
+           {
+               printf(" Maximum %d sockets are allowed \n", WSAData.iMaxSockets);}
+
+       }
+#endif /* WIN32 */
+
  
   /* clear out address structures */
  
@@ -539,7 +801,8 @@ int   *port;                            /* VM */
    * ...UNLESS PASSED A +VE PORT NUMBER TO USE (VM).
    */
         if (port == NULL || *port <= 0) {            /* VM */
-           sp = getservbyname ("example", "tcp");
+           sp = getservbyname ("pawserv", "tcp");
+/*           printf(" name = %s, port = %d \n",sp->s_name,sp->s_port); */
            if (sp == NULL) {
                fprintf(stderr, "%s: 'example' not in services file\n",
                                "server_sock_setup");
@@ -551,23 +814,35 @@ int   *port;                            /* VM */
  
   /* Create the listen socket. */
         ls = socket(AF_INET, SOCK_STREAM, 0);
-        if (ls == -1) {
-#ifdef VM
-                tcperror("server_sock_setup");
+        if (ls == INVALID_SOCKET) {
+#if defined(IBM) || defined(_WIN32)
+            tcperror("server_sock_setup: ls = socket(AF_INET, ...)");
 #else
-                perror("server_sock_setup");
-#endif /* VM */
+            perror("server_sock_setup");
+#endif /* IBM */
                 fprintf(stderr, "%s: unable to create socket\n",
                                 "server_sock_setup");
                 exit(1);
         }
+#ifdef _WIN32
+        {
+            int flag = 1;
+            if(setsockopt(ls,SOL_SOCKET,SO_REUSEADDR,(char *)&flag,sizeof(int))
+               == SOCKET_ERROR) {
+             tcperror("server_sock_setup: setsockopt(ls,...)");
+             fprintf(stderr, "%s: unable to setsockopt\n",
+                                "server_sock_setup");
+             exit(1);
+            }
+        }
+#endif
   /* Bind the listen address to the socket. */
-        if (bind(ls, &myaddr_in, sizeof(struct sockaddr_in)) == -1) {
-#ifdef VM
-                tcperror("server_sock_setup");
+        if (bind(ls, (struct sockaddr *)&myaddr_in, sizeof(struct sockaddr_in)) == SOCKET_ERROR) {
+#if defined(IBM) || defined(_WIN32)
+            tcperror("server_sock_setup: bind(ls,...)");
 #else
                 perror("server_sock_setup");
-#endif /* VM */
+#endif /* IBM */
                 fprintf(stderr, "%s: unable to bind address\n",
                                 "server_sock_setup");
                 exit(1);
@@ -576,19 +851,23 @@ int   *port;                            /* VM */
    * can connect.  The listen backlog is set to 5, which
    * is the largest currently supported.
    */
-        if (listen(ls, 5) == -1) {
-#ifdef VM
-                tcperror("server_sock_setup");
+#ifdef _WIN32
+        if (listen(ls, 1) == SOCKET_ERROR) {
+#else
+        if (listen(ls, 5) == SOCKET_ERROR) {
+#endif
+#if defined(IBM) || defined(_WIN32)
+            tcperror("server_sock_setup: listen(ls,5)");
 #else
                 perror("server_sock_setup");
-#endif /* VM */
+#endif /* IBM */
                 fprintf(stderr, "%s: unable to listen on socket\n",
                                 "server_sock_setup");
                 exit(1);
         }
         addrlen = sizeof(struct sockaddr_in);
-        s = accept(ls, &peeraddr_in, &addrlen);
-        if ( s == -1) {
+        s = accept(ls, (struct sockaddr *)&peeraddr_in, (socklen_t *)&addrlen);
+        if ( s == INVALID_SOCKET) {
                 fprintf(stderr, "%s: accept error\n", "server_sock_setup");
                 return(-1);
         }
@@ -605,7 +884,60 @@ int   *port;                            /* VM */
         fprintf(stderr, "Started  from %s port %u at %s",
                          clnthost, clntpport, ctime(&timevar));
  
-        *in = *out = s;
+        *in = *out = s;        
+#if defined (AUTHENT ) && defined(_WIN32)
+  /* Read the first buffer from the client and check the
+     user name and password (which we assume to be in the
+     format %s %s).         */
+ 
+        len = recv(s, idbuf, sizeof(idbuf), 0);
+        if (len == SOCKET_ERROR) {
+            sock_reply(&s,"Bad id receive.\n", NULL);
+            return -1;
+        }
+        if (--len > 0) for (i=0; i<len; i++) idbuf[i] = ~idbuf[i];
+        i = sscanf((char *)idbuf, "%s %s", user, passwd);
+        if (i != 1 && i != 2) {   /* Allow any password, even null for OS9 */
+            sock_reply(&s,"Bad id record '%s'\n", idbuf);
+            return -1;
+        }
+        if (chpass(&s,user, passwd) <= 0) {
+            return INVALID_SOCKET;
+        }
+  /* Successful authentication....... */
+
+#endif
+#ifdef _WIN32
+        if (closesocket(ls) == SOCKET_ERROR) tcperror("server_sock_setup: closesocket(ls)");
+#if 0
+        system("start /B pawserv.exe");
+#endif
+
+        {
+            STARTUPINFO startinfo;
+            PROCESS_INFORMATION processinfo;
+            ZeroMemory(&startinfo,sizeof(STARTUPINFO));
+            startinfo.cb = sizeof(STARTUPINFO);
+
+            if(CreateProcess(
+                   "PawServ.exe",   // pointer to name of executable module 
+                    NULL,           // pointer to command line string
+                    NULL,           // pointer to process security attributes 
+                    NULL,           // pointer to thread security attributes 
+                    FALSE,          // handle inheritance flag 
+                    CREATE_DEFAULT_ERROR_MODE, // creation flags 
+                    NULL,           // pointer to new environment block 
+                    NULL,           // pointer to current directory name 
+                    &startinfo,     // pointer to STARTUPINFO 
+                    &processinfo 	// pointer to PROCESS_INFORMATION  
+                    ) == FALSE)
+            {
+                tcperror("CreateProcess");
+            }
+            else 
+                printf(" New Process has been create succefully \n");
+        }
+#endif
         return(s);  /* Return the user socket descriptor */
 }
 #endif /* OSK */
@@ -629,7 +961,7 @@ static int junk = 0;
 #define NSO  100                        /* VM */
 static int svmode[NSO], sxsock[NSO];    /* VM */
 #define MAGIC 0x12345678                /* VM */
-#define VMTO 30      /* 30 sec timeout   * VM */
+#define VMTO 50      /* 50 sec timeout   * VM */
  
 #ifdef VMS
 int csetup(sysdes, in, out, srvdes)            /* VMS CASE... */
@@ -650,10 +982,18 @@ int   *in, *out;
 char  *srvc;
 short *s_ln, *c_ln;        /* dummy arguments */
 #else
+#ifdef CERNLIB_MSSTDCALL
+int  csetup(system, lsys, in, out, srvc, lsrvc )              /* Microsoft Fortran */
+char  *system;
+int lsys, lsrvc;
+int   *in, *out;
+char  *srvc;
+#else
 int csetup(system, in, out, srvc)              /* UNIX ETC... */
 char  *system;
 int   *in, *out;
 char  *srvc;
+#endif /* MS */
 #endif /* APOFTN */
 #endif /* CRAYFTN */
 #endif /* VMS */
@@ -667,22 +1007,23 @@ char  *srvc;
  unsigned long addr;
  int s, addrlen;
  int sx, nn = 0;                     /* REXEC */
-#ifndef VM
- char get[50], *getp = get;          /* REXEC */
-#endif /* VM */
+#ifndef IBM
+ char get[80]/*AV inc from 50*/, *getp = get;          /* REXEC */
+#endif /*^IBM */
  char sys[30];
  register int i, j, k;
  register char *c;
  
- char portstr[20], *pt;              /* VM */
- int    vmode = 0;                   /* VM */
- unsigned short sport = 0, prt = 0;  /* VM */
+ char portstr[20], *pt;              /* IBM */
+ int    vmode = 0;                   /* IBM */
+ unsigned short sport = 0, prt = 0;  /* IBM */
  char uspass[50];
  char *user = NULL, *passwd = NULL;
-#ifdef AUTHENT
- unsigned char idbuf[100];
+ int port;
+#if defined(AUTHENT) 
+  char idbuf[100];
 #endif /* AUTHENT */
- 
+
 #ifdef VMS
  char *system, *srvc;
  unsigned short s_ln, c_ln;
@@ -713,13 +1054,13 @@ char  *srvc;
  j = *c_ln;
  i = *s_ln;
 #else
-#ifdef VM
+#ifdef IBM
  extern char asciitoebcdic[];    /* translation tables */
  extern char ebcdictoascii[];
  char buff[100];
  char *get;
  char *getp;
- char getbuf[50];                       /* REXEC */
+ char getbuf[50];                        /* REXEC */
  getp = getbuf;                          /* REXEC */
  get = getbuf;                           /* REXEC */
 /* j = 80; */      /* (crude kludge) length of srvc in Fortran */
@@ -727,12 +1068,27 @@ char  *srvc;
  i = gtlnfstr(&system,1);          /* length of 1st arg (srvc) */
  j = gtlnfstr(&system,4);          /* length of 4th arg (system) */
 #else
- j = strlen(srvc);
- i = strlen(system);
-#endif /* VM */
+#ifdef WIN32
+       if (initwinsock==-1) 
+       {
+           if (initwinsock = WSAStartup(MAKEWORD(1,1),&WSAData)) 
+           {
+               printf(" WSASetup %d \n",initwinsock);
+               return(-2);
+           }
+       }
+       j = lsrvc;
+       i = lsys;
+#else
+       j = strlen(srvc);
+       i = strlen(system);
+#endif /* WIN32 */
+#endif /* IBM */
 #endif /* APOFTN */
 #endif /* CRAYFTN */
 #endif /* VMS */
+
+
  
  /* Terminate correctly the host & service strings passed by FTN..  */
         for (k=0; k<j; k++) if (srvc[k] == ' ') { srvc[k] = '\0'; break;}
@@ -741,7 +1097,25 @@ char  *srvc;
         c = srvc;   while (*c) { if (isupper(*c)) *c = tolower(*c); c++; }
         c = system; while (*c) { if (isupper(*c)) *c = tolower(*c); c++; }
  
-/*DEBUG fprintf(stderr, "system '%s' service '%s'\n", system, srvc);*/
+      /* fprintf(stderr, "system '%s' service '%s'\n", system, srvc);  */
+ 
+/* changed TS 27.11.91 */
+/* ================================================================= */
+/* the original part (Version 1.21 of tcpaw can only connect
+   to VM via rexec and inetd systems,
+   in order to reach MVS something like this should be used.
+*/
+        strcpy(servhost, system);  /* Use our own storage when needed....  */
+        *sys = '\0';
+ 
+/*  Has the user specified the option -V or -M ?                           */
+ 
+        if ( !strcmp((system + strlen(system) - 4),"(mvs") ){
+            *(system + strlen(system) - 4) = '\0';
+            strcpy(servhost, system);
+            fprintf(stderr,"MVS system: '%s'\n",system);
+            goto mvscase;
+        }
  
         if ( !strcmp((system + strlen(system) - 3),"(vm") ){
             *(system + strlen(system) - 3) = '\0';
@@ -750,56 +1124,38 @@ char  *srvc;
             goto vmcase;
         }
  
-/*DEBUG fprintf(stderr, "system '%s' service '%s'\n", system, srvc);*/
- 
-        strcpy(servhost, system);  /* Use our own storage when needed....  */
-        *sys = '\0';
-        if ((addr = inet_addr(servhost)) != -1) {   /* Permit IP addresses */
-#ifdef VM
-           sprintf(buff, "Is system '%s' running VM/CMS (y/n)? [n]: ",
-                             system);
-           if (((get = LNRD(buff)) != NULL) && (*get == 'y' || *get == 'Y')) {
-                sprintf(buff, "Give VM system name [CERNVM]: ");
-                get = LNRD(buff);
-                if (*get == '\0') strcpy(sys, "cernvm");
-           else {
-                strcpy(sys, get);
-           }
-           get = getp;
-#else
-           fprintf(stderr, "Is system '%s' running VM/CMS (y/n)? [n]: ",
-                               system);
-           if ((fgets(get, sizeof(get), stdin) != NULL) &&
-                                (*get == 'y' || *get == 'Y')) {
-                fprintf(stderr, "Give VM system name [CERNVM]: ");
-                fgets(get, sizeof(get), stdin);
-                if (*get == '\n') strcpy(sys, "cernvm");
-                else {
-                     get[strlen(get)-1] = '\0';        /* convert newline  */
-                     strcpy(sys, get);
-                }
-#endif /* VM */
-                goto vmcase;
-           }
-        }
 /* NOTE THAT THE FOLLOWING TESTS ON MACHINE NAMES ARE CERN-SPECIFIC !! */
  if (!strncmp(system, "cernvm", 6) || !strncmp(system, "lepics", 6) ||
      !strncmp(system, "crnvm", 5))
   goto vmcase;
-/* NOTE THAT THE FOLLOWING TESTS ON MACHINE NAMES ARE CERN-SPECIFIC !! */
-/*
-        if (!strncmp(system, "cernvm", 6) || !strncmp(system, "lepics", 6) ||
-            !strncmp(system, "crnvm", 5))
-                goto vmcase;
-*/
-#ifdef AUTHENT
+/* NOTE THAT THE FOLLOWING TESTS ON MACHINE NAMES ARE GSI-SPECIFIC !! */
+ if (!strncmp(system, "mvs", 3) || !strncmp(system, "MVS", 3) )
+  goto mvscase;
+        if ((addr = inet_addr(servhost)) != -1) {   /* Permit IP addresses */
+ 
+           /* my offer, because */
+           /* i had problems in anderstanding all the stuff */
+ 
+           fprintf(stderr,"\nWhich system is '%s' running?: (c)\n", system );
+           fprintf(stderr," a  VM\n");
+           fprintf(stderr," b  MVS\n");
+           fprintf(stderr," c  other System\n");
+           fprintf(stderr,"\nEnter a, b or c:%s\n", system );
+ 
+           if (fgets(get, 80, stdin) != NULL) {
+                if (*get == 'a' || *get == 'A') goto vmcase;
+                if (*get == 'b' || *get == 'B') goto mvscase;
+           }
+        }
+/* ================================================================= */
+ 
+#if defined(AUTHENT) 
 /* Get the user name/password info from ~/.netrc file for authentication   */
  
 #ifdef APOPAL1
 /***     DIRTY TEMPORARY FIX FOR APOLLO-TO-OS9 AUTHENTICATION FOR PSH ***/
         if (!strncmp(system, "o-o", 3)) user = passwd = "(any)"; else
 #endif /* APOPAL1 */
- 
         ruserpass(servhost, &user, &passwd);       /* get info from .netrc */
         sprintf(uspass, "%s %s", user, passwd);
 #endif /* AUTHENT */
@@ -817,14 +1173,20 @@ vmcase:
 /*
         fprintf(stderr, "localhost = %s\n", portstr);
         fprintf(stderr, "prt = %d prt<<5 = %d\n", prt, (prt<<5));
-        fprintf(stderr, "pid = %d (%x)\n", getpid(), getpid());
 */
 #ifdef VMS
 /*      fprintf(stderr, "time = %d\n", time(0));   */
 #endif /* VMS */
 #endif /* DEBUG */
 /*      if (!sport)                  ** DEBUG **/
-        sport = (prt << 5) | (getpid() & 0x3e0) + junk++;
+ 
+#ifdef IBMMVS
+        /* not the best way, but it works */
+        sport = (prt << 5) | ((1000 & 0x3e0) + junk++);
+#else
+        sport = (prt << 5) | ((getpid() & 0x3e0) + junk++);
+#endif /* IBMMVS */
+ 
 #ifdef VMS
         sport += (time(0) & 0xfff); /* Add 0-4095 as VMS pid may not change */
 #endif /* VMS */
@@ -855,7 +1217,11 @@ vmcase:
 */
 #endif /* DEBUG */
  
+#ifdef linux_softland
+        sx = _rexec(&getp, (int)sp->s_port, user, passwd, uspass, NULL);
+#else
         sx = rexec(&getp, (int)sp->s_port, user, passwd, uspass, NULL);
+#endif /* linux_softland */
         if (sx < 0) {
             fprintf(stderr, "Bad rexec return %d\n", sx);
             fprintf(stderr, "Probable cause:\n");
@@ -868,6 +1234,43 @@ vmcase:
  
         fprintf(stderr, "%s: loading %s exec (%d sec timeout)...\n\n",
                              system, srvc, VMTO);
+        goto vmagain;
+ 
+mvscase:
+ 
+/* MVS tsosub mode follows:                        */
+ 
+        vmode++;
+ 
+        sp = getservbyname ("tsosub", "tcp");
+        if (sp == NULL) {
+          fprintf(stderr, "%s: 'tsosub' not in services file\n",
+                              "tsosub");
+          /* in etc.services is no tsosub service up to now */
+          fprintf(stderr, "Use port 5001 for tsosub to connect to %s\n",system);
+          port = 5001;
+          /* return(-1); */
+ 
+        }
+        else
+          port = (int) sp->s_port;
+ 
+ 
+        sport = 0; /* MVS adds free portnumber to the srvc string */
+                   /* sport=0, the port number is choicen by MVS */
+        sx = tsosub(&system, port, user, passwd, srvc, &sport);
+        if (sx < 0) {
+         /* fprintf(stderr, "Bad tsosub return %d\n", sx); */
+            return(-1);
+        }
+ 
+        fprintf(stderr, "Remote host/port = %s/%d\n", system,sport);
+        fprintf(stderr, "%s: loading %s (%d sec timeout)...\n\n",
+                             system, srvc, VMTO);
+ 
+/* now connect to server  */
+ 
+ 
 vmagain:
   /* clear out address structures */
         memset ((char *)&myaddr_in, 0, sizeof(struct sockaddr_in));
@@ -910,12 +1313,12 @@ vmagain:
  
   /* Create the socket. */
         s = socket(AF_INET, SOCK_STREAM, 0);
-        if (s == -1) {
-#ifdef VM
+        if (s == INVALID_SOCKET) {
+#if defined(IBM) || defined(_WIN32)
             tcperror("client_sock_setup");
 #else
             perror("client_sock_setup");
-#endif /* VM */
+#endif /* IBM */
             fprintf(stderr, "%s: unable to create socket\n",
                 "client_sock_setup");
             if (vmode) close(sx);
@@ -924,18 +1327,22 @@ vmagain:
   /* Try to connect to the remote server at the address
    * which was just built into peeraddr.
    */
-        if (connect(s, &peeraddr_in, sizeof(struct sockaddr_in)) == -1) {
+        if (connect(s, (struct sockaddr *)&peeraddr_in, sizeof(struct sockaddr_in)) == SOCKET_ERROR) {
+#ifndef _WIN32
             close(s);
+#else
+            closesocket(s);
+#endif
             if (vmode) while (nn++ < VMTO) {
-          /*  fprintf(stderr, "Retry %d\n", nn); */
+            /*  fprintf(stderr, "Retry %d\n", nn);  */
               sleep(1);
               goto vmagain;
             }
-#ifdef VM
+#if defined(IBM) || defined(_WIN32)
             tcperror("client_sock_setup");
 #else
             perror("client_sock_setup");
-#endif /* VM */
+#endif /* IBM */
             fprintf(stderr, "%s: unable to connect to remote\n",
                 "client_sock_setup");
             if (vmode) close(sx);
@@ -943,12 +1350,12 @@ vmagain:
         }
  
         addrlen = sizeof(struct sockaddr_in);
-        if (getsockname(s, &myaddr_in, &addrlen) == -1) {
-#ifdef VM
+        if (getsockname(s, (struct sockaddr *)&myaddr_in, (socklen_t *)&addrlen) == SOCKET_ERROR) {
+#if defined(IBM) || defined(_WIN32)
             tcperror("client_sock_setup");
 #else
             perror("client_sock_setup");
-#endif /* VM */
+#endif /* IBM */
             fprintf(stderr, "%s: unable to read socket address\n",
                    "client_sock_setup");
             clntpport = 0;
@@ -960,40 +1367,71 @@ vmagain:
         fprintf(stderr, "Connected to %s on TCP port %u at %s",
                 servhost, clntpport, ctime(&timevar));
  
-#ifdef AUTHENT
+#if defined(AUTHENT)
         if (!vmode) {
  /* Send out the user/password authentication record first... */
            j = strlen(uspass);
-#ifdef VM
+#ifdef IBM
            CMXLATE(uspass,ebcdictoascii,j);
-#endif /* VM */
+#endif /* IBM */
            for (i=0; i<j; i++) uspass[i] = ~uspass[i];
            if (send(s, uspass, j+1, 0) <= 0) {
-#ifdef VM
+#if defined(IBM) || defined(_WIN32)
                tcperror("Error sending authorization");
 #else
                perror("Error sending authorization");
-#endif /* VM */
+#endif /* IBM */
                goto badserv;
            }
  /* Read back a confirmation from server...                   */
            if ((i = recv(s, idbuf, sizeof(idbuf), 0)) <= 0) {
-#ifdef VM
+#if defined(IBM) || defined(_WIN32)
                tcperror("Error receiving authorization");
 #else
                perror("Error receiving authorization");
-#endif /* VM */
+#endif /* IBM */
 badserv:
                fprintf(stderr,"%s: Service '%s' not set up OK on host %s.\n",
                      "client_sock_setup", srvc, servhost);
+#ifndef _WIN32
                close(s);
+#else
+               closesocket(s);
+#endif
                return(-1);
            }
            idbuf[i] = '\0';
-#ifdef VM
+#ifdef IBM
            CMXLATE(idbuf,asciitoebcdic,i);
-#endif /* VM */
+#endif /* IBM */
            fprintf(stderr, "%s\n", idbuf);
+ 
+/*  Check reply string and set return code as appropriate */
+ 
+if (!strncmp(idbuf,"Bad id record",13))    { return(-2); }
+ 
+if (!strncmp(idbuf,"Unknown user",12))     { return(-2); }
+ 
+if (!strncmp(idbuf,"Bad password",12))     { return(-3); }
+ 
+if (!strncmp(idbuf,"Can't setegid",13))    { return(-4); }
+ 
+if (!strncmp(idbuf,"Can't initgroups",16)) { return(-5); }
+ 
+if (!strncmp(idbuf,"Can't set home",14))   { return(-6); }
+ 
+if (!strncmp(idbuf,"Can't seteuid",13))    { return(-7); }
+ 
+if (!strncmp(idbuf,"Can't setuser",13))    { return(-8); }
+ 
+if (!strncmp(idbuf,"Can't setacct",13))    { return(-9); }
+ 
+if (!strncmp(idbuf,"Can't setpriv",13))    { return(-10);}
+ 
+if (!strncmp(idbuf,"Bad passcode",12))     { return(-11);}
+ 
+if (!strncmp(idbuf,"Can't setid",11))      { return(-12);}
+ 
         }
 #endif /* AUTHENT */
  
@@ -1017,18 +1455,29 @@ badserv:
  */
  
 int sclose(sock)
-int  *sock;
+SOCKET  *sock;
  
 {
+#ifndef _WIN32
     close(*sock);            /* close the user socket */
 #ifndef OSK
-    if (ls > 0) close(ls);   /* ..and the listen socket if an active server */
+    if (ls  > 0) close(ls);   /* ..and the listen socket if an active server */
 #endif /* OSK */
  
     if (svmode[(*sock)%NSO] == MAGIC) {
        close(sxsock[(*sock)%NSO]);   /* ..and the sx socket if appropriate  */
        svmode[(*sock)%NSO] = sxsock[(*sock)%NSO] = 0;
     }
+#else
+    closesocket(*sock);            /* close the user socket */
+    if (ls != INVALID_SOCKET) closesocket(ls);   /* ..and the listen socket if an active server */
+ 
+    if (svmode[(*sock)%NSO] == MAGIC) {
+       closesocket(sxsock[(*sock)%NSO]);   /* ..and the sx socket if appropriate  */
+       svmode[(*sock)%NSO] = sxsock[(*sock)%NSO] = 0;
+    }
+#endif /* WIN32 */
+    return 1;
 }
  
 /*
@@ -1054,19 +1503,27 @@ int *sock;
 _fcd bufdes;
 int *m;
 #else
+#ifdef CERNLIB_MSSTDCALL
+int ssendstr(sock, buf, lbuf, m)      /* Microsoft case... */
+SOCKET *sock;
+char *buf;
+int lbuf;
+int *m;
+#else
 int ssendstr(sock, buf, m)
 int  *sock;
 char *buf;
 int  *m;
+#endif /* MS */
 #endif /* CRAYFTN */
 #endif /* VMS */
  
 {
-#ifdef VM
+#ifdef IBM
     extern char asciitoebcdic[];    /* translation tables */
     extern char ebcdictoascii[];
-#endif /* VM */
-    int s = *sock, n = *m, i, j, k = 0;
+#endif /* IBM */
+    int s = *sock, n = *m, i, k = 0;
  
 #ifdef VMS
     char *buf = bufdes->dsc$a_pointer;
@@ -1075,16 +1532,18 @@ int  *m;
     char *buf = _fcdtocp(bufdes);
 #endif /* CRAYFTN */
  
-#ifdef VM
-    CMXLATE(buf,ebcdictoascii,strlen(buf));
-#endif /* VM */
+#ifdef IBM
+/*    CMXLATE(buf,ebcdictoascii,strlen(buf));*/
+    CMXLATE(buf,ebcdictoascii,*m);
+#endif /* IBM */
 retry:
-    if ((i =send(s, buf+k, n-k, 0)) <= 0) {
+    if ((i =send(s, buf+k, n-k, 0)) == SOCKET_ERROR) {
 #ifdef XDEBUG
          tcperror("send");
          fprintf(STDERR,
               "sock_sendstr: sock = %d ret = %d len = %d k = %d buf[0-7] = '",
                              s, i, n, k);
+         int j;
          for (j=0; j<8; j++)  fprintf(STDERR, "%c", buf[j]);
          fprintf(STDERR, "'\n");
          if (i = 0) { sleep(2); goto retry; }
@@ -1120,19 +1579,27 @@ int *sock;
 _fcd bufdes;
 int *m;
 #else
+#ifdef CERNLIB_MSSTDCALL
+int srecvstr(sock, buf,lbuf, m)      /* MS  CASE... */
+SOCKET *sock;
+char *buf;
+int lbuf;
+int *m;
+#else
 int srecvstr(sock, buf, m)
 int  *sock;
 char *buf;
 int  *m;
+#endif /* MS */
 #endif /* CRAYFTN */
 #endif /* VMS */
  
 {
-#ifdef VM
+#ifdef IBM
     extern char asciitoebcdic[];    /* translation tables */
     extern char ebcdictoascii[];
-#endif /* VM */
-    int s = *sock, n = *m, i, j, k = 0;
+#endif /* IBM */
+    int s = *sock, n = *m, i, k = 0;
  
 #ifdef VMS
     char *buf = bufdes->dsc$a_pointer;
@@ -1144,23 +1611,24 @@ int  *m;
     if (n < 0) n = -n;  /* Look for maximum number of bytes option... */
  
 retry:
-    if ((i = recv(s, buf+k, n-k, 0)) <= 0) {
-#ifdef VM
-        CMXLATE(buf+k,asciitoebcdic,i);
-#endif /* VM */
+    if ((i = recv(s, buf+k, n-k, 0)) == SOCKET_ERROR) {
+#ifdef IBM
+/*      CMXLATE(buf+k,asciitoebcdic,i); Maybe not, with length <=0 JDS 251093*/
+#endif /* IBM */
 #ifdef XDEBUG
         tcperror("recv");
         fprintf(STDERR,
              "sock_recvstr: sock = %d ret = %d len = %d k = %d buf[0-15] = '",
                             s, i, *m, k);
+        int j;
         for (j=0; j<16; j++)  fprintf(STDERR, "%c", buf[j]);
         fprintf(STDERR, "'\n");
 #endif /* XDEBUG */
         return(i);
     }
-#ifdef VM
+#ifdef IBM
     CMXLATE(buf+k,asciitoebcdic,i);
-#endif /* VM */
+#endif /* IBM */
     if (*m > 0) {       /* look for exact number of bytes option... */
         if (i < (n-k)) { k += i; goto retry; }
         return(n);
@@ -1185,7 +1653,7 @@ int  *sock;
 char *buf;
 int  *m;
 {
-    int s = *sock, n = *m, i, j, k = 0;
+    int s = *sock, n = *m, i, k = 0;
  
 retry:
     if ((i = send(s, buf+k, n-k, 0)) <= 0) {
@@ -1193,6 +1661,7 @@ retry:
         fprintf(STDERR,
              "sock_send: sock = %d ret = %d len = %d k = %d buf[0-7] = '",
                          s, i, n, k);
+        int j;
         for (j=0; j<8; j++)  fprintf(STDERR, "%c", buf[j]);
         fprintf(STDERR, "'\n");
 #endif /* XDEBUG */
@@ -1220,16 +1689,17 @@ int  *sock;
 char *buf;
 int  *m;
 {
-    int s = *sock, n = *m, i, j, k = 0;
+    int s = *sock, n = *m, i, k = 0;
  
     if (n < 0) n = -n;  /* Look for maximum number of bytes option... */
  
 retry:
-    if ((i = recv(s, buf+k, n-k, 0)) <= 0) {
+    if ((i = recv(s, buf+k, n-k, 0)) == SOCKET_ERROR) {
 #ifdef XDEBUG
         fprintf(STDERR,
              "sock_recv: sock = %d ret = %d len = %d k = %d buf[0-7] = '",
                          s, i, *m, k);
+        int j;
         for (j=0; j<8; j++)  fprintf(STDERR, "%c", buf[j]);
         fprintf(STDERR, "'\n");
 #endif /* XDEBUG */
@@ -1242,8 +1712,7 @@ retry:
         return(i);
 }
  
-reply(s1, s2, s3)
-    char *s1, *s2, *s3;
+void reply(char* s1, char* s2, char* s3)
 {
 #ifdef OSK
     char buff[100];
@@ -1261,11 +1730,27 @@ reply(s1, s2, s3)
 #endif /* LOGFILE */
 }
  
-#ifdef AUTHENT
+void sock_reply(int* s, char* s1, char* s2, char* s3)
+{
+ 
+/* As reply() but use socket rather than stdout */
+ 
+    char buff[100];
+    int  osock = *s;
+ 
+    sprintf(buff, s1, s2, s3);
+    send(osock, buff, strlen(buff)+1, 0);
+ 
+#if defined(LOGFILE) && (!defined(_WIN32))
+    fprintf(logfile, s1, s2, s3);
+#endif /* LOGFILE */
+}
+ 
+#if defined(AUTHENT)
 /* Code derived from ftpd to do name/passwd checking.. */
 /* Note that printf's get pushed down the network to client... */
-#ifdef VM
-int chpass(user, pass)           /* For VM */
+#ifdef IBM
+int chpass(user, pass)           /* For IBM */
     char *user, *pass;
 {
     char *topoint;
@@ -1280,24 +1765,51 @@ int chpass(user, pass)           /* For VM */
       topoint++;
     }
     if (CHPAS(user,pass)){    /*if pw check no ok (done in assembler) */
-      reply("Bad password for user %s.\n", user);
+      reply("Bad password for user %s.\n", user, NULL);
       return(-3);
     }
-    reply("User %s accepted.\n", user);
+    reply("User %s accepted.\n", user, NULL);
 #ifdef LOGFILE
     fclose(logfile);
 #endif /* LOGFILE */
     return(1);
 }
-#else /* ^VM */
-#ifndef VMS
-int chpass(user, pass)           /* For Unix and other "normal" people */
+#ifdef IBMMVS
+int CHPAS(user, pass)           /* For IBMMVS */
     char *user, *pass;
+{
+    int i;
+    char cmd??(80??);
+ 
+    i = sprintf(cmd,"TSOEXEC PWDCHK2 %s,%s ",user,pass);
+    i = system(cmd);
+    /* i = 0  user,pass ok */
+    /* i = 4  user,pass not ok */
+    return(i);
+}
+#endif /* IBMMVS  */
+ 
+#else /* ^IBM */
+#ifndef _WIN32
+#ifndef VMS
+int chpass(char* user, char* pass)           /* For Unix and other "normal" people */
 {
  
 #ifndef OSK
  
-        char  buff[100];
+        /*AV moved below char  buff[100];*/
+ 
+#ifdef AFS
+ 
+/* Use  cc -I/usr/afsws/include to get appropriate AFS include files */
+ 
+#include <afs/stds.h>
+#include <afs/kautils.h>
+#include <errno.h>
+char     *reason;
+ 
+#endif /* AFS */
+ 
 #ifdef APOPWD1
 /** TEMPORARY APOLLO KLUDGE WHILE "crypt" DOESN'T WORK.. **/
 #include <sys/wait.h>
@@ -1305,8 +1817,13 @@ int chpass(user, pass)           /* For Unix and other "normal" people */
         union wait ret;
 #endif /* APOPWD1 */
  
-        char   *xpasswd, *crypt();
+        char   *xpasswd, *encrypted, *crypt();
         struct passwd *pw;
+ 
+#if defined(linux_softland) || defined(SHADOW_SUPPORT)
+        struct spwd *spwd;
+#endif /* linux_softland */
+ 
 #ifdef ACE
         struct acmdata acmd;     /* Unicos6.0 calling sequence used..  */
  
@@ -1315,14 +1832,46 @@ int chpass(user, pass)           /* For Unix and other "normal" people */
  
         pw = getpwnam(user);
         if (pw == NULL) {
-                reply("User %s unknown.\n", user);
+                reply("Unknown user %s.\n", user, NULL);
                 return(-2);
         }
+	encrypted = pw->pw_passwd;
+ 
+#ifdef linux_softland
+        spwd = getspnam(user);
+        if (spwd == NULL) {
+                reply("User %s has illegal shadow password\n",user,NULL);
+                return(-2);
+        }
+	encrypted = spwd->sp_pwdp;
+
+#elif defined(SHADOW_SUPPORT)
+	/* shadow passwords may not be enabled in Debian, so must check */
+	{
+		FILE *test = fopen("/etc/shadow", "r");
+		if (test) {
+			fclose(test);
+			spwd = getspnam(user);
+			if (spwd == NULL) {
+				reply("User %s has illegal shadow password\n",
+				      user, NULL);
+				return(-2);
+			}
+			encrypted = spwd->sp_pwdp;
+		}
+		else if (errno == EACCES) {
+			reply("Server has insufficient permissions to "
+			      "read /etc/shadow file\n", NULL,NULL);
+			return(-2);
+		}
+	}
+
+#endif /* linux_softland */
  
 #ifdef APOPWD1
 /** TEMPORARY APOLLO KLUDGE WHILE "crypt" DOESN'T WORK.. **/
 #define KLUDGE "-c /com/date >/dev/null 2>/dev/null"
- 
+        char buff[100];
         sprintf(buff, "%s %s %s %s %s","/com/login",user,"-lp", pass,KLUDGE);
         ret.w_status = system(buff);
         if (ret.w_Retcode) {
@@ -1339,34 +1888,63 @@ int chpass(user, pass)           /* For Unix and other "normal" people */
             if ((i = acmlg(&acmd))) {
                 reply("Bad passcode for user %s: ACE error %d.\n",
                                         pw->pw_name, i);
-                return(-7);
+                return(-11);
             }
         } else  {  /* apply the normal Unix password check ...            */
 #endif /* ACE */
-            xpasswd = crypt(pass, pw->pw_passwd);
+ 
+#ifdef AFS
+ 
+   irc=ka_UserAuthenticateGeneral(KA_USERAUTH_VERSION + KA_USERAUTH_DOSETPAG,
+                   user,
+                   (char *) 0,
+                   (char *) 0,
+                   pass,
+                   0,
+                   0, 0,
+                   &reason);
+ 
+   if (irc!=0) printf("AFS authentication failed because %s\n", reason);
+ 
+   if (irc) {
+ 
+#else
+ 
+#ifdef linux_softland
+            xpasswd = pw_encrypt(pass, encrypted);
+#else
+            xpasswd = crypt(pass, encrypted);
+#endif /* linux_softland */
             /* The strcmp does not catch null passwords! */
-            if (*pw->pw_passwd == '\0' || strcmp(xpasswd,pw->pw_passwd)) {
+#if defined(linux_softland) || defined(SHADOW_SUPPORT)
+            if (*encrypted == '\0' || strcmp(xpasswd,spwd->sp_pwdp)) {
+#else
+            if (*encrypted == '\0' || strcmp(xpasswd,pw->pw_passwd)) {
+#endif /* linux_softland */
+ 
+#endif /* AFS */
+ 
 #endif /* APOPWD1 */
-                reply("Bad password for user %s.\n", pw->pw_name);
+                reply("Bad password for user %s.\n", pw->pw_name, NULL);
                 return(-3);
             }
 #ifdef ACE
         }
 #endif /* ACE */
 #ifdef HPUX
-        if (setresgid(0,pw->pw_gid,0)) {
+        if (setresgid(pw->pw_gid,pw->pw_gid,0)) {
 #else
 #ifdef IBMRT
         setgid(pw->pw_gid);
 #endif /* IBMRT */
         if (setegid(pw->pw_gid)) {
 #endif /* HPUX */
-                reply("Can't setegid for user %s.\n", pw->pw_name);
+                reply("Can't setegid for user %s.\n", pw->pw_name, NULL);
                 return(-4);
         }
 #ifndef NOINITGROUPS
         if (initgroups(pw->pw_name, pw->pw_gid)) {
-                reply("Can't initgroups for user %s.\n", pw->pw_name);
+                reply("Can't initgroups for user %s.\n", pw->pw_name, NULL);
                 return(-5);
         }
 #endif  /* NOINITGROUPS */
@@ -1390,7 +1968,7 @@ int chpass(user, pass)           /* For Unix and other "normal" people */
 #endif /* LOGFILE */
 #ifndef OSK
 #ifdef HPUX
-        setresuid(0,pw->pw_uid,0);
+        setresuid(pw->pw_uid,pw->pw_uid,0);
 #else
 #ifdef IBMRT
         setuid(pw->pw_uid);
@@ -1403,7 +1981,8 @@ int chpass(user, pass)           /* For Unix and other "normal" people */
  
 #else  /* VMS */
  
-int chpass(user, pass)           /* For VMS only (yes, it's different) */
+int chpass(s, user, pass)           /* For VMS only (yes, it's different) */
+    int  *s;
     char *user, *pass;
 {
         char   *xpasswd, *crypt();
@@ -1411,23 +1990,23 @@ int chpass(user, pass)           /* For VMS only (yes, it's different) */
  
         pw = getpwnam(user);
         if (pw == NULL) {
-                reply("User %s unknown.\n", user);
+                sock_reply(s,"Unknown user %s.\n", user);
                 return(-2);
         } else {
                 xpasswd = vmscrypt(user, pass, pw->pw_encrypt, pw->pw_salt);
                 /* The strcmp does not catch null passwords! */
                 if (*pw->pw_passwd == '\0' || strcmp(xpasswd,pw->pw_passwd)) {
-                        reply("Bad password for user %s.\n", user);
+                        sock_reply(s,"Bad password for user %s.\n", user);
                         return(-3);
                 }
         }
         if (setegid(pw->pw_gid) < 0) {
-                reply("Can't setegid for user %s.\n", user);
+                sock_reply(s,"Can't setegid for user %s.\n", user);
                 return(-4);
         }
 /*
         if (initgroups(pw->pw_name, pw->pw_gid) < 0) {
-                reply("Can't initgroups for user %s.\n", user);
+                sock_reply(s,"Can't initgroups for user %s.\n", user);
                 return(-5);
         }
 */
@@ -1438,33 +2017,42 @@ int chpass(user, pass)           /* For VMS only (yes, it's different) */
  */
         if (chdir(pw->pw_dir)) {
                 setuic(my_pw->pw_uic);
-                reply("Can't set home directory for user %s.\n", user);
+                sock_reply(s,"Can't set home directory for user %s.\n", user);
                 return(-6);
         }
  
 /* Success..                    */
-        reply("User %s accepted.\n", user);
+        sock_reply(s,"User %s accepted.\n", user);
 #ifdef LOGFILE
         fclose(logfile);       /* Do this while still root.. */
 #endif /* LOGFILE */
         if (seteuid(pw->pw_uid) < 0)    {
-                printf("Can't seteuid for user %s.\n", user);
-                fflush(stdout);
+                sock_reply(s,"Can't seteuid for user %s.\n", user);
                 return(-7);
         }
+ 
+/* The following two routines to not currently work on the Alpha */
+#if !defined(CERNLIB_QMALPH)
+ 
         if (setuser(pw->pw_name) != 0)  {       /* Change user name     */
-                printf("Can't setuser for user %s.\n", user);
-                fflush(stdout);
+                sock_reply(s,"Can't setuser for user %s.\n", user);
                 return(-8);
         }
+ 
         if (setacct(pw->pw_account) != 0) {     /* Change account       */
-                printf("Can't setacct for user %s.\n", user);
-                fflush(stdout);
+                sock_reply(s,"Can't setacct for user %s.\n", user);
                 return(-9);
         }
+ 
+#endif
+ 
+        if (setid(pw->pw_uic) != 0) {     /* Set rights identifiers */
+                sock_reply(s,"Can't setid for user %s.\n", user);
+                return(-12);
+        }
+ 
         if (setpriv(pw->pw_priv) != 0)  {       /* Change privileges    */
-                printf("Can't setpriv for user %s.\n", user);
-                fflush(stdout);
+                sock_reply(s,"Can't setpriv for user %s.\n", user);
                 return(-10);
         }
  
@@ -1472,7 +2060,34 @@ int chpass(user, pass)           /* For VMS only (yes, it's different) */
 }
  
 #endif /* VMS */
-#endif /* VM */
+#else
+   int chpass(SOCKET *s,char *user, char *passwd){
+       sock_reply(s,"User %s accepted.\n", user);
+       printf(" logfile = %x \n",logfile);
+#ifdef LOGFILE
+        if (logfile) fclose(logfile);       /* Do this while still root.. */
+        logfile = 0;
+#endif /* LOGFILE */
+       return 1;
+#if 0
+       HANDLE hToken;
+       if (LogonUser(user,NULL,passwd,LOGON32_LOGON_BATCH,LOGON32_PROVIDER_DEFAULT, &hToken) == TRUE)
+       {
+           sock_reply(s,"User %s accepted.\n", user);
+           CloseHandle(hToken);
+       }
+       else
+       {
+           sock_reply(s,"Bad password for user %s.\n", user);
+           return -3;
+       }
+
+       return 1;
+#endif
+   }
+
+#endif /* WIN32 */
+#endif /* IBM*/
 #endif /* AUTHENT */
  
 /* Provide all of ruserpass.c unless specifically omitted */
@@ -1488,8 +2103,7 @@ int chpass(user, pass)           /* For VMS only (yes, it's different) */
  
         static char usr[30], pss[30], myname[30];
  
-ruserpass(host, aname, apass)
-        char *host, **aname, **apass;
+void ruserpass(char* host, char ** aname, char** apass)
 {
         struct sgttyb   sgttyb_val;
  
@@ -1497,7 +2111,6 @@ ruserpass(host, aname, apass)
                 rnetrc(host, aname, apass);
         if (*aname == NULL) {
                 char *c = myname;
- 
                 strcpy(myname, getenv("USER"));
                 while (*c) { *c = tolower(*c); c++; }
                 fprintf(stderr, "Name (%s:%s): ", host, myname);
@@ -1610,7 +2223,7 @@ static char tokval[100];
 static struct toktab {
         char *tokstr;
         int tval;
-} toktab[]= {
+} toktab[]= {{
         "default",      DEFAULT,
         "login",        LOGIN,
         "password",     PASSWD,
@@ -1624,12 +2237,63 @@ static struct toktab {
         "force",        FORCE,
         "machine",      MACHINE,
         0,              0
-};
+  }};
  
-#ifdef VM
+#ifdef IBMMVS
 static FILE *cfile;
  
-ruserpass(host, aname, apass)
+void ruserpass(host, aname, apass)
+ char *host, **aname, **apass;
+{
+  int i1,i2,i3;
+  int i = 0,ch;
+  char *myname;
+  char buff[100];
+  char buff1[10];
+  char buff2[100];
+  char buff3[100];
+ 
+ if (*aname == 0 || *apass == 0)
+  rnetrc(host, aname, apass);
+ 
+ if (*aname == 0) {
+    *aname = malloc(101);
+    JOBNAM(buff1);
+    buff1??(4??) = '\0';
+    myname = buff1;
+    sprintf(buff, "Name (%s:%s): ", host, myname);
+    printf("%s",buff);
+ /* ch=getchar();   */       /* first character after printf is \n */
+    for(i=0;(i<99) && ((ch=getchar()) != EOF) &&(ch!='\n') ; i++)
+      buff2??(i??) = ch;
+    buff2??(i??) = '\0';
+    if (i == 0 )
+      strcpy(*aname, myname);
+    else
+      strcpy(*aname, buff2);
+ }
+ 
+ if ( *aname  && *apass ==  0 ) {
+   *apass = malloc(101);
+   sprintf(buff, "Password (%s:%s): ", host, *aname);
+   i1 = strlen(buff);
+   i2 = 99;
+   i3 = 0;
+   buff3??(0??) = '\0';
+   while (strlen(buff3) == 0) {
+     GETINH(buff,i1,buff3,i2,i3);
+     for (i = 0 ; ((i < 99) && buff3??(i??) != ' ') ;i++);
+     buff3??(i??) = '\0';
+   }
+   strcpy(*apass, buff3);
+ }
+}
+#endif /* IBMMVS */
+ 
+#ifdef IBMVM
+static FILE *cfile;
+ 
+void ruserpass(host, aname, apass)
  char *host, **aname, **apass;
 {
   char *myname;
@@ -1650,6 +2314,9 @@ ruserpass(host, aname, apass)
   *apass = LNRDPAS(buff);
  }
 }
+#endif /* IBMVM */
+ 
+#ifdef IBM
  
 static
 rnetrc(host, aname, apass)
@@ -1658,11 +2325,23 @@ rnetrc(host, aname, apass)
  char buf[BUFSIZ];
  int t;
  
+#ifdef IBMVM
  strcpy(buf, "DOT.NETRC.A0");
+#else
+ strcpy(buf, "DOT.NETRC");
+#endif
+
+#if defined(__APPLE__) || __GNUC__ > 3
+static rnetrc(char *host, char **aname, char **apass);
+static token();
+static void    catch();
+#endif
+
+ 
  cfile = fopen(buf, "r");
  if (cfile == NULL) {
   if (errno != ENOENT)
-   perror(buf);
+    /* perror(buf); */
   return;
  }
 next:
@@ -1709,7 +2388,10 @@ done:
  fclose(cfile);
 }
  
-#else /* ^VM */
+#else /* ^IBM */
+ 
+#if defined(CERNLIB_V93B)
+ 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
@@ -1717,7 +2399,7 @@ done:
 char    *malloc(), *index(), *getpass(), *getlogin();
 static  FILE *cfile;
  
-ruserpass(host, aname, apass)
+void ruserpass(host, aname, apass)
         char *host, **aname, **apass;
 {
  
@@ -1743,14 +2425,85 @@ ruserpass(host, aname, apass)
         }
 }
  
-static
+#endif
+
+#if defined(__APPLE__) || __GNUC__ > 3
+static int rnetrc(char *host, char **aname, char **apass);
+static int token();
+static void    catch();
+#endif
+
+ 
+#include <sys/types.h>
+#include <sys/stat.h>
+#if (!defined(NEXT)) && (!defined(_WIN32))
+#include <pwd.h>
+#endif /* ^NEXT */
+#include <errno.h>
+ 
+char   *ku_pros( /* char *prompt, char *default */ );
+char   *ku_prop( /* char *prompt */ );
+ 
+#ifndef _WIN32
+#if __GNUC__ < 3 && !(defined(__APPLE__))
+  char    *malloc(), *index(), *getpass(), *getuid();
+#endif
+#endif
+
+static  FILE *cfile;
+ 
+void ruserpass(host, aname, apass)
+        char *host, **aname, **apass;
+{
+ 
+        if (*aname == 0 || *apass == 0)
+                rnetrc(host, aname, apass);
+        if (*aname == 0) {
+                char prompt[80];
+                char *answ;
+#ifndef _WIN32
+                char *myname;
+                uid_t uid;
+                struct passwd *pwd;
+                uid = getuid();
+                pwd = getpwuid(uid);
+                myname = pwd->pw_name;
+#else
+                char myname[30];
+                int lmyname = sizeof(myname);
+                GetUserName(myname,&lmyname);
+#endif
+                sprintf(prompt, "Name (%s:%s):", host, myname);
+                answ = ku_pros(prompt, NULL);
+                if( answ != NULL ) {
+                  if( answ[0] == '\0' )
+                    answ = myname;
+                  *aname = strcpy( malloc(strlen(answ)+1), answ );
+                }
+        }
+        if (*aname && *apass == 0) {
+                char prompt[80];
+                char *answ;
+                sprintf(prompt, "Password (%s:%s):", host, *aname);
+                answ = ku_prop(prompt);
+                if( answ != NULL ) {
+                  *apass = strcpy( malloc(strlen(answ)+1), answ );
+                }
+        }
+}
+ 
+static int
 rnetrc(host, aname, apass)
         char *host, **aname, **apass;
 {
         char *hdir, buf[BUFSIZ];
         int t;
+#ifndef _WIN32
         struct stat stb;
         extern int errno;
+#else
+        struct _stat stb;
+#endif
         char *getenv();
  
         hdir = getenv("HOME");
@@ -1761,7 +2514,7 @@ rnetrc(host, aname, apass)
         if (cfile == NULL) {
                 if (errno != ENOENT)
                         perror(buf);
-                return;
+                return(0);
         }
 next:
         while ((t = token())) switch(t) {
@@ -1776,7 +2529,7 @@ next:
                 while ((t = token()) && t != MACHINE) switch(t) {
  
                 case LOGIN:
-                        if (token())
+                        if (token()) {
                                 if (*aname == 0) {
                                         *aname = malloc(strlen(tokval) + 1);
                                         strcpy(*aname, tokval);
@@ -1784,6 +2537,7 @@ next:
                                         if (strcmp(*aname, tokval))
                                                 goto next;
                                 }
+                        }        
                         break;
                 case PASSWD:
                         if (fstat(fileno(cfile), &stb) >= 0
@@ -1811,13 +2565,19 @@ next:
         }
 done:
         fclose(cfile);
+   /*AV: make compiler happy*/ return 0;
 }
  
-#endif /* VM */
+#endif /* IBM*/
  
-static
+#ifdef _WIN32
+        static FILE *cfile;
+#endif
+
+static int
 token()
 {
+
         char *cp;
         int c;
         struct toktab *t;
@@ -1854,17 +2614,14 @@ token()
         return (ID);
 }
  
-#ifndef VM
+#if (!defined(IBM)) && (!defined(_WIN32))
 /* I provide "getpass" myself as standard version truncates to 8 characters */
 #include <sys/ioctl.h>
-#ifdef CBREAK
+#if defined(CBREAK) || defined(__APPLE__)
 #define BSDTTY         /* First find out if BSD or SYSV terminal handling.. */
 #endif
  
 #ifndef BSDTTY
-#if (__GLIBC__ < 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 40)
-#include <termio.h>
-#else
 #include <termios.h>
 #include <sys/ioctl.h>
 struct termio {
@@ -1875,21 +2632,30 @@ struct termio {
     unsigned char c_line;
     unsigned char c_cc[8];
 };
-#endif
 #else
+//AV: Newer APPLE requires sys/ioctl_compat.h
+#include <sys/ioctl_compat.h>
 #include <sgtty.h>
 #endif
  
+#if (!defined(__convexc__)) && (!defined(__APPLE__)) && __GNUC__ < 3
 extern int kill(), ioctl(), getpid();
+#endif /* __convexc__ */
 static int intrupt;
  
 /*** NOTE MAXPASSWD IS DEFINED AS 8 IN ALL STANDARD UNIX SYSTEMS, BUT THIS
  *** GIVES US PROBLEMS INTERWORKING WITH VMS AND CRAY-SECURID SYSTEMS. ***/
 #define MAXPASSWD     20       /* max significant characters in password */
  
+#if defined(__APPLE__)
+/*AV: Just use the standard function */
+#include <pwd.h>
+#include <unistd.h>
+char *getpass(const char *prompt);
+#else
 char *
 getpass(prompt)
-char    *prompt;
+const char    *prompt;
 {
 #ifndef BSDTTY
         struct termio ttyb;
@@ -1902,7 +2668,11 @@ char    *prompt;
         register int c;
         FILE    *fi;
         static char pbuf[ MAXPASSWD + 1 ];
+#if !defined(__APPLE__)
         void    (*sig)(), catch();
+#else
+        void    (*sig)();
+#endif
  
         if((fi = fopen("/dev/tty", "r")) == NULL)
                 return((char*)NULL);
@@ -1943,28 +2713,41 @@ char    *prompt;
                 (void) kill(getpid(), SIGINT);
         return(pbuf);
 }
+#endif
  
 static void
 catch()
 {
         ++intrupt;
 }
-#endif /* ^VM */
+#endif /* ^IBM*/
 #endif /* NORUSERPASS */
 #endif /* VMS */
  
 /* I provide "rexec" myself as standard version does not allow IP addresses */
  
-rexec(ahost, rport, name, pass, cmd, fd2p)
+#if defined(CERNLIB_SOLARIS)
+/* Solaris headers clash with an old style definition */
+/*AV: update signature */
+int rexec(char **ahost, unsigned short rport, const char *name,
+     const char *pass, const char *cmd, int *fd2p)
+#else
+# ifdef linux
+int _rexec(ahost, rport, name, pass, cmd, fd2p)
+# else
+int rexec(ahost, rport, name, pass, cmd, fd2p)
+# endif /* linux */
+ 
         char **ahost;
         int rport;
         char *name, *pass, *cmd;
         int *fd2p;
+#endif
 {
-#ifdef VM
+#ifdef IBM
         extern char asciitoebcdic[];    /* translation tables */
         extern char ebcdictoascii[];
-#endif /* VM */
+#endif /* IBM */
         int s, timo = 1;
         struct sockaddr_in sin;
         char c;
@@ -1987,11 +2770,11 @@ rexec(ahost, rport, name, pass, cmd, fd2p)
 retry:
         s = socket(AF_INET, SOCK_STREAM, 0);
         if (s < 0) {
-#ifdef VM
+#if defined(IBM) || defined(_WIN32)
                 tcperror("rexec: socket");
 #else
                 perror("rexec: socket");
-#endif /* VM */
+#endif /* IBM */
                 return (-1);
         }
         sin.sin_family = AF_INET;
@@ -2003,18 +2786,29 @@ retry:
                              ((struct in_addr *)(hp->h_addr))->s_addr;
 /*              bcopy(hp->h_addr, (caddr_t)&sin.sin_addr, hp->h_length); */
         }
-        if (connect(s, &sin, sizeof(struct sockaddr_in)) < 0) {
+        if (connect(s, (struct sockaddr *)&sin, sizeof(struct sockaddr_in)) == SOCKET_ERROR ) {
+#ifndef _WIN32
                 if (errno == ECONNREFUSED && timo <= 16) {
                         (void) close(s);
                         sleep(timo);
                         timo *= 2;
                         goto retry;
                 }
-#ifdef VM
+#else
+                if (WSAGetLastError() == WSAECONNREFUSED
+                    && timo <= 16) {
+                        (void) closesocket(s);
+                        sleep(timo);
+                        timo *= 2;
+                        goto retry;
+                }
+#endif
+
+#if defined(IBM) || defined(_WIN32)
                 tcperror("rexec: connect");
 #else
                 perror("rexec: connect");
-#endif /* VM */
+#endif /* IBM */
                 return (-1);
         }
         if (fd2p == 0) {
@@ -2024,28 +2818,28 @@ retry:
                 fprintf(stderr, "Control channel not implemented\n");
                 goto bad;
         }
-#ifdef VM
+#ifdef IBM
         CMXLATE(name,ebcdictoascii,strlen(name));
         CMXLATE(pass,ebcdictoascii,strlen(pass));
         CMXLATE(cmd,ebcdictoascii,strlen(cmd));
-#endif /* VM */
+#endif /* IBM */
         (void) send(s, name, strlen(name) + 1, 0);
         (void) send(s, pass, strlen(pass) + 1, 0);
         (void) send(s, cmd, strlen(cmd) + 1, 0);
         if (recv(s, &c, 1, 0) != 1) {
-#ifdef VM
+#if defined(IBM) || defined(_WIN32)
                 tcperror("rexec recv");
 #else
                 perror("rexec recv");
-#endif /* VM */
+#endif /* IBM */
                 goto bad;
         }
         if (c != 0) {
                 fprintf(stderr,"c = ");
                 while (recv(s, &c, 1, 0) == 1) {
-#ifdef VM
+#ifdef IBM
                      CMXLATE(&c,asciitoebcdic,1);
-#endif /* VM */
+#endif /* IBM */
                      fprintf(stderr,"%c",c);
                      (void) send(2, &c, 1, 0);
                      if (c == '\n')
@@ -2068,7 +2862,7 @@ bad:
 /*** COMPATIBILITY-MODE: FULL-LENGTH NAMES AS USED IN EARLY "TCPAW"     ***/
  
 #ifndef OSK
-#ifndef VM
+#ifndef IBM
 int inetd_sock_setup(in, out)
 int  *in, *out;
 {
@@ -2080,7 +2874,7 @@ int *sock;
 {
    return(iclose(sock));
 }
-#endif /* ^VM */
+#endif /* ^IBM*/
 #endif /* OSK */
  
 int server_sock_setup(in, out)
@@ -2176,7 +2970,8 @@ int  *m;
    return(srecv(sock, buf, m));
 }
  
-#ifndef apollo
+/* #ifndef apollo */
+#if !defined(apollo) || defined(APOLLO_F77)
 /***  UNIX routines f77 <-> C to handle underlines generated by FORTRAN ***/
 /***  CASE FOR SYSTEMS USING FULL-LENGTH NAMES (WITH UNDERLINES) IN F77 ***/
  
@@ -2189,7 +2984,7 @@ char  *srvc;
 }
  
 #ifndef OSK
-#ifndef VM
+#ifndef IBM
 int inetd_sock_setup_(in, out)
 int  *in, *out;
 {
@@ -2201,7 +2996,7 @@ int *sock;
 {
    return(iclose(sock));
 }
-#endif /* ^VM */
+#endif /* ^IBM*/
 #endif /* OSK */
  
 int server_sock_setup_(in, out)
@@ -2259,7 +3054,7 @@ char  *srvc;
    return(csetup(system, in, out, srvc));
 }
 #ifndef OSK
-#ifndef VM
+#ifndef IBM
  
 int isetup_(in, out)
 int  *in, *out;
@@ -2272,7 +3067,7 @@ int *sock;
 {
    return(iclose(sock));
 }
-#endif /* ^VM */
+#endif /* ^IBM*/
 #endif /* OSK */
  
 int ssetup_(in, out)
@@ -2320,10 +3115,10 @@ int  *m;
 }
 #endif /* apollo */
  
-#ifdef CRAYFTN
-/****   SPECIAL VERSION FOR CRAY CFT77 ***/
+#if defined(CRAYFTN)
+/****   SPECIAL VERSION FOR CRAY CFT77  */
  
-int CSETUP(system, in, out, srvc)
+int  CSETUP(system, in, out, srvc)
 _fcd system;
 int  *in, *out;
 _fcd srvc;
@@ -2331,25 +3126,25 @@ _fcd srvc;
    return(csetup(system, in, out, srvc));
 }
  
-int ISETUP(in, out)
+int type_of_call ISETUP(in, out)
 int  *in, *out;
 {
    return(isetup(in, out));
 }
  
-int ICLOSE(sock)
-int *sock;
+int type_of_call ICLOSE(sock)
+SOCKET *sock;
 {
    return(iclose(sock));
 }
  
-int SSETUP(in, out)
+int type_of_call SSETUP(in, out)
 int  *in, *out;
 {
    return(ssetup(in, out));
 }
  
-int SCLOSE(sock)
+int type_of_call SCLOSE(sock)
 int *sock;
 {
    return(sclose(sock));
@@ -2371,7 +3166,7 @@ int  *m;
    return(srecvstr(sock, buf, m));
 }
  
-int SSEND(sock, buf, m)
+int type_of_call SSEND(sock, buf, m)
 int  *sock;
 char *buf;
 int  *m;
@@ -2379,7 +3174,7 @@ int  *m;
    return(ssend(sock, buf, m));
 }
  
-int SRECV(sock, buf, m)
+int type_of_call SRECV(sock, buf, m)
 int  *sock;
 char *buf;
 int  *m;
@@ -2387,7 +3182,79 @@ int  *m;
    return(srecv(sock, buf, m));
 }
 #endif /* CRAYFTN */
+
+#ifdef CERNLIB_MSSTDCALL
+/****   SPECIAL VERSION FOR Microsoft Powerstation Fortran ***/
  
+int type_of_call CSETUP(system, lsys, in, out, srvc, lsrvc)
+char *system;
+int lsys, lsrvc;
+int  *in, *out;
+char *srvc;
+{
+   return(csetup(system, lsys, in, out, srvc,lsrvc));
+}
+ 
+int type_of_call ISETUP(in, out)
+int  *in, *out;
+{
+   return(isetup(in, out));
+}
+ 
+int type_of_call ICLOSE(sock)
+int *sock;
+{
+   return(iclose(sock));
+}
+ 
+int type_of_call SSETUP(in, out,port)
+int  *in, *out,*port;
+{
+   return(ssetup(in, out, port));
+}
+ 
+int type_of_call SCLOSE(sock)
+int *sock; 
+{
+   return(sclose(sock));
+}
+ 
+int type_of_call SSENDSTR(sock, buf, lbuf, m)
+int  *sock;
+char *buf;
+int lbuf;
+int  *m;
+{
+   return(ssendstr(sock, buf, lbuf, m));
+}
+ 
+int type_of_call SRECVSTR(sock, buf, lbuf, m)
+int  *sock;
+char *buf;
+int lbuf;
+int  *m;
+{
+   return(srecvstr(sock, buf, lbuf, m));
+}
+ 
+int type_of_call SSEND(sock, buf, m)
+int  *sock;
+char *buf;
+int  *m;
+{
+   return(ssend(sock, buf, m));
+}
+ 
+int type_of_call SRECV(sock, buf, m)
+int  *sock;
+char *buf;
+int  *m;
+{
+   return(srecv(sock, buf, m));
+}
+#endif /* Microsoft Fortran */
+ 
+
 #ifdef OSK
 /****   SPECIAL VERSION FOR OS9 ONLY ***/
  
@@ -2453,7 +3320,7 @@ int  *m;
 }
 #endif /* OSK */
  
-#ifdef VM
+#ifdef IBM
 int cinit(int dummy)
 {
 /*  fprintf(stderr,"Initializing C environment...\n");*/
@@ -2480,7 +3347,259 @@ int argposition;       /* n for nth argument */
         return(-1);   /* no secondary plist when no character*n arg */
     }
 }
-#endif /* VM */
+#endif /* IBM */
  
  
+#ifdef IBMMVS
+ 
+/* systemf not found in cspack, so added for IBMMVS */
+ 
+int systemf(command)
+char *command;
+ 
+{
+   char *c;
+   int i, j, k;
+ 
+#ifdef DEBUG
+   printf(" systemf: command = '%s' \n",command);
+#endif  /* DEBUG */
+ 
+   /*Terminate correctly the host & service strings passed by FTN..*/
+   j = strlen(command);
+   for (k=0; k<j; k++) if (command[k] == ' ') {command[k] = '\0'; break;}
+   /* And map to lower case...                                    */
+   c = command;   while (*c) { if (isupper(*c)) *c = tolower(*c); c++;   }
+ 
+#ifdef DEBUG
+   printf(" systemf: command = '%s' \n",command);
+#endif  /* DEBUG */
+ 
+ 
+     i = system(command);
+ 
+     return(0);
+}
+ 
+#endif /* IBMMVS */
+/* client to connect to tsosubd on mvs */
+int tsosub(char **ahost, int rport,  char* name, char* pass, char* cmd, unsigned short * sport)
+{
+#ifdef IBM
+        extern char asciitoebcdic[];    /* translation tables */
+        extern char ebcdictoascii[];
+#endif /*TEST */
+        int s, timo = 1;
+        struct sockaddr_in sin;
+        /*AV: unused char c; */
+        short port;
+        struct hostent *hp;
+        unsigned long addr;
+        char buf[80];
+        /*AV: unused char cmdbuf[80];*/
+ 
+/*      This fails on the Sun
+        char machine[80]   = "machine";
+        char user[80]      = "user";
+        char tty [80]      = "tty"; */
+        char machine[80];
+        char user[80];
+        char tty [80];
+        char cmvs_sport[80];
+        char servreply[80];
+ 
+/*      but this is ok    */
+ 
+        sprintf(machine,"%s","machine");
+        sprintf(user,"%s","user");
+        sprintf(tty,"%s","tty");
+ 
+        if ((addr = inet_addr(*ahost)) != -1) {  /* Permit IP addresses */
+                sin.sin_addr.s_addr = addr;
+        } else {
+                hp = gethostbyname(*ahost);
+                if (hp == 0) {
+                       fprintf(stderr, "%s: unknown host\n", *ahost);
+                       return (-1);
+                }
+        }
+ 
+        ruserpass(*ahost, &name, &pass);
+ 
+retry:
+        s = socket(AF_INET, SOCK_STREAM, 0);
+        if (s < 0) {
+#ifdef IBM
+                tcperror("tsosub: socket");
+#else
+                perror("tsosub: socket");
+#endif /* IBM */
+                return (-1);
+        }
+        sin.sin_family = AF_INET;
+        sin.sin_port   = (short)rport;
+        if (addr != -1)                      {  /* Permit IP addresses */
+                sin.sin_addr.s_addr = addr;
+        } else {
+                sin.sin_addr.s_addr =
+                             ((struct in_addr *)(hp->h_addr))->s_addr;
+/*              bcopy(hp->h_addr, (caddr_t)&sin.sin_addr, hp->h_length); */
+        }
+        if (connect(s, (struct sockaddr *)&sin, sizeof(struct sockaddr_in)) == SOCKET_ERROR) {
+#ifndef WIN32
+                if (errno == ECONNREFUSED && timo <= 16) {
+                        (void) close(s);
+                        sleep(timo);
+                        timo *= 2;
+                        goto retry;
+                }
+#else
+                if (WSAGetLastError() == WSAECONNREFUSED && timo <= 16) {
+                        (void) closesocket(s);
+                        sleep(1000*timo);
+                        timo *= 2;
+                        goto retry;
+                }
+#endif
+
+#ifdef IBM
+                tcperror("tsosub: connect");
+#else
+                perror("tsosub: connect");
+#endif /* IBM */
+                return (-1);
+        }
+        port = 0;
+#ifdef IBM
+        CMXLATE(machine,ebcdictoascii,strlen(machine));
+        CMXLATE(user,ebcdictoascii,strlen(user));
+        CMXLATE(tty,ebcdictoascii,strlen(tty));
+        CMXLATE(name,ebcdictoascii,strlen(name));
+        CMXLATE(pass,ebcdictoascii,strlen(pass));
+        CMXLATE(cmd,ebcdictoascii,strlen(cmd));
+#endif /* IBM */
+ 
+        if ( send(s, machine, strlen(machine) + 1, 0) < 0) {
+#ifdef IBM
+                tcperror("tsosub: send machine");
+#else
+                perror("tsosub: send machine");
+#endif /* IBM */
+                goto bad;
+        }
+ 
+        if ( send(s, user, strlen(user) + 1, 0) < 0) {
+#ifdef IBM
+                tcperror("tsosub: send user");
+#else
+                perror("tsosub: send user");
+#endif /* IBM */
+                goto bad;
+        }
+ 
+        if ( send(s, tty, strlen(tty) + 1, 0) < 0) {
+#ifdef IBM
+                tcperror("tsosub: send tty");
+#else
+                perror("tsosub: send tty");
+#endif /* IBM */
+                goto bad;
+        }
+ 
+        if ( send(s, name, strlen(name) + 1, 0) < 0) {
+#ifdef IBM
+                tcperror("tsosub: send name");
+#else
+                perror("tsosub: send name");
+#endif /* IBM */
+                goto bad;
+        }
+ 
+        if ( send(s, pass, strlen(pass) + 1, 0) < 0) {
+#ifdef IBM
+                tcperror("tsosub: send pass");
+#else
+                perror("tsosub: send pass");
+#endif /* IBM */
+                goto bad;
+        }
+ 
+        if ( send(s, cmd, strlen(cmd) + 1, 0) < 0) {
+#ifdef IBM
+                tcperror("tsosub: send cmd");
+#else
+                perror("tsosub: send cmd");
+#endif /* IBM */
+                goto bad;
+        }
+ 
+        sprintf(buf,"%i",*sport);
+#ifdef IBM
+        CMXLATE(buf,ebcdictoascii,strlen(buf));
+#endif /* IBM */
+        if ( send(s, buf, strlen(buf) + 1, 0) < 0 ) {
+#ifdef IBM
+                tcperror("tsosub: send sport");
+#else
+                perror("tsosub: send sport");
+#endif /* IBM */
+                goto bad;
+        }
+ 
+ 
+        if (getstr(s,cmvs_sport,sizeof(cmvs_sport),"mvs_sport") <= 0) {
+            goto bad;
+        }
+ 
+#ifdef IBM
+        CMXLATE(cmvs_sport,asciitoebcdic,strlen(cmvs_sport));
+#endif /* IBM */
+ 
+        *sport = atoi(cmvs_sport);
+ 
+        if (getstr(s,servreply,sizeof(servreply),"servreply") <= 0) {
+            goto bad;
+        }
+ 
+#ifdef IBM
+        CMXLATE(servreply,asciitoebcdic,strlen(servreply));
+        CMXLATE(cmd,asciitoebcdic,strlen(cmd));
+#endif /* IBM */
+ 
+        fprintf(stderr,"%s\n",servreply);
+ 
+        close(s);
+ 
+        return (1);
+bad:
+ 
+        close(s);
+ 
+        return (-1);
+}
+ 
+int getstr(int sock, char* buf, int cnt, char* errmesg)
+/* int     cnt;              sizeof() the char array */
+/* char    *errmesg;         in case error message required */
+{
+      char    c;
+      int     k = 0;
+ 
+      do {
+            if ( read(sock, &c, 1) != 1) {
+                   printf("Error or EOF while reading %s from socket.\n",
+                   errmesg);
+                   return(-1);                 /* error or  EOF */
+            }
+            *buf++ = c;
+            k++;
+            if (--cnt == 0) {
+                   printf("%s too long from socket.\n", errmesg);
+                   return(-1);
+            }
+      } while (c!= 0);  /* null byte terminates the string */
+ 
+      return(k-1);
+ 
+}
 #endif
