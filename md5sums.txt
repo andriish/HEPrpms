@@ -294,6 +294,7 @@ fd47d9c53d787a7ff3bee74f79d4be9f  EvtGen/2.2.3/rpmbuild/SOURCES/EvtGen-02.02.03.
 60379a7ed2fb6eb0077525e21454fb09  cernlib/2024.09.16.0/rpmbuild/SOURCES/cernlib-cernlib-2024.09.16.0-free.tar.gz
 c276a4acface6309ca6f991d08135ba7  fastjet/3.4.3/rpmbuild/SOURCES/fastjet-3.4.3.tar.gz
 0daa3b424b6586c63df96b438bb5191c  fjcontrib/1.100/rpmbuild/SOURCES/fjcontrib-1.100.tar.gz
+909e7d9961ba83d1471f7a99fb1b159c  fjcontrib/1.100/rpmbuild/SOURCES/1.100.zip
 d384c49b9ce75dae9b91f90c7991ff8f  gosam/2.1.2/rpmbuild/SOURCES/gosam-2.1.2+c307997.tar.gz
 9503320a00e7c16b4ac1fd20749d3feb  LoopTools/2.16/rpmbuild/SOURCES/LoopTools-2.16.tar.gz
 68c93e7a3de3fa8132d26acaffa9c22b  Professor/2.5.0/rpmbuild/SOURCES/professor-professor-2.5.0.tar.gz
