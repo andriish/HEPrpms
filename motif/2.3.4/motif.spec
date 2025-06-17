@@ -4,7 +4,8 @@ Version: 2.3.4
 Release: 38%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
-Source: http://downloads.sf.net/motif/motif-%{version}-src.tgz
+#Source: http://downloads.sf.net/motif/motif-{version}-src.tgz
+Source: https://distfiles.macports.org/openmotif/motif-%{version}-src.tgz
 Source1: xmbind
 URL: http://www.motifzone.net/
 Obsoletes: openmotif < 2.3.4
