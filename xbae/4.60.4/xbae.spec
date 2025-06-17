@@ -1,6 +1,6 @@
 Name:           xbae
 Version:        4.60.4
-Release:        29%{?dist}
+Release:        30%{?dist}
 Summary:        Motif matrix, caption and text input widgets
 # all the files are covered by the MIT license, except DebugUtil.c LGPLv2+
 License:        LGPLv2+
@@ -18,7 +18,7 @@ BuildRequires:  libXpm-devel
 # needed for examples
 BuildRequires:  libXmu-devel
 
-%if 0%{?rhel}
+%if %{?rhel}%{!?rhel:0} < 10
 BuildRequires:  openmotif-devel
 %else
 BuildRequires:  motif-devel
@@ -52,7 +52,7 @@ that provides generic customised data entry and formatting for strings.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name} = %{version}-%{release}
-%if 0%{?rhel}
+%if %{?rhel}%{!?rhel:0} < 10
 Requires:       openmotif-devel 
 %else
 Requires:       motif-devel
