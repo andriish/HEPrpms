@@ -4,7 +4,7 @@
 
 Name:           Professor
 Version:        2.5.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        Unknown
 Url:            http://professor.hepforge.org/
 Source0:        https://gitlab.com/hepcedar/professor/-/archive/professor-%{version}/professor-professor-%{version}.tar.gz
@@ -27,7 +27,7 @@ BuildRequires: python3-devel  Cython root-core  python3-pip python3-setuptools
 Requires: root6-libs root6
 BuildRequires: python3-devel  python3-Cython  python3-tools root6-libs root6 python3-setuptools
 %endif
-%if %{?fedora}%{!?fedora:0} >= 39
+%if %{?fedora}%{!?fedora:0} >= 39 || %{?rhel}%{!?rhel:0} >= 10
 BuildRequires: python3-rpm-macros
 %endif
 
@@ -48,7 +48,7 @@ export PYTHON=/usr/bin/python3
 export CXXFLAGS='%{optflags} -O0 ' 
 export CPPFLAGS=-I/usr/include/eigen3
 sed -i 's@python@python3@1'   Makefile
-%if %{?fedora}%{!?fedora:0} >= 39
+%if %{?fedora}%{!?fedora:0} >= 39 || %{?rhel}%{!?rhel:0} >= 10
 %py3_shebang_fix   ./
 %py3_shebang_fix   ./bin/prof*
 %py3_shebang_fix  ./contrib/prof*
