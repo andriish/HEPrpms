@@ -1,6 +1,6 @@
 Name: fastnlo
 Version: 2.5.0.2826
-Release: 7%{?dist}
+Release: 8%{?dist}
 License: GPL
 Prefix: %{_prefix}
 Summary: Fast pQCD calculations for PDF fits.
@@ -26,7 +26,7 @@ Requires:      qcdnum fastjet
 %endif
 
 
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
 BuildRequires: python3 python3-devel
 %endif
 %if 0%{?suse_version}
@@ -44,7 +44,7 @@ develop programs which make use of %{name}.
 The library documentation is available on header files.
 
 
-%if %{?rhel}%{!?rhel:0} >= 8
+%if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
 %package  -n python-%{name}
 Summary:        python bindings for %{name}
 Provides:       python3-%{name} = %{version}-%{release}
@@ -65,19 +65,18 @@ for observables in hadron-induced processes.
 
 
 sed -i 's|\#\$(DEPDIR)/fastnlo_wrap.Plo:|\$(DEPDIR)/fastnlo_wrap.Plo:|g' pyext/Makefile.in
-%if 0%{?rhel} 
+%if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
 %configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum --enable-pyext3 
+%else
+%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum
 %endif
 
-%if 0%{?suse_version} || 0%{?fedora}
-%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum  
-%endif
 
 make %{?_smp_mflags}
 
 %install 
 %make_install
-%if 0%{?rhel} 
+%if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
 mkdir -p %{buildroot}/%{python3_sitearch}/
 mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch}/
 %endif
@@ -92,7 +91,7 @@ mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch
 /usr/include/*
 
 
-%if %{?rhel}%{!?rhel:0} >= 8
+%if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
 %files -n python-%{name}
 %{python3_sitearch}/*
 %endif
