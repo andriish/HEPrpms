@@ -2,7 +2,7 @@
 Summary:  A model for recola2
 Name: recola2-SM
 Version: 2.2.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 #Source0: https://www.hepforge.org/archive/recola/recola2-{version}.tar.gz
@@ -13,7 +13,7 @@ Requires:      collier
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:      gcc-gfortran
 BuildRequires:      python3-devel
-%if %{?fedora}%{!?fedora:0}
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 10
 BuildRequires:      chrpath
 %endif
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
@@ -63,7 +63,7 @@ next-to-leading order.
 %else
 %make_install
 %endif
-%if %{?fedora}%{!?fedora:0}
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 10
 chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libmodelfile.so
 %endif
 %endif
