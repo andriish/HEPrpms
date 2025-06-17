@@ -15,7 +15,7 @@ BuildRequires:   autoconf binutils automake libtool  zlib-devel
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: gcc-c++  python3-Cython   zlib
 %endif
-%if %if %{?rhel}%{!?rhel:0} >= 10
+%if %{?rhel}%{!?rhel:0} >= 10
 BuildRequires: python3-rpm-macros
 %endif
 %if %{?fedora}%{!?fedora:0}
