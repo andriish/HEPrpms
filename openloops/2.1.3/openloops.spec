@@ -6,7 +6,7 @@
 
 Name:           openloops
 Version:        2.1.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
 Source0:        https://gitlab.com/openloops/OpenLoops/-/archive/OpenLoops-%{version}/OpenLoops-OpenLoops-%{version}.tar.gz
@@ -19,7 +19,7 @@ BuildRequires:  libtool
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran
 %endif
-%if %{?fedora}%{!?fedora:0} >= 39
+%if %{?fedora}%{!?fedora:0} >= 39 || %{?rhel}%{!?rhel:0} >= 10
 BuildRequires: python3-rpm-macros
 %endif
 %if 0%{?suse_version}
@@ -51,7 +51,7 @@ BuildRequires: python3-devel python3-scons
 sed -i  's@.*process_lib_dir.*@process_lib_dir = /usr/'%_lib'/openloops/proclib@g'  pyol/config/default.cfg
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
-%if %{?fedora}%{!?fedora:0} >= 39
+%if %{?fedora}%{!?fedora:0} >= 39 || %{?rhel}%{!?rhel:0} >= 10
 %py3_shebang_fix ./
 %else
 pathfix.py -pn -i %{__python3}  ./
