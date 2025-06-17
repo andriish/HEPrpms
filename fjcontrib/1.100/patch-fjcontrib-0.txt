@@ -1,6 +1,6 @@
 diff -Naur ./ORIG/Centauro/Makefile ./PATCHED/Centauro/Makefile
---- ./ORIG/Centauro/Makefile	2024-12-30 22:41:04.122343326 +0100
-+++ ./PATCHED/Centauro/Makefile	2024-12-30 22:41:04.124343358 +0100
+--- ./ORIG/Centauro/Makefile	2025-02-06 14:04:08.876648784 +0100
++++ ./PATCHED/Centauro/Makefile	2025-02-06 14:04:08.879648764 +0100
 @@ -27,7 +27,7 @@
  EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
  
@@ -50,8 +50,8 @@ diff -Naur ./ORIG/Centauro/Makefile ./PATCHED/Centauro/Makefile
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/ClusteringVetoPlugin/Makefile ./PATCHED/ClusteringVetoPlugin/Makefile
---- ./ORIG/ClusteringVetoPlugin/Makefile	2024-12-30 22:41:04.122343326 +0100
-+++ ./PATCHED/ClusteringVetoPlugin/Makefile	2024-12-30 22:41:04.124343358 +0100
+--- ./ORIG/ClusteringVetoPlugin/Makefile	2025-02-06 14:04:08.876648784 +0100
++++ ./PATCHED/ClusteringVetoPlugin/Makefile	2025-02-06 14:04:08.879648764 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -109,8 +109,8 @@ diff -Naur ./ORIG/ClusteringVetoPlugin/Makefile ./PATCHED/ClusteringVetoPlugin/M
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/CMPPlugin/Makefile ./PATCHED/CMPPlugin/Makefile
---- ./ORIG/CMPPlugin/Makefile	2024-12-13 17:29:31.000000000 +0100
-+++ ./PATCHED/CMPPlugin/Makefile	2024-12-31 01:51:16.130128424 +0100
+--- ./ORIG/CMPPlugin/Makefile	2025-02-06 14:04:08.876648784 +0100
++++ ./PATCHED/CMPPlugin/Makefile	2025-02-06 14:04:08.879648764 +0100
 @@ -44,7 +44,7 @@
  EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
  
@@ -160,8 +160,8 @@ diff -Naur ./ORIG/CMPPlugin/Makefile ./PATCHED/CMPPlugin/Makefile
  depend:
  	makedepend -Y -- -Iinclude  -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/configure ./PATCHED/configure
---- ./ORIG/configure	2024-12-31 00:08:18.547164757 +0100
-+++ ./PATCHED/configure	2024-12-31 00:06:14.448089520 +0100
+--- ./ORIG/configure	2025-02-06 14:04:08.879648764 +0100
++++ ./PATCHED/configure	2025-02-06 14:04:08.882648745 +0100
 @@ -48,6 +48,7 @@
    --fastjet-config=FILE  
                      sets the 'fastjet-config' file to use [$fjconfig]
@@ -251,8 +251,8 @@ diff -Naur ./ORIG/configure ./PATCHED/configure
 +echo -e "\nInstallation prefix: "$prefix"\n"                                 >> config.log
 +echo -e "\nLibrary prefix: "$libdir"\n"                                 >> config.log
 diff -Naur ./ORIG/ConstituentSubtractor/Makefile ./PATCHED/ConstituentSubtractor/Makefile
---- ./ORIG/ConstituentSubtractor/Makefile	2024-12-30 22:41:04.122343326 +0100
-+++ ./PATCHED/ConstituentSubtractor/Makefile	2024-12-30 22:41:04.124343358 +0100
+--- ./ORIG/ConstituentSubtractor/Makefile	2025-02-06 14:04:08.876648784 +0100
++++ ./PATCHED/ConstituentSubtractor/Makefile	2025-02-06 14:04:08.879648764 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -318,8 +318,8 @@ diff -Naur ./ORIG/ConstituentSubtractor/Makefile ./PATCHED/ConstituentSubtractor
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/EnergyCorrelator/Makefile ./PATCHED/EnergyCorrelator/Makefile
---- ./ORIG/EnergyCorrelator/Makefile	2024-12-30 23:59:10.007003516 +0100
-+++ ./PATCHED/EnergyCorrelator/Makefile	2024-12-30 22:41:04.124343358 +0100
+--- ./ORIG/EnergyCorrelator/Makefile	2025-02-06 14:04:08.876648784 +0100
++++ ./PATCHED/EnergyCorrelator/Makefile	2025-02-06 14:04:08.879648764 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -384,8 +384,8 @@ diff -Naur ./ORIG/EnergyCorrelator/Makefile ./PATCHED/EnergyCorrelator/Makefile
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/FlavorCone/Makefile ./PATCHED/FlavorCone/Makefile
---- ./ORIG/FlavorCone/Makefile	2024-12-30 22:41:04.123343342 +0100
-+++ ./PATCHED/FlavorCone/Makefile	2024-12-30 22:41:04.124343358 +0100
+--- ./ORIG/FlavorCone/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/FlavorCone/Makefile	2025-02-06 14:04:08.879648764 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -443,8 +443,8 @@ diff -Naur ./ORIG/FlavorCone/Makefile ./PATCHED/FlavorCone/Makefile
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/GenericSubtractor/Makefile ./PATCHED/GenericSubtractor/Makefile
---- ./ORIG/GenericSubtractor/Makefile	2024-12-30 22:41:04.123343342 +0100
-+++ ./PATCHED/GenericSubtractor/Makefile	2024-12-31 01:45:53.587623836 +0100
+--- ./ORIG/GenericSubtractor/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/GenericSubtractor/Makefile	2025-02-06 14:04:08.880648758 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -500,8 +500,8 @@ diff -Naur ./ORIG/GenericSubtractor/Makefile ./PATCHED/GenericSubtractor/Makefil
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/IFNPlugin/Makefile ./PATCHED/IFNPlugin/Makefile
---- ./ORIG/IFNPlugin/Makefile	2024-12-13 17:29:29.000000000 +0100
-+++ ./PATCHED/IFNPlugin/Makefile	2024-12-31 01:51:45.154623763 +0100
+--- ./ORIG/IFNPlugin/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/IFNPlugin/Makefile	2025-02-06 14:04:08.880648758 +0100
 @@ -44,7 +44,7 @@
  EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
  
@@ -550,8 +550,8 @@ diff -Naur ./ORIG/IFNPlugin/Makefile ./PATCHED/IFNPlugin/Makefile
  depend:
  	makedepend -Y -- -Iinclude  -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/JetCleanser/Makefile ./PATCHED/JetCleanser/Makefile
---- ./ORIG/JetCleanser/Makefile	2024-12-30 22:41:04.123343342 +0100
-+++ ./PATCHED/JetCleanser/Makefile	2024-12-30 22:41:04.125343374 +0100
+--- ./ORIG/JetCleanser/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/JetCleanser/Makefile	2025-02-06 14:04:08.880648758 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -609,8 +609,8 @@ diff -Naur ./ORIG/JetCleanser/Makefile ./PATCHED/JetCleanser/Makefile
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/JetFFMoments/Makefile ./PATCHED/JetFFMoments/Makefile
---- ./ORIG/JetFFMoments/Makefile	2024-12-30 22:41:04.123343342 +0100
-+++ ./PATCHED/JetFFMoments/Makefile	2024-12-30 22:41:04.125343374 +0100
+--- ./ORIG/JetFFMoments/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/JetFFMoments/Makefile	2025-02-06 14:04:08.880648758 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -669,8 +669,8 @@ diff -Naur ./ORIG/JetFFMoments/Makefile ./PATCHED/JetFFMoments/Makefile
  depend:
  	makedepend -Y --   -- $(SRCS) example.cc
 diff -Naur ./ORIG/JetsWithoutJets/Makefile ./PATCHED/JetsWithoutJets/Makefile
---- ./ORIG/JetsWithoutJets/Makefile	2024-12-30 22:41:04.123343342 +0100
-+++ ./PATCHED/JetsWithoutJets/Makefile	2024-12-30 22:41:04.125343374 +0100
+--- ./ORIG/JetsWithoutJets/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/JetsWithoutJets/Makefile	2025-02-06 14:04:08.880648758 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -728,8 +728,8 @@ diff -Naur ./ORIG/JetsWithoutJets/Makefile ./PATCHED/JetsWithoutJets/Makefile
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/KTClusCXX/Makefile ./PATCHED/KTClusCXX/Makefile
---- ./ORIG/KTClusCXX/Makefile	2024-12-30 22:41:04.123343342 +0100
-+++ ./PATCHED/KTClusCXX/Makefile	2024-12-30 22:41:04.125343374 +0100
+--- ./ORIG/KTClusCXX/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/KTClusCXX/Makefile	2025-02-06 14:04:08.880648758 +0100
 @@ -62,9 +62,9 @@
  
  # install things in PREFIX/...
@@ -743,8 +743,8 @@ diff -Naur ./ORIG/KTClusCXX/Makefile ./PATCHED/KTClusCXX/Makefile
  
  depend:
 diff -Naur ./ORIG/LundPlane/Makefile ./PATCHED/LundPlane/Makefile
---- ./ORIG/LundPlane/Makefile	2024-12-31 00:01:21.182185478 +0100
-+++ ./PATCHED/LundPlane/Makefile	2024-12-31 01:55:17.079240519 +0100
+--- ./ORIG/LundPlane/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/LundPlane/Makefile	2025-02-06 14:04:08.880648758 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -805,8 +805,8 @@ diff -Naur ./ORIG/LundPlane/Makefile ./PATCHED/LundPlane/Makefile
  depend:
  	makedepend -Y -- -Iinclude -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/Makefile.in ./PATCHED/Makefile.in
---- ./ORIG/Makefile.in	2024-12-31 00:04:39.841507473 +0100
-+++ ./PATCHED/Makefile.in	2024-12-31 01:47:15.257017618 +0100
+--- ./ORIG/Makefile.in	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/Makefile.in	2025-02-06 14:04:08.880648758 +0100
 @@ -63,11 +63,11 @@
  fragile_SHARED_SRC_LIST=@FRAGILE_SHARED_SRC_LIST@
  fragile_SHARED_INCLUDES=@FRAGILE_SHARED_INCLUDES@
@@ -823,8 +823,8 @@ diff -Naur ./ORIG/Makefile.in ./PATCHED/Makefile.in
  fragile-shared-distclean:
  	rm -f libfastjetcontribfragile.@DYNLIBEXT@
 diff -Naur ./ORIG/Nsubjettiness/Makefile ./PATCHED/Nsubjettiness/Makefile
---- ./ORIG/Nsubjettiness/Makefile	2024-12-31 00:01:43.004550374 +0100
-+++ ./PATCHED/Nsubjettiness/Makefile	2024-12-31 01:45:10.056880925 +0100
+--- ./ORIG/Nsubjettiness/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/Nsubjettiness/Makefile	2025-02-06 14:04:08.880648758 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -881,8 +881,8 @@ diff -Naur ./ORIG/Nsubjettiness/Makefile ./PATCHED/Nsubjettiness/Makefile
  doxygen:
  	doxygen Doxyfile
 diff -Naur ./ORIG/QCDAwarePlugin/Makefile ./PATCHED/QCDAwarePlugin/Makefile
---- ./ORIG/QCDAwarePlugin/Makefile	2024-12-30 22:41:04.123343342 +0100
-+++ ./PATCHED/QCDAwarePlugin/Makefile	2024-12-30 22:41:04.125343374 +0100
+--- ./ORIG/QCDAwarePlugin/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/QCDAwarePlugin/Makefile	2025-02-06 14:04:08.881648751 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -940,8 +940,8 @@ diff -Naur ./ORIG/QCDAwarePlugin/Makefile ./PATCHED/QCDAwarePlugin/Makefile
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/RecursiveTools/Makefile ./PATCHED/RecursiveTools/Makefile
---- ./ORIG/RecursiveTools/Makefile	2024-12-31 00:02:29.441326912 +0100
-+++ ./PATCHED/RecursiveTools/Makefile	2024-12-31 02:00:20.201413666 +0100
+--- ./ORIG/RecursiveTools/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/RecursiveTools/Makefile	2025-02-06 14:04:08.881648751 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -1000,8 +1000,8 @@ diff -Naur ./ORIG/RecursiveTools/Makefile ./PATCHED/RecursiveTools/Makefile
  	makedepend -Y -- -Iinclude  -- $(SRCS) $(EXAMPLES_SRCS)
  # DO NOT DELETE
 diff -Naur ./ORIG/ScJet/Makefile ./PATCHED/ScJet/Makefile
---- ./ORIG/ScJet/Makefile	2024-12-30 22:41:04.123343342 +0100
-+++ ./PATCHED/ScJet/Makefile	2024-12-31 01:43:36.043285370 +0100
+--- ./ORIG/ScJet/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/ScJet/Makefile	2025-02-06 14:04:08.881648751 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -1058,8 +1058,8 @@ diff -Naur ./ORIG/ScJet/Makefile ./PATCHED/ScJet/Makefile
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/SignalFreeBackgroundEstimator/Makefile ./PATCHED/SignalFreeBackgroundEstimator/Makefile
---- ./ORIG/SignalFreeBackgroundEstimator/Makefile	2024-12-30 22:41:04.124343358 +0100
-+++ ./PATCHED/SignalFreeBackgroundEstimator/Makefile	2024-12-30 22:41:04.126343390 +0100
+--- ./ORIG/SignalFreeBackgroundEstimator/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/SignalFreeBackgroundEstimator/Makefile	2025-02-06 14:04:08.882648745 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -1117,8 +1117,8 @@ diff -Naur ./ORIG/SignalFreeBackgroundEstimator/Makefile ./PATCHED/SignalFreeBac
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/SoftKiller/Makefile ./PATCHED/SoftKiller/Makefile
---- ./ORIG/SoftKiller/Makefile	2024-12-30 22:41:04.124343358 +0100
-+++ ./PATCHED/SoftKiller/Makefile	2024-12-30 22:41:04.126343390 +0100
+--- ./ORIG/SoftKiller/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/SoftKiller/Makefile	2025-02-06 14:04:08.882648745 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -1176,8 +1176,8 @@ diff -Naur ./ORIG/SoftKiller/Makefile ./PATCHED/SoftKiller/Makefile
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/SubjetCounting/Makefile ./PATCHED/SubjetCounting/Makefile
---- ./ORIG/SubjetCounting/Makefile	2024-12-30 22:41:04.124343358 +0100
-+++ ./PATCHED/SubjetCounting/Makefile	2024-12-30 22:41:04.126343390 +0100
+--- ./ORIG/SubjetCounting/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/SubjetCounting/Makefile	2025-02-06 14:04:08.882648745 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -1235,8 +1235,8 @@ diff -Naur ./ORIG/SubjetCounting/Makefile ./PATCHED/SubjetCounting/Makefile
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/ValenciaPlugin/Makefile ./PATCHED/ValenciaPlugin/Makefile
---- ./ORIG/ValenciaPlugin/Makefile	2024-12-30 22:41:04.124343358 +0100
-+++ ./PATCHED/ValenciaPlugin/Makefile	2024-12-30 22:41:04.126343390 +0100
+--- ./ORIG/ValenciaPlugin/Makefile	2025-02-06 14:04:08.879648764 +0100
++++ ./PATCHED/ValenciaPlugin/Makefile	2025-02-06 14:04:08.882648745 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -1294,8 +1294,8 @@ diff -Naur ./ORIG/ValenciaPlugin/Makefile ./PATCHED/ValenciaPlugin/Makefile
  depend:
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/VariableR/Makefile ./PATCHED/VariableR/Makefile
---- ./ORIG/VariableR/Makefile	2024-12-30 22:41:04.124343358 +0100
-+++ ./PATCHED/VariableR/Makefile	2024-12-30 22:41:04.126343390 +0100
+--- ./ORIG/VariableR/Makefile	2025-02-06 14:04:08.879648764 +0100
++++ ./PATCHED/VariableR/Makefile	2025-02-06 14:04:08.882648745 +0100
 @@ -2,6 +2,7 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
