@@ -3,7 +3,7 @@
 %endif
 Name:           apfel
 Version:        3.1.1
-Release:        1005%{?dist}
+Release:        1006%{?dist}
 License:        GPL
 Url:            https://github.com/scarrazza/apfel
 Source:         https://github.com/scarrazza/apfel/archive/refs/tags/%{version}.tar.gz
@@ -16,7 +16,9 @@ BuildRequires: lhapdf-devel
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: platform-python-devel 
 %endif
-
+%if %{?fedora}%{!?fedora:0} >= 39 || %{?rhel}%{!?rhel:0} >= 10
+BuildRequires: python3-rpm-macros
+%endif
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 BuildRequires:  python3-devel gcc-gfortran
 %endif
@@ -53,7 +55,7 @@ This package provides the Python 3 bindings for HepMC3.
 
 
 %build
-%if %{?fedora}%{!?fedora:0} >= 39
+%if %{?fedora}%{!?fedora:0} >= 39 || %{?rhel}%{!?rhel:0} >= 10
 %py3_shebang_fix  bin/apfel.in
 %endif
 %if %{?rhel}%{!?rhel:0}
