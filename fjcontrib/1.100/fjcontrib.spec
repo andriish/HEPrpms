@@ -5,7 +5,7 @@ License:        GPLv2+
 Url:            http://www.fjcontrib.fr
 #Source0:        https://fastjet.hepforge.org/contrib/downloads/{name}-{version}.tar.gz
 #Source0:        https://github.com/fjcontrib/fjcontrib/archive/refs/tags/%{version}.zip
-Source0:        https://fastjet.fr/contrib/downloads/{name}-{version}.tar.gz
+Source0:        https://fastjet.fr/contrib/downloads/%{name}-%{version}.tar.gz
 Patch0:         patch-fjcontrib-0.txt
 Prefix:         %{_prefix}
 Summary:        The fastjet-contrib space is intended to provide a common location for access to 3rd party extensions of FastJet. 
