@@ -1,0 +1,182 @@
+commit 23d12d1f25b33773018bb873c21547b0f4aab14c
+Author: Mykola Vshyvkov <mvshyvk@softserveinc.com>
+Date:   Wed Jun 26 15:34:53 2013 +0300
+
+    Fixed bug #1599 (Eliminates 14 warnings of incompatible type argument from some modules).
+
+diff --git a/lib/Xm/ColorObj.c b/lib/Xm/ColorObj.c
+index 63ed4748721a807e..b3a51eb99ffca232 100644
+--- a/lib/Xm/ColorObj.c
++++ b/lib/Xm/ColorObj.c
+@@ -62,7 +62,7 @@
+ #define WARNING2	_XmMMsgColObj_0002
+ 
+ #ifdef FIX_1400
+-static void trap_XCloseDisplay(Display *disp, XExtCodes *codes);
++static int trap_XCloseDisplay(Display *disp, XExtCodes *codes);
+ #endif
+ 
+ /** default should not be killed unless application is dying **/
+@@ -1543,9 +1543,10 @@ XmeGetDesktopColorCells (Screen * screen,
+ }
+ 
+ #ifdef FIX_1400
+-static void trap_XCloseDisplay(Display *disp, XExtCodes *codes)
++static int trap_XCloseDisplay(Display *disp, XExtCodes *codes)
+ {
+     if (disp == _XmColorObjCacheDisplay)
+     	_XmColorObjCacheDisplay = NULL;
++    return 0;
+ }
+ #endif
+diff --git a/lib/Xm/Container.c b/lib/Xm/Container.c
+index f0b35a919d3e36a3..6576783f055a86f9 100644
+--- a/lib/Xm/Container.c
++++ b/lib/Xm/Container.c
+@@ -3234,7 +3234,7 @@ ConstraintSetValues(
+ 	    ContainerResetDepths(nc);
+ 
+ #ifdef FIX_1425
+-		FindMaxDepths(cc, cw);
++		FindMaxDepths(cc, (Widget)cw);
+ #else
+ 	    cw->container.max_depth = MAX(cw->container.max_depth,nc->depth);
+ #endif
+@@ -7181,7 +7181,7 @@ static void FindMaxDepths(XmContainerConstraint	c, Widget w)
+ 		Widget child = node->widget_ptr;
+ 		XmContainerConstraint cc = GetContainerConstraint(child);
+ 		cw->container.max_depth = MAX(cw->container.max_depth, cc->depth);
+-		FindMaxDepths(cc, cw);
++		FindMaxDepths(cc, (Widget)cw);
+ 		node = node->next_ptr;
+ 	}
+ }
+diff --git a/lib/Xm/DataF.c b/lib/Xm/DataF.c
+index 622ee61a309c38af..a780c972e49069ba 100644
+--- a/lib/Xm/DataF.c
++++ b/lib/Xm/DataF.c
+@@ -8867,7 +8867,7 @@ df_LoadFontMetrics(
+ #ifdef USE_XFT
+     } else if (XmTextF_use_xft(tf)) {
+ #ifdef FIX_1415
+-	  _XmXftFontAverageWidth((Widget) tf, TextF_XftFont(tf), &charwidth);
++	  _XmXftFontAverageWidth((Widget) tf, TextF_XftFont(tf), (int *)&charwidth);
+ #else
+         charwidth = XmTextF_xft_font(tf)->max_advance_width;
+ #endif
+diff --git a/lib/Xm/IconButton.c b/lib/Xm/IconButton.c
+index 2cd206347b0bd895..5f2cae7a23853167 100644
+--- a/lib/Xm/IconButton.c
++++ b/lib/Xm/IconButton.c
+@@ -1870,7 +1870,7 @@ CreateGCs(Widget w)
+ 
+ #ifdef FIX_1381
+     /*generally gray insensitive foreground (instead stipple)*/
+-    values.foreground = _XmAssignInsensitiveColor(iw);
++    values.foreground = _XmAssignInsensitiveColor((Widget)iw);
+     XmIconButton_insensitive_text_gc(iw) = XtGetGC(w, smask, &values);
+ #else 
+     XmIconButton_stippled_text_gc(iw) = XtGetGC(w, smask, &values);
+diff --git a/lib/Xm/Label.c b/lib/Xm/Label.c
+index 8f5621229d4314a6..fd4c63abb5747050 100644
+--- a/lib/Xm/Label.c
++++ b/lib/Xm/Label.c
+@@ -1562,7 +1562,7 @@ Redisplay(
+ #ifdef FIX_1505
+ 	      if (pix_use == Pix(lw)) {
+ 		  XSetFillStyle(XtDisplay(lw), gc, FillStippled);
+-		  XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap(lw));
++		  XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap((Widget)lw));
+ 		  XFillRectangle(XtDisplay(lw), XtWindow(lw), gc,
+ 			lp->TextRect.x + lp->PixmapRect.x,
+ 			lp->TextRect.y + lp->PixmapRect.y,
+diff --git a/lib/Xm/LabelG.c b/lib/Xm/LabelG.c
+index d574e436df53a764..b674041fc9bc1f87 100644
+--- a/lib/Xm/LabelG.c
++++ b/lib/Xm/LabelG.c
+@@ -2452,7 +2452,7 @@ LRectangle *background_box)
+ #ifdef FIX_1505
+                 if (pix_use == Pix(lw)) {
+                     XSetFillStyle(XtDisplay(lw), gc, FillStippled);
+-                    XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap(lw));
++                    XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap((Widget)lw));
+                     XFillRectangle(XtDisplay(lw), XtWindow(lw), gc,
+                        lw->rectangle.x + LabG_TextRect(lw).x +
+                        LabG_PixmapRect(lw).x,
+diff --git a/lib/Xm/List.c b/lib/Xm/List.c
+index 1dd16d2880f84ceb..98aec0e47c01c343 100644
+--- a/lib/Xm/List.c
++++ b/lib/Xm/List.c
+@@ -2486,7 +2486,7 @@ DrawItems(XmListWidget lw,
+ #ifdef FIX_1381
+ 	  {
+ 		gc = lw->list.InsensitiveGC;
+-		_XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor(lw);
++		_XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor((Widget)lw);
+ 	  }
+ #else
+ 	gc = lw->list.InsensitiveGC;
+@@ -2831,7 +2831,7 @@ MakeGC(XmListWidget lw)
+   values.background = lw->core.background_pixel;
+ #ifdef FIX_1381
+   /*generally gray insensitive foreground (instead stipple)*/
+-  values.foreground = _XmAssignInsensitiveColor(lw);
++  values.foreground = _XmAssignInsensitiveColor((Widget)lw);
+ #else
+   values.foreground = lw->primitive.foreground;
+   valueMask |= GCStipple | GCFillStyle;
+diff --git a/lib/Xm/ResEncod.c b/lib/Xm/ResEncod.c
+index fdb44644c94be415..09d2d8f14d181379 100644
+--- a/lib/Xm/ResEncod.c
++++ b/lib/Xm/ResEncod.c
+@@ -2513,9 +2513,9 @@ processCharsetAndTextUtf8(XmStringCharSet tag,
+ 
+   /* Now copy in the text */
+   if (ctlen > 0) {
+-    char *text = Convert(ctext, ctlen, "UTF-8", tag);
++    char *text = Convert((char *)ctext, ctlen, "UTF-8", tag);
+     if (text == NULL) return(False);
+-    *outc = ctextConcat(*outc, *outlen, text, strlen(text));
++    *outc = ctextConcat(*outc, *outlen, (const_OctetPtr)text, strlen(text));
+     *outlen += ctlen;
+     XtFree(text);
+   };
+diff --git a/lib/Xm/Text.c b/lib/Xm/Text.c
+index 0cf37018bd68da52..427b613c97b12750 100644
+--- a/lib/Xm/Text.c
++++ b/lib/Xm/Text.c
+@@ -1745,7 +1745,7 @@ _XmTextUpdateLineTable(Widget widget,
+         }
+         _XmTextSetCursorPosition(widget, cursorPos);
+       } else if (start == tw->text.cursor_position && tw->text.auto_show_cursor_position) {
+-        _XmTextShowPosition(tw, cursorPos);
++        _XmTextShowPosition((Widget)tw, cursorPos);
+       }
+     }
+ #else
+diff --git a/lib/Xm/TextF.c b/lib/Xm/TextF.c
+index 6b7a85bd7a8fe836..e8f1c78a33cef5a2 100644
+--- a/lib/Xm/TextF.c
++++ b/lib/Xm/TextF.c
+@@ -6988,7 +6988,7 @@ LoadFontMetrics(XmTextFieldWidget tf)
+ #ifdef USE_XFT
+   } else if (TextF_UseXft(tf)) {
+ #ifdef FIX_1415
+-	  _XmXftFontAverageWidth((Widget) tf, TextF_XftFont(tf), &charwidth);
++	  _XmXftFontAverageWidth((Widget) tf, TextF_XftFont(tf), (int *)&charwidth);
+ #else
+     charwidth = TextF_XftFont(tf)->max_advance_width;
+ #endif
+diff --git a/lib/Xm/TextIn.c b/lib/Xm/TextIn.c
+index 40f2b5ad89d846da..b4f2d111f6277cdb 100644
+--- a/lib/Xm/TextIn.c
++++ b/lib/Xm/TextIn.c
+@@ -1345,7 +1345,7 @@ PrintableString(XmTextWidget tw,
+ #ifdef USE_XFT
+   } else if (o_data->use_xft) {
+     XGlyphInfo ext;
+-    XftTextExtentsUtf8(XtDisplay(tw), (XftFont*)o_data->font, str, n, &ext);
++    XftTextExtentsUtf8(XtDisplay(tw), (XftFont*)o_data->font, (_Xconst FcChar8 *)str, n, &ext);
+     return ext.xOff != 0;    
+ #endif
+   } else {

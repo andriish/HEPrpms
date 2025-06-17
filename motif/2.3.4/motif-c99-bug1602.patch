@@ -1,0 +1,54 @@
+commit 56dae22f7c2e7446852af1d68116f1809edae633
+Author: Mykola Vshyvkov <mvshyvk@softserveinc.com>
+Date:   Wed Jun 26 19:21:20 2013 +0300
+
+    Fixed bug #1602 (Eliminates 6 warnings "implicit declaration of function" in some modules).
+
+diff --git a/tools/wml/wml.c b/tools/wml/wml.c
+index d8ad382ebb93f0cc..723288a9c29cead2 100644
+--- a/tools/wml/wml.c
++++ b/tools/wml/wml.c
+@@ -80,6 +80,7 @@ static char rcsid[] = "$TOG: wml.c /main/8 1999/04/16 09:41:47 mgreess $"
+ #endif
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <unistd.h>
+ 
+ 
+ /*
+@@ -159,6 +160,7 @@ void wmlInit ();
+  * External variables
+  */
+ extern	int	yyleng;
++extern  int yyparse();
+ 
+ 
+ 
+diff --git a/tools/wml/wmloutp1.c b/tools/wml/wmloutp1.c
+index c826c4f0fad65b68..ea6a8e2780d08d78 100644
+--- a/tools/wml/wmloutp1.c
++++ b/tools/wml/wmloutp1.c
+@@ -45,6 +45,11 @@ static char rcsid[] = "$XConsortium: wmloutp1.c /main/7 1995/07/13 21:04:31 drk
+ 
+ #include "wml.h"
+ 
++/* External functions declaraion */
++extern  void wmlOutputKeyWordFiles ();
++extern  void wmlOutputMmFiles();
++
++
+ 
+ void wmlOutput ()
+ 
+diff --git a/tools/wml/wmlresolve.c b/tools/wml/wmlresolve.c
+index 3b8642c12474cfbd..c9bc84151f8a7902 100644
+--- a/tools/wml/wmlresolve.c
++++ b/tools/wml/wmlresolve.c
+@@ -58,6 +58,7 @@ static char rcsid[] = "$XConsortium: wmlresolve.c /main/9 1995/08/29 11:11:05 dr
+ #include <stdlib.h>
+ #endif
+ #include <stdio.h>
++#include <string.h>
+ 
+ /*
+  * Routines used only in this module

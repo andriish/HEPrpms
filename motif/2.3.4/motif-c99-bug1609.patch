@@ -1,0 +1,147 @@
+commit 7a52b1ea7e1ec88ba854db30a51d9f68f2f0078f
+Author: Mykola Vshyvkov <mvshyvk@softserveinc.com>
+Date:   Wed Jul 3 18:52:21 2013 +0300
+
+    Fixed bug #1609 (Eliminates 18 warnings  of "incompatible implicit declaration" in modules of "clients" catalog).
+
+diff --git a/clients/mwm/WmCmd.c b/clients/mwm/WmCmd.c
+index f21d41d541dc50a3..4d723aa4848314f6 100644
+--- a/clients/mwm/WmCmd.c
++++ b/clients/mwm/WmCmd.c
+@@ -48,6 +48,7 @@
+ #include "WmWsm.h"
+ #include "WmDebug.h"
+ #include "WmWinConf.h"
++#include "WmFeedback.h"
+ 
+ 
+ 
+diff --git a/clients/mwm/WmCmd.h b/clients/mwm/WmCmd.h
+index ff779defe240933b..e8bc104e850c5ec3 100644
+--- a/clients/mwm/WmCmd.h
++++ b/clients/mwm/WmCmd.h
+@@ -59,5 +59,8 @@ extern void    AddWindowMenuEntry  (ClientData *);
+ extern void    DeleteCommand       (long, CmdTree **);
+ extern void    SendInvokeMessage   (CARD32, CARD32, Atom, Time);
+ 
++extern void
++GetAutomationData (XtPointer input, Atom *outputType, XtPointer *output, unsigned long *outputLen, int *outputFmt);
++
+ 
+ #endif /* _WM_CMD_ */
+diff --git a/clients/mwm/WmFunction.c b/clients/mwm/WmFunction.c
+index 9a2102bcf80cbf08..94fb8cde2c0ec83d 100644
+--- a/clients/mwm/WmFunction.c
++++ b/clients/mwm/WmFunction.c
+@@ -112,6 +112,7 @@ extern pid_t vfork();
+ #include "WmWinList.h"
+ #include "WmWinState.h"
+ #include "WmXSMP.h"
++#include "WmCmd.h"
+ 
+ #include <Xm/RowColumnP.h> /* for MS_LastManagedMenuTime */
+ extern XmMenuState _XmGetMenuState();
+diff --git a/clients/mwm/WmInitWs.c b/clients/mwm/WmInitWs.c
+index aaa584cd3e4ce7b7..d29b5f96fec246fc 100644
+--- a/clients/mwm/WmInitWs.c
++++ b/clients/mwm/WmInitWs.c
+@@ -134,6 +134,7 @@ typedef struct
+ #include <stdlib.h>
+ #endif /* WSM */
+ #include "WmXSMP.h"
++#include "Xm/VirtKeysI.h"
+ 
+ /*
+  * Function Declarations:
+diff --git a/clients/mwm/WmResParse.c b/clients/mwm/WmResParse.c
+index 465f5b4d29e99411..a63e928acd643c54 100644
+--- a/clients/mwm/WmResParse.c
++++ b/clients/mwm/WmResParse.c
+@@ -63,6 +63,7 @@ static char rcsid[] = "$XConsortium: WmResParse.c /main/9 1996/11/01 10:17:34 dr
+ #include "WmResource.h"
+ 
+ #include <Xm/VirtKeysP.h>
++#include "Xm/VirtKeysI.h"
+ 
+ #include <X11/cursorfont.h>
+ #include <X11/keysym.h>
+diff --git a/clients/mwm/WmWinList.c b/clients/mwm/WmWinList.c
+index a45a4fc9471ab21d..31472a5caa832d90 100644
+--- a/clients/mwm/WmWinList.c
++++ b/clients/mwm/WmWinList.c
+@@ -63,7 +63,7 @@ static char rcsid[] = "$TOG: WmWinList.c /main/8 1997/06/10 15:50:50 samborn $"
+ #ifdef WSM
+ #include "WmWrkspace.h"
+ #endif /* WSM */
+-
++#include "WmEvent.h"
+ 
+ 
+ 
+diff --git a/clients/mwm/WmWsmLib/recv.c b/clients/mwm/WmWsmLib/recv.c
+index 8b2833fbc2ea756f..06908e24756b0e3c 100644
+--- a/clients/mwm/WmWsmLib/recv.c
++++ b/clients/mwm/WmWsmLib/recv.c
+@@ -38,6 +38,8 @@ XtPointer *, unsigned long *, int *
+ );
+ #endif /* JUNK */
+ 
++extern Time GetTimestamp (Display *dpy);
++
+ 
+ /*	Function Name: WSMDefaultOwnSelection
+  *	Description: This is the default routine that owns the proper
+diff --git a/clients/mwm/WmWsmLib/send.c b/clients/mwm/WmWsmLib/send.c
+index 8792e2c7c8ac82bb..c261da70bfff366a 100644
+--- a/clients/mwm/WmWsmLib/send.c
++++ b/clients/mwm/WmWsmLib/send.c
+@@ -45,6 +45,8 @@ static void ReplyReceived(
+ Widget, XtPointer, Atom *, Atom *, XtPointer, unsigned long *, int *
+ );
+ 
++extern Time GetTimestamp (Display *dpy);
++
+ /*	Function Name: WSMSendMessage
+  *	Description: Sends a message to WSM or WM on the screen
+  *                   and display specified.
+diff --git a/clients/uil/UilDefI.h b/clients/uil/UilDefI.h
+index a0176b619e89f1eb..f17bff764bf6fd1e 100644
+--- a/clients/uil/UilDefI.h
++++ b/clients/uil/UilDefI.h
+@@ -608,7 +608,7 @@ extern void sym_dump_object_variant  _ARGUMENTS(( sym_def_obj_entry_type *az_sym
+ extern void sym_dump_root_entry  _ARGUMENTS(( sym_root_entry_type *az_symbol_entry ));
+ extern char *sym_section_text  _ARGUMENTS(( int b_type ));
+ extern void dump_free_list  _ARGUMENTS(( void ));
+-
++extern int sar_get_units_type (yystype *parse_frame);
+ #if defined(__cplusplus) || defined(c_plusplus)
+ }
+ #endif
+diff --git a/clients/uil/UilMain.c b/clients/uil/UilMain.c
+index 6120eda2fa176670..1864ba78597e2dd6 100644
+--- a/clients/uil/UilMain.c
++++ b/clients/uil/UilMain.c
+@@ -104,9 +104,10 @@ static void UilWrapup _ARGUMENTS((Uil_compile_desc_type *compile_desc));
+ #endif
+ 
+ externaldef(uilmsg) nl_catd uil_catd = NULL;
+-
+ #endif
+ 
++extern  int yyparse();
++
+ /*
+ **
+ **  MODULE Definitions
+diff --git a/clients/xmbind/xmbind.c b/clients/xmbind/xmbind.c
+index f3d5a67ce35dab84..a16e2d968c45f7f0 100644
+--- a/clients/xmbind/xmbind.c
++++ b/clients/xmbind/xmbind.c
+@@ -29,6 +29,7 @@ static char rcsid[] = "$TOG: xmbind.c /main/10 1997/06/18 17:34:48 samborn $"
+ #endif
+ #endif
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <Xm/Xm.h>
+ 
+ /* Internal routines "borrowed" from libXm.  Don't try this at home! */

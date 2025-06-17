@@ -1,0 +1,134 @@
+commit d094e8c4a6a1890520ade3e1900229454dc2eac2
+Author: Mykola Vshyvkov <mvshyvk@softserveinc.com>
+Date:   Mon Jul 1 19:02:25 2013 +0300
+
+    Fixed bug #1605 (Eliminates 14 warnings of some types in WML tool).
+
+diff --git a/lib/Xm/XmRenderT.c b/lib/Xm/XmRenderT.c
+index 0abd71265fc901b9..5ecd38bef29d2c6b 100644
+--- a/lib/Xm/XmRenderT.c
++++ b/lib/Xm/XmRenderT.c
+@@ -1993,7 +1993,7 @@ GetSameRenditions(XmRendition *rend_cache, XmRendition rend, int count_rend)
+ 	for (i=0; i<count_rend; i++){
+ 
+ 		if ( rend_cache && (rend_cache[i])
+-				&& (((_XmRendFontName(rend) 	&& _XmRendFontName(rend_cache[i]) ) && !strcmp(_XmRendFontName(rend_cache[i]), _XmRendFontName(rend))
++				&& ((((_XmRendFontName(rend) 	&& _XmRendFontName(rend_cache[i]) ) && !strcmp(_XmRendFontName(rend_cache[i]), _XmRendFontName(rend)))
+ 					|| 	(!_XmRendFontName(rend) && !_XmRendFontName(rend_cache[i])))
+ 				&& (((_XmRendFontFoundry(rend) && _XmRendFontFoundry(rend_cache[i])) && !strcmp(_XmRendFontFoundry(rend_cache[i]), _XmRendFontFoundry(rend)))
+ 					|| 	(!_XmRendFontFoundry(rend) && !_XmRendFontFoundry(rend_cache[i])))
+diff --git a/tools/wml/wml.h b/tools/wml/wml.h
+index 91d3857d005b90ce..d4bd405d6f910cc8 100644
+--- a/tools/wml/wml.h
++++ b/tools/wml/wml.h
+@@ -678,6 +678,19 @@ extern void wmlCreateCharset ();
+ extern void wmlAddCharsetAttribute ();
+ extern void LexIssueError ();
+ 
++/*      May be, declaration of functions must be next:
++extern void wmlAddClassChild ();
++extern void wmlCreateChild ();
++extern void wmlCreateOrAppendCtrlList ();
++extern void wmlAddCtrlListControl ();
++        But, we are using real function arguments type declaration:
++*/
++extern void wmlAddClassChild (char *);
++extern void wmlCreateChild (char *, char *);
++extern void wmlCreateOrAppendCtrlList (char *);
++extern void wmlAddCtrlListControl (char *);
++
++
+ 
+ /*
+  * Defined in wmlresolve.c
+diff --git a/tools/wml/wmldbcreate.c b/tools/wml/wmldbcreate.c
+index 6de585ae8d12c17d..b6b12dca6aad399d 100644
+--- a/tools/wml/wmldbcreate.c
++++ b/tools/wml/wmldbcreate.c
+@@ -260,7 +260,7 @@ void emit_chars(table_id)
+     int	    table_id;
+ {
+     _db_header	    header;
+-    unsigned char   *ptr;
++    unsigned char   *ptr = NULL;
+     int		    i;
+ 
+     switch (table_id)
+@@ -338,7 +338,7 @@ void emit_ints_and_string(table_id)
+     int	    table_id;
+ {
+     _db_header		    header;
+-    key_keytable_entry_type *table;
++    key_keytable_entry_type *table = NULL;
+     int			    i;
+ 
+     switch (table_id)
+@@ -376,7 +376,7 @@ void emit_ints_and_string(table_id)
+ void emit_char_table(table_id)
+ int	table_id;
+ {
+-    unsigned char **table;
++    unsigned char **table = NULL;
+     _db_header header;
+     unsigned char *entry_vec;
+     int i, j;
+@@ -437,7 +437,7 @@ int	table_id;
+     _db_header	header;
+     int		*lengths;
+     char	*string_table;
+-    char	**table;
++    char	**table = NULL;
+     int		i;
+ 
+     switch (table_id)
+@@ -558,7 +558,7 @@ void emit_shorts(table_id)
+     int	    table_id;
+ {
+     _db_header		header;
+-    unsigned short int	*ptr;
++    unsigned short int	*ptr = NULL;
+     int			i;
+ 
+     switch (table_id)
+@@ -624,7 +624,7 @@ void emit_int_and_table_shorts(table_id)
+     int	    table_id;
+ {
+     _db_header		header;
+-    UilEnumSetDescDef	*table;
++    UilEnumSetDescDef	*table = NULL;
+     int			j, i;
+     unsigned short int	*value_vec;
+ 
+@@ -657,7 +657,7 @@ void emit_ints(table_id)
+     int	    table_id;
+ {
+     _db_header	header;
+-    int		*ptr;
++    int		*ptr = NULL;
+     int		i;
+ 
+     switch (table_id)
+diff --git a/tools/wml/wmllex.l b/tools/wml/wmllex.l
+index ea21dfe64176e75f..5e3158d3a54e448c 100644
+--- a/tools/wml/wmllex.l
++++ b/tools/wml/wmllex.l
+@@ -95,7 +95,6 @@ int             yytknval2;              /* terminal token value 2 */
+ "Gadget"		{ return GADGET;}
+ "Argument"		{ return ARGUMENT;}
+ "Reason"		{ return REASON;}
+-"Constraint"		{ return CONSTRAINT;}
+ "SubResource"		{ return SUBRESOURCE;}
+ "True"			{ return ATTRTRUE; }
+ "False"			{ return ATTRFALSE; }
+diff --git a/tools/wml/wmluiltok.l b/tools/wml/wmluiltok.l
+index d334e4f46302cde9..f02d9fec34d821ce 100644
+--- a/tools/wml/wmluiltok.l
++++ b/tools/wml/wmluiltok.l
+@@ -82,6 +82,7 @@ TokenRec token[1000];
+ TokenRec temp;
+ 
+ void add_token ();
++int yywrap ();
+ 
+ int phase		= 0;
+ int keyword_count;
