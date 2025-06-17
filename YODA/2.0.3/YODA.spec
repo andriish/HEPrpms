@@ -109,7 +109,7 @@ sed -Ei "1{s|/usr/bin/env python|/usr/bin/python3|}" pyext/yoda/search.py
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 export PYTHON=%{_bindir}/python3
 export CXXFLAGS="%{optflags} -Wformat -Wno-error"
-%if %{?fedora}%{!?fedora:0} >= 39
+%if %{?fedora}%{!?fedora:0} >= 39 || %{?rhel}%{!?rhel:0} >= 10
 %py3_shebang_fix  ./
 %py3_shebang_fix  bin/yoda*
 %py3_shebang_fix  bin/root*
