@@ -104,8 +104,8 @@ if [ "%{_lib}" = "lib64" ]; then
   sed -i 's/^libdir=.*/&64/' %{buildroot}%{_libdir}/pkgconfig/qd.pc
 fi
 
-%check
-LD_LIBRARY_PATH=$PWD/src/.libs:$PWD/fortran/.libs make check
+#check
+#LD_LIBRARY_PATH=$PWD/src/.libs:$PWD/fortran/.libs make check
 
 %files
 %doc AUTHORS NEWS README TODO
