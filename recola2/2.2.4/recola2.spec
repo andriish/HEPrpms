@@ -2,7 +2,7 @@
 Summary:  A Fortran95 computer program for the automated generation and numerical computation of EW and QCD amplitudes.
 Name: recola2
 Version: 2.2.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 Source0: https://www.hepforge.org/archive/recola/recola2-%{version}.tar.gz
@@ -10,7 +10,7 @@ Source0: https://www.hepforge.org/archive/recola/recola2-%{version}.tar.gz
 URL:   https://recola.gitlab.io/recola2/
 BuildRequires:      collier gcc-c++ recola2-SM 
 Requires:      collier recola2-SM
-%if 0%{?fedora}
+%if 0%{?fedora} || %{?rhel}%{!?rhel:0} >= 10
 BuildRequires: chrpath
 %endif
 %if 0%{?rhel} || 0%{?fedora}
@@ -55,7 +55,7 @@ next-to-leading order.
 
 %if 0%{?rhel} || 0%{?fedora}
 %cmake_install
-%if 0%{?fedora}
+%if 0%{?fedora} || %{?rhel}%{!?rhel:0} >= 10
 chrpath --delete $RPM_BUILD_ROOT%{_libdir}/librecola.so
 chrpath --delete $RPM_BUILD_ROOT/usr/lib/python3.*/site-packages/pyrecola.so
 %endif
