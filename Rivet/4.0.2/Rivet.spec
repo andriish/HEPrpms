@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        4.0.2
-Release:        1005%{?dist}
+Release:        1006%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -31,7 +31,7 @@ Requires:       HepMC3
 Requires:       HepMC3-search
 BuildRequires:  HepMC3-devel
 BuildRequires:  HepMC3-search-devel
-%if %{?fedora}%{!?fedora:0} >= 39
+%if %{?fedora}%{!?fedora:0} >= 39 || %{?rhel}%{!?rhel:0} >= 10
 BuildRequires: python3-rpm-macros
 %endif
 %endif
@@ -102,7 +102,7 @@ export CXXFLAGS="-g -Wformat -Wno-error -fPIC"
 %if %{?rhel}%{!?rhel:0} == 8
 export LDFLAGS="-lstdc++fs"
 %endif
-%if %{?fedora}%{!?fedora:0} >= 39
+%if %{?fedora}%{!?fedora:0} >= 39 || %{?rhel}%{!?rhel:0} >= 10
 %py3_shebang_fix  ./
 %py3_shebang_fix  bin/rivet*
 %py3_shebang_fix  bin/make-*
