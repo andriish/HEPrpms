@@ -4,7 +4,7 @@
 
 Name:           YODA
 Version:        2.0.3
-Release:        1002
+Release:        1003
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
 Source0:        https://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
@@ -14,6 +14,9 @@ Summary:        Plotting and histogramming tool
 BuildRequires:   autoconf binutils automake libtool  zlib-devel
 %if %{?rhel}%{!?rhel:0} >= 8
 BuildRequires: gcc-c++  python3-Cython   zlib
+%endif
+%if %if %{?rhel}%{!?rhel:0} >= 10
+BuildRequires: python3-rpm-macros
 %endif
 %if %{?fedora}%{!?fedora:0}
 %if %{?fedora}%{!?fedora:0} >= 35
