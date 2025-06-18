@@ -2,7 +2,7 @@
 
 Name:           f2c
 Summary:        A Fortran 77 to C/C++ conversion program
-Version:        20210928
+Version:        20240504
 Release:        3%{?dist}
 License:        MIT
 
@@ -43,7 +43,7 @@ Dynamic libraries from %{name}.
 mkdir libf2c
 unzip -qq %{SOURCE1} -d libf2c
 %patch -P 0 -p1
-%patch -P 1 -p1
+#patch -P 1 -p1
 
 # Set library soversion
 sed -i "s/@SOVER@/%{sover}/" libf2c/makefile.u
@@ -73,7 +73,7 @@ install -Dpm 0755 fc %{buildroot}%{_bindir}/f77
 
 
 %files
-%doc f2c.ps f2c.pdf src/changes src/README
+%doc f2c.ps f2c.pdf  src/README
 %license src/Notice
 %{_bindir}/f2c
 %{_bindir}/f77

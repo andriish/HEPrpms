@@ -38,7 +38,7 @@
  ## arrange for $DYLD_LIBRARY_PATH to include the directory containing libf2c.so.
 
 -libf2c.so: $(OFILES)
--	$(CC) -shared -o libf2c.so $(OFILES)
+-	$(CC) $(LDFLAGS) -shared -o libf2c.so $(OFILES)
 +$(SHARED): $(OFILES)
 +	$(CC) -shared -Wl,-soname,libf2c.so.0 -o $@ $(OFILES) -lm -lc
 
@@ -53,16 +53,3 @@
 
  backspac.o:	fio.h
  close.o:	fio.h
---- a/src/f2c.h	1999-09-07 19:46:24.000000000 +0200
-+++ b/src/f2c.h	2011-12-14 00:53:19.503602011 +0100
-@@ -7,8 +7,8 @@
- #ifndef F2C_INCLUDE
- #define F2C_INCLUDE
-
--typedef long int integer;
--typedef unsigned long int uinteger;
-+typedef int integer;
-+typedef unsigned int uinteger;
- typedef char *address;
- typedef short int shortint;
- typedef float real;
