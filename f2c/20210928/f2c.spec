@@ -42,8 +42,8 @@ Dynamic libraries from %{name}.
 %setup -c %{name}-%{version}
 mkdir libf2c
 unzip -qq %{SOURCE1} -d libf2c
-%patch0 -p1
-%patch1 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
 
 # Set library soversion
 sed -i "s/@SOVER@/%{sover}/" libf2c/makefile.u
