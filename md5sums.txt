@@ -156,11 +156,11 @@ b7281e64361616275cbb65cde6a1fa71  applgrid/1.6.27/rpmbuild/SOURCES/applgrid-1.6.
 bab5f1b9d5b053365c07a8ccc1787f77  MG5_aMC/2.9.11/rpmbuild/SOURCES/MG5_aMC_v2.9.11.tar.gz
 58fc7d29e66a627e0d0a93c55a008bbc  python-awkward/1.4.0/rpmbuild/SOURCES/1.4.0.tar.gz
 eabe0fb663fbd3a3f301968ccca6bacf  DD4hep/01.20.00/rpmbuild/SOURCES/v01-20.tar.gz
-28758bfd41de18b0d1fcf716eea05032  f2c/20210928/rpmbuild/SOURCES/src.tgz
-e80fb30fa3717660db71b1bed65b88b7  f2c/20210928/rpmbuild/SOURCES/libf2c.zip
-2a84d6d2f74412d7a288e721070d62b8  f2c/20210928/rpmbuild/SOURCES/f2c.pdf
-9595ed53af3bb890034ba0db75094c0e  f2c/20210928/rpmbuild/SOURCES/f2c.ps
-dcdf6afbd96204662bf10594b744cb44  f2c/20210928/rpmbuild/SOURCES/fc
+28758bfd41de18b0d1fcf716eea05032  f2c/20240504/rpmbuild/SOURCES/src.tgz
+e80fb30fa3717660db71b1bed65b88b7  f2c/20240504/rpmbuild/SOURCES/libf2c.zip
+2a84d6d2f74412d7a288e721070d62b8  f2c/20240504/rpmbuild/SOURCES/f2c.pdf
+9595ed53af3bb890034ba0db75094c0e  f2c/20240504/rpmbuild/SOURCES/f2c.ps
+dcdf6afbd96204662bf10594b744cb44  f2c/20240504/rpmbuild/SOURCES/fc
 c34cb1e0f435a709099fef2f0c86c7fd  MCFM/10.2.1/rpmbuild/SOURCES/MCFM-10.2.1.tar.gz
 e43306265a56675f0f58727685b806ca  MG5_aMC/3.4.0/rpmbuild/SOURCES/MG5_aMC_v3.4.0.tar.gz
 ea165d618640dbdecb42ae4491337965  gengetopt/2.23/rpmbuild/SOURCES/gengetopt-2.23.tar.xz
@@ -320,3 +320,10 @@ b063862d798a69785ef348c9ee992567  whizard/3.1.6/rpmbuild/SOURCES/whizard-3.1.6.t
 4268484161aa114e0598c79a96f00b83  geant4/11.3.2/rpmbuild/SOURCES/geant4-v11.3.2.tar.gz
 b5a04023cc74f3413247efb1dcd511e9  transfig/3.2.9/rpmbuild/SOURCES/fig2dev-3.2.9.tar.xz
 612bb8127d0d31da6e5474edf8a5c247  motif/2.3.4/rpmbuild/SOURCES/motif-2.3.4-src.tgz
+a599ff2f273d83c7ec42cc32cbaf67c1  imake/1.0.10/rpmbuild/SOURCES/imake-1.0.10.tar.xz
+6c7a1cc70ba390be51eee5d2408c306a  imake/1.0.10/rpmbuild/SOURCES/makedepend-1.0.8.tar.xz
+683847bee13c78a005705824a7c6f225  imake/1.0.10/rpmbuild/SOURCES/gccmakedep-1.0.3.tar.bz2
+daed7279016bb921f0a0e969c9508535  imake/1.0.10/rpmbuild/SOURCES/xorg-cf-files-1.0.8.tar.xz
+a56ce1f81960e4b5af1730e4f5262162  imake/1.0.10/rpmbuild/SOURCES/lndir-1.0.4.tar.xz
+27d46d7bf8e4434dff44e20ea2a6ad7a  f2c/20240504/rpmbuild/SOURCES/src.tgz
+651b3d9cbfc9ae659166332785ac3b6e  f2c/20240504/rpmbuild/SOURCES/libf2c.zip
