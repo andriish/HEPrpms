@@ -3,7 +3,7 @@
 Name:           f2c
 Summary:        A Fortran 77 to C/C++ conversion program
 Version:        20210928
-Release:        10%{?dist}
+Release:        3%{?dist}
 License:        MIT
 
 URL:            https://www.netlib.org/f2c/
@@ -39,10 +39,11 @@ Dynamic libraries from %{name}.
 
 
 %prep
-%autosetup -N -c %{name}-%{version}
+%setup -c %{name}-%{version}
 mkdir libf2c
 unzip -qq %{SOURCE1} -d libf2c
-%autopatch -p1
+%patch0 -p1
+%patch1 -p1
 
 # Set library soversion
 sed -i "s/@SOVER@/%{sover}/" libf2c/makefile.u
@@ -87,28 +88,6 @@ install -Dpm 0755 fc %{buildroot}%{_bindir}/f77
 
 
 %changelog
-* Thu Jan 16 2025 Fedora Release Engineering <releng@fedoraproject.org> - 20210928-10
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
-
-* Wed Jul 17 2024 Fedora Release Engineering <releng@fedoraproject.org> - 20210928-9
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
-
-* Wed Jan 24 2024 Fedora Release Engineering <releng@fedoraproject.org> - 20210928-8
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Fri Jan 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 20210928-7
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Wed Jul 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 20210928-6
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
-
-* Fri May 19 2023 Richard Shaw <hobbes1069@gmail.com> - 20210928-5
-- Current license is already compliant for SPDX.
-- Modernize %%prep using %%autosetup / %%autopatch.
-
-* Thu Jan 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 20210928-4
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
-
 * Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 20210928-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
