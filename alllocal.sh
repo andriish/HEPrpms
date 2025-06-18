@@ -4,7 +4,7 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-f2c:20210928
+f2c:20240504
 #imake:1.0.10
 #motif:2.3.4
 #transfig:3.2.9
