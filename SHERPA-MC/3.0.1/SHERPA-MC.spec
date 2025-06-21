@@ -11,7 +11,7 @@
 
 Name:           SHERPA-MC
 Version:        3.0.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://gitlab.com/sherpa-team/sherpa/-/archive/v%{version}/sherpa-v%{version}.tar.gz
@@ -22,8 +22,8 @@ Patch0:           patch-SHERPA-MC-0.txt
 BuildRequires:    gcc-gfortran gcc-c++ root pythia8-devel pythia8   Rivet Rivet-devel cmake
 BuildRequires:    root-core root HepMC3-rootIO-devel HepMC3-devel HepMC3-search HepMC3-search-devel  HepMC3-rootIO HepMC3  
 BuildRequires:    autoconf automake libtool sqlite-devel sqlite subversion root-physics libzip-devel openmpi-devel
-BuildRequires:    openmpi environment-modules lhapdf-devel fastjet fastjet-devel  YODA-devel Rivet-devel zlib zlib-devel openloops
-Requires:         lhapdf  HepMC3-rootIO HepMC3  sqlite root root-core openloops root Rivet YODA pythia8 openmpi fastjet  zlib
+BuildRequires:    openmpi environment-modules lhapdf-devel fastjet fastjet-devel  YODA-devel Rivet-devel zlib zlib-devel openloops root-tree-ntuple-utils
+Requires:         lhapdf  HepMC3-rootIO HepMC3  sqlite root root-core openloops root Rivet YODA pythia8 openmpi fastjet  zlib root-tree-ntuple-utils
 Requires:         hztool libgfortran  recola qd openssl  HepMC3-search
 BuildRequires:    swig  recola qd qd-devel openssl-devel openssl
 Requires:         blackhat blackhat-data MG5_aMC

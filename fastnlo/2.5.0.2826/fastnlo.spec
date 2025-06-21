@@ -1,6 +1,6 @@
 Name: fastnlo
 Version: 2.5.0.2826
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPL
 Prefix: %{_prefix}
 Summary: Fast pQCD calculations for PDF fits.
@@ -9,7 +9,7 @@ URL:     https://fastnlo.hepforge.org/
 #A patch is needed to make this work with python
 
 %if 0%{?rhel} || 0%{?fedora}
-BuildRequires: gcc-gfortran gcc-c++ lhapdf-devel lhapdf   root root-core 
+BuildRequires: gcc-gfortran gcc-c++ lhapdf-devel lhapdf   root root-core root-tree-ntuple-utils
 BuildRequires: qcdnum qcdnum-devel hoppet  fastjet fastjet-devel  zlib zlib-devel
 BuildRequires: autoconf automake libtool tex(latex) swig doxygen texlive-epstopdf ghostscript
 Requires:     qcdnum fastjet 
