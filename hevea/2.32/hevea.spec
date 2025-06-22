@@ -27,6 +27,8 @@ modern browsers display correctly most of the time.
 
 %if %{?rhel}%{!?rhel:0} >= 10
 sed -i 's/Pervasives/Stdlib/g' ./*.ml
+sed -i 's/String.lowercase /String.lowercase_ascii /g'  ./*.ml
+sed -i 's/String.capitalize /String.capitalize_ascii /g'  ./*.ml
 %endif
 # Fix encoding
 iconv -f iso-8859-1 -t utf-8 CHANGES > CHANGES.utf8
