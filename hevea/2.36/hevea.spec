@@ -22,7 +22,7 @@ BuildRequires:	ocaml
 BuildRequires:	ocaml-ocamlbuild
 BuildRequires:	tex(latex)
 BuildRequires:	tex(amsfonts.sty)
-BuildRequires:	tex(comment.sty)
+#BuildRequires:	tex(comment.sty)
 BuildRequires:	tex(keyval.sty)
 BuildRequires:	tex(url.sty)
 
@@ -31,7 +31,7 @@ Requires:	netpbm-progs
 Requires:	tex(dvips)
 Requires:	tex(latex)
 Requires:	tex(amsfonts.sty)
-Requires:	tex(comment.sty)
+#Requires:	tex(comment.sty)
 Requires:	tex(keyval.sty)
 Requires:	tex(url.sty)
 
