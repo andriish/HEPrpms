@@ -29,6 +29,8 @@ modern browsers display correctly most of the time.
 sed -i 's/Pervasives/Stdlib/g' ./*.ml ./*.mll
 sed -i 's/String.lowercase /String.lowercase_ascii /g'  ./*.ml ./*.mll
 sed -i 's/String.uppercase /String.uppercase_ascii /g'  ./*.ml ./*.mll
+sed -i 's/Char.lowercase /Char.lowercase_ascii /g'  ./*.ml ./*.mll
+sed -i 's/Char.uppercase /Char.uppercase_ascii /g'  ./*.ml ./*.mll
 sed -i 's/String.capitalize /String.capitalize_ascii /g'  ./*.ml ./*.mll
 %endif
 # Fix encoding
