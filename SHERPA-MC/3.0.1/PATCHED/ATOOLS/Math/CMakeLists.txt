@@ -60,3 +60,6 @@ sherpa_create_git_info(Math)
  
 add_library(ToolsMath SHARED ${Math_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/Git_Info.C )
 sherpa_handle_shared_library(ToolsMath ToolsMath)
+if (SHERPA_ENABLE_THREADING)
+  target_link_libraries(ToolsMath PRIVATE Threads::Threads)
+endif()

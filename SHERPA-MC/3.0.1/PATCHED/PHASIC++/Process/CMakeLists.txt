@@ -35,3 +35,6 @@ sherpa_create_git_info(Process)
  
 add_library(PhasicProcess SHARED ${Process_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/Git_Info.C )
 sherpa_handle_shared_library(PhasicProcess PhasicProcess)
+if (SHERPA_ENABLE_THREADING)
+  target_link_libraries(PhasicProcess PRIVATE Threads::Threads)
+endif()

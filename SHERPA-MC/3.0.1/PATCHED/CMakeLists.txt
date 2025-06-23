@@ -522,17 +522,6 @@ IF (SHERPA_ENABLE_MCFM)
   add_subdirectory(AddOns/MCFM)
 endif()
 
-if (SHERPA_ENABLE_THREADING)
-  target_link_libraries(ToolsMath PRIVATE Threads::Threads)
-  target_link_libraries(ToolsOrg PRIVATE Threads::Threads)
-  target_link_libraries(ToolsPhys PRIVATE Threads::Threads)
-  target_link_libraries(ComixAmplitude PRIVATE Threads::Threads)
-  target_link_libraries(Comix PRIVATE Threads::Threads)
-  target_link_libraries(ComixPhasespace PRIVATE Threads::Threads)
-  target_link_libraries(METoolsCurrents PRIVATE Threads::Threads)
-  target_link_libraries(METoolsExplicit PRIVATE Threads::Threads)
-  target_link_libraries(PhasicProcess PRIVATE Threads::Threads)
-endif()
 
 
 if (SHERPA_ENABLE_RIVET)

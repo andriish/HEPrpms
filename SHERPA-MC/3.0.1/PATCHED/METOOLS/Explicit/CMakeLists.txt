@@ -27,3 +27,6 @@ sherpa_create_git_info(Explicit)
  
 add_library(METoolsExplicit SHARED ${Explicit_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/Git_Info.C )
 sherpa_handle_shared_library(METoolsExplicit METoolsExplicit)
+if (SHERPA_ENABLE_THREADING)
+  target_link_libraries(METoolsExplicit PRIVATE Threads::Threads)
+endif()

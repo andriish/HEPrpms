@@ -14,3 +14,6 @@ sherpa_create_git_info(Phasespace)
  
 add_library(ComixPhasespace SHARED ${Phasespace_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/Git_Info.C )
 sherpa_handle_shared_library(ComixPhasespace ComixPhasespace)
+if (SHERPA_ENABLE_THREADING)
+  target_link_libraries(ComixPhasespace PRIVATE Threads::Threads)
+endif()
