@@ -6,9 +6,6 @@
 
 #include <iostream>
 #include <vector>
-#ifdef USING__Threading
-#include <pthread.h>
-#endif
 
 namespace std {
 
