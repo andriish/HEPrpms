@@ -12,7 +12,7 @@ HEPrpmsSUSE https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/
 repositories. Most of the packages in these repositories are related to the High Energy Physics 
 experiment/theory/phenomenology.
 
-As of December 2023, the packages are built for Fedora 38, Fedora 39, Fedora rawhide, CentOS8, CentOS9 and OpenSUSE Tumbleweed.
+As of July 2025, the packages are built for Fedora 41, Fedora 42, Fedora rawhide, CentOS(EPEL)8, CentOS(EPEL)9, CentOS(EPEL)10 and OpenSUSE Tumbleweed.
 The packages are built on COPR https://copr.fedorainfracloud.org/ service, 
 however, other build platforms can be used as well.
 
@@ -91,7 +91,7 @@ however, other build platforms can be used as well.
 
 ## Using the software repositories
 To enable and use the software repositories on 
-### CentOS8/9 and other RH-compatible distros:
+### CentOS8/9/10 and other RH-compatible distros:
 
  - Install EPEL (as root)
    ```
