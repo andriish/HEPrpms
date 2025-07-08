@@ -4,6 +4,7 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+pythia8:8.3.12
 #hevea:2.32
 #f2c:20240504
 #imake:1.0.10
@@ -33,7 +34,7 @@ declare -a BUILDLIST=(
 #gosam:2.1.2
 ###################
 #cernlib:2024.09.16.0
-SHERPA-MC:3.0.1
+#SHERPA-MC:3.0.1
 #nlox:1.2.1
 #qqvvamp:1.1
 #ggvvamp:1.0

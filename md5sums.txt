@@ -327,3 +327,4 @@ daed7279016bb921f0a0e969c9508535  imake/1.0.10/rpmbuild/SOURCES/xorg-cf-files-1.
 a56ce1f81960e4b5af1730e4f5262162  imake/1.0.10/rpmbuild/SOURCES/lndir-1.0.4.tar.xz
 27d46d7bf8e4434dff44e20ea2a6ad7a  f2c/20240504/rpmbuild/SOURCES/src.tgz
 651b3d9cbfc9ae659166332785ac3b6e  f2c/20240504/rpmbuild/SOURCES/libf2c.zip
+b55f03ebd29cf0339905a6a1476b4b41  pythia8/8.3.12/rpmbuild/SOURCES/pythia8312.tgz
