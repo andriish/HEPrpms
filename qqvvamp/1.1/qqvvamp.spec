@@ -41,7 +41,8 @@ export CXXFLAGS='-O1 -fno-var-tracking -mcmodel=medium -fdata-sections -ffunctio
 export LDFLAGS='-Wl,--as-needed'
 %cmake .
 %if 0%{?rhel} == 9
-%cmake_build -j2
+export CXXFLAGS='-O0 -fno-var-tracking -mcmodel=medium -fdata-sections -ffunction-sections -fno-implicit-templates'
+%cmake_build -j4
 %endif
 %cmake_build
 
