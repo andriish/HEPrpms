@@ -40,7 +40,7 @@ This package contains the header files and libraries needed to develop applicati
 export CXXFLAGS='-O1 -fno-var-tracking -mcmodel=medium -fdata-sections -ffunction-sections'
 export LDFLAGS='-Wl,--as-needed'
 %cmake .
-%if 0%{?rhel} == 9
+%if %{?rhel}%{!?rhel:0} == 9
 export CXXFLAGS='-O0 -fno-var-tracking -mcmodel=medium -fdata-sections -ffunction-sections -fno-implicit-templates'
 %cmake_build -j4
 %endif
