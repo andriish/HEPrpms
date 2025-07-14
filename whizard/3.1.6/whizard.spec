@@ -164,6 +164,9 @@ export CFLAGS="$FC_OPTFLAGS -Wno-error -Wno-error=format-security "
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 9
+%if %{?fedora}%{!?fedora:0} > 42 || %{?rhel}%{!?rhel:0} > 9
+export LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"
+%endif
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --enable-recola     --with-recola=/usr/%_lib \
     --enable-gosam      --with-gosam=/usr  --with-golem=/usr  --with-ninja=/usr --with-samurai=/usr \
