@@ -501,7 +501,7 @@ diff -Naur ./ORIG/GenericSubtractor/Makefile ./PATCHED/GenericSubtractor/Makefil
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/GHSAlgo/Makefile ./PATCHED/GHSAlgo/Makefile
 --- ./ORIG/GHSAlgo/Makefile	2025-02-24 09:55:20.000000000 +0100
-+++ ./PATCHED/GHSAlgo/Makefile	2025-07-15 17:40:07.847873048 +0200
++++ ./PATCHED/GHSAlgo/Makefile	2025-07-15 17:49:31.031287150 +0200
 @@ -2,8 +2,9 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -553,7 +553,7 @@ diff -Naur ./ORIG/GHSAlgo/Makefile ./PATCHED/GHSAlgo/Makefile
 +	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
  	for header in $(INSTALLED_HEADERS); do\
 -	  $(install_HEADER) include/fastjet/contrib/$$header $(PREFIX)/include/fastjet/contrib/;\
-+	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
  	done
 -	$(install_DIR) $(PREFIX)/lib
 -	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
@@ -1124,7 +1124,7 @@ diff -Naur ./ORIG/ScJet/Makefile ./PATCHED/ScJet/Makefile
  	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
 diff -Naur ./ORIG/SDFPlugin/Makefile ./PATCHED/SDFPlugin/Makefile
 --- ./ORIG/SDFPlugin/Makefile	2025-02-24 09:55:19.000000000 +0100
-+++ ./PATCHED/SDFPlugin/Makefile	2025-07-15 17:39:02.511780905 +0200
++++ ./PATCHED/SDFPlugin/Makefile	2025-07-15 17:52:00.481780961 +0200
 @@ -2,8 +2,9 @@
  # in your path, edit this line to specify the full path
  FASTJETCONFIG=fastjet-config
@@ -1178,7 +1178,7 @@ diff -Naur ./ORIG/SDFPlugin/Makefile ./PATCHED/SDFPlugin/Makefile
 +	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
  	for header in $(INSTALLED_HEADERS); do\
 -	  $(install_HEADER) include/fastjet/contrib/$$header $(PREFIX)/include/fastjet/contrib/;\
-+	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
  	done
 -	$(install_DIR) $(PREFIX)/lib
 -	$(install_LIB) lib$(NAME).a $(PREFIX)/lib

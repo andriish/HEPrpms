@@ -4,7 +4,7 @@ Release:        1%{?dist}
 License:        GPLv2+
 Url:            http://www.fjcontrib.fr
 #Source0:        https://fastjet.hepforge.org/contrib/downloads/{name}-{version}.tar.gz
-#Source0:        https://github.com/fjcontrib/fjcontrib/archive/refs/tags/%{version}.zip
+#Source0:        https://github.com/fjcontrib/fjcontrib/archive/refs/tags/{version}.zip
 Source0:        https://fastjet.fr/contrib/downloads/%{name}-%{version}.tar.gz
 Patch0:         patch-fjcontrib-0.txt
 Prefix:         %{_prefix}
