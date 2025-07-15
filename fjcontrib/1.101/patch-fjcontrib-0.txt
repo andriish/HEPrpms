@@ -1,0 +1,1354 @@
+diff -Naur ./ORIG/Centauro/Makefile ./PATCHED/Centauro/Makefile
+--- ./ORIG/Centauro/Makefile	2025-02-06 14:04:08.876648784 +0100
++++ ./PATCHED/Centauro/Makefile	2025-02-06 14:04:08.879648764 +0100
+@@ -27,7 +27,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,12 +36,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -62,16 +63,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/ClusteringVetoPlugin/Makefile ./PATCHED/ClusteringVetoPlugin/Makefile
+--- ./ORIG/ClusteringVetoPlugin/Makefile	2025-02-06 14:04:08.876648784 +0100
++++ ./PATCHED/ClusteringVetoPlugin/Makefile	2025-02-06 14:04:08.879648764 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -27,7 +28,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,12 +37,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -62,16 +64,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/CMPPlugin/Makefile ./PATCHED/CMPPlugin/Makefile
+--- ./ORIG/CMPPlugin/Makefile	2025-02-06 14:04:08.876648784 +0100
++++ ./PATCHED/CMPPlugin/Makefile	2025-02-06 14:04:08.879648764 +0100
+@@ -44,7 +44,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -53,12 +53,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -79,16 +80,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) include/fastjet/contrib/$$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y -- -Iinclude  -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/configure ./PATCHED/configure
+--- ./ORIG/configure	2025-02-06 14:04:08.879648764 +0100
++++ ./PATCHED/configure	2025-02-06 14:04:08.882648745 +0100
+@@ -48,6 +48,7 @@
+   --fastjet-config=FILE  
+                     sets the 'fastjet-config' file to use [$fjconfig]
+   --prefix=PREFIX   sets the installation directory [prefix returned by fastjet-config]
++  --libdir=LIBDIR   sets the library  directory [$PREFIX/lib]
+   --only=Contrib1,Contrib2,... 
+                     only configures for compilation selected contribs 
+   --exclude=Contrib1,Contrib2,...
+@@ -57,6 +58,13 @@
+ }
+ 
+ #------------------------------------------------------------------------
++# write warning messages
++#------------------------------------------------------------------------
++write_warning(){
++    echo "Warning: unrecognized argument $1"
++}
++
++#------------------------------------------------------------------------
+ # write error messages and exit
+ #------------------------------------------------------------------------
+ write_error(){
+@@ -124,6 +132,9 @@
+                 prefix)
+                     prefix="$arg_value"
+                     ;;
++                libdir)
++                    libdir="$arg_value"
++                    ;;
+                 fastjet_config)
+                     fjconfig="$arg_value"
+                     ;;
+@@ -134,7 +145,7 @@
+                     excluded_contribs="${arg_value//,/ }" # replace all commas with a blank
+                     ;;
+ 		*)
+-		    write_error "$arg: unrecognised argument"
++		    write_warning "$arg: unrecognised argument"
+ 		    ;;
+ 	    esac
+             ;;
+@@ -143,7 +154,7 @@
+             echo "$arg" >> $makefileinc
+             ;;
+         *)
+-            write_error "$arg is not a recognised argument. Aborting"
++            write_warning "$arg is not a recognised argument."
+             ;;
+     esac
+ done
+@@ -172,10 +183,14 @@
+ if [ "x"$prefix == "x" ] ; then 
+      prefix=`$fjconfig --prefix`
+ fi
++if [ "x"$libdir == "x" ] ; then 
++     libdir=$prefix/lib
++fi
+ 
+ # generate the rest of $makefileinc
+ echo "FASTJETCONFIG=$fjconfig" >> $makefileinc
+ echo "PREFIX=$prefix" >> $makefileinc
++echo "LIBDIR=$libdir" >> $makefileinc
+ echo 'install_script = $(SHELL) ../utils/install-sh' >> $makefileinc
+ echo 'check_script = ../utils/check.sh' >> $makefileinc
+ 
+@@ -329,6 +344,7 @@
+ escaped_built_list="$(echo ${built_contribs} | sed -e 's/[\/&]/\\&/g')"
+ escaped_fjconfig="$(echo ${fjconfig} | sed -e 's/[\/&]/\\&/g')"
+ escaped_prefix="$(echo ${prefix} | sed -e 's/[\/&]/\\&/g')"
++escaped_libdir="$(echo ${libdir} | sed -e 's/[\/&]/\\&/g')"
+ escaped_commandline="$(echo ${commandline} | sed -e 's/[\/&]/\\&/g')"
+ 
+ # this is the list of all sources that go into libraries. It is quite
+@@ -361,6 +377,7 @@
+ sed -e "s/@CONTRIB_BUILD_LIST@/$escaped_built_list/g" \
+     -e "s/@FJCONFIG@/$escaped_fjconfig/g" \
+     -e "s/@PREFIX@/${escaped_prefix}/g" \
++    -e "s/@LIBDIR@/${escaped_libdir}/g" \
+     -e "s/template gets processed/was generated automatically/" \
+     -e "s/@contrib_commandline@/$escaped_commandline/" \
+     -e "s/@FRAGILE_SHARED_SRC_LIST@/$escaped_srclist/" \
+@@ -476,4 +493,5 @@
+     read_tag $contrib version contribversion
+     printf "        %-22s v%s\n" $contrib $contribversion                  >> config.log
+ done
+-echo -e "\nInstallation prefix: "$prefix"\n"                               >> config.log
++echo -e "\nInstallation prefix: "$prefix"\n"                                 >> config.log
++echo -e "\nLibrary prefix: "$libdir"\n"                                 >> config.log
+diff -Naur ./ORIG/ConstituentSubtractor/Makefile ./PATCHED/ConstituentSubtractor/Makefile
+--- ./ORIG/ConstituentSubtractor/Makefile	2025-02-06 14:04:08.876648784 +0100
++++ ./PATCHED/ConstituentSubtractor/Makefile	2025-02-06 14:04:08.879648764 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g -fPIC
+ install_script = $(SHELL) ../utils/install-sh
+@@ -22,14 +23,14 @@
+ 
+ CXXFLAGS+= $(shell $(FASTJETCONFIG) --cxxflags)
+ LDFLAGS += -lm $(shell $(FASTJETCONFIG) --libs)
+-#CXXFLAGS+= $(shell root-config --cflags)
++#CXXFLAGS+=     $(shell root-config --cflags)
+ #LDFLAGS+= -lm $(shell root-config --libs)
+ 
+ OBJS  = $(SRCS:.cc=.o)
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -38,12 +39,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -65,16 +67,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/EnergyCorrelator/Makefile ./PATCHED/EnergyCorrelator/Makefile
+--- ./ORIG/EnergyCorrelator/Makefile	2025-02-06 14:04:08.876648784 +0100
++++ ./PATCHED/EnergyCorrelator/Makefile	2025-02-06 14:04:08.879648764 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -Wextra -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -21,14 +22,14 @@
+ #------------------------------------------------------------------------
+ 
+ CXXFLAGS+= $(shell $(FASTJETCONFIG) --cxxflags)
+-LDFLAGS += $(shell $(FASTJETCONFIG) --libs)
++LDFLAGS += -lm $(shell $(FASTJETCONFIG) --libs)
+ 
+ OBJS  = $(SRCS:.cc=.o)
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ EXAMPLES_OBJS  = $(EXAMPLES:=.o)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -37,11 +38,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS)
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ 
+ # building the examples
+ examples: $(EXAMPLES)
+@@ -67,16 +70,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/FlavorCone/Makefile ./PATCHED/FlavorCone/Makefile
+--- ./ORIG/FlavorCone/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/FlavorCone/Makefile	2025-02-06 14:04:08.879648764 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -27,7 +28,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,12 +37,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -62,16 +64,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/GenericSubtractor/Makefile ./PATCHED/GenericSubtractor/Makefile
+--- ./ORIG/GenericSubtractor/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/GenericSubtractor/Makefile	2025-02-06 14:04:08.880648758 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -29,18 +30,20 @@
+ EXAMPLES_SRCS = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ 
+ .PHONY: clean install examples $(EXAMPLES)
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+ 
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -61,16 +64,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/IFNPlugin/Makefile ./PATCHED/IFNPlugin/Makefile
+--- ./ORIG/IFNPlugin/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/IFNPlugin/Makefile	2025-02-06 14:04:08.880648758 +0100
+@@ -44,7 +44,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -53,11 +53,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ 
+ # building the examples
+ examples: $(EXAMPLES)
+@@ -79,16 +81,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) include/fastjet/contrib/$$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y -- -Iinclude  -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/JetCleanser/Makefile ./PATCHED/JetCleanser/Makefile
+--- ./ORIG/JetCleanser/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/JetCleanser/Makefile	2025-02-06 14:04:08.880648758 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -27,7 +28,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,12 +37,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -62,16 +64,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/JetFFMoments/Makefile ./PATCHED/JetFFMoments/Makefile
+--- ./ORIG/JetFFMoments/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/JetFFMoments/Makefile	2025-02-06 14:04:08.880648758 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = ${SHELL} ../utils/install-sh
+@@ -20,23 +21,24 @@
+ #------------------------------------------------------------------------
+ 
+ # add fastjet libraries
+-CXXFLAGS+=$(shell ${FASTJETCONFIG} --cxxflags)
++CXXFLAGS+= -fPIC   $(shell ${FASTJETCONFIG} --cxxflags)
+ LDFLAGS+=-lm $(shell ${FASTJETCONFIG} --libs)
+ 
+ OBJS  = ${SRCS:.cc=.o}
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ 
+ .PHONY: clean install examples
+ 
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ examples: example
+ 
+ example: all example.o
+@@ -52,13 +54,14 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a example
++	rm -f lib$(NAME).a lib$(NAME).so example
+ 
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
+-	$(install_HEADER) JetFFMoments.hh $(PREFIX)/include/fastjet/contrib
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
++	$(install_HEADER) JetFFMoments.hh $(DESTDIR)$(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) example.cc
+diff -Naur ./ORIG/JetsWithoutJets/Makefile ./PATCHED/JetsWithoutJets/Makefile
+--- ./ORIG/JetsWithoutJets/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/JetsWithoutJets/Makefile	2025-02-06 14:04:08.880648758 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -27,7 +28,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,12 +37,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -62,16 +64,17 @@
+ 	rm -f *~ *.o *.a
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/KTClusCXX/Makefile ./PATCHED/KTClusCXX/Makefile
+--- ./ORIG/KTClusCXX/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/KTClusCXX/Makefile	2025-02-06 14:04:08.880648758 +0100
+@@ -62,9 +62,9 @@
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+ 
+ depend:
+diff -Naur ./ORIG/LundPlane/Makefile ./PATCHED/LundPlane/Makefile
+--- ./ORIG/LundPlane/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/LundPlane/Makefile	2025-02-06 14:04:08.880648758 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -37,21 +38,23 @@
+ OBJS  = $(SRCS:.cc=.o)
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+-install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_HEADER  = $(install_script) -c -m 755
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+-install_DATA    = $(install_script) -c -m 644
++install_DATA    = $(install_script) -c -m 755
+ install_PROGRAM = $(install_script) -c -s
+ install_SCRIPT  = $(install_script) -c
+ 
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ 
+ # building the examples
+ examples: $(EXAMPLES)
+@@ -77,16 +80,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a   lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) include/fastjet/contrib/$$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y -- -Iinclude -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/Makefile.in ./PATCHED/Makefile.in
+--- ./ORIG/Makefile.in	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/Makefile.in	2025-02-06 14:04:08.880648758 +0100
+@@ -63,11 +63,11 @@
+ fragile_SHARED_SRC_LIST=@FRAGILE_SHARED_SRC_LIST@
+ fragile_SHARED_INCLUDES=@FRAGILE_SHARED_INCLUDES@
+ libfastjetcontribfragile.@DYNLIBEXT@: $(fragile_SHARED_SRC_LIST)
+-	$(CXX) @DYNLIBOPT@ -fPIC -DPIC $(CXXFLAGS) `$(FASTJETCONFIG) --cxxflags --libs` $(fragile_SHARED_INCLUDES) $(fragile_SHARED_SRC_LIST) -o libfastjetcontribfragile.@DYNLIBEXT@
++	$(CXX) @DYNLIBOPT@ -fPIC -DPIC $(CXXFLAGS) `$(FASTJETCONFIG) --cxxflags --libs | sed 's/-Wl,-rpath[^[:space:]]*//g' ` $(fragile_SHARED_INCLUDES) $(fragile_SHARED_SRC_LIST) -o libfastjetcontribfragile.@DYNLIBEXT@
+ 
+ fragile-shared-install: fragile-shared
+-	utils/install-sh -c -m 755 libfastjetcontribfragile.@DYNLIBEXT@ $(PREFIX)/lib
+-	@DYNLIBPOSTPROC@ $(PREFIX)/lib/libfastjetcontribfragile.@DYNLIBEXT@ 
++	utils/install-sh -c -m 755 libfastjetcontribfragile.@DYNLIBEXT@ $(DESTDIR)$(LIBDIR)
++	@DYNLIBPOSTPROC@ $(DESTDIR)$(LIBDIR)/libfastjetcontribfragile.@DYNLIBEXT@ 
+ 
+ fragile-shared-distclean:
+ 	rm -f libfastjetcontribfragile.@DYNLIBEXT@
+diff -Naur ./ORIG/Nsubjettiness/Makefile ./PATCHED/Nsubjettiness/Makefile
+--- ./ORIG/Nsubjettiness/Makefile	2025-02-06 14:04:08.877648777 +0100
++++ ./PATCHED/Nsubjettiness/Makefile	2025-02-06 14:04:08.880648758 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -Woverloaded-virtual -g -Wunused-parameter
+ install_script = $(SHELL) ../utils/install-sh
+@@ -28,7 +29,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -37,11 +38,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS)
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ 
+ # building the examples
+ examples: $(EXAMPLES) $(EXAMPLES2)
+@@ -69,16 +72,17 @@
+ 	rm -f *~ *.o *.a
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ doxygen:
+ 	doxygen Doxyfile
+diff -Naur ./ORIG/QCDAwarePlugin/Makefile ./PATCHED/QCDAwarePlugin/Makefile
+--- ./ORIG/QCDAwarePlugin/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/QCDAwarePlugin/Makefile	2025-02-06 14:04:08.881648751 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -27,7 +28,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,12 +37,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -62,16 +64,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/RecursiveTools/Makefile ./PATCHED/RecursiveTools/Makefile
+--- ./ORIG/RecursiveTools/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/RecursiveTools/Makefile	2025-02-06 14:04:08.881648751 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -38,7 +39,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -47,11 +48,14 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
++
+ 
+ # building the examples
+ examples: $(EXAMPLES)
+@@ -82,17 +86,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) include/fastjet/contrib/$$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) include/fastjet/contrib/$$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
+-
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ depend:
+ 	makedepend -Y -- -Iinclude  -- $(SRCS) $(EXAMPLES_SRCS)
+ # DO NOT DELETE
+diff -Naur ./ORIG/ScJet/Makefile ./PATCHED/ScJet/Makefile
+--- ./ORIG/ScJet/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/ScJet/Makefile	2025-02-06 14:04:08.881648751 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -27,7 +28,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,11 +37,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ 
+ # building the examples
+ examples: $(EXAMPLES)
+@@ -62,16 +65,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/SignalFreeBackgroundEstimator/Makefile ./PATCHED/SignalFreeBackgroundEstimator/Makefile
+--- ./ORIG/SignalFreeBackgroundEstimator/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/SignalFreeBackgroundEstimator/Makefile	2025-02-06 14:04:08.882648745 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g -fPIC
+ install_script = $(SHELL) ../utils/install-sh
+@@ -27,7 +28,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,12 +37,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -63,16 +65,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/SoftKiller/Makefile ./PATCHED/SoftKiller/Makefile
+--- ./ORIG/SoftKiller/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/SoftKiller/Makefile	2025-02-06 14:04:08.882648745 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -27,7 +28,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,12 +37,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -62,16 +64,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/SubjetCounting/Makefile ./PATCHED/SubjetCounting/Makefile
+--- ./ORIG/SubjetCounting/Makefile	2025-02-06 14:04:08.878648771 +0100
++++ ./PATCHED/SubjetCounting/Makefile	2025-02-06 14:04:08.882648745 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -27,7 +28,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,12 +37,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -62,16 +64,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/ValenciaPlugin/Makefile ./PATCHED/ValenciaPlugin/Makefile
+--- ./ORIG/ValenciaPlugin/Makefile	2025-02-06 14:04:08.879648764 +0100
++++ ./PATCHED/ValenciaPlugin/Makefile	2025-02-06 14:04:08.882648745 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS= -O3 -Wall -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -27,7 +28,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,12 +37,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -62,16 +64,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
+diff -Naur ./ORIG/VariableR/Makefile ./PATCHED/VariableR/Makefile
+--- ./ORIG/VariableR/Makefile	2025-02-06 14:04:08.879648764 +0100
++++ ./PATCHED/VariableR/Makefile	2025-02-06 14:04:08.882648745 +0100
+@@ -2,6 +2,7 @@
+ # in your path, edit this line to specify the full path
+ FASTJETCONFIG=fastjet-config
+ PREFIX=`$(FASTJETCONFIG) --prefix`
++LIBDIR=$(PREFIX)/lib
+ CXX=g++
+ CXXFLAGS=  -O3 -Wall -Woverloaded-virtual -g
+ install_script = $(SHELL) ../utils/install-sh
+@@ -27,7 +28,7 @@
+ EXAMPLES_SRCS  = $(EXAMPLES:=.cc)
+ 
+ install_HEADER  = $(install_script) -c -m 644
+-install_LIB     = $(install_script) -c -m 644
++install_LIB     = $(install_script) -c -m 755
+ install_DIR     = $(install_script) -d
+ install_DATA    = $(install_script) -c -m 644
+ install_PROGRAM = $(install_script) -c -s
+@@ -36,12 +37,13 @@
+ .PHONY: clean distclean examples check install
+ 
+ # compilation of the code (default target)
+-all: lib$(NAME).a
++all: lib$(NAME).a  lib$(NAME).so
+ 
+ lib$(NAME).a: $(OBJS) 
+ 	ar cru lib$(NAME).a $(OBJS)
+ 	ranlib lib$(NAME).a
+-
++lib$(NAME).so: $(OBJS) 
++	$(CXX) -shared -o lib$(NAME).so $(OBJS)
+ # building the examples
+ examples: $(EXAMPLES)
+ 
+@@ -62,16 +64,17 @@
+ 	rm -f *~ *.o
+ 
+ distclean: clean
+-	rm -f lib$(NAME).a $(EXAMPLES)
++	rm -f lib$(NAME).a lib$(NAME).so $(EXAMPLES)
+ 
+ # install things in PREFIX/...
+ install: all
+-	$(install_DIR) $(PREFIX)/include/fastjet/contrib
++	$(install_DIR) $(DESTDIR)$(PREFIX)/include/fastjet/contrib
+ 	for header in $(INSTALLED_HEADERS); do\
+-	  $(install_HEADER) $$header $(PREFIX)/include/fastjet/contrib/;\
++	  $(install_HEADER) $$header $(DESTDIR)$(PREFIX)/include/fastjet/contrib/;\
+ 	done
+-	$(install_DIR) $(PREFIX)/lib
+-	$(install_LIB) lib$(NAME).a $(PREFIX)/lib
++	$(install_DIR) $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).a $(DESTDIR)$(LIBDIR)
++	$(install_LIB) lib$(NAME).so $(DESTDIR)$(LIBDIR)
+ 
+ depend:
+ 	makedepend -Y --   -- $(SRCS) $(EXAMPLES_SRCS)
