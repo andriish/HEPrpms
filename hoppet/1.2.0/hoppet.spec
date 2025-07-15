@@ -3,7 +3,7 @@
 
 Name:          hoppet
 Version:       1.2.0
-Release:       10%{?dist}
+Release:       11%{?dist}
 License:       GPL
 Prefix:        %{_prefix}
 Summary:       Higher Order Perturbative Parton Evolution Toolkit

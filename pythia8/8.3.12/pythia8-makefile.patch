@@ -1,0 +1,89 @@
+diff -ur pythia8312.orig/configure pythia8312/configure
+--- pythia8312.orig/configure	2024-05-24 04:06:00.000000000 +0200
++++ pythia8312/configure	2024-06-05 17:44:26.149017119 +0200
+@@ -210,7 +210,6 @@
+ 	LIB=${LIB#-L}
+ 	if [ "${LIB:0:1}" = "-" ]; then continue; fi
+ 	PKG_LIB+=("-L$(cd $LIB 2> /dev/null && pwd -P)")
+-	PKG_LIB+=("-Wl,-rpath,$(cd $LIB 2> /dev/null && pwd -P)")
+     done
+     PKG_CFG[2]="${PKG_INC[@]}"; PKG_CFG[3]="${PKG_LIB[@]}"
+     
+Endast i pythia8312: configure.orig
+diff -ur pythia8312.orig/Makefile pythia8312/Makefile
+--- pythia8312.orig/Makefile	2024-05-24 04:06:00.000000000 +0200
++++ pythia8312/Makefile	2024-06-05 17:46:40.991431974 +0200
+@@ -36,7 +36,7 @@
+ LOCAL_MKDIRS:=$(shell mkdir -p $(LOCAL_TMP) $(LOCAL_LIB))
+-CXX_COMMON:=-I$(LOCAL_INCLUDE) $(CXX_COMMON)
++CXX_COMMON:=-I$(LOCAL_INCLUDE) $(CXX_COMMON) -pthread
+ OBJ_COMMON:=-MD $(CXX_COMMON) $(OBJ_COMMON)
+-LIB_COMMON=-Wl,-rpath,../lib:$(PREFIX_LIB) -ldl $(GZIP_LIB)
++LIB_COMMON=-ldl $(GZIP_LIB) -pthread
+ 
+ # PYTHIA.
+ OBJECTS=$(patsubst $(LOCAL_SRC)/%.cc,$(LOCAL_TMP)/%.o,\
+@@ -114,7 +114,7 @@
+ $(LOCAL_LIB)/libpythia8lhapdf%.so: $(LOCAL_TMP)/LHAPDF%Plugin.o\
+ 	$(LOCAL_LIB)/libpythia8$(LIB_SUFFIX)
+ 	$(CXX) $< -o $@ $(CXX_COMMON) $(CXX_SHARED) $(CXX_SONAME)$(notdir $@)\
+-	 $(LHAPDF$*_LIB) -lLHAPDF -Llib -lpythia8
++	 $(LHAPDF$*_LIB) -lLHAPDF $(LOCAL_LIB)/libpythia8$(LIB_SUFFIX)
+ 
+ # POWHEG.
+ $(LOCAL_TMP)/LHAPowheg.o: $(LOCAL_INCLUDE)/Pythia8Plugins/LHAPowheg.h
+@@ -124,12 +124,12 @@
+ $(LOCAL_LIB)/libpythia8powheg%.so: $(POWHEG_DIR)lib%.so\
+ 	$(LOCAL_TMP)/LHAPowheg.o $(LOCAL_LIB)/libpythia8$(LIB_SUFFIX)
+ 	$(CXX) $(LOCAL_TMP)/LHAPowheg.o -o $@ $(CXX_COMMON) $(CXX_SHARED)\
+-	 $(CXX_SONAME)$(notdir $@) -Llib -lpythia8\
+-	 -Wl,-rpath,../lib:$(POWHEG_DIR) -L$(POWHEG_DIR) -l$*
++	 $(CXX_SONAME)$(notdir $@) $(LOCAL_LIB)/libpythia8$(LIB_SUFFIX)\
++	 -L$(POWHEG_DIR) -l$*
+ $(LOCAL_LIB)/libpythia8powhegHooks.so: $(LOCAL_TMP)/PowhegHooks.o\
+ 	$(LOCAL_LIB)/libpythia8$(LIB_SUFFIX)
+ 	$(CXX) $< -o $@ $(CXX_COMMON) $(CXX_SHARED) $(CXX_SONAME)$(notdir $@)\
+-	 -Llib -lpythia8
++	 $(LOCAL_LIB)/libpythia8$(LIB_SUFFIX)
+ 
+ # MG5 matrix element plugins.
+ mg5mes:
+diff -ur pythia8312.orig/plugins/python/Makefile pythia8312/plugins/python/Makefile
+--- pythia8312.orig/plugins/python/Makefile	2024-05-24 04:06:00.000000000 +0200
++++ pythia8312/plugins/python/Makefile	2024-06-05 17:44:26.150017122 +0200
+@@ -27,8 +27,9 @@
+ LOCAL_INCLUDE=include
+ LOCAL_MKDIRS:=$(shell mkdir -p $(LOCAL_TMP) $(TOP_LIB))
+ OBJ_COMMON=-MD $(CXX_COMMON) -Iinclude $(PYTHON_INCLUDE) -w -fpermissive
+-LIB_COMMON=-Wl,-rpath,$(TOP_LIB) -ldl $(GZIP_LIB)
++LIB_COMMON=-ldl $(GZIP_LIB)
+ PYTHIA=$(TOP_LIB)/libpythia8$(LIB_SUFFIX)
++PYTHON_EXT_SUFFIX=.so
+ 
+ # Determine the headers.
+ HEADERS=$(patsubst ../../include/Pythia8%.h,$(LOCAL_INCLUDE)/Pythia8%.h,\
+@@ -46,7 +47,7 @@
+ .PHONY: all clean
+ 
+ # All targets.
+-all: $(TOP_LIB)/pythia8.so
++all: $(TOP_LIB)/pythia8$(PYTHON_EXT_SUFFIX)
+ 
+ # PYTHIA library.
+ $(PYTHIA):
+@@ -75,11 +76,11 @@
+ 	$(CXX) $< -o $@ -c $(OBJ_COMMON)
+ 
+ # Build the library.
+-$(TOP_LIB)/pythia8.so: $(PYTHIA) $(HEADERS) $(OBJECTS)
++$(TOP_LIB)/pythia8$(PYTHON_EXT_SUFFIX): $(PYTHIA) $(HEADERS) $(OBJECTS)
+ 	$(CXX) $(OBJECTS) -o $@ $(CXX_COMMON) $(CXX_SHARED)\
+-	 $(CXX_SONAME)$(notdir $@) $(LIB_COMMON) -L$(TOP_LIB)\
+-	 -Wl,-rpath,$(PREFIX_LIB) -lpythia8 -Wl,-undefined,dynamic_lookup
++	 $(CXX_SONAME)$(notdir $@) $(LIB_COMMON)\
++	 $(PYTHIA) -Wl,-undefined,dynamic_lookup
+ 
+ # Clean.
+ clean:
+-	rm -rf $(LOCAL_TMP) $(TOP_LIB)/pythia8.so
++	rm -rf $(LOCAL_TMP) $(TOP_LIB)/pythia8$(PYTHON_EXT_SUFFIX)
