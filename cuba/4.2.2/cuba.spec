@@ -72,7 +72,7 @@ LDFLAGS=' '
 CXXFLAGS='-fcommon -g'
 CFLAGS='-fcommon -g'
 %endif
-%if %{?fedora}%{!?fedora:0} >= 41
+%if 0%{?suse_version} || %{?fedora}%{!?fedora:0} >= 41
 CFLAGS='-fcommon -g -std=gnu17' 
 %endif
 %configure
