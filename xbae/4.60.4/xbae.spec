@@ -81,7 +81,7 @@ done
 
 
 %build
-%global optflags %{optflags} -Wno-incompatible-pointer-types -Wno-int-conversion
+%global optflags %{optflags} -Wno-incompatible-pointer-types -Wno-int-conversion -std=gnu17
 %configure --disable-static --disable-dependency-tracking
 make %{?_smp_mflags}
 
