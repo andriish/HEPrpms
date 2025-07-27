@@ -1,0 +1,70 @@
+diff -Naur ORIG/lib_src/openloops/src/otf_reduction.F90 PATCHED/lib_src/openloops/src/otf_reduction.F90
+--- ORIG/lib_src/openloops/src/otf_reduction.F90	2025-02-07 16:50:22.000000000 +0100
++++ PATCHED/lib_src/openloops/src/otf_reduction.F90	2025-07-27 12:37:23.566783271 +0200
+@@ -1860,14 +1860,14 @@
+       !p^2 = 0 case
+       if(abs(xi) == 0._/**/REALKIND) then
+         B0coeff(1) = Gin(1)
+-        B0coeff(2) = (-f0**2)*PPmu/msq(0)
+-        B0coeff(3) = f1*(2*f0-f1)*PPmu/msq(1)
++        B0coeff(2) = (-f0)*PPmu*(msq(0)-msq(1))
++        B0coeff(3) = (2*f0-f1)*PPmu*(msq(0)-msq(1))
+         B0coeff(4) = -(f0+f1)*PPmu/2
+       ! Expansion for p^2!=0 up to order xi^2
+       else
+         B0coeff(1) = Gin(1)
+-        B0coeff(2) = f0*(-f0-2*f0*f1*xi -((2*f0+3*f1)*f0*f1)*xi**2)*(PPmu/msq(0))
+-        B0coeff(3) = f1*((2*f0-f1) +2*xi*f0**2 + (xi**2)*(2*f0+3*f1)*f0**2)*(PPmu/msq(1))
++        B0coeff(2) = (-f0-2*f0*f1*xi -((2*f0+3*f1)*f0*f1)*xi**2)*(PPmu*(msq(0)-msq(1)))
++        B0coeff(3) = ((2*f0-f1) +2*xi*f0**2 + (xi**2)*(2*f0+3*f1)*f0**2)*(PPmu*(msq(0)-msq(1)))
+         B0coeff(4) = (-(f0 +f1)/2 + xi*(one/3 - f0*(f0+f1)) + (-3*f0**3 - 47*f1*f0**2 - &
+         11*f0*f1**2 + f1**3)*xi**2/12)*PPmu
+       end if
+diff -Naur ORIG/openloops PATCHED/openloops
+--- ORIG/openloops	2025-07-27 12:21:43.320253116 +0200
++++ PATCHED/openloops	2025-07-27 12:21:43.321085630 +0200
+@@ -175,6 +175,14 @@
+         processes="$processes $arg"
+       fi
+     done
++    NORMPWD=$(pwd -P)
++    NORMSCONSTRUCTDIR=$(cd $LIBDIR/../ && pwd -P) 
++    echo $NORMPWD $NORMSCONSTRUCTDIR 
++    if [[ "$NORMPWD" != "$NORMSCONSTRUCTDIR" ]]; then
++      if [ ! -e ./SConstruct ]; then
++         ln -s $NORMSCONSTRUCTDIR/SConstruct ./SConstruct        
++      fi
++    fi 
+     $SCONS auto="$processes" $options
+     ;;
+ 
+diff -Naur ORIG/pyol/tools/OLBaseConfig.py PATCHED/pyol/tools/OLBaseConfig.py
+--- ORIG/pyol/tools/OLBaseConfig.py	2025-07-27 12:21:43.320896130 +0200
++++ PATCHED/pyol/tools/OLBaseConfig.py	2025-07-27 12:21:43.321430072 +0200
+@@ -109,7 +109,11 @@
+         else:
+             config.read_file(fh)
+     # override with user configuration
+-    config.read([os.path.join(prefix, user_config_file)])
++    if (os.path.exists(os.path.join(os.getcwd(), user_config_file))):
++      print("Using "+str(os.path.join(os.getcwd(), user_config_file)))
++      config.read([os.path.join(os.getcwd(), user_config_file)])
++    else:
++      config.read([os.path.join(prefix, user_config_file)])
+     config = dict(config.items('OpenLoops'))
+     # override with command line options
+     for key, val in dict(args).items():
+diff -Naur ORIG/pyol/tools/OLLibrary.py PATCHED/pyol/tools/OLLibrary.py
+--- ORIG/pyol/tools/OLLibrary.py	2025-07-27 12:21:43.321024089 +0200
++++ PATCHED/pyol/tools/OLLibrary.py	2025-07-27 12:21:43.321564536 +0200
+@@ -32,8 +32,8 @@
+ 
+ class CPPContainer:
+     """Container for source files scheduled for preprocessing."""
+-
+-    cpp_script = os.path.join('pyol', 'build', 'cpp.scons')
++    pyolprefix = os.path.dirname(os.path.dirname(globals().get('__file__', '')))
++    cpp_script = os.path.join(pyolprefix, 'build', 'cpp.scons')
+ 
+     def __init__(self, mp_src = [], dp_src = [], version_src = [], mp = ['dp'],
+                  version = 'none', process_api = -1, revision = 'none',
