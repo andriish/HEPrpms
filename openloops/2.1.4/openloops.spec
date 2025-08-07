@@ -6,7 +6,7 @@
 
 Name:           openloops
 Version:        2.1.4
-Release:        5%{?dist}
+Release:        6%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
 Source0:        https://gitlab.com/openloops/OpenLoops/-/archive/OpenLoops-%{version}/OpenLoops-OpenLoops-%{version}.tar.gz

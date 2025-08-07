@@ -1,3 +1,104 @@
+diff -Naur ORIG/lib_src/collier/src/DD_4pt.F PATCHED/lib_src/collier/src/DD_4pt.F
+--- ORIG/lib_src/collier/src/DD_4pt.F	2025-02-07 16:50:22.000000000 +0100
++++ PATCHED/lib_src/collier/src/DD_4pt.F	2025-07-30 22:15:07.387689436 +0200
+@@ -3804,13 +3804,13 @@
+         le(2)   = cp23/cp2
+ 
+         do i=1,2
+-          if (abs(dimag(x(i)))/abs(x(i)).lt.crit) x(i) = 
++          if (abs(dimag(x(i))).lt.crit*abs(x(i))) x(i) = 
+      &       dcmplx( dreal(x(i)),(abs(dimag(x(i)))+abs(x(i))*eps2)
+      &                           *sign(1d0,dimag(xe(i))) )
+-          if (abs(dimag(arg(i)))/abs(arg(i)).lt.crit) arg(i) = 
++          if (abs(dimag(arg(i))).lt.crit*abs(arg(i))) arg(i) = 
+      &       dcmplx( dreal(arg(i)),(abs(dimag(arg(i)))+abs(arg(i))*eps2)
+      &                           *sign(1d0,dimag(arge(i))) )
+-          if (abs(dimag(l(i)))/abs(l(i)).lt.crit) l(i) = 
++          if (abs(dimag(l(i))).lt.crit*abs(l(i))) l(i) = 
+      &       dcmplx( dreal(l(i)),(abs(dimag(l(i)))+abs(l(i))*eps2)
+      &                           *sign(1d0,dimag(le(i))) )
+         enddo
+@@ -4067,7 +4067,7 @@
+ 
+         do i=1,6
+           y1(i) = 1d0-1d0/y0(i)
+-          if (abs(dimag(y1(i)))/abs(y1(i)).lt.crit) y1(i) = 
++          if (abs(dimag(y1(i))).lt.crit*abs(y1(i))) y1(i) = 
+      &      dcmplx( dreal(y1(i)),(abs(dimag(y1(i)))+abs(y1(i))*eps2)
+      &                           *sign(1d0,dimag(1d0-1d0/y0e(i))) )
+         enddo
+@@ -4270,7 +4270,7 @@
+           sgn = (-1)**(i+1)
+ 
+           xx(i) = x(i)
+-          if (abs(dimag(xx(i)))/abs(xx(i)).lt.crit) xx(i) = 
++          if (abs(dimag(xx(i))).lt.crit*abs(xx(i))) xx(i) = 
+      &      dcmplx( dreal(xx(i)),(abs(dimag(xx(i)))+abs(xx(i))*eps2)
+      &                              *sign(1d0,dimag(xe(i))) )
+           D0mzero_dd = D0mzero_dd + pre*sgn*cspen_dd(1d0+xx(i))
+@@ -4321,7 +4321,7 @@
+             if (dcmplx(p12).ne.m32) then
+               arg  = 1d0+x(i)*y14/y13
+               arge = 1d0+xe(i)*y14e/y13e
+-              if (abs(dimag(arg))/abs(arg).lt.crit) arg = 
++              if (abs(dimag(arg)).lt.crit*abs(arg)) arg = 
+      &          dcmplx( dreal(arg),(abs(dimag(arg))+abs(arg)*eps2)
+      &                                *sign(1d0,dimag(arge)) )
+               etal = eta_dd(-xe(i),y14e/y13e)
+@@ -4339,7 +4339,7 @@
+             if (dcmplx(p4).ne.m42) then
+               arg  = 1d0+x(i)*y12/y14
+               arge = 1d0+xe(i)*y12e/y14e
+-              if (abs(dimag(arg))/abs(arg).lt.crit) arg = 
++              if (abs(dimag(arg)).lt.crit*abs(arg)) arg = 
+      &          dcmplx( dreal(arg),(abs(dimag(arg))+abs(arg)*eps2)
+      &                                *sign(1d0,dimag(arge)) )
+               etal = eta_dd(-xe(i),y12e/y14e)
+@@ -4357,7 +4357,7 @@
+             if (dcmplx(p1).ne.m22) then
+               arg  = 1d0+x(i)*y13/y12
+               arge = 1d0+xe(i)*y13e/y12e
+-              if (abs(dimag(arg))/abs(arg).lt.crit) arg = 
++              if (abs(dimag(arg)).lt.crit*abs(arg)) arg = 
+      &          dcmplx( dreal(arg),(abs(dimag(arg))+abs(arg)*eps2)
+      &                                *sign(1d0,dimag(arge)) )
+               etal = eta_dd(-xe(i),y13e/y12e)
+@@ -4888,7 +4888,7 @@
+             endif
+           endif
+ 
+-          if (abs(dimag(argl(j)))/abs(argl(j)).lt.crit) then
++          if (abs(dimag(argl(j))).lt.crit*abs(argl(j))) then
+             l(j) = l(j) + log(
+      &         dcmplx( dreal(argl(j)),
+      &                 (abs(dimag(argl(j)))+abs(argl(j))*eps2)
+@@ -4900,7 +4900,7 @@
+         do i=1,2
+           sgn = (-1)**(i+1)
+           xx(j,i) = x(j,i)
+-          if (abs(dimag(xx(j,i)))/abs(xx(j,i)).lt.crit) xx(j,i) = 
++          if (abs(dimag(xx(j,i))).lt.crit*abs(xx(j,i))) xx(j,i) = 
+      &       dcmplx( dreal(xx(j,i)),
+      &               (abs(dimag(xx(j,i)))+abs(xx(j,i))*eps2)
+      &               *sign(1d0,dimag(xe(j,i))) )
+@@ -4908,7 +4908,7 @@
+ 
+           if (arg(j).ne.(0d0,0d0)) then
+             rx(j,i) = 1d0-r(j)*x(j,i)
+-            if (abs(dimag(rx(j,i)))/abs(rx(j,i)).lt.crit) rx(j,i) = 
++            if (abs(dimag(rx(j,i))).lt.crit*abs(rx(j,i))) rx(j,i) = 
+      &         dcmplx( dreal(rx(j,i)),
+      &                 (abs(dimag(rx(j,i)))+abs(rx(j,i))*eps2)
+      &                 *sign(1d0,dimag(-re(j)*xe(j,i))) )
+@@ -4924,7 +4924,7 @@
+ 
+         do k=1,2
+           sx(j,k,i) = 1d0-s(j,k)*x(j,i)
+-          if (abs(dimag(sx(j,k,i)))/abs(sx(j,k,i)).lt.crit) sx(j,k,i) = 
++          if (abs(dimag(sx(j,k,i))).lt.crit*abs(sx(j,k,i))) sx(j,k,i) = 
+      &       dcmplx( dreal(sx(j,k,i)),
+      &               (abs(dimag(sx(j,k,i)))+abs(sx(j,k,i))*eps2)
+      &               *sign(1d0,dimag(-se(j,k)*xe(j,i))) )
 diff -Naur ORIG/lib_src/openloops/src/otf_reduction.F90 PATCHED/lib_src/openloops/src/otf_reduction.F90
 --- ORIG/lib_src/openloops/src/otf_reduction.F90	2025-02-07 16:50:22.000000000 +0100
 +++ PATCHED/lib_src/openloops/src/otf_reduction.F90	2025-07-27 12:37:23.566783271 +0200
