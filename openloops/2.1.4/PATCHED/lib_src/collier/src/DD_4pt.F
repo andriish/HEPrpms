@@ -4396,6 +4396,7 @@ c          endif
 **********************************************************************
         use DD_global
         use DD_4pt
+        use, intrinsic :: ieee_arithmetic
         implicit real*8 (a-z)
 
 
@@ -4887,20 +4888,27 @@ c inverse zeroes of arguments of logarithms
               argle(9) = arge(4)
             endif
           endif
-
+!          if ( ieee_is_nan(dreal(argl(j)))
+!     &    .or. ieee_is_nan(dimag(argl(j))) ) then
+!          write(*,*)argl
+!          endif
+          if (argl(j).ne.(0d0,0d0) .and. abs(argl(j)) .ge. crit)  then
           if (abs(dimag(argl(j))).lt.abs(argl(j))*crit) then
             l(j) = l(j) + log(
      &         dcmplx( dreal(argl(j)),
      &                 (abs(dimag(argl(j)))+abs(argl(j))*eps2)
      &                 *sign(1d0,dimag(argle(j))) ))
           else
+!            write(*,*)l(j),argl(j),j
             l(j) = l(j) + log(argl(j))
+          endif
           endif
 
         do i=1,2
           sgn = (-1)**(i+1)
           xx(j,i) = x(j,i)
-          if (abs(dimag(xx(j,i)))/abs(xx(j,i)).lt.crit) xx(j,i) = 
+          if (xx(j,i) .ne. (0d0,0d0) .and. abs(xx(j,i)) .ge. crit) then
+          if (abs(dimag(xx(j,i))).lt.abs(xx(j,i))*crit) xx(j,i) = 
      &       dcmplx( dreal(xx(j,i)),
      &               (abs(dimag(xx(j,i)))+abs(xx(j,i))*eps2)
      &               *sign(1d0,dimag(xe(j,i))) )
@@ -4918,13 +4926,17 @@ c inverse zeroes of arguments of logarithms
             D0massive_dd = D0massive_dd + sgn*pre*(
      &        - l(j)*log(-xx(j,i)) + cspen_dd(rx(j,i)) + etal )
           else
-            D0massive_dd = D0massive_dd + sgn*pre*(
+            D0massive_dd = D0massive_dd 
+     &      + sgn*pre*(
      &        - l(j)*log(-xx(j,i)) - log(-xx(j,i))**2/2d0 )
+          endif
           endif
 
         do k=1,2
           sx(j,k,i) = 1d0-s(j,k)*x(j,i)
-          if (abs(dimag(sx(j,k,i)))/abs(sx(j,k,i)).lt.crit) sx(j,k,i) = 
+          if (sx(j,k,i) .ne. (0d0,0d0) .and. 
+     &    abs(sx(j,k,i)) .ge. crit) then
+          if (abs(dimag(sx(j,k,i))).lt. abs(sx(j,k,i))*crit) sx(j,k,i) = 
      &       dcmplx( dreal(sx(j,k,i)),
      &               (abs(dimag(sx(j,k,i)))+abs(sx(j,k,i))*eps2)
      &               *sign(1d0,dimag(-se(j,k)*xe(j,i))) )
@@ -4932,7 +4944,7 @@ c inverse zeroes of arguments of logarithms
           if (etal.ne.(0d0,0d0)) etal = etal*log(sx(j,k,i))
           D0massive_dd = D0massive_dd - sgn*pre*(
      &      + cspen_dd(sx(j,k,i)) + etal )
-
+        endif
         end do
         end do
 
