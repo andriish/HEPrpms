@@ -1,0 +1,93 @@
+diff -Naur ORIG/meson.build PATCHED/meson.build
+--- ORIG/meson.build	2025-08-19 15:43:44.000000000 +0200
++++ PATCHED/meson.build	2025-09-12 12:03:13.270315486 +0200
+@@ -1,7 +1,7 @@
+ project('GoSam',
+     'fortran',
+     'cpp',
+-    version: '3.0.2-' + run_command(find_program('git'), 'rev-parse', '--short=7', 'HEAD', capture: true, check: true).stdout().strip(),
++    version: '3.0.1-' + run_command(find_program('git'), 'rev-parse', '--short=7', 'HEAD', capture: true, check: true).stdout().strip(),
+     default_options: {
+         'buildtype': 'release',
+         'bindir': get_option('bindir') + '/GoSam',
+@@ -30,9 +30,10 @@
+     add_global_link_arguments('-march=native', language: ['fortran', 'c', 'cpp'])
+ endif
+ 
+-add_global_link_arguments('--disable-new-dtags', language: ['fortran', 'c', 'cpp'])
++#add_global_link_arguments('--disable-new-dtags', language: ['fortran', 'c', 'cpp'])
+ 
+-run_command(
++if get_option('qgraf')
++  run_command(
+     'wget',
+     '--user=anonymous',
+     '--password=anonymous',
+@@ -40,14 +41,20 @@
+     'http://qgraf.tecnico.ulisboa.pt/v3.4/qgraf-3.4.2.tgz',
+     check: true
+     )
++endif
+ 
+ subproject('avh_olo')
+ if get_option('golem95')
+     subproject('golem95')
+ endif
+ subproject('ninja')
+-subproject('qgraf')
+-subproject('form')
++if get_option('qgraf')
++   subproject('qgraf')
++endif
++if get_option('form')
++   subproject('form')
++endif
++
+ 
+ subdir('src/python/golem')
+ 
+diff -Naur ORIG/meson_options.txt PATCHED/meson_options.txt
+--- ORIG/meson_options.txt	2025-09-12 11:56:12.807839732 +0200
++++ PATCHED/meson_options.txt	2025-09-12 11:56:41.434540988 +0200
+@@ -1,4 +1,18 @@
+ option(
++    'qgraf',
++    type: 'boolean',
++    value: true,
++    description: 'Download, build and install `qgraf`'
++    )
++
++option(
++    'form',
++    type: 'boolean',
++    value: true,
++    description: 'Download, build and install`Form`'
++    )
++
++option(
+     'golem95',
+     type: 'boolean',
+     value: false,
+@@ -17,4 +31,4 @@
+     type: 'boolean',
+     value: false,
+     description: 'Build GoSam and it`s dependencies for the host CPU architecture. This can lead to a improved runtime performance, the generated libraries will not work on other CPU architectures though.'
+-    )
+\ No newline at end of file
++    )
+diff -Naur ORIG/subprojects/avh_olo.wrap PATCHED/subprojects/avh_olo.wrap
+--- ORIG/subprojects/avh_olo.wrap	2025-08-19 15:43:44.000000000 +0200
++++ PATCHED/subprojects/avh_olo.wrap	2025-09-12 12:35:48.118140824 +0200
+@@ -1,9 +1,9 @@
+ [wrap-git]
+ url=https://bitbucket.org/hameren/oneloop.git
+-revision=head
++revision=v3.7.2
+ depth=1
+ patch_directory=avh_olo
+ diff_files=avh_olo/create.py.patch
+ 
+ [provide]
+-dependency_names = avh_olo
+\ No newline at end of file
++dependency_names = avh_olo
