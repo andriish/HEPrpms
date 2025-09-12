@@ -1,12 +1,3 @@
-%if %{?fedora}%{!?fedora:0} >= 29 || %{?rhel}%{!?rhel:0} >= 8
-%global py3default 1
-%else
-%global py3default 0
-%endif
-%if 0%{?suse_version}
-%{!?python3_pkgversion:%global python3_pkgversion 3}
-%endif
-
 Name:           fastjet
 Version:        3.5.1
 Release:        1001%{?dist}
@@ -15,16 +6,14 @@ URL:            http://www.fastjet.fr
 Source0:        https://www.fastjet.fr/repo/%{name}-%{version}.tar.gz
 Prefix:         %{_prefix}
 Summary:        Fast implementation of several recombination jet algorithms
-BuildRequires:  gcc-c++ 
+BuildRequires:  gcc-c++ cmake
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 BuildRequires:  CGAL-devel >= 5.0
 Requires:       CGAL-devel >= 5.0
 %endif
-%if ! %{py3default}
-BuildRequires:  python2-devel
-%endif
+
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 BuildRequires:  python3-devel
 %endif
@@ -56,16 +45,7 @@ Provides:       %{name}-devel = %{version}-%{release}
 develop programs which make use of %{name}.
 The library documentation is available on header files.
 
-%if 0%{?rhel} || 0%{?fedora}
-%if ! %{py3default}
-%package        -n python2-%{name}
-Summary:        python bindings for %{name} - Python 2 module
-%{?python_provide:%python_provide python2-%{name}}
-Requires: %{name}%{?_isa} = %{version}-%{release}
-%description -n python2-%{name}
-This package contains python bindings for %{name}.
-%endif
-%endif
+
 
 %package -n python%{python3_pkgversion}-%{name}
 Summary:        python bindings for %{name} - Python 3 module
@@ -74,108 +54,42 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %description -n python%{python3_pkgversion}-%{name}
 This package contains python bindings for %{name}.
 
-
-#if 0#{?suse_version}
-
-#debug_package
-
-#endif
-
-
 %prep
 %setup -q -n %{name}-%{version}
+
 %build
-cp README.md README
-%if 0%{?rhel} || 0%{?fedora}
-%if %{py3default}
-export PYTHON=%{__python3}
-%else
-export PYTHON=%{__python2}
-%endif
-%configure --enable-allplugins --enable-pyext --enable-cgal-header-only=yes  --with-cgal-dir=/usr/include
-%make_build
-%endif
-%if 0%{?suse_version}
-export PYTHON=%{__python3}
-%configure --enable-allplugins --enable-pyext --enable-cgal-header-only=yes  --with-cgal-dir=/usr/include --enable-thread-safety
-%make_build
-%endif
+%cmake -DFASTJET_ENABLE_CGAL=ON -DFASTJET_ENABLE_PYTHON=ON -DFASTJET_ENABLE_ALLPLUGINS=ON
+%cmake_build
 
 %install
-%if 0%{?rhel} || 0%{?fedora}
-%if %{py3default}
-%make_install pythondir=%{python3_sitearch}
-rm -f %{buildroot}%{python3_sitearch}/*.a
-rm -f %{buildroot}%{python3_sitearch}/*.la
-%else
-%make_install pythondir=%{python2_sitearch}
-rm -f  %{buildroot}%{python2_sitearch}/*.a
-rm -f  %{buildroot}%{python2_sitearch}/*.la
-%endif
-rm %{buildroot}%{_libdir}/*.a
-rm %{buildroot}%{_libdir}/*.la
+%cmake_install
 
-%if ! %{py3default}
-  (
-  export PYTHON=%{__python3}
-  %configure --enable-allplugins --enable-pyext --enable-thread-safety
-  cd pyinterface  
-  make clean
-  make  PYTHON=%{__python3}  pythondir=%{python3_sitearch}
-  %make_install PYTHON=%{__python3}    pythondir=%{python3_sitearch}
-  rm -f %{buildroot}%{python3_sitearch}/*.a
-  rm -f %{buildroot}%{python3_sitearch}/*.la
-  )
-%endif
-%endif
-
-
-%if 0%{?suse_version}
-%make_install pythondir=%{python3_sitearch}
-rm -f %{buildroot}%{python3_sitearch}/*.a
-rm -f %{buildroot}%{python3_sitearch}/*.la
-rm %{buildroot}%{_libdir}/*.a
-rm %{buildroot}%{_libdir}/*.la
-%endif
 
 
 %files -n fastjet
-%doc AUTHORS README COPYING
-%{_bindir}/%{name}-config
-%{_libdir}/libfastjet.so
-%{_libdir}/libfastjet.so.0
-%{_libdir}/libfastjet.so.0.0.0
+%doc AUTHORS README.md COPYING
+%{_libdir}/libfastjet.so*
 %{_libdir}/libfastjetplugins.so*
 %{_libdir}/libfastjettools.so*
 %{_libdir}/libsiscone.so*
 %{_libdir}/libsiscone_spherical.so*
 
 %files -n fastjet-devel 
-%{_libdir}/libfastjet.so
-%{_libdir}/libfastjettools.so
-%{_libdir}/libsiscone.so
-%{_libdir}/libsiscone_spherical.so
-%{_libdir}/libfastjetplugins.so
+%{_bindir}/%{name}-config
 %{_includedir}/siscone/*.h
 %{_includedir}/siscone/spherical/*.h
 %{_includedir}/fastjet/*.h
 %{_includedir}/fastjet/*.hh
 %{_includedir}/fastjet/tools/*.hh
 %{_includedir}/fastjet/internal/*.hh
-/usr/share/fastjet/pyinterface/*
+%{_libdir}/cmake/siscone
+%{_libdir}/cmake/fastjet
 
-%if 0%{?rhel} || 0%{?fedora}
-%if ! %{py3default}
-%files -n python2-%{name}
-%{python2_sitearch}/_%{name}*.so*
-%{python2_sitearch}/*.p*
-%endif
-%endif
 
 %files -n python%{python3_pkgversion}-%{name}
-%{python3_sitearch}/_%{name}*.so*
-%{python3_sitearch}/*.p*
-%{python3_sitearch}/__pycache__/*
+%{python3_sitearch}/fastjet/_%{name}*.so*
+%{python3_sitearch}/fastjet/*.p*
+%{python3_sitearch}/fastjet/__pycache__/*
 
 
 

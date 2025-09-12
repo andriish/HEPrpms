@@ -4,10 +4,10 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-gosam:3.0.2
+#gosam:3.0.2
 #openloops:2.1.4
 #fjcontrib:1.101
-#fastjet:3.5.1
+fastjet:3.5.1
 #hevea:2.32
 #hevea:2.32
 #f2c:20240504
