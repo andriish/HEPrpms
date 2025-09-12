@@ -7,7 +7,7 @@ declare -a BUILDLIST=(
 #gosam:3.0.2
 #openloops:2.1.4
 #fjcontrib:1.101
-fastjet:3.5.1
+#fastjet:3.5.1
 #hevea:2.32
 #hevea:2.32
 #f2c:20240504
@@ -30,7 +30,7 @@ fastjet:3.5.1
 ### LATER 
 #fjcontrib:1.100
 #### BAD 
-#MG5_aMC:3.5.8
+MG5_aMC:3.6.3
 #qcdloop:2.1.0
 #Professor:2.5.0
 #qd:2.3.24
