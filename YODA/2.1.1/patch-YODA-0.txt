@@ -1,0 +1,21 @@
+diff -Naur ORIG/pyext/yoda/plotting/utils.py PATCHED/pyext/yoda/plotting/utils.py
+--- ORIG/pyext/yoda/plotting/utils.py	2025-09-12 15:54:36.640405263 +0200
++++ PATCHED/pyext/yoda/plotting/utils.py	2025-09-12 15:54:35.633387374 +0200
+@@ -232,7 +232,7 @@
+             # ToDo: extend y-axis range?
+             anchor = anchor.replace('upper', 'lower')
+             xypos = (1.00,0.03)
+-        return *xypos, anchor, align
++        return (*xypos, anchor, align)
+     # split x-range into thirds
+     xlo, xhi = splitRange(*xlims, 3, logx)
+     xvals = refAO.xVals()
+@@ -278,7 +278,7 @@
+     ][loc]
+     if not loc in [2,5,8]:
+         align = 'l'
+-    return *xypos, anchor, align
++    return (*xypos, anchor, align)
+ 
+ 
+ def adjustOverflows(aos, xlims, hasOverflows, modUnderflow, modOverflow):
