@@ -4,9 +4,9 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-golem95:1.3.4
+#golem95:1.3.4
 #recola2:2.2.5
-#Rivet:4.1.1
+Rivet:4.1.1
 #YODA:2.1.1
 #gosam:3.0.2
 #openloops:2.1.4

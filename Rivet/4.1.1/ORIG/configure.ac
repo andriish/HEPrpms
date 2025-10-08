@@ -1,7 +1,7 @@
 ## Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([Rivet],[4.0.2],[rivet@projects.hepforge.org],[Rivet])
+AC_INIT([Rivet],[4.1.1],[rivet@projects.hepforge.org],[Rivet])
 
 ## Check and block installation into the src/build dir
 if test "$prefix" = "$PWD"; then
@@ -21,9 +21,9 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_SUBST(LT_OBJDIR)
 
 ## Compute version code
-let rivet_major=$(echo "$PACKAGE_VERSION" | cut -d. -f1 | sed -e 's/^0*//;s/^$/0/')
-let rivet_minor=$(echo "$PACKAGE_VERSION" | cut -d. -f2 | sed -e 's/^0*//;s/^$/0/')
-let rivet_micro=$(echo "$PACKAGE_VERSION" | cut -d. -f3 | sed -e 's/^0*//;s/^$/0/')
+let rivet_major=$(echo "$PACKAGE_VERSION" | cut -d. -f1 | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/')
+let rivet_minor=$(echo "$PACKAGE_VERSION" | cut -d. -f2 | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/')
+let rivet_micro=$(echo "$PACKAGE_VERSION" | cut -d. -f3 | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/')
 let PACKAGE_VERSION_CODE=10000*$rivet_major+100*$rivet_minor+$rivet_micro
 
 ## Package-specific #defines
@@ -45,17 +45,18 @@ AC_CEDAR_OSX
 dnl AC_LCG_TAG
 
 ## Set default compiler flags
-if test "x$CXXFLAGS" == "x"; then CXXFLAGS="-O2"; fi
+if test "x$CXXFLAGS" = "x"; then CXXFLAGS="-O2"; fi
 
 ## Compiler setup
 AC_LANG(C++)
 AC_PROG_CXX
+RIVETCXX="$CXX"
 AX_CXX_COMPILE_STDCXX([17], [noext], [mandatory])
+STDFLAG=$(echo "$CXX" | sed "s|^$RIVETCXX *||")
 
 ## Store and propagate the compiler identity and flags
-RIVETCXX="$CXX"
 AC_SUBST(RIVETCXX)
-RIVETCXXFLAGS="$CXXFLAGS"
+RIVETCXXFLAGS="$STDFLAG $CXXFLAGS"
 AC_SUBST(RIVETCXXFLAGS)
 RIVETCPPFLAGS="$CPPFLAGS"
 AC_SUBST(RIVETCPPFLAGS)
@@ -71,7 +72,7 @@ AC_DISABLE_STATIC
 LT_INIT([dlopen])
 AX_EXECINFO
 AC_FUNC_STRERROR_R
-AC_CHECK_PROG([FCP], [rsync], [rsync -aq], [cp -f])
+AC_CHECK_PROG([FCP], [rsync], [rsync], [cp -f])
 AC_CHECK_PROG([RSH], [rsync], [rsync], [scp])
 
 ## YODA histogramming library
@@ -84,9 +85,9 @@ if test -f "$YODACONFIG"; then
   AC_MSG_CHECKING([YODA version using yoda-config])
   YODA_VERSION=`$YODACONFIG --version`
   AC_MSG_RESULT([$YODA_VERSION])
-  YODA_VERSION1=[`echo $YODA_VERSION | cut -d. -f1 | sed -e 's/^0*//' -e 's/\([0-9]*\).*/\1/g'`]
-  YODA_VERSION2=[`echo $YODA_VERSION | cut -d. -f2 | sed -e 's/^0*//' -e 's/\([0-9]*\).*/\1/g'`]
-  YODA_VERSION3=[`echo $YODA_VERSION | cut -d. -f3 | sed -e 's/^0*//' -e 's/\([0-9]*\).*/\1/g'`]
+  YODA_VERSION1=[`echo $YODA_VERSION | cut -d. -f1 | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/'`]
+  YODA_VERSION2=[`echo $YODA_VERSION | cut -d. -f2 | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/'`]
+  YODA_VERSION3=[`echo $YODA_VERSION | cut -d. -f3 | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/'`]
   let YODA_VERSION_INT=YODA_VERSION1*10000+YODA_VERSION2*100+YODA_VERSION3
   if test $YODA_VERSION_INT -lt 20000; then
     AC_MSG_ERROR([YODA version isn't sufficient: at least version 2.0.0 required])
@@ -94,10 +95,48 @@ if test -f "$YODACONFIG"; then
   AC_MSG_CHECKING([YODA Python path using yoda-config])
   YODA_PYTHONPATH=`$YODACONFIG --pythonpath`
   YODACPPFLAGS=`$YODACONFIG --cppflags`
+  YODALDFLAGS=`$YODACONFIG --ldflags`
+  YODALIBS=`$YODACONFIG --libs`
   AC_MSG_RESULT([$YODA_PYTHONPATH])
 fi
+AC_SUBST(YODALIBS)
+AC_SUBST(YODALDFLAGS)
 AC_SUBST(YODACPPFLAGS)
 AC_SUBST(YODA_PYTHONPATH)
+
+## HDF5
+AC_ARG_ENABLE([h5], [AS_HELP_STRING([--disable-h5],[disable H5 extension  @<:@default=build@:>@])], [], [enable_h5=yes])
+if test "x$enable_h5" = "xyes"; then
+  oldCPPFLAGS=$CPPFLAGS
+  CPPFLAGS="$CPPFLAGS $YODACPPFLAGS"
+  AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM(
+        [[#include "YODA/Config/BuildConfig.h"]],
+        [[#ifndef HAVE_HDF5
+          #error "HAVE_HDF5 not defined"
+          #endif]]
+    )], [], [enable_h5=no])
+  if test "x$enable_h5" = "xyes"; then
+    AC_COMPILE_IFELSE(
+      [AC_LANG_PROGRAM(
+          [[#include "YODA/Config/BuildConfig.h"]],
+          [[#ifndef WITH_HIGHFIVE
+            #error "WITH_HIGHFIVE not defined"
+            #endif]]
+      )],
+      [AC_DEFINE([WITH_YODA_HIGHFIVE], [1], [Defined if YODA uses bundled HighFive])],
+      [AC_MSG_NOTICE([YODA uses external HighFive])]
+    )
+    AC_DEFINE_UNQUOTED(HAVE_H5, 1, "Define to 1 if you have HDF5 support.")
+    AC_MSG_NOTICE([Building extra HDF5 compatibility tools])
+  else
+    AC_MSG_NOTICE([YODA configured without HDF5 support, not building extra HDF5 compatibility tools])
+  fi
+  CPPFLAGS=$oldCPPFLAGS
+else
+  AC_MSG_NOTICE([Not building extra HDF5 compatibility tools])
+fi
+AM_CONDITIONAL(ENABLE_H5, [test x$enable_h5 = xyes])
 
 
 ## HepMC event record library
@@ -129,15 +168,9 @@ else
 fi
 hepmc_version=`./conftest`
 if test x$hepmc_version != x; then
-  hepmc_major=[`echo "$hepmc_version" | cut -d. -f1 | sed -e 's/^0*//' -e 's/\([0-9]*\).*/\1/g'`]
-  hepmc_minor=[`echo "$hepmc_version" | cut -d. -f2 | sed -e 's/^0*//' -e 's/\([0-9]*\).*/\1/g'`]
-  hepmc_micro=[`echo "$hepmc_version" | cut -d. -f3 | sed -e 's/^0*//' -e 's/\([0-9]*\).*/\1/g'`]
-  if test "x$hepmc_minor" = "x"; then
-    hepmc_minor=0
-  fi
-  if test "x$hepmc_micro" = "x"; then
-    hepmc_micro=0
-  fi
+  hepmc_major=[`echo "$hepmc_version" | cut -d. -f1 | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/'`]
+  hepmc_minor=[`echo "$hepmc_version" | cut -d. -f2 | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/'`]
+  hepmc_micro=[`echo "$hepmc_version" | cut -d. -f3 | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/'`]
 fi
 rm -f conftest conftest.cpp conftest.cc conftest.C
 HEPMC_VERSION=$hepmc_major$hepmc_minor$hepmc_micro
@@ -158,8 +191,6 @@ AC_SUBST(HEPMCINCPATH)
 AC_SUBST(HEPMCLIBPATH)
 AC_SUBST(HEPMCLIBNAME)
 
-CPPFLAGS="$CPPFLAGS -DENABLE_HEPMC_3=true"
-
 ## FastJet clustering library
 AC_CEDAR_LIBRARYANDHEADERS([fastjet], , , [AC_MSG_ERROR([FastJet is required])])
 AC_PATH_PROG(FJCONFIG, fastjet-config, [], $FASTJETPATH/bin:$PATH)
@@ -167,21 +198,16 @@ if test -f "$FJCONFIG"; then
   AC_MSG_CHECKING([FastJet version using fastjet-config])
   fjversion=`$FJCONFIG --version`
   AC_MSG_RESULT([$fjversion])
-  fjmajor=[`echo $fjversion | cut -f1 -d. | sed -e 's/^0*//'`]
-  fjminor=[`echo $fjversion | cut -f2 -d. | sed -e 's/^0*//'`]
-  fjmicro=[`echo $fjversion | cut -f3 -d. | sed -e 's/^0*//'`]
-  if test "x$fjminor" = "x"; then
-    fjminor=0
-  fi
-  if test "x$fjmicro" = "x"; then
-    fjmicro=0
-  fi
+  fjmajor=[`echo $fjversion | cut -f1 -d. | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/'`]
+  fjminor=[`echo $fjversion | cut -f2 -d. | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/'`]
+  fjmicro=[`echo $fjversion | cut -f3 -d. | sed -e 's/^0*//;s/\([0-9]*\).*/\1/g;s/^$/0/'`]
   if test "$fjmajor" -lt 3 -o "$fjminor" -lt 2 ; then  #< only works for v3.x
     AC_MSG_ERROR([FastJet version 3.2.0 or later is required])
   fi
-  FASTJETLIBADD="$($FJCONFIG --libs --plugins --rpath=no)"
+  # Only keep -l flags (library names)
+  FASTJETLIBADD=`echo "$($FJCONFIG --libs --plugins --rpath=no)" | tr ' ' '\n' | grep '^-l' | tr '\n' ' '`
 else
-  FASTJETLIBADD="-L$FASTJETLIBPATH -l$FASTJETLIBNAME -lfastjetplugins"
+  FASTJETLIBADD="-l$FASTJETLIBNAME -lfastjetplugins"
 fi
 FASTJETLDFLAGS="-L$FASTJETLIBPATH"
 
@@ -200,7 +226,6 @@ if test -n "$with_fjcontrib"; then
   AC_SUBST(FJCONTRIBINCPATH)
   AC_SUBST(FJCONTRIBLIBPATH)
   AC_SUBST(FJCONTRIBCPPFLAGS)
-  FASTJETLIBADD="$FASTJETLIBADD -L$FJCONTRIBLIBPATH"
   FASTJETLDFLAGS="$FASTJETLDFLAGS -L$FJCONTRIBLIBPATH"
 else
   FJCONTRIBINCPATH=$FASTJETINCPATH
@@ -217,7 +242,7 @@ AC_MSG_NOTICE([FastJet ld flags: $FASTJETLDFLAGS])
 oldCPPFLAGS=$CPPFLAGS
 CPPFLAGS="$CPPFLAGS $FASTJETCPPFLAGS $FJCONTRIBCPPFLAGS"
 oldLIBS=$LIBS
-LIBS="$LIBS $FASTJETLIBADD"
+LIBS="$LIBS $FASTJETLDFLAGS $FASTJETLIBADD"
 FASTJET_ERRMSG="Required FastJet plugin headers were not found: did you build FastJet with the --enable-allcxxplugins option?"
 AC_CHECK_HEADER([fastjet/D0RunIIConePlugin.hh], [], [AC_MSG_ERROR([$FASTJET_ERRMSG])])
 AC_CHECK_HEADER([fastjet/TrackJetPlugin.hh], [], [AC_MSG_ERROR([$FASTJET_ERRMSG])])
@@ -245,57 +270,67 @@ int main() {
 CPPFLAGS=$oldCPPFLAGS
 LIBS=$oldLIBS
 
-## HDF5 + highfive
-if test "x$with_highfive" = "xyes"; then
-  AX_LIB_HDF5()
-  if test x$HDF5_TYPE == xparallel; then
-    AX_PROG_CXX_MPI([true], [], [AC_MSG_ERROR([Found hdf5-parallel, but no MPI compiler.])])
-  fi
-  AC_MSG_NOTICE([HDF5 include flags: $HDF5_CFLAGS ::: $HDF5_CPPFLAGS])
-  AC_MSG_NOTICE([HDF5 lib flags: $HDF5_LDFLAGS ::: $HDF5_LIBS])
-  oldCPPFLAGS=$CPPFLAGS
-  CPPFLAGS="$CPPFLAGS $HDF5_CPPFLAGS $HIGHFIVECPPFLAGS"
-  AC_CHECK_HEADER([highfive/H5File.hpp], [], [AC_MSG_ERROR([H5 header not found.])])
-  CPPFLAGS=$oldCPPFLAGS
-else
-  AC_MSG_NOTICE([Not building extra HighFive compatibility tools])
-fi
-AM_CONDITIONAL(ENABLE_HIGHFIVE, [test x$with_highfive = xyes])
-
 ## HEPTopTagger
 # AC_CEDAR_HEADERS([HEPTopTagger], , , [AC_MSG_ERROR([HEPTopTagger is required])])
 
-
-# ## GNU Scientific Library
-# AC_SEARCH_GSL
-# AC_CEDAR_HEADERS([gsl], , , [AC_MSG_ERROR([GSL (GNU Scientific Library) is required])])
-# oldCPPFLAGS=$CPPFLAGS
-# CPPFLAGS="$CPPFLAGS -I$GSLINCPATH"
-# AC_CHECK_HEADER([gsl/gsl_vector.h], [], [AC_MSG_ERROR([GSL vectors not found.])])
-# CPPFLAGS=$oldCPPFLAGS
-
-
 ## Disable build/install of standard analyses
+PLUGIN_MATCH=""
+PLUGIN_UNMATCH=""
 AC_ARG_ENABLE([analyses],
   [AS_HELP_STRING([--disable-analyses],[don't try to build or install standard analyses])],
   [], [enable_analyses=yes])
 if test x$enable_analyses != xyes; then
    AC_MSG_WARN([Not building standard Rivet analyses, by request])
+else
+  AC_ARG_WITH([plugin-match],
+              [AS_HELP_STRING([--with-plugin-match=STRING],
+                              [only build analysis groups matching provided regex])],
+              [PLUGIN_MATCH="$withval"], [])
+  AC_ARG_WITH([plugin-unmatch],
+              [AS_HELP_STRING([--with-plugin-unmatch=STRING],
+                              [exclude analysis groups matching provided regex])],
+              [PLUGIN_UNMATCH="$withval"], [])
+  AC_MSG_NOTICE(Build plugins matching "$PLUGIN_MATCH")
+  AC_MSG_NOTICE(Exclude plugins matching "$PLUGIN_UNMATCH")
 fi
+AC_SUBST([PLUGIN_MATCH])
+AC_SUBST([PLUGIN_UNMATCH])
 AM_CONDITIONAL(ENABLE_ANALYSES, [test x$enable_analyses = xyes])
 
 
 ## Optional build/install of ONNXRuntime analyses (make standard at some point)
 AC_ARG_ENABLE([onnxrt],
-  [AS_HELP_STRING([--enable-onnxrt],
+  [AS_HELP_STRING([--enable-onnxrt[=PATH]],
   [require ONNXRuntime library and build ONNX analyses plugin; optionally give the path to ONNXRuntime @<:@$prefix@:>@])],
-  [enable_onnx=yes; ONNXRTPREFIX=$enable_onnxrt], [enable_onnx=no; ONNXRTPREFIX=])
+  [
+    if test "x$enableval" = "xno"; then
+      enable_onnx=no
+    elif test "x$enableval" = "xyes"; then
+      enable_onnx=yes
+      ONNXRTPREFIX=$prefix
+    else
+      enable_onnx=yes
+      ONNXRTPREFIX=$enableval
+    fi
+  ],
+  [
+    enable_onnx=no
+    ONNXRTPREFIX=
+  ]
+)
+
 if test x$enable_onnx != xno; then
   AC_MSG_WARN([Building with ONNXRuntime support, and including ONNX-analyses plugin])
-  if test x$ONNXRTPREFIX = xyes; then ONNXRTPREFIX=$prefix; fi
   # TODO: test ONNXRt functionality from given paths
   ONNXRTINCPATH=$ONNXRTPREFIX/include
-  ONNXRTLIBPATH=$ONNXRTPREFIX/lib
+  # Check whether lib or lib64 exists and set ONNXRTLIBPATH accordingly
+  if test -d "$ONNXRTPREFIX/lib64"; then
+    ONNXRTLIBPATH="$ONNXRTPREFIX/lib64"
+  elif test -d "$ONNXRTPREFIX/lib"; then
+    ONNXRTLIBPATH="$ONNXRTPREFIX/lib"
+  else
+    AC_MSG_ERROR([Neither lib nor lib64 found in $ONNXRTPREFIX])
+  fi
 fi
 AM_CONDITIONAL(ENABLE_ONNX, [test x$enable_onnx = xyes])
 AC_SUBST(ONNXRTPREFIX)
@@ -318,6 +353,36 @@ AM_CONDITIONAL(ENABLE_PDFMANUAL, [test x$enable_pdfmanual = xyes])
 #
 AC_ARG_ENABLE([pdfmanual],
   [AS_HELP_STRING([--enable-pdfmanual],[backward compatility dummy flag, no effect and deprecated])], [], [])
+
+# Add support for --with-yaml-cpp
+AC_ARG_WITH([yaml-cpp],
+    [AS_HELP_STRING([--with-yaml-cpp=DIR], [Specify the yaml-cpp prefix path or leave it empty for /usr])],
+    [if test "x$withval" = "xyes"; then
+         yaml_cpp_prefix="/usr"
+     else
+         yaml_cpp_prefix="$withval"
+     fi],
+    [yaml_cpp_prefix="no"])
+# Check if the user provided a custom path for yaml-cpp or use default /usr
+YAML_CPP_CPPFLAGS=""
+YAML_CPP_LDFLAGs=""
+if test "x$yaml_cpp_prefix" != "xno"; then
+    YAML_CPP_CPPFLAGS="-I$yaml_cpp_prefix/include"
+    YAML_CPP_LDFLAGS="-L$yaml_cpp_prefix/lib -L$yaml_cpp_prefix/lib64 -lyaml-cpp"
+    AC_CHECK_LIB([yaml-cpp], [main], ,
+        [AC_MSG_ERROR([yaml-cpp library not found in $yaml_cpp_prefix/lib or $yaml_cpp_prefix/lib64])])
+    AC_CHECK_HEADER([yaml-cpp/yaml.h], ,
+        [AC_MSG_ERROR([yaml-cpp headers not found in $yaml_cpp_prefix/include])])
+    AM_CONDITIONAL([WITH_YAML_CPP], [true])
+else
+    # Use the bundled yaml-cpp
+    AC_CONFIG_FILES([src/Core/yamlcpp/Makefile])
+    AM_CONDITIONAL([WITH_YAML_CPP], [false])
+fi
+# Substitute the variable
+AC_SUBST([YAML_CPP_LDFLAGS])
+AC_SUBST([YAML_CPP_CPPFLAGS])
+
 
 
 ## Build Doxygen documentation if possible
@@ -393,15 +458,12 @@ AM_CONDITIONAL(WITH_CYTHON, [test x$CYTHON_FOUND = xyes])
 
 ## Set default build flags
 AM_CPPFLAGS="-I\$(top_srcdir)/include -I\$(top_builddir)/include"
-#AM_CPPFLAGS="$AM_CPPFLAGS -I\$(top_srcdir)/include/eigen3"
-#AM_CPPFLAGS="$AM_CPPFLAGS \$(GSL_CPPFLAGS)"
 AM_CPPFLAGS="$AM_CPPFLAGS \$(RIVETCPPFLAGS)"
 AM_CPPFLAGS="$AM_CPPFLAGS \$(YODACPPFLAGS)"
 AM_CPPFLAGS="$AM_CPPFLAGS -I\$(HEPMC3INCPATH)"
 AM_CPPFLAGS="$AM_CPPFLAGS \$(FASTJETCPPFLAGS) \$(FJCONTRIBCPPFLAGS)"
-if test "x$with_highfive" = "xyes"; then
-  AM_CPPFLAGS="$AM_CPPFLAGS \$(HDF5_CPPFLAGS) \$(HIGHFIVECPPFLAGS)"
-fi
+AM_CPPFLAGS="$AM_CPPFLAGS \$(YAML_CPP_CPPFLAGS)"
+AM_LDFLAGS="$AM_LDFLAGS \$(YAML_CPP_LDFLAGS)"
 AC_CEDAR_CHECKCXXFLAG([-pedantic], [AM_CXXFLAGS="$AM_CXXFLAGS -pedantic"])
 AC_CEDAR_CHECKCXXFLAG([-Wall], [AM_CXXFLAGS="$AM_CXXFLAGS -Wall"])
 AC_CEDAR_CHECKCXXFLAG([-Wunused-variable], [AM_CXXFLAGS="$AM_CXXFLAGS -Wunused-variable"])
@@ -416,6 +478,29 @@ AX_OPENMP([AM_CXXFLAGS="$AM_CXXFLAGS $OPENMP_CXXFLAGS"])
 ## Optional zlib support for gzip-compressed data streams/files
 AX_CHECK_ZLIB
 
+## Optional unit-test coverage checks
+AC_ARG_ENABLE([coverage],
+  AS_HELP_STRING([--enable-coverage],
+  [enable coverage report @<:@default=build@:>@]),,
+  enable_coverage=no)
+if test "x$enable_coverage" = "xyes"; then
+	AC_CHECK_PROG(LCOV_CHECK, lcov, yes)
+  AS_IF([test x"$LCOV_CHECK" != x"yes"], [AC_MSG_ERROR([Coverage reports require lcov!])])
+	AC_CHECK_PROG(GENHTML_CHECK, genhtml, yes)
+  AS_IF([test x"$GENHTML_CHECK" != x"yes"], [AC_MSG_ERROR([Coverage reports require genhtml!])])
+
+  CXXFLAGS="$CXXFLAGS -O0 -g"
+	CODE_COVERAGE_CPPFLAGS="-O0 -g -fprofile-arcs -ftest-coverage -fno-inline"
+	CODE_COVERAGE_CFLAGS="-O0 -g -fprofile-arcs -ftest-coverage -fno-inline"
+	CODE_COVERAGE_CXXFLAGS="-O0 -g -fprofile-arcs -ftest-coverage -fno-inline"
+	CODE_COVERAGE_LIBS="-lgcov"
+
+	AC_SUBST([CODE_COVERAGE_CPPFLAGS])
+	AC_SUBST([CODE_COVERAGE_CFLAGS])
+	AC_SUBST([CODE_COVERAGE_CXXFLAGS])
+	AC_SUBST([CODE_COVERAGE_LIBS])
+fi
+AM_CONDITIONAL(CODE_COVERAGE_ENABLED, [test x$enable_coverage = xyes])
 
 ## Debug flag (default=-DNDEBUG, enabled=-g)
 AC_ARG_ENABLE([debug], [AS_HELP_STRING([--enable-debug],[build with debugging symbols  @<:@default=no@:>@])], [], [enable_debug=no])
@@ -440,7 +525,7 @@ AC_EMPTY_SUBST
 AC_CONFIG_FILES(Makefile)
 AC_CONFIG_FILES(include/Makefile include/Rivet/Makefile)
 AC_CONFIG_FILES(src/Makefile)
-AC_CONFIG_FILES(src/Core/Makefile src/Core/yamlcpp/Makefile)
+AC_CONFIG_FILES(src/Core/Makefile)
 AC_CONFIG_FILES(src/Tools/Makefile)
 AC_CONFIG_FILES(src/Projections/Makefile)
 AC_CONFIG_FILES(src/AnalysisTools/Makefile)
