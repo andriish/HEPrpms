@@ -51,7 +51,7 @@ make
 %make_install
 
 %files 
-%doc AUTHORS README COPYING
+%doc AUTHORS  COPYING
 %{_libdir}/*
 
 %files -n %{name}-devel
