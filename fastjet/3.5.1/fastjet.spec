@@ -8,7 +8,7 @@ Prefix:         %{_prefix}
 Summary:        Fast implementation of several recombination jet algorithms
 BuildRequires:  gcc-c++ cmake
 %if 0%{?rhel} || 0%{?fedora}
-BuildRequires:  gcc-gfortran 
+BuildRequires:  gcc-gfortran swig
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 BuildRequires:  CGAL-devel >= 5.0
 Requires:       CGAL-devel >= 5.0
