@@ -1,0 +1,23 @@
+diff -Naur ORIG/madgraph/various/misc.py PATCHED/madgraph/various/misc.py
+--- ORIG/madgraph/various/misc.py	2025-10-15 22:31:58.405002974 +0200
++++ PATCHED/madgraph/various/misc.py	2025-10-15 22:31:58.405315061 +0200
+@@ -146,10 +146,15 @@
+         info_dict = files.read_from_file(os.path.join(madgraph.__path__[0],
+                                                   "VERSION"),
+                                                   parse_info_str, 
+-                                                  print_error=False)
+-        PACKAGE_INFO = info_dict
+-        
+-    return info_dict
++                                                  print_error=True)
++        if info_dict:                                          
++         PACKAGE_INFO = info_dict
++        else
++         info_dict ={}
++         info_dict['version'] = '2.x.x'
++         info_dict['date'] = '20xx-xx-xx'
++         PACKAGE_INFO = info_dict        
++    return PACKAGE_INFO
+ 
+ #===============================================================================
+ # get_time_info

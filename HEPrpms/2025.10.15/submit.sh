@@ -38,7 +38,7 @@ lhapdf-sets-whizard:2.8.3
 LoopTools:2.16
 MCFM:10.3
 MC-TESTER:1.25.1
-MG5_aMC:3.5.9
+MG5_aMC:3.6.3
 njet:2.1.1
 nlojet++:4.1.3
 nlox:1.2.1

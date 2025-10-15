@@ -338,3 +338,4 @@ f4f46992a74f5e6f2d157e16c23198e0  YODA/2.1.1/rpmbuild/SOURCES/YODA-2.1.1.tar.gz
 7edaa31a9d6a0f589f9b0089ed3aaaee  Rivet/4.1.1/rpmbuild/SOURCES/Rivet-4.1.1.tar.gz
 e7dc04b941078cec8591eeab0a98e67a  recola2/2.2.5/rpmbuild/SOURCES/recola2-2.2.5.tar.gz
 69cf3eb9924787a31ffa952b13c7bb21  golem95/1.3.4/rpmbuild/SOURCES/golem95-1.3.4.tar.gz
+d654cc993e76328c49eabeeb9842f88d  MG5_aMC/3.6.4/rpmbuild/SOURCES/MG5_aMC_v3.6.4.tar.gz
