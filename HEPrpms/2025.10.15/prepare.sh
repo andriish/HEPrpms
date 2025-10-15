@@ -14,7 +14,7 @@ yum list installed | grep copr:copr.fedorainfracloud.org:averbyts:HEPrpms | tr -
  echo 'Requires:' $p' == '$v; 
  done)
 
-(for a in $(cat 1.txt | grep -v \.src | grep -v debugsource | grep -v debuginfo  | sort | uniq ); do 
+(for a in $(cat 1.txt | grep \.src | grep -v debugsource | grep -v debuginfo  | sort | uniq ); do 
  v=$(echo $a| cut -f 2 -d: | cut -f 1 -d\-); 
  p=$(echo $a| cut -f 1 -d: | cut -f 1 -d.); 
  echo $p':'$v; 

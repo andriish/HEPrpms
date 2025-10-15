@@ -3,7 +3,8 @@
 HEPrpms is a collection of .spec files that enable creation of RPM packages for some widely used the HEP software.
 The binary packages build from HEPrpms spec files are available at
 
-HEPrpms https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpms/
+HEPrpms https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpms/  (epel9, epel10, 3 latest Fedora releases)
+HEPrpms https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsepel8/ (epel8)
 
 and 
 
@@ -12,7 +13,6 @@ HEPrpmsSUSE https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/
 repositories. Most of the packages in these repositories are related to the High Energy Physics 
 experiment/theory/phenomenology.
 
-As of July 2025, the packages are built for Fedora 41, Fedora 42, Fedora rawhide, CentOS(EPEL)8, CentOS(EPEL)9, CentOS(EPEL)10 and OpenSUSE Tumbleweed.
 The packages are built on COPR https://copr.fedorainfracloud.org/ service, 
 however, other build platforms can be used as well.
 
@@ -249,14 +249,14 @@ export name=$(echo $a | cut -f1 -d: )
 export version=$(echo $a | cut -f2 -d: )
 envsubst <<EOF > temp.sh
 #!/bin/bash
-git clone --depth 1 https://github.com/andriish/HEPspecs.git
-cd HEPspecs
+git clone --depth 1 https://github.com/andriish/HEPrpms.git
+cd HEPrpms
 sh srpmsbuild.sh  $name $version
 EOF
 copr add-package-custom myREPOSITORY \
         --name $name \
         --script temp.sh \
-        --script-resultdir HEPspecs/$name/$version/rpmbuild/SOURCES/ \
+        --script-resultdir HEPrpms/$name/$version/rpmbuild/SOURCES/ \
         --script-builddeps 'git rpmdevtools wget' \
         --script-chroot opensuse-tumbleweed-x86_64
 mv temp.sh log/$name$version
