@@ -30,9 +30,9 @@ Herwig:7.3.0
 HJets:1.3
 hoppet:1.2.0
 hztool:4.3.2
-iminuit:2.21.1
+iminuit:2.21.3
 JetVHeto:3.0.0
-LCIO:2.22.02
+LCIO:02.22.02
 lhapdf-sets-Herwig:7.1.6
 lhapdf-sets-whizard:2.8.3
 LoopTools:2.16
@@ -50,7 +50,7 @@ PTL:2.3.3
 pythia6:6.4.28
 python-uproot4:4.3.3
 qcdloop:2.1.0
-qcdnum:18.00.0
+qcdnum:18.00.00
 qgraf:3.6.7
 qqvvamp:1.1
 rapgap:3.4.0
@@ -73,6 +73,7 @@ ginac:1.8.9
 imake:1.0.10
 hevea:2.32
 highfive:2.3.1
+pythia8:8.3.12
 )
 mkdir -p log
 for a in "${BUILDLIST[@]}" 
