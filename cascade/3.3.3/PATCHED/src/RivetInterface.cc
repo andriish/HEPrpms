@@ -69,7 +69,11 @@ extern "C" {
     int rivet_init_(char* rname1) {
         if ( rivet ) return 0;
         rname=std::string(rname1);
+#if defined(RIVET_VERSION_CODE) && (RIVET_VERSION_CODE>=40100)        
+        rivet = new Rivet::AnalysisHandler();
+#else
         rivet = new Rivet::AnalysisHandler(rname);
+#endif        
 #ifdef RIVET4
         rivet->setCheckBeams(!igBeam);
 #else
