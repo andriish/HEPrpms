@@ -5,7 +5,7 @@
 
 Name:           Rivet
 Version:        4.1.1
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 Source0:        https://rivet.hepforge.org/downloads/%{name}-%{version}.tar.gz
@@ -76,7 +76,7 @@ Summary:        Libraries and headers for %{name}
 Provides:       %{name}-devel = %{version}-%{release}
 Requires:       YODA-devel >= 2.0.0
 Requires:       %{name} = %{version}-%{release}
-Requires:       highfive-devel hdf5-devel
+Requires:       highfive-devel hdf5-devel fjcontrib-devel fastjet-devel 
 %description devel
 %{libnamedev} contains the libraries and header files needed to
 develop programs which make use of %{name}.
