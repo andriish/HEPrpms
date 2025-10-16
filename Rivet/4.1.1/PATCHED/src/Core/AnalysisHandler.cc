@@ -292,6 +292,7 @@ namespace Rivet {
     if (_skipMultiWeights) {
 
       // If running in single-weight mode, remove all bar the nominal weight
+      auto defaultweightName = _weightNames[_defaultWeightIdx];
       _weightIndices.clear();
       _weightNames.clear();
       if (customNomIdx >= 0 && customNomIdx != (int)_defaultWeightIdx) {
@@ -301,7 +302,7 @@ namespace Rivet {
         MSG_WARNING("Specified nominal weight different from auto-detected nominal weight. Will retain both.");
       }
       _weightIndices.push_back(_defaultWeightIdx);
-      _weightNames.push_back(_weightNames[_defaultWeightIdx]);
+      _weightNames.push_back(defaultweightName);
       _rivetDefaultWeightIdx = _weightIndices.size() - 1;
 
     }
