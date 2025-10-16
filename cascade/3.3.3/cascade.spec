@@ -1,6 +1,6 @@
 Name:       cascade
 Version:    3.3.3
-Release:    4%{?dist}
+Release:    5%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy physics
 
 License:    GPLv2
@@ -19,7 +19,7 @@ BuildRequires:  tex(latex) ghostscript tex(sectsty.sty)
 Requires:       libgfortran HepMC lhapdf  pythia6 HepMC3 Rivet YODA HepMC3  HepMC3-search HepMC3-devel HepMC3-search-devel
 BuildRequires:  gsl gsl-devel zlib zlib-devel 
 Requires:       gsl zlib
-BuildRequires:  fastjet-devel fastjet gcc-c++ gcc-gfortran tmdlib tmdlib-devel pythia8 pythia8-devel
+BuildRequires:  fastjet-devel fastjet gcc-c++ gcc-gfortran tmdlib tmdlib-devel pythia8 pythia8-devel fjcontrib-devel
 Requires:       fastjet tmdlib  pythia8
 %endif
 %if 0%{?suse_version}
