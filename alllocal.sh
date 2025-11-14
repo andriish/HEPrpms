@@ -4,9 +4,11 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-MG5_aMC:3.6.4
+#iminuit:2.21.3
 #golem95:1.3.4
-#recola2:2.2.5
+recola2:2.2.5
+#recola2:2.2.4
+#recola2:2.2.3
 #Rivet:4.1.1
 #YODA:2.1.1
 #gosam:3.0.2
