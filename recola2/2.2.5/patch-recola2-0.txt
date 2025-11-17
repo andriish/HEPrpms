@@ -1,0 +1,38 @@
+diff -Naur ORIG/src/CMakeLists.txt PATCHED/src/CMakeLists.txt
+--- ORIG/src/CMakeLists.txt	2025-11-14 16:21:30.437454594 +0100
++++ PATCHED/src/CMakeLists.txt	2025-11-14 16:21:44.517874177 +0100
+@@ -333,7 +333,33 @@
+ #  Recola installation configuration  #
+ #-------------------------------------#
+ 
+-set(RECOLA_HEADERS "")
++set(RECOLA_HEADERS ${CMAKE_Fortran_MODULE_DIRECTORY}/aafurambo.mod                     
++${CMAKE_Fortran_MODULE_DIRECTORY}/form_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/process_computation_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/skeleton_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/amplitude_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/globals_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/process_definition_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/statistics_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/collier_interface_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/input_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/process_generation_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/tables_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/colourflow_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/loop_vertices_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/random_psp_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/tree_vertices_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/currents_rcl.mod                  
++${CMAKE_Fortran_MODULE_DIRECTORY}/luxury.mod             
++${CMAKE_Fortran_MODULE_DIRECTORY}/recola1_interface_rcl.mod    
++${CMAKE_Fortran_MODULE_DIRECTORY}/wave_functions_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/draw_current_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/memory_logger_rcl.mod  
++${CMAKE_Fortran_MODULE_DIRECTORY}/wrapper_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/extended_higgs_interface_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/order_rcl.mod
++${CMAKE_Fortran_MODULE_DIRECTORY}/reset_rcl.mod
++)
+ set(RECOLA_HEADERS ${RECOLA_HEADERS} "${CMAKE_Fortran_MODULE_DIRECTORY}/recola.mod")
+ set(RECOLA_HEADERS ${RECOLA_HEADERS} "${RECOLA_INCLUDE_PATH}/recola.h")
+ set(RECOLA_HEADERS ${RECOLA_HEADERS} "${RECOLA_INCLUDE_PATH}/recola.hpp")
