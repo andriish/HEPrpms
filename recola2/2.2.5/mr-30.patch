@@ -1,0 +1,617 @@
+diff --git a/include/recola.h b/include/recola.h
+index bb1d536..ec9a3e3 100644
+--- a/include/recola.h
++++ b/include/recola.h
+@@ -167,6 +167,10 @@ void RCLMOD(input,set_renoscheme)
+ // get_renoscheme_rcl -> wrapper
+ void RCLMOD(input,set_resonant_particle)
+      (const char*,long int);
++void RCLMOD(input,set_internal_projection)
++     (const int*,const int*,const int*);
++void RCLMOD(input,update_internal_projection)
++     (const int*,const int*,const int*);
+ void RCLMOD(input,set_quarkline)
+      (const int*,const int*,const int*);
+ void RCLMOD(input,reset_vertices)
+@@ -177,6 +181,10 @@ void RCLMOD(input,reset_ctcouplings)
+      ();
+ void RCLMOD(input,print_collier_statistics)
+      ();
++void RCLMOD(input,initialise_particles)
++     ();
++void RCLMOD(input,clear_particles)
++     ();
+ 
+ // additional stuff, only used in combination with rept1l
+ void RCLMOD(input,set_compute_selfenergy)
+@@ -969,6 +977,16 @@ ivoid set_resonant_particle_rcl
+ {
+   RCLMOD(input,set_resonant_particle)(p, strlen(p));
+ }
++ivoid set_internal_projection_rcl
++            (int npr, int v, int p)
++{
++  RCLMOD(input,set_internal_projection)(&npr,&v,&p);
++}
++ivoid update_internal_projection_rcl
++            (int npr, int v, int p)
++{
++  RCLMOD(input,update_internal_projection)(&npr,&v,&p);
++}
+ ivoid set_quarkline_rcl
+             (int npr, int q1, int q2)
+ {
+@@ -990,6 +1008,14 @@ ivoid print_collier_statistics_rcl()
+ {
+   RCLMOD(input,print_collier_statistics)();
+ }
++ivoid initialise_particles_rcl()
++{
++  RCLMOD(input,initialise_particles)();
++}
++ivoid clear_particles_rcl()
++{
++  RCLMOD(input,clear_particles)();
++}
+ 
+ 
+ /**********************************************
+diff --git a/include/recola.hpp b/include/recola.hpp
+index 87e5773..54acc78 100644
+--- a/include/recola.hpp
++++ b/include/recola.hpp
+@@ -987,6 +987,16 @@ ivoid set_resonant_particle_rcl
+ {
+   RCLMOD(input,set_resonant_particle)(pa.c_str(),pa.length());
+ }
++ivoid set_internal_projection_rcl
++      (const int npr, const int v, const int p)
++{
++  RCLMOD(input,set_internal_projection)(&npr,&v,&p);
++}
++ivoid update_internal_projection_rcl
++      (const int npr, const int v, const int p)
++{
++  RCLMOD(input,update_internal_projection)(&npr,&v,&p);
++}
+ ivoid set_quarkline_rcl
+       (const int npr, const int q1, const int q2)
+ {
+@@ -1012,6 +1022,16 @@ ivoid print_collier_statistics_rcl
+ {
+   RCLMOD(input,print_collier_statistics)();
+ }
++ivoid initialise_particles_rcl
++      ()
++{
++  RCLMOD(input,initialise_particles)();
++}
++ivoid clear_particles_rcl
++      ()
++{
++  RCLMOD(input,clear_particles)();
++}
+ 
+ 
+ /**********************************
+diff --git a/src/api/input_rcl.f90 b/src/api/input_rcl.f90
+index d689e8f..dc58eb8 100644
+--- a/src/api/input_rcl.f90
++++ b/src/api/input_rcl.f90
+@@ -717,6 +717,23 @@ module input_rcl
+ 
+ !------------------------------------------------------------------------------!
+ 
++  subroutine initialise_particles_rcl
++    use modelfile, only: is_particle_model_init_mdl,   &
++                      set_particle_model_init_mdl,  &
++                      init_particles_mdl
++
++    if (.not. is_particle_model_init_mdl()) then
++      call init_particles_mdl()
++      call set_particle_model_init_mdl(.true.)
++    end if
++  end subroutine initialise_particles_rcl
++
++  subroutine clear_particles_rcl
++    use modelfile, only: clear_particles_mdl
++
++    call clear_particles_mdl()
++  end subroutine clear_particles_rcl
++
+   subroutine switchoff_couplingN_rcl(pan,nmax,xlp_in)
+     use modelfile, only: is_particle_model_init_mdl,   &
+                          get_particle_id_mdl,          &
+@@ -1250,6 +1267,110 @@ module input_rcl
+ 
+   end subroutine set_resonant_particle_rcl
+ 
++!------------------------------------------------------------------------------!
++
++  subroutine set_internal_projection_rcl (npr,v,p,fp_warning)
++  ! Select polarization of massive intermediate particle.
++  ! Args:
++  !   npr (int): process number
++  !   v (int): particle binary id
++  !   p (int): polarisation state: -1, 0, +1, 3
++  ! Note:\n\
++  !   The internal lines, for which the projection
++  !   is done, need to be on-shell. Usually, the pole-
++  !   approximation is used for that.
++  !   p = 3 can be selected to get the transverse polarization
++  !   contribution, i.e. the add-up left- and right-handed
++  !   polarization contributions.
++  ! Examples:
++  !   External particle are identified by binaries, i.e. in this example
++  !   1 (u), 2 (u~), e+(4), nu_e(8), mu-(16), nu_mu~(32), g(64)
++  !   Define the process:
++  !   >>> call define_process_rcl(1, 'u u~ > e+ nu_e mu- nu_mu~ g', 'LO')
++  !   Set the polarisation of the internal W^+ line:
++  !   >>> call set_internal_projection_rcl(1, 12, -1)
++  !   12 refers to e+ (4) + nu_e (8)
++  !   Set the polarisation of the internal W^- line:
++  !   call set_internal_projection_rcl(1, 48, -1)
++  !   48 refers to mu- (16) + nu_mu~ (32)
++
++    integer, intent(in) :: v, p, npr
++    logical, intent(in), optional :: fp_warning
++    logical :: warning
++    integer             :: pr, legs, vp
++
++    if (present(fp_warning)) then
++      warning = fp_warning
++    else
++      warning = .true.
++    end if
++
++    if (warning) call processes_generated_warning_rcl('set_internal_projection_rcl')
++    call get_pr(npr,'set_internal_projection_rcl',pr)
++
++    legs = prs(pr)%legs
++
++    ! polproj stores only projections of the first 2**(legs-1) momenta
++    if (v .ge. 2**(legs-1)) then
++      vp = 2**(legs) - 1 - v
++      ! flip helicity for transversal polarization for opposite
++      ! propagation direction
++      if (abs(p) .eq. 1) then
++        prs(pr)%polsel(vp) = -p
++      else
++        prs(pr)%polsel(vp) = p
++      end if
++    else
++      vp = v
++      prs(pr)%polsel(vp) = p
++    end if
++
++  end subroutine set_internal_projection_rcl
++
++  subroutine update_internal_projection_rcl (npr,v,p)
++
++    use modelfile, only: is_resonant_particle_id_mdl
++    integer, intent(in) :: v, p, npr
++    integer             :: pr, legs, i, e1, e2
++
++    if (.not. processes_generated) then
++        call error_rcl('No processes have been generated yet.', &
++                       where='update_internal_projection_rcl')
++    end if
++    call get_pr(npr,'update_internal_projection_rcl',pr)
++    legs = prs(pr)%legs
++    do i = 1,prs(pr)%resMax
++        if (.not. is_resonant_particle_id_mdl(prs(pr)%parRes(i))) then
++            cycle
++        end if
++
++        e1 = newbin(prs(pr)%binRes(i),pr)
++        e2 = pow2(legs) - 1 - e1
++
++        if ((v .ne. e1) .and. (v .ne. e2)) then
++            cycle
++        end if
++
++        if (abs(p) .eq. 1) then
++            if (v .eq. e1) then
++                prs(pr)%polsel(i) = -p
++            else
++                prs(pr)%polsel(i) = p
++            end if
++        else
++          prs(pr)%polsel(i) = p
++        end if
++
++        polprojin(e1,pr) = prs(pr)%polsel(i)
++        if (abs(prs(pr)%polsel(i)) .eq. 1) then
++          polprojin(e1,pr) = -prs(pr)%polsel(i)
++          polprojin(e2,pr) = prs(pr)%polsel(i)
++        else
++          polprojin(e2,pr) = prs(pr)%polsel(i)
++        end if
++    end do
++  end subroutine update_internal_projection_rcl
++
+ !------------------------------------------------------------------------------!
+ 
+   subroutine set_quarkline_rcl (npr,q1,q2)
+diff --git a/src/core/amplitude_rcl.f90 b/src/core/amplitude_rcl.f90
+index 22253f3..5f0ab7a 100644
+--- a/src/core/amplitude_rcl.f90
++++ b/src/core/amplitude_rcl.f90
+@@ -489,9 +489,8 @@ module amplitude_rcl
+   real (sp)                  :: timeTIin,timeTIout,timeTCin,timeTCout
+   real (dp)                  :: fa,cllcritacc,check
+   real (dp)                  :: deltaUV,deltaIR,deltaIR2,muUV,muIR
+-  real (dp) :: ppOut(0:3)
+-  complex (dp) :: wpOut(0:3), spr
+ 
++  complex(dp) :: wpOut(0:3), ppOut(0:3), spr
+ 
+   if (prs(prin)%crosspr .ne. 0) then
+     pr = prs(prin)%crosspr
+@@ -1065,8 +1064,6 @@ module amplitude_rcl
+                 call tree2(ps(lout),p(:,leg1),pl(:,leg1),m,den,  &
+                            cosm0(s,pr)%valR,tyR,ww0(:,w0in(1)),ww0out(:,mo))
+               end if
+-              call helicity_projection(polprojin(lout,pr),parsm0(s,pr), &
+-                                       m2,p(:,lout),pl(:,lout),ww0out(:,mo))
+ 
+             case (3)
+               leg1 = binsm0(1,s,pr)
+@@ -1082,8 +1079,6 @@ module amplitude_rcl
+                            pl(:,leg1),pl(:,leg2),m,den,cosm0(s,pr)%valR,tyR, &
+                            ww0(:,w0in(1)),ww0(:,w0in(2)),ww0out(:,mo))
+               end if
+-              call helicity_projection(polprojin(lout,pr),parsm0(s,pr), &
+-                                       m2,p(:,lout),pl(:,lout),ww0out(:,mo))
+             case (4)
+               leg1 = binsm0(1,s,pr)
+               leg2 = binsm0(2,s,pr)
+@@ -1102,8 +1097,6 @@ module amplitude_rcl
+                            ww0(:,w0in(1)),ww0(:,w0in(2)),ww0(:,w0in(3)), &
+                            ww0out(:,mo))
+               end if
+-              call helicity_projection(polprojin(lout,pr),parsm0(s,pr), &
+-                                       m2,p(:,lout),pl(:,lout),ww0out(:,mo))
+             case (5)
+               leg1 = binsm0(1,s,pr)
+               leg2 = binsm0(2,s,pr)
+@@ -1124,8 +1117,6 @@ module amplitude_rcl
+                            ww0(:,w0in(1)),ww0(:,w0in(2)),ww0(:,w0in(3)), &
+                            ww0(:,w0in(4)),ww0out(:,mo))
+               end if
+-              call helicity_projection(polprojin(lout,pr),parsm0(s,pr), &
+-                                       m2,p(:,lout),pl(:,lout),ww0out(:,mo))
+             case (6)
+               leg1 = binsm0(1,s,pr)
+               leg2 = binsm0(2,s,pr)
+@@ -1148,8 +1139,6 @@ module amplitude_rcl
+                            ww0(:,w0in(1)),ww0(:,w0in(2)),ww0(:,w0in(3)),           &
+                            ww0(:,w0in(4)),ww0(:,w0in(5)),ww0out(:,mo))
+               end if
+-              call helicity_projection(polprojin(lout,pr),parsm0(s,pr), &
+-                                       m2,p(:,lout),pl(:,lout),ww0out(:,mo))
+             case (7)
+               leg1 = binsm0(1,s,pr)
+               leg2 = binsm0(2,s,pr)
+@@ -1166,8 +1155,6 @@ module amplitude_rcl
+                     ww0(:,w0in(5)), p(:,leg5), pl(:,leg5), &
+                     ww0(:,w0in(6)), p(:,leg6), pl(:,leg6), &
+                     den, m, ww0out(:,mo), last)
+-              call helicity_projection(polprojin(lout,pr),parsm0(s,pr), &
+-                                       m2,p(:,lout),pl(:,lout),ww0out(:,mo))
+             case (8)
+               leg1 = binsm0(1,s,pr)
+               leg2 = binsm0(2,s,pr)
+@@ -1186,13 +1173,14 @@ module amplitude_rcl
+                     ww0(:,w0in(6)), p(:,leg6), pl(:,leg6), &
+                     ww0(:,w0in(7)), p(:,leg7), pl(:,leg7), &
+                     den, m, ww0out(:,mo), last)
+-              call helicity_projection(polprojin(lout,pr),parsm0(s,pr), &
+-                                       m2,p(:,lout),pl(:,lout),ww0out(:,mo))
+             case default
+               call error_rcl('Tree current with npoint not in [2..8].',&
+                              where='compute_amplitude(internal)')
+             end select
+ 
++            call helicity_projection(polprojin(lout,pr),parsm0(s,pr), &
++                                     m2,p(:,lout),pl(:,lout),ww0out(:,mo))
++
+             if (transverse_resonance .and. defresbin(lout,pr)) then
+               if ( &
+                 (parsm0(s,pr) .eq. get_particle_id_mdl("G0")) .or. &
+@@ -3013,7 +3001,7 @@ module amplitude_rcl
+       write(nx,'(2x,5a)') &
+         'The denominator of the propagator of resonance number ', &
+         trim(adjustl(ci)),' (',trim(cpa),' particle) '
+-      write(nx,'(2x,a)') 'carries an off-sheel squared momentum p^2:'
++      write(nx,'(2x,a)') 'carries an off-shell squared momentum p^2:'
+       write(nx,'(4x,a,'//trim(fmtp2)//',a)') 'p^2       = ',p2,' GeV^2'
+       write(nx,'(4x,a,'//trim(fmtpm)//',a)') 'sqrt(p^2) = ',pm,' GeV'
+       write(nx,*)
+diff --git a/src/core/wave_functions_rcl.f90 b/src/core/wave_functions_rcl.f90
+index 53b05a1..89cbbb5 100644
+--- a/src/core/wave_functions_rcl.f90
++++ b/src/core/wave_functions_rcl.f90
+@@ -37,7 +37,7 @@ module wave_functions_rcl
+   complex (dp), intent (out) :: wp(0:3)
+ 
+   real(dp)       :: s0,s3,p0p3
+-  complex(dp)    :: m,pv,pT,r,php,phm,bp,bm,bhp,bhm,ap,am
++  complex(dp)    :: m,pv,pT,r,php,phm,bp,bm,bhp,bhm,ap,am,mo,mo2
+   logical        :: pTzero
+ 
+   ! pl(1) = p(0)+p(3)
+@@ -68,7 +68,7 @@ module wave_functions_rcl
+     select case (hel)
+ 
+     case (0)
+-
++      ! Longitudinal polarisation vector
+       wp(0) = pv/m
+       if (pTzero) then ! pT = 0 (i.e. p(1)/pT = s0, p(2)/pT = 0)
+         wp(1:2) = cnul
+@@ -78,7 +78,7 @@ module wave_functions_rcl
+       endif
+ 
+     case (-1,1)
+-
++      ! Transverse polarisation vectors
+       wp(0) = cnul
+       if (pTzero) then ! pT = 0 (i.e. p(1)/pT = s0, p(2)/pT = 0)
+         wp(1) = - hel*s3/csq2
+@@ -89,6 +89,20 @@ module wave_functions_rcl
+         wp(2) = ( - s0*hel*p(2)*p(3)/pv - cima*p(1) )/csq2/pT
+         wp(3) = s0*hel*pT/csq2/pv
+       endif
++
++    case (2)
++      ! Auxiliary polarisation vector
++      mo2 = pl(1)*pl(2) - pl(3)*pl(4)
++      mo = sqrt(mo2)
++      wp(0) = p(0)/mo
++      if (pTzero) then ! pT = 0 (i.e. p(1)/pT = s0, p(2)/pT = 0)
++        wp(1:2) = cnul
++        wp(3)   = s3*pv/mo
++      else             ! pT > 0 (this implies pv > 0)
++        wp(1:3) = p(1:3)/mo
++      endif
++
++      wp(:) = wp(:)*sqrt(mo2/m**2-1d0)
+     end select
+ 
+   ! fermions
+diff --git a/src/pyrecola/pyrecola.c b/src/pyrecola/pyrecola.c
+index 8f47c3f..a115245 100644
+--- a/src/pyrecola/pyrecola.c
++++ b/src/pyrecola/pyrecola.c
+@@ -936,7 +936,7 @@ switchon_resonant_selfenergies_py(PyObject *self, PyObject *args)
+ }
+ PyDoc_STRVAR(switchoff_resonant_selfenergies_doc,
+ "switchoff_resonant_selfenergies_rcl\n\n\
+-Sets the value of `resSE` to .true.");
++Sets the value of `resSE` to .false.");
+ static PyObject *
+ switchoff_resonant_selfenergies_py(PyObject *self, PyObject *args)
+ {
+@@ -1320,6 +1320,61 @@ set_resonant_particle_py(PyObject *self, PyObject *args)
+   Py_INCREF(Py_None);
+   return Py_None;
+ }
++PyDoc_STRVAR(set_internal_projection_doc,
++"set_internal_projection_rcl(npr,v,p)\n\n\
++Select polarization of massive intermediate particle.\n\
++Args:\n\
++  npr (int): process number\n\
++  v (int): particle binary id\n\
++  p (int): polarisation state: -1, 0, +1, 3\n\n\
++Note:\n\
++  The internal lines, for which the projection\n\
++  is done, need to be on-shell. Usually, the pole-\n\
++  approximation is used for that.\n\
++  p = 3 can be selected to get the transverse polarization\n\
++  contribution, i.e. the add-up left- and right-handed\n\
++  polarization contributions.\n\n\
++Examples:\n\
++  External particle are identified by binaries, i.e. in this example\n\
++  1 (u), 2 (u~), e+(4), nu_e(8), mu-(16), nu_mu~(32), g(64)\n\
++  Define the process:\n\
++  >>> call define_process_rcl(1, 'u u~ > e+ nu_e mu- nu_mu~ g', 'LO')\n\
++  Set the polarisation of the internal W^+ line:\n\
++  >>> call set_internal_projection_rcl(1, 12, -1)\n\
++  12 refers to e+ (4) + nu_e (8)\n\
++  Set the polarisation of the internal W^- line:\n\
++  call set_internal_projection_rcl(1, 48, -1)\n\
++  48 refers to mu- (16) + nu_mu~ (32)");
++static PyObject *
++set_internal_projection_py(PyObject *self, PyObject *args)
++{
++  int npr,v,p;
++
++  if (!PyArg_ParseTuple(args, "iii", &npr,&v,&p))
++      return NULL;
++
++  set_internal_projection_rcl(npr,v,p);
++
++  Py_INCREF(Py_None);
++  return Py_None;
++}
++PyDoc_STRVAR(update_internal_projection_doc,
++"update_internal_projection_rcl(npr,v,p)\n\n\
++Do the same as set_internal_projection_rcl but\n\
++also update the internally used polprojin array.");
++static PyObject *
++update_internal_projection_py(PyObject *self, PyObject *args)
++{
++  int npr,v,p;
++
++  if (!PyArg_ParseTuple(args, "iii", &npr,&v,&p))
++      return NULL;
++
++  update_internal_projection_rcl(npr,v,p);
++
++  Py_INCREF(Py_None);
++  return Py_None;
++}
+ PyDoc_STRVAR(set_quarkline_doc,
+ "set_quarkline_rcl(npr,q1,q2)\n\n\
+ Enforces a quark-flow between two quarks ``q1`` and ``q2``.\n\n\
+@@ -1403,6 +1458,32 @@ print_collier_statistics_py(PyObject *self, PyObject *args)
+   Py_INCREF(Py_None);
+   return Py_None;
+ }
++PyDoc_STRVAR(initialise_particles_doc,
++"initialise_particles_rcl\n\n\
++Initialises the some electroweak parameters of the model before the process is generated.");
++static PyObject *
++initialise_particles_py(PyObject *self, PyObject *args)
++{
++
++  initialise_particles_rcl();
++
++  Py_INCREF(Py_None);
++  return Py_None;
++}
++PyDoc_STRVAR(clear_particles_doc,
++"clear_particles_rcl\n\n\
++Call the model internal clear_particles_mdl routine and reset a lot of model parameters.\n\
++This routine is supposed to be used in combination with a call of initialise_particles_rcl before\n\
++and both calls are expected to be made before the process is generated.");
++static PyObject *
++clear_particles_py(PyObject *self, PyObject *args)
++{
++
++  clear_particles_rcl();
++
++  Py_INCREF(Py_None);
++  return Py_None;
++}
+ 
+ // additional stuff, only used in combination with rept1l
+ static PyObject *
+@@ -4847,11 +4928,15 @@ static PyMethodDef pyrecola_methods[] = {
+   {"get_parameter_rcl", get_parameter_py, METH_VARARGS, get_parameter_doc},
+   {"set_renoscheme_rcl", set_renoscheme_py, METH_VARARGS, set_renoscheme_doc},
+   {"set_resonant_particle_rcl", set_resonant_particle_py, METH_VARARGS, set_resonant_particle_doc},
++  {"set_internal_projection_rcl", set_internal_projection_py, METH_VARARGS, set_internal_projection_doc},
++  {"update_internal_projection_rcl", update_internal_projection_py, METH_VARARGS, update_internal_projection_doc},
+   {"set_quarkline_rcl", set_quarkline_py, METH_VARARGS, set_quarkline_doc},
+   {"reset_vertices_rcl", reset_vertices_py, METH_VARARGS, reset_vertices_doc},
+   {"reset_couplings_rcl", reset_couplings_py, METH_VARARGS, reset_couplings_doc},
+   {"reset_ctcouplings_rcl", reset_ctcouplings_py, METH_VARARGS, reset_ctcouplings_doc},
+   {"print_collier_statistics_rcl", print_collier_statistics_py, METH_VARARGS, print_collier_statistics_doc},
++  {"initialise_particles_rcl", initialise_particles_py, METH_VARARGS, initialise_particles_doc},
++  {"clear_particles_rcl", clear_particles_py, METH_VARARGS, clear_particles_doc},
+   // additional stuff, only used in combination with rept1l
+   {"set_compute_selfenergy_rcl", set_compute_selfenergy_py, METH_VARARGS},
+   {"set_compute_selfenergy_offshell_rcl", set_compute_selfenergy_offshell_py, METH_VARARGS},
+diff --git a/src/recola.f90 b/src/recola.f90
+index 953cd7a..d2f00de 100644
+--- a/src/recola.f90
++++ b/src/recola.f90
+@@ -61,6 +61,8 @@
+       switchoff_coupling2_rcl,                     &
+       switchoff_coupling3_rcl,                     &
+       switchoff_coupling4_rcl,                     &
++      initialise_particles_rcl,                    &
++      clear_particles_rcl,                         &
+       switchon_transverse_resonant_propagator_rcl, &
+       switchoff_transverse_resonant_propagator_rcl,&
+       switchon_resonant_selfenergies_rcl,          &
+@@ -86,6 +88,8 @@
+       set_renoscheme_rcl,                          &
+       get_renoscheme_rcl,                          &
+       set_resonant_particle_rcl,                   &
++      set_internal_projection_rcl,                 &
++      update_internal_projection_rcl,              &
+       set_quarkline_rcl,                           &
+       set_otter_mode_rcl,                          &
+       reset_vertices_rcl,                          &
+diff --git a/src/util/draw_current_rcl.f90 b/src/util/draw_current_rcl.f90
+index cc44ab5..3be4973 100644
+--- a/src/util/draw_current_rcl.f90
++++ b/src/util/draw_current_rcl.f90
+@@ -42,7 +42,7 @@ module draw_current_rcl
+ 
+       write(99,'(a)') '\documentclass[11pt]{article}'
+       write(99,'(a)')
+-      write(99,'(a)') '\usepackage{axodraw}'
++      write(99,'(a)') '\usepackage{axodraw2}'
+       write(99,'(a)')
+       write(99,'(a)') '\oddsidemargin -20pt \evensidemargin -20pt'
+       write(99,'(a)') '\topmargin -40pt \headheight 00pt \headsep 00pt'
+diff --git a/tests/helicity_sel.f90 b/tests/helicity_sel.f90
+index 8b8273e..0a39559 100644
+--- a/tests/helicity_sel.f90
++++ b/tests/helicity_sel.f90
+@@ -5,7 +5,7 @@ program internal_projection
+   integer, parameter :: dp = 8
+   real (kind=dp) :: p_full (0:3,1:6),p_full_prod(0:3,1:4), p_full_dec1(0:3,1:3), p_full_dec2(0:3,1:3)
+   real (kind=dp) :: A2(0:1), B2(0:1), C2(0:1), D2(0:1), E2(0:1)
+-  real (kind=dp) :: M2prod, M2dec1, M2dec2, M2full
++  real (kind=dp) :: M2prod, M2dec1, M2dec2, M2full, M2full2, M2full3, M2full4
+   real (kind=dp) ::alphas, MW, MZ, wwidth, alpha
+ 
+   p_full(:,1)=[5000.0000000000000d0, 0.0000000000000000d0, 0.0000000000000000d0, 5000.0000000000000d0]
+@@ -43,12 +43,50 @@ program internal_projection
+ 
+   call set_print_level_squared_amplitude_rcl(3)
+   call set_resonant_particle_rcl("W-")
+-  ! call define_process_rcl(1,"A A -> A[-](e+ e-) Z[-](mu+ mu-)","NLO")
+   call define_process_rcl(1,"A A -> W-[-](nu_e~ e-) W+[-](mu+ nu_mu)","NLO")
++  call define_process_rcl(2,"A A -> W-[+](nu_e~ e-) W+[-](mu+ nu_mu)","NLO")
++  call define_process_rcl(3,"A A -> W-(nu_e~ e-) W+(mu+ nu_mu)","NLO")
++  call define_process_rcl(4,"A A -> W-(nu_e~ e-) W+(mu+ nu_mu)","NLO")
++
++  call set_internal_projection_rcl(3, 4+8, 1)
++  call set_internal_projection_rcl(3, 16+32, 1)
+ 
+   call generate_processes_rcl
+-  call compute_process_rcl(1, p_full, "NLO", A2)
++  call compute_process_rcl(1, p_full, "LO", A2)
+   call get_squared_amplitude_rcl(1,0,"LO",M2full)
++  write(*,*) "ME2 = ", M2full
++  call compute_process_rcl(2, p_full, "LO", A2)
++  call get_squared_amplitude_rcl(2,0,"LO",M2full2)
++
++  call compute_process_rcl(3, p_full, "LO", A2)
++  call get_squared_amplitude_rcl(3,0,"LO",M2full3)
++
++  write(*,*) "Updating 4"
++  call update_internal_projection_rcl(4, 4+8, -1)
++  call update_internal_projection_rcl(4, 16+32, -1)
++  ! stop
++
++  call compute_process_rcl(4, p_full, "LO", A2)
++  call get_squared_amplitude_rcl(4,0,"LO",M2full4)
++
++  write(*,*) "ME2 = ", M2full2
++  write(*,*) "ME2 = ", M2full3
++  write(*,*) "ME2 = ", M2full4
++  if (M2full2 .eq. M2full) then
++      write(*,*) "Updating projection failed (1)" 
++      stop 9
++  end if
++
++  call update_internal_projection_rcl(2, 4+8, -1)
++
++  call compute_process_rcl(2, p_full, "LO", A2)
++  call get_squared_amplitude_rcl(2,0,"LO",M2full2)
++
++  if ((M2full2 .ne. M2full) .or. (M2full4 .ne. M2full)) then
++      write(*,*) "Updating projection failed (2)", M2full2, M2full4, M2full
++      stop 9
++  end if
++
+   write(*,*) "ME2 = ", M2full
+   call reset_recola_rcl()
+ 
+@@ -76,8 +114,8 @@ program internal_projection
+      write(*,*) "Internal projection successful!"
+   else
+      write(*,*) "Internal projection failed!"
++     stop 9
+   end if
+ 
+-
+   call reset_recola_rcl
+ end program internal_projection
