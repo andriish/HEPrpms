@@ -7,7 +7,7 @@ declare -a BUILDLIST=(
 #rapgap:3.4.0
 #cascade:3.3.3
 #golem95:1.3.4
-recola2:2.2.5
+#recola2:2.2.5
 #Rivet:4.1.1
 #YODA:2.1.1
 #gosam:3.0.2
@@ -44,7 +44,7 @@ recola2:2.2.5
 #gosam:2.1.2
 ###################
 #cernlib:2024.09.16.0
-#SHERPA-MC:3.0.1
+SHERPA-MC:3.0.3
 #nlox:1.2.1
 #qqvvamp:1.1
 #ggvvamp:1.0
