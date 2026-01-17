@@ -65,6 +65,8 @@ http://amcatnlo.web.cern.ch/amcatnlo/list_refs.htm
 
 %prep
 %setup -q  -n MG5_aMC_v3_6_7
+sed -i 's/589793D0/589793/g' madgraph/iolibs/template_files/f2py_splitter.py
+
 %build
 
 %install
