@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           form
 Version:        4.3.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv3
 Url:            https://github.com/vermaseren/form
 Source0:        https://github.com/vermaseren/form/releases/download/v%{version}/form-%{version}.tar.gz
@@ -24,6 +24,9 @@ BuildRequires: tex(hanging.sty) tex(stackengine.sty)  tex(newunicodechar.sty) te
 %endif
 %if %{?rhel}%{!?rhel:0} >= 8 || %{?fedora}%{!?fedora:0} >= 31
 BuildRequires: ghostscript-tools-dvipdf texlive-wasy
+%endif
+%if %{?fedora}%{!?fedora:0} >= 44
+BuildRequires: tex(xltabular.sty)
 %endif
 Prefix: %{_prefix}
 
