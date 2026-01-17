@@ -44,7 +44,7 @@ declare -a BUILDLIST=(
 #gosam:2.1.2
 ###################
 #cernlib:2024.09.16.0
-SHERPA-MC:3.0.3
+#SHERPA-MC:3.0.3
 #nlox:1.2.1
 #qqvvamp:1.1
 #ggvvamp:1.0
@@ -55,7 +55,7 @@ SHERPA-MC:3.0.3
 #highfive:2.9.0
 #Rivet:4.0.0
 #cernlib:2024.06.12.0
-#MG5_aMC:3.5.6
+MG5_aMC:3.6.7
 #Delphes:3.5.1pre11
 #geneva:1.0.0
 #SHERPA-MC:2.2.16
