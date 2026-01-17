@@ -27,6 +27,7 @@ BuildRequires: ghostscript-tools-dvipdf texlive-wasy
 %endif
 %if %{?fedora}%{!?fedora:0} >= 44
 BuildRequires: tex(xltabular.sty)
+BuildRequires: tex(ltablex.sty)
 %endif
 Prefix: %{_prefix}
 
