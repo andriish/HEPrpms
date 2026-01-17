@@ -1,3 +1,6 @@
+%global __python3_bytecompile_exclude %{buildroot}/%{python3_sitearch}/madgraph/iolibs/template_files/f2py_splitter.py
+%global _python_bytecompile_errors_terminate_build 0
+
 %define major            0
 %define libname          MG5_aMC
 %undefine __brp_mangle_shebangs 
@@ -65,7 +68,7 @@ http://amcatnlo.web.cern.ch/amcatnlo/list_refs.htm
 
 %prep
 %setup -q  -n MG5_aMC_v3_6_7
-sed -i 's/589793D0/589793/g' madgraph/iolibs/template_files/f2py_splitter.py
+
 
 %build
 
