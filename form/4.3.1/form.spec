@@ -29,6 +29,7 @@ BuildRequires: ghostscript-tools-dvipdf texlive-wasy
 BuildRequires: tex(xltabular.sty)
 BuildRequires: tex(ltablex.sty)
 BuildRequires: tex(tabularray.sty)
+BuildRequires: tex(ninecolors.sty)
 %endif
 Prefix: %{_prefix}
 
