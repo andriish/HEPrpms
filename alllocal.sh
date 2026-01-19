@@ -78,7 +78,7 @@ declare -a BUILDLIST=(
 #MG5_aMC:3.5.3
 #gosam:2.1.1
 #qgraf:3.6.7
-Professor:2.5.1
+#Professor:2.5.1
 #hevea:2.32
 #pythia6:6.4.28
 #OK apfel:3.1.1
@@ -102,7 +102,7 @@ Professor:2.5.1
 #ThePEG:2.3.0
 #Herwig:7.3.0
 #geant4:11.1.3
-#COCOA:0.1.1
+COCOA:0.1.1
 #whizard:3.1.4
 
 #noweb:2.13

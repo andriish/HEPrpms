@@ -42,7 +42,9 @@ BuildRequires: python3-rpm-macros
 
 
 %build
-
+%if %{?fedora}%{!?fedora:0} >= 44
+sed -i 's@c++11@c++14@1'   Makefile
+%endif
 %if  %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 export PYTHON=/usr/bin/python3
 export CXXFLAGS='%{optflags} -O0 ' 
