@@ -55,7 +55,7 @@ declare -a BUILDLIST=(
 #highfive:2.9.0
 #Rivet:4.0.0
 #cernlib:2024.06.12.0
-MG5_aMC:3.6.7
+#MG5_aMC:3.6.7
 #Delphes:3.5.1pre11
 #geneva:1.0.0
 #SHERPA-MC:2.2.16
@@ -78,7 +78,7 @@ MG5_aMC:3.6.7
 #MG5_aMC:3.5.3
 #gosam:2.1.1
 #qgraf:3.6.7
-#Professor:2.4.2
+Professor:2.5.1
 #hevea:2.32
 #pythia6:6.4.28
 #OK apfel:3.1.1

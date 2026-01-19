@@ -341,3 +341,4 @@ e7dc04b941078cec8591eeab0a98e67a  recola2/2.2.5/rpmbuild/SOURCES/recola2-2.2.5.t
 d654cc993e76328c49eabeeb9842f88d  MG5_aMC/3.6.4/rpmbuild/SOURCES/MG5_aMC_v3.6.4.tar.gz
 8e8ec1a8f9c1c5b9044553255651f4d2  SHERPA-MC/3.0.3/rpmbuild/SOURCES/sherpa-v3.0.3.tar.gz
 4181e7e6387efc08a1f344d52c9ca5b5  MG5_aMC/3.6.7/rpmbuild/SOURCES/MG5_aMC_v3.6.7.tar.gz
+add69759ce00cb4a1876ce3bcb77f338  Professor/2.5.1/rpmbuild/SOURCES/professor-professor-2.5.1.tar.gz
