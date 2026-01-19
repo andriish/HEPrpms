@@ -1,6 +1,6 @@
 Name:           njet
 Version:        2.1.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        GPL
 Url:            https://bitbucket.org/njet
 Source0:        https://bitbucket.org/njet/njet/downloads/%{name}-%{version}.tar.gz
@@ -28,6 +28,10 @@ sed -i 's@python@python3@1'  blha/njet.py
 
 %build
 export FFLAGS="%{optflags} -std=legacy"
+%if %{?fedora}%{!?fedora:0} >= 44
+export CFLAGS="%{optflags} -std=c++17"
+export CXXFLAGS="%{optflags} -std=c++17"
+%endif
 %configure --with-qd=/usr 
 make  
 %install
