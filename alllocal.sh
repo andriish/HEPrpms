@@ -102,7 +102,7 @@ declare -a BUILDLIST=(
 #ThePEG:2.3.0
 #Herwig:7.3.0
 #geant4:11.1.3
-COCOA:0.1.1
+#COCOA:0.1.1
 #whizard:3.1.4
 
 #noweb:2.13
@@ -149,7 +149,7 @@ COCOA:0.1.1
 #blackhat:0.9.9
 #binder:1.3.0
 #SHERPA-MC:2.2.15
-#FeynHiggs:2.19.0
+FeynHiggs:2.19.0
 #f90cache:0.99c
 #tmdlib:2.2.08
 #whizard:3.1.0

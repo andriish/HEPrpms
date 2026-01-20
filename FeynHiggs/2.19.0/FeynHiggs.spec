@@ -1,7 +1,7 @@
 %define debug_package %{nil}
 Name:           FeynHiggs
 Version:        2.19.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Fortran code for the (diagrammatic/EFT/hybrid) calculation of the masses, mixings and much more of the Higgs bosons
 License:        GPL
 Prefix:         %{_prefix}

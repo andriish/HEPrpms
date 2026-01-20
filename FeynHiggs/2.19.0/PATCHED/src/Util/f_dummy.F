@@ -1,0 +1,5 @@
+       SUBROUTINE F(DY,Y,T,IFLAG)
+       IMPLICIT NONE
+       DOUBLE PRECISION T, DY(*), Y(*)
+       INTEGER IFLAG
+       END
