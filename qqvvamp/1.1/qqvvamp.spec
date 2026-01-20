@@ -37,17 +37,19 @@ This package contains the header files and libraries needed to develop applicati
 %patch -P 0 -p1
 
 %build
-
 %if %{?rhel}%{!?rhel:0} == 9
 export CXXFLAGS='-O0 -g0 -fno-var-tracking -mcmodel=medium -fdata-sections -ffunction-sections -fno-implicit-templates'
-export LDFLAGS='-Wl,--as-needed'
-%cmake_build -j4
 %else
 export CXXFLAGS='-O1 -fno-var-tracking -mcmodel=medium -fdata-sections -ffunction-sections'
+%endif
+
 export LDFLAGS='-Wl,--as-needed'
 %cmake .
-%cmake_build
+%if %{?rhel}%{!?rhel:0} == 9
+export CXXFLAGS='-O0 -fno-var-tracking -mcmodel=medium -fdata-sections -ffunction-sections -fno-implicit-templates'
+%cmake_build -j4
 %endif
+%cmake_build
 
 %install
 %cmake_install
