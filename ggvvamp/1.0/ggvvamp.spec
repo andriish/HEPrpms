@@ -37,7 +37,12 @@ This package contains the header files and libraries needed to develop applicati
 %patch -P 0 -p1
 
 %build
+%if %{?fedora}%{!?fedora:0} >= 44
+export CXXFLAGS='%{optflags} -fno-var-tracking -g0'
+%else
 export CXXFLAGS='%{optflags} -fno-var-tracking'
+%endif
+
 %cmake .
 %cmake_build
 
