@@ -342,3 +342,4 @@ d654cc993e76328c49eabeeb9842f88d  MG5_aMC/3.6.4/rpmbuild/SOURCES/MG5_aMC_v3.6.4.
 8e8ec1a8f9c1c5b9044553255651f4d2  SHERPA-MC/3.0.3/rpmbuild/SOURCES/sherpa-v3.0.3.tar.gz
 4181e7e6387efc08a1f344d52c9ca5b5  MG5_aMC/3.6.7/rpmbuild/SOURCES/MG5_aMC_v3.6.7.tar.gz
 add69759ce00cb4a1876ce3bcb77f338  Professor/2.5.1/rpmbuild/SOURCES/professor-professor-2.5.1.tar.gz
+1716d84f880f67953fe2f2517cac0b20  YODA/2.1.2/rpmbuild/SOURCES/YODA-2.1.2.tar.gz
