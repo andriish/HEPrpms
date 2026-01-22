@@ -1,7 +1,7 @@
 ## Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([Rivet],[4.1.1],[rivet@projects.hepforge.org],[Rivet])
+AC_INIT([Rivet],[4.1.2],[rivet@projects.hepforge.org],[Rivet])
 
 ## Check and block installation into the src/build dir
 if test "$prefix" = "$PWD"; then
@@ -365,7 +365,7 @@ AC_ARG_WITH([yaml-cpp],
     [yaml_cpp_prefix="no"])
 # Check if the user provided a custom path for yaml-cpp or use default /usr
 YAML_CPP_CPPFLAGS=""
-YAML_CPP_LDFLAGs=""
+YAML_CPP_LDFLAGS=""
 if test "x$yaml_cpp_prefix" != "xno"; then
     YAML_CPP_CPPFLAGS="-I$yaml_cpp_prefix/include"
     YAML_CPP_LDFLAGS="-L$yaml_cpp_prefix/lib -L$yaml_cpp_prefix/lib64 -lyaml-cpp"

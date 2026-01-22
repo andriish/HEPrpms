@@ -720,6 +720,9 @@ namespace Rivet {
     /// Toggle for multi-file runs
     bool _isEndOfFile;
 
+    /// Toggle for subevent warning
+    bool _subeventWarning;
+
     /// Nominal cross-section
     std::pair<double,double> _userxs;
 

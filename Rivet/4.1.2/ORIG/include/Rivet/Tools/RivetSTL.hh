@@ -25,6 +25,7 @@ namespace Rivet {
   // using namespace std;
   using std::string;
   using std::to_string;
+  using namespace std::string_literals;
 
   using std::ifstream;
   using std::ofstream;

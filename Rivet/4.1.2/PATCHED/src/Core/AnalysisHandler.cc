@@ -35,10 +35,10 @@ namespace {
 namespace Rivet {
 
 
-  AnalysisHandler::AnalysisHandler(const string& runname)
-    : _runname(runname),
-      _ntrials(0.0),
+  AnalysisHandler::AnalysisHandler()
+    : _ntrials(0.0),
       _isEndOfFile(false),
+      _subeventWarning(true),
       _userxs{NAN, NAN},
       _initialised(false),
       _checkBeams(true),
@@ -47,12 +47,13 @@ namespace Rivet {
       _unmatchWeightNames(""),
       _nominalWeightName(""),
       _weightCap(0.),
-      _NLOSmearing(0.),
+      _NLOSmearing(-1.0),
       _defaultWeightIdx(0),
       _rivetDefaultWeightIdx(0),
       _customDefaultWeightIdx(-1),
       _dumpPeriod(0), _dumping(false) {
     registerDefaultTypes<double,int,string>();
+    _beaminfo = make_shared<YODA::BinnedEstimate<string>>("/TMP/_BEAMPZ");
   }
 
 
@@ -62,7 +63,9 @@ namespace Rivet {
     if (!printed && getLog().getLevel() <= 20) {
       cout << endl
            << "The MCnet usage guidelines apply to Rivet: see http://www.montecarlonet.org/GUIDELINES" << endl
-           << "Please acknowledge Rivet in results made using it, and cite https://arxiv.org/abs/1912.05451" << endl;
+           << "Please acknowledge Rivet in results made using it, and cite https://arxiv.org/abs/2404.15984"
+           << " and https://arxiv.org/abs/2312.15070" << endl;
+      // << https://arxiv.org/abs/1912.05451" << endl;
       // << "https://arxiv.org/abs/1003.0694" << endl;
       printed = true;
     }
@@ -119,7 +122,12 @@ namespace Rivet {
     // Set the Run's beams based on this first event
     /// @todo Improve this const ugliness
     const Event evt(const_cast<GenEvent&>(ge), _weightIndices);
-    setRunBeams(Rivet::beams(evt));
+    try {
+      setRunBeams(Rivet::beams(evt));
+    }
+    catch (const BeamError& e) {
+      if (_checkBeams) throw e;
+    }
 
     MSG_DEBUG("Initialising the analysis handler");
     _eventNumber = ge.event_number();
@@ -176,7 +184,9 @@ namespace Rivet {
       try {
         // Allow projection registration in the init phase onwards
         a->_allowProjReg = true;
+        a->preInit();
         a->init();
+        a->postInit();
         a->setProjectionHandler(_projHandler);
         a->syncDeclQueue();
         //MSG_DEBUG("Checking consistency of analysis: " << a->name());
@@ -225,7 +235,7 @@ namespace Rivet {
     // If there are no weights, add a nominal one
     if (_weightNames.empty()) {
       _weightNames.push_back("");
-      _customDefaultWeightIdx =_rivetDefaultWeightIdx = _defaultWeightIdx = 0;
+      _customDefaultWeightIdx = _rivetDefaultWeightIdx = _defaultWeightIdx = 0;
       _weightIndices = { 0 };
       return;
     }
@@ -276,7 +286,12 @@ namespace Rivet {
     }
 
     // Warn user if still no nominal weight could be identified
-    if (nDefaults == 0) {
+    if (nDefaults == 0 && _skipMultiWeights) {
+      nom_winner = _weightNames[_defaultWeightIdx];
+      MSG_ERROR("Could not identify nominal weight. Will retain first encountered weight: '"
+                << nom_winner << "'");
+    }
+    else if (nDefaults == 0) {
       MSG_WARNING("Could not identify nominal weight. Will continue assuming variations-only run.");
       // Put candidates in quotes in case weight name contains whitespace
       MSG_WARNING("Candidate weight names:\n    '" << join(_weightNames, "'\n    '") << "'");
@@ -292,17 +307,16 @@ namespace Rivet {
     if (_skipMultiWeights) {
 
       // If running in single-weight mode, remove all bar the nominal weight
-      auto defaultweightName = _weightNames[_defaultWeightIdx];
       _weightIndices.clear();
-      _weightNames.clear();
       if (customNomIdx >= 0 && customNomIdx != (int)_defaultWeightIdx) {
         _weightIndices.push_back(customNomIdx);
-        _weightNames.push_back(_weightNames[customNomIdx]);
+        _weightNames = { _weightNames[customNomIdx] };
         _customDefaultWeightIdx = 0;
         MSG_WARNING("Specified nominal weight different from auto-detected nominal weight. Will retain both.");
       }
+      else  _weightNames.clear();
       _weightIndices.push_back(_defaultWeightIdx);
-      _weightNames.push_back(defaultweightName);
+      _weightNames.push_back(nom_winner);
       _rivetDefaultWeightIdx = _weightIndices.size() - 1;
 
     }
@@ -492,6 +506,11 @@ namespace Rivet {
         }
       }
     }
+    if (_subeventWarning && _subEventWeights.size() > 1) {
+      MSG_WARNING("Correlated subevents detected. Grouped fills will be collapsed, " \
+                  "but bin-edge migration may affect uncertainties.\n");
+      _subeventWarning = false;
+    }
     MSG_DEBUG("Analyzing subevent #" << _subEventWeights.size() - 1 << ".");
 
     // Warn if the subevent list is getting very long without flushing
@@ -507,9 +526,13 @@ namespace Rivet {
 
     // Run the analyses
     for (const AnaHandle& a : analyses()) {
+      // Set the current event ptr
+      a->_currentevent = &event;
       MSG_TRACE("About to run analysis " << a->name());
       try {
+        a->preAnalyze(event);
         a->analyze(event);
+        a->postAnalyze(event);
       } catch (const Error& err) {
         throw Error(a->name() + "::analyze method error: " + err.what());
       } catch (const std::bad_cast &err) {
@@ -518,6 +541,8 @@ namespace Rivet {
         throw Error(message);
       }
       MSG_TRACE("Finished running analysis " << a->name());
+      // Unset the current event ptr
+      a->_currentevent = nullptr;
     }
 
   }
@@ -633,7 +658,10 @@ namespace Rivet {
     // update Ntrials heuristic calculation
     const double ntrials = _ntrials + safediv(_fileCounter.get()->persistent(defaultWeightIndex())->sumW(),
                                               _xs.get()->persistent(defaultWeightIndex())->val());
-    if (ntrials != 0.) {
+    if (notNaN(_userxs.first)) { // user provided a custom cross-section
+      setCrossSection(_userxs, true);
+    }
+    else if (ntrials != 0.) {
       const double nFiles = _xserr.get()->persistent(defaultWeightIndex())->numEntries() + 1.0;
       for (size_t iW = 0; iW < numWeights(); ++iW) {
         const double sumw  = _eventCounter.get()->persistent(iW)->sumW();
@@ -679,8 +707,10 @@ namespace Rivet {
           ao.get()->setActiveFinalWeightIdx(iW);
         }
         try {
-          MSG_TRACE("running " << a->name() << "::finalize() for weight " << iW << ".");
+          MSG_TRACE("Running " << a->name() << "::finalize() for weight " << iW << ".");
+          a->preFinalize();
           a->finalize();
+          a->postFinalize();
         } catch (const Error& err) {
           throw Error(a->name() + "::finalize method error: " + err.what());
         }
@@ -735,7 +765,7 @@ namespace Rivet {
                       << " and may be ignored in the analysis.");
         opts[opt[0]] = opt[1];
       }
-      for ( auto opt: opts) {
+      for (const auto& opt: opts) {
         analysis->_options[opt.first] = opt.second;
         analysis->_optstring += ":" + opt.first + "=" + opt.second;
       }
@@ -744,6 +774,9 @@ namespace Rivet {
           MSG_WARNING("Analysis '" << analysisname << "' already registered: skipping duplicate");
           return *this;
         }
+      }
+      if (analysis->name() != analysisname) {
+        MSG_WARNING("Options reordered to use canonical analysis name '" << analysis->name() << "'");
       }
       analysis->_analysishandler = this;
       _analyses[analysisname] = analysis;
@@ -783,7 +816,9 @@ namespace Rivet {
                                    const vector<string> &addopts,
                                    const vector<string> &matches,
                                    const vector<string> &unmatches,
-                                   const bool equiv, const bool reentrantOnly) {
+                                   const bool equiv,
+                                   const bool reentrantOnly,
+                                   const bool checkbeams) {
 
     // Parse option adding.
     vector<string> optAnas;
@@ -849,7 +884,7 @@ namespace Rivet {
         YODA::read(file, aos_raw);
         for (YODA::AnalysisObject* aor : aos_raw) {
           const string& aopath = aor->path();
-          if (aopath == "/TMP/_BEAMPZ") {
+          if (checkbeams && aopath == "/TMP/_BEAMPZ") {
             raw_map[aopath].reset(aor);
             ++rawcount; ++tmpcount;
             continue;
@@ -1159,7 +1194,9 @@ namespace Rivet {
       try {
         // Allow projection registration in the init phase onwards
         a->_allowProjReg = true;
+        a->preInit();
         a->init();
+        a->postInit();
         a->setProjectionHandler(_projHandler);
         a->syncDeclQueue();
       } catch (const Error& err) {
@@ -1278,7 +1315,9 @@ namespace Rivet {
       try {
         // Allow projection registration in the init phase onwards
         a->_allowProjReg = true;
+        a->preInit();
         a->init();
+        a->postInit();
         a->setProjectionHandler(_projHandler);
         a->syncDeclQueue();
       } catch (const Error& err) {
@@ -1581,11 +1620,6 @@ namespace Rivet {
   }
 
 
-  string AnalysisHandler::runName() const {
-    return _runname;
-  }
-
-
   std::vector<std::string> AnalysisHandler::analysisNames() const {
     std::vector<std::string> rtn;
     for (const AnaHandle& a : analyses()) {
@@ -1781,7 +1815,7 @@ namespace Rivet {
 
   double AnalysisHandler::runSqrtS() const {
     double rtn = sqrtS(runBeams());
-    if (rtn <= 0. && _beaminfo && _beaminfo->numBins()==2) { // try falling back to _beaminfo
+    if (fuzzyLessEquals(rtn, 0.) && _beaminfo && _beaminfo->numBins()==2) { // try falling back to _beaminfo
       rtn = sqrtS(fabs(_beaminfo->bin(1).val()), fabs(_beaminfo->bin(2).val()));
     }
     return rtn;
