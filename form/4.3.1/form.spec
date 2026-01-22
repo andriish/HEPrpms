@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           form
 Version:        4.3.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        GPLv3
 Url:            https://github.com/vermaseren/form
 Source0:        https://github.com/vermaseren/form/releases/download/v%{version}/form-%{version}.tar.gz
@@ -18,6 +18,10 @@ BuildRequires:  tex(tabu.sty) tex(multirow.sty) tex(multicol.sty) tex(adjustbox.
 BuildRequires:   tex(ulem.sty)  tex(wasysym.sty) tex(float.sty) 
 %if 0%{?suse_version}
 BuildRequires: tex(hanging.sty) tex(stackengine.sty)  tex(newunicodechar.sty) tex(etoc.sty) tex(fancyvrb.sty)  tex(enumitem.sty) tex(alphalph.sty)
+BuildRequires: tex(xltabular.sty)
+BuildRequires: tex(ltablex.sty)
+BuildRequires: tex(tabularray.sty)
+BuildRequires: tex(ninecolors.sty)
 %endif
 %if  %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8 
 BuildRequires: tex(hanging.sty) tex(stackengine.sty)  tex(newunicodechar.sty) tex(etoc.sty) tex(ulem.sty) 
