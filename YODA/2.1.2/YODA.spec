@@ -164,9 +164,6 @@ rm -fr %{buildroot}/%_libdir/python*/site-packages/site.py
 %_includedir/YODA/*.icc
 %_includedir/YODA/Utils/*.h
 %_includedir/YODA/Config/*.h
-%if 0%{?suse_version}
-%_includedir/YODA/highfive
-%endif
 
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
