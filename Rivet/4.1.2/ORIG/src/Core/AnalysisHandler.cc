@@ -316,7 +316,7 @@ namespace Rivet {
       }
       else  _weightNames.clear();
       _weightIndices.push_back(_defaultWeightIdx);
-      _weightNames.push_back(_weightNames[_defaultWeightIdx]);
+      _weightNames.push_back(nom_winner);
       _rivetDefaultWeightIdx = _weightIndices.size() - 1;
 
     }
