@@ -1,7 +1,7 @@
 Summary:  A parton-level Monte Carlo event generator
 Name: MCFM
 Version: 10.3
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 URL:     https://mcfm.fnal.gov/
@@ -53,7 +53,7 @@ export CXXFLAGS="%{optflags}  -fPIC"
 %cmake -Duse_external_lhapdf:BOOL=ON -Duse_internal_lhapdf:BOOL=OFF -Dwith_library:BOOL=ON -S. -BBUILD
 cmake --build BUILD
 %else
-%cmake -Duse_external_lhapdf:BOOL=ON -Duse_internal_lhapdf:BOOL=OFF -Dwith_library:BOOL=ON  -BBUILD
+%cmake -Duse_external_lhapdf:BOOL=ON -Duse_internal_lhapdf:BOOL=OFF -Dwith_library:BOOL=ON  -BBUILD -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 cmake --build BUILD
 %endif
 
