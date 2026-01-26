@@ -41,6 +41,7 @@ BuildRequires:    swig  recola libqd0 qd-devel openssl-devel openssl
 Requires:         blackhat blackhat-data libgfortran5
 BuildRequires:    blackhat-devel blackhat  MG5_aMC
 BuildRequires:    texinfo git  MG5_aMC
+BuildRequires:  openmpi-macros-devel
 %endif
 
 
