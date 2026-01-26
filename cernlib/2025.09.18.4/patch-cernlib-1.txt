@@ -1,0 +1,84 @@
+diff -Naur ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/obsolete/telnetg/telnetg.c PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/obsolete/telnetg/telnetg.c
+--- ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/obsolete/telnetg/telnetg.c	2026-01-16 09:04:26.369474323 +0100
++++ PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/obsolete/telnetg/telnetg.c	2026-01-16 09:04:26.371152649 +0100
+@@ -75,7 +75,16 @@
+ #ifdef USG
+ #ifdef LINUX
+ #define CEOF EOF
+-# include <termio.h>
++#include <termios.h>
++#include <sys/ioctl.h>
++struct termio {
++    unsigned short c_iflag;
++    unsigned short c_oflag;
++    unsigned short c_cflag;
++    unsigned short c_lflag;
++    unsigned char c_line;
++    unsigned char c_cc[8];
++};
+ #else
+ # include <sys/termio.h>
+ #endif /* LINUX */
+diff -Naur ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpaw.c PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpaw.c
+--- ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpaw.c	2026-01-16 09:04:26.369474323 +0100
++++ PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpaw.c	2026-01-16 09:04:26.371152649 +0100
+@@ -2622,7 +2622,16 @@
+ #endif
+  
+ #ifndef BSDTTY
+-#include <termio.h>
++#include <termios.h>
++#include <sys/ioctl.h>
++struct termio {
++    unsigned short c_iflag;
++    unsigned short c_oflag;
++    unsigned short c_cflag;
++    unsigned short c_lflag;
++    unsigned char c_line;
++    unsigned char c_cc[8];
++};
+ #else
+ //AV: Newer APPLE requires sys/ioctl_compat.h
+ #include <sys/ioctl_compat.h>
+diff -Naur ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpold.c PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpold.c
+--- ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpold.c	2026-01-16 09:04:26.370256690 +0100
++++ PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpold.c	2026-01-16 09:04:26.371394809 +0100
+@@ -1862,7 +1862,16 @@
+ #endif
+  
+ #ifndef BSDTTY
+-#include <termio.h>
++#include <termios.h>
++#include <sys/ioctl.h>
++struct termio {
++    unsigned short c_iflag;
++    unsigned short c_oflag;
++    unsigned short c_cflag;
++    unsigned short c_lflag;
++    unsigned char c_line;
++    unsigned char c_cc[8];
++};
+ #else
+ #include <sgtty.h>
+ #endif
+diff -Naur ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c
+--- ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c	2026-01-16 09:04:26.370541003 +0100
++++ PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c	2026-01-16 09:04:26.371590884 +0100
+@@ -159,7 +159,16 @@
+ 
+ #ifdef TERMIO_SYSV
+ #include <sys/ioctl.h>
+-#include <termio.h>
++#include <termios.h>
++#include <sys/ioctl.h>
++struct termio {
++    unsigned short c_iflag;
++    unsigned short c_oflag;
++    unsigned short c_cflag;
++    unsigned short c_lflag;
++    unsigned char c_line;
++    unsigned char c_cc[8];
++};
+ static struct termio   new_termio, old_termio;
+ #endif
+ 

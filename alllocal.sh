@@ -4,6 +4,7 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+cernlib:2025.09.18.4
 #rapgap:3.4.0
 #cascade:3.3.3
 #golem95:1.3.4
@@ -123,7 +124,7 @@ declare -a BUILDLIST=(
 #tmdlib:2.2.10
 
 #fastjet:3.4.2
-clhep:2.4.7.2
+#clhep:2.4.7.2
 #fjcontrib:1.053
 #LCIO:02.20.00
 #LoopTools:2.16

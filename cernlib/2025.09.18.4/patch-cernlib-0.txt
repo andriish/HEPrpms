@@ -1,0 +1,51 @@
+diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt
+--- ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2026-01-16 09:04:26.368831531 +0100
++++ PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2026-01-16 09:04:26.370827717 +0100
+@@ -22,7 +22,7 @@
+ #The complicated way to set the version is used to assure the simple
+ #replacement of version variable with sed will not break the CMakeLists.txt
+ if (NOT __CL_VERSION__)
+-  set(EXTERNAL_VERSION_STRING "2025.02.25")
++  set(EXTERNAL_VERSION_STRING "2025.04.04")
+ else()
+   set(EXTERNAL_VERSION_STRING "__CL_VERSION__.1")
+ endif()
+@@ -72,7 +72,7 @@
+   endif()
+ endif()
+ 
+-set(CMAKE_VERBOSE_MAKEFILE FALSE)
++set(CMAKE_VERBOSE_MAKEFILE ON)
+ set(CMAKE_POSITION_INDEPENDENT_CODE FALSE)
+ if (CERNLIB_QPRINT)
+   add_definitions(-DCERNLIB_QPRINT)
+@@ -413,6 +413,9 @@
+   list(FILTER NEW_CMAKE_C_FLAGS  EXCLUDE REGEX "flto.*")
+   list(FILTER NEW_CMAKE_C_FLAGS  EXCLUDE REGEX "ffat.*")
+   list(FILTER NEW_CMAKE_C_FLAGS  EXCLUDE REGEX "-O3")
++  list(FILTER NEW_CMAKE_C_FLAGS  EXCLUDE REGEX "-Werror=format-security")
++  list(FILTER NEW_CMAKE_C_FLAGS  EXCLUDE REGEX "-Werror=implicit-function-declaration")
++  list(FILTER NEW_CMAKE_C_FLAGS  EXCLUDE REGEX "-Werror=implicit-int")
+ #It would be nice to implement the filtering as well
+ endif()
+ list(JOIN NEW_CMAKE_C_FLAGS " " CMAKE_C_FLAGS_X )
+@@ -557,7 +560,7 @@
+ file(READ ${CMAKE_CURRENT_SOURCE_DIR}/pawlib/paw/programs/paw.script FILE_CONTENTS)
+ string(REPLACE "\$drv " "\$drv${COMPSUFFIX} " FILE_CONTENTS "${FILE_CONTENTS}")
+ string(REPLACE "\"/cern\"" "\"${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/cernlib\"" FILE_CONTENTS "${FILE_CONTENTS}")
+-# string(REPLACE "\"pro\"" "\"${CERNLIB_VERSION_MAJOR}\"" FILE_CONTENTS "${FILE_CONTENTS}")
++string(REPLACE "\"pro\"" "\"${CERNLIB_VERSION_MAJOR}\"" FILE_CONTENTS "${FILE_CONTENTS}")
+ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script "${FILE_CONTENTS}")
+ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script  DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME paw${COMPSUFFIXBIN} COMPONENT libs)
+ ########################################################################
+diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c PATCHED/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c
+--- ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c	2026-01-16 09:04:26.369305559 +0100
++++ PATCHED/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c	2026-01-16 09:04:26.371013488 +0100
+@@ -29,6 +29,7 @@
+ #include "higz/pilot.h"
+ #if defined(CERNLIB_GIF)
+ #include <X11/Xlib.h>
++#define XUTIL_DEFINE_FUNCTIONS
+ #include <X11/Xutil.h>
+ #include <stdio.h>
+ #include <stdlib.h>

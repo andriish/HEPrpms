@@ -32,7 +32,7 @@ BuildRequires:  LHAPDF-devel   pythia-devel pythia-doc libLHAPDF libpythia8
 Requires:        libLHAPDF libpythia8  pythia-doc
 BuildRequires:   libboost_filesystem-devel
 BuildRequires:   libboost_headers-devel
-BuildRequires:   libboost_system-devel
+#BuildRequires:   libboost_system-devel
 BuildRequires:   libboost_test-devel PHOTOS PHOTOS-devel TAUOLA TAUOLA-devel
 %endif
 

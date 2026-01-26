@@ -35,19 +35,19 @@
 
 #define verdir {version}
 %define verdir 2025
-%define verdatadir 2025.04
+%define verdatadir 2025.09
 
 # data files should be the same and therefore parallel installable
 
 Name:          cernlib
-Version:       2025.04.04.0
+Version:       2025.09.18.4
 Release:       1%{?dist}
 Summary:       General purpose CERN library
 Group:         Development/Libraries
 License:       GPL+ and LGPLv2+
 URL:           http://cernlib.web.cern.ch/cernlib/
-#Patch0:         patch-cernlib-0.txt
-#Patch1:         patch-cernlib-1.txt
+Patch0:         patch-cernlib-0.txt
+Patch1:         patch-cernlib-1.txt
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 7
 BuildRequires: openssl-libs openssl-devel  lapack-devel blas-devel lapack blas
