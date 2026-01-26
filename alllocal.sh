@@ -8,7 +8,7 @@ declare -a BUILDLIST=(
 #cascade:3.3.3
 #golem95:1.3.4
 #recola2:2.2.5
-Rivet:4.1.2
+#Rivet:4.1.2
 #YODA:2.1.2
 #gosam:3.0.2
 #openloops:2.1.4
@@ -123,7 +123,7 @@ Rivet:4.1.2
 #tmdlib:2.2.10
 
 #fastjet:3.4.2
-#clhep:2.4.7.1
+clhep:2.4.7.2
 #fjcontrib:1.053
 #LCIO:02.20.00
 #LoopTools:2.16
