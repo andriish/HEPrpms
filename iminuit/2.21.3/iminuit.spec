@@ -5,7 +5,7 @@
 
 Name:           %{srcname}
 Version:        2.21.1
-Release:        2%{?dist}
+Release:        4%{?dist}
 Summary:        A Jupyter-friendly Python interface for the Minuit2 C++ library maintained by CERN’s ROOT team
 
 License:        MIT, LGPL
@@ -39,6 +39,8 @@ rm -rf extern/root
 rm -rf extern/pybind11
 unzip %SOURCE1
 mv pybind11-%{pybind11blob} extern/pybind11
+grep -q '^cmake_minimum_required' extern/pybind11/CMakeLists.txt  || sed -i '1i cmake_minimum_required(VERSION 3.16)' extern/pybind11/CMakeLists.txt
+
 unzip %SOURCE2
 mv root-%{rootblob} extern/root
 sed -i 's/3\.13/3\.11/g' CMakeLists.txt
