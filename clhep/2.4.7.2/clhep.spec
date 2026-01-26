@@ -23,7 +23,7 @@ Requires: %{name} = %{version}
 Install this package to develop software based on CLHEP.
 
 %prep
-%setup -q -n  ../CLHEP-CLHEP_2_4_7_2
+%setup -q -n  CLHEP-CLHEP_2_4_7_2
 
 %build
 %if %{?rhel}%{!?rhel:0} || %{?fedora}%{!?fedora:0}
@@ -34,7 +34,7 @@ cd ..
 
 %if 0%{?suse_version}
 cd .. 
-%cmake -S CLHEP-CLHEP_2_4_7_2
+%cmake -S ../CLHEP-CLHEP_2_4_7_2
 make
 %endif
 
