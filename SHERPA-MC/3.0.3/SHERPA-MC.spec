@@ -203,7 +203,8 @@ TOP=$(pwd)
 %cmake_build
 
 
-%{_openmpi_load}
+#{_openmpi_load}
+%setup_openmpi
 mkdir $TOP/$MPI_COMPILER; 
 cd $TOP/$MPI_COMPILER
 %cmake -DSHERPA_ENABLE_ANALYSIS:BOOL=ON -DSHERPA_ENABLE_BINRELOC:BOOL=ON -DSHERPA_ENABLE_BLACKHAT:BOOL=ON \
@@ -219,7 +220,7 @@ cd $TOP/$MPI_COMPILER
 
 %cmake_build
 cd $TOP
-%{_openmpi_unload}
+#{_openmpi_unload}
 
 
 %endif
@@ -252,14 +253,14 @@ mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
 echo %{_libdir}/%{name} >   %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 %py3_shebang_fix %{buildroot}//usr/share/SHERPA-MC/plot_graphs
 
-
-%{_openmpi_load}
+%setup_openmpi
+#{_openmpi_load}
 cd $TOP/$MPI_COMPILER
 %cmake_install
 %py3_shebang_fix %{buildroot}/$MPI_HOME/share/SHERPA-MC/plot_graphs
 rm -rf %{buildroot}/$MPI_HOME/share
 cd ..
-%{_openmpi_unload}
+#{_openmpi_unload}
 
 
 rm -rf $RPM_BUILD_ROOT/usr/share/info/dir
