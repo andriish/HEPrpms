@@ -39,7 +39,8 @@ rm -rf extern/root
 rm -rf extern/pybind11
 unzip %SOURCE1
 mv pybind11-%{pybind11blob} extern/pybind11
-grep -q '^cmake_minimum_required' extern/pybind11/CMakeLists.txt  || sed -i '1i cmake_minimum_required(VERSION 3.16)' extern/pybind11/CMakeLists.txt
+sed -i 's/cmake_minimum_required/#cmake_minimum_required/g' extern/pybind11/CMakeLists.txt  
+sed -i '1i cmake_minimum_required(VERSION 3.16)' extern/pybind11/CMakeLists.txt
 
 unzip %SOURCE2
 mv root-%{rootblob} extern/root
