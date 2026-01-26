@@ -1,7 +1,7 @@
 Summary:       Class library for High Energy Physics
 Name:          clhep
 Version:       2.4.7.2
-Release:       1%{?dist}
+Release:       1001%{?dist}
 License:       distributable
 URL:           http://proj-clhep.web.cern.ch/proj-clhep/
 #Source:        https://proj-clhep.web.cern.ch/proj-clhep/dist1/clhep-{version}.tgz
