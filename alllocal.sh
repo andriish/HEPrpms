@@ -8,8 +8,8 @@ declare -a BUILDLIST=(
 #cascade:3.3.3
 #golem95:1.3.4
 #recola2:2.2.5
-#Rivet:4.1.1
-#YODA:2.1.1
+Rivet:4.1.2
+#YODA:2.1.2
 #gosam:3.0.2
 #openloops:2.1.4
 #fjcontrib:1.101
@@ -72,7 +72,7 @@ declare -a BUILDLIST=(
 #fjcontrib:1.056
 #binder:1.4.1
 #openloops:2.1.3
-COCOA:0.1.1
+#COCOA:0.1.1
 #HEPrpms:2023.12.30
 #whizard:3.1.4
 #MG5_aMC:3.5.3

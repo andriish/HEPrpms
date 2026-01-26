@@ -1,6 +1,6 @@
 Name:           fastjet
 Version:        3.5.1
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 License:        GPLv2+
 URL:            http://www.fastjet.fr
 Source0:        https://www.fastjet.fr/repo/%{name}-%{version}.tar.gz
@@ -26,6 +26,7 @@ BuildRequires:  gcc-fortran
 BuildRequires:  cgal-devel >= 5.0
 Requires:       cgal-devel >= 5.0
 BuildRequires:  python3-devel python-rpm-macros
+BuildRequires:  swig
 %endif
 
 
@@ -89,8 +90,9 @@ This package contains python bindings for %{name}.
 %files -n python%{python3_pkgversion}-%{name}
 %{python3_sitearch}/fastjet/_%{name}*.so*
 %{python3_sitearch}/fastjet/*.p*
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
 %{python3_sitearch}/fastjet/__pycache__/*
-
+%endif
 
 
 %changelog

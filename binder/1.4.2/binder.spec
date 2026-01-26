@@ -1,6 +1,6 @@
 Name:        binder
 Version:    1.4.2
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    A tool for automatic generation of Python bindings to C++ code
 License:    MIT License
 URL:        https://github.com/RosettaCommons/binder
@@ -48,7 +48,7 @@ sed -i 's/CMAKE_CXX_STANDARD 14/CMAKE_CXX_STANDARD 17/g' CMakeLists.txt
 %endif
 
 %if 0%{?suse_version}
-cmake .  -DCMAKE_INSTALL_PREFIX=/usr -DBINDER_ENABLE_TEST=OFF
+cmake .  -DCMAKE_INSTALL_PREFIX=/usr -DBINDER_ENABLE_TEST=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 make
 %endif
 
