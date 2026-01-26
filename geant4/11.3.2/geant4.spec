@@ -3,7 +3,7 @@
 
 Name:        geant4
 Version:    11.3.2
-Release:    1001%{?dist}
+Release:    1002%{?dist}
 Summary:    A toolkit for the simulation of the passage of particles through matter
 
 License:    Geant
