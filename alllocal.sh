@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-cernlib:2025.09.18.4
+sympy:1.12.4
+#cernlib:2025.09.18.4
 #rapgap:3.4.0
 #cascade:3.3.3
 #golem95:1.3.4

@@ -1,0 +1,103 @@
+--- sympy-sympy-1.12/sympy/logic/boolalg.py.orig	2023-05-09 17:42:05.000000000 -0600
++++ sympy-sympy-1.12/sympy/logic/boolalg.py	2023-06-29 16:38:14.568908065 -0600
+@@ -1012,7 +1012,7 @@ class Xor(BooleanFunction):
+             for j in range(i + 1, len(rel)):
+                 rj, cj = rel[j][:2]
+                 if cj == nc:
+-                    odd = ~odd
++                    odd = not odd
+                     break
+                 elif cj == c:
+                     break
+--- sympy-sympy-1.12/sympy/parsing/ast_parser.py.orig	2023-05-09 17:42:05.000000000 -0600
++++ sympy-sympy-1.12/sympy/parsing/ast_parser.py	2023-06-29 17:12:19.620751353 -0600
+@@ -23,7 +23,7 @@ from sympy.core.basic import Basic
+ from sympy.core.sympify import SympifyError
+ 
+ from ast import parse, NodeTransformer, Call, Name, Load, \
+-    fix_missing_locations, Str, Tuple
++    fix_missing_locations, Constant, Tuple
+ 
+ class Transform(NodeTransformer):
+ 
+@@ -52,7 +52,7 @@ class Transform(NodeTransformer):
+         elif node.id in ['True', 'False']:
+             return node
+         return fix_missing_locations(Call(func=Name('Symbol', Load()),
+-                args=[Str(node.id)], keywords=[]))
++                args=[Constant(node.id)], keywords=[]))
+ 
+     def visit_Lambda(self, node):
+         args = [self.visit(arg) for arg in node.args.args]
+--- sympy-sympy-1.12/sympy/parsing/sympy_parser.py.orig	2023-05-09 17:42:05.000000000 -0600
++++ sympy-sympy-1.12/sympy/parsing/sympy_parser.py	2023-06-29 17:42:24.574014070 -0600
+@@ -627,7 +627,9 @@ def factorial_notation(tokens: List[TOKE
+     result: List[TOKEN] = []
+     nfactorial = 0
+     for toknum, tokval in tokens:
+-        if toknum == ERRORTOKEN:
++        if toknum == OP and tokval == "!":
++            nfactorial += 1
++        elif toknum == ERRORTOKEN:
+             op = tokval
+             if op == '!':
+                 nfactorial += 1
+@@ -1135,7 +1137,7 @@ class EvaluateFalseTransformer(ast.NodeT
+             new_node = ast.Call(
+                 func=ast.Name(id=sympy_class, ctx=ast.Load()),
+                 args=[left, right],
+-                keywords=[ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load()))],
++                keywords=[ast.keyword(arg='evaluate', value=ast.Constant(value=False, ctx=ast.Load()))],
+                 starargs=None,
+                 kwargs=None
+             )
+@@ -1167,8 +1169,8 @@ class EvaluateFalseTransformer(ast.NodeT
+             if isinstance(node.op, ast.Sub):
+                 right = ast.Call(
+                     func=ast.Name(id='Mul', ctx=ast.Load()),
+-                    args=[ast.UnaryOp(op=ast.USub(), operand=ast.Num(1)), right],
+-                    keywords=[ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load()))],
++                    args=[ast.UnaryOp(op=ast.USub(), operand=ast.Constant(1)), right],
++                    keywords=[ast.keyword(arg='evaluate', value=ast.Constant(value=False, ctx=ast.Load()))],
+                     starargs=None,
+                     kwargs=None
+                 )
+@@ -1178,16 +1180,16 @@ class EvaluateFalseTransformer(ast.NodeT
+                     rev = True
+                     left = ast.Call(
+                     func=ast.Name(id='Pow', ctx=ast.Load()),
+-                    args=[left, ast.UnaryOp(op=ast.USub(), operand=ast.Num(1))],
+-                    keywords=[ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load()))],
++                    args=[left, ast.UnaryOp(op=ast.USub(), operand=ast.Constant(1))],
++                    keywords=[ast.keyword(arg='evaluate', value=ast.Constant(value=False, ctx=ast.Load()))],
+                     starargs=None,
+                     kwargs=None
+                 )
+                 else:
+                     right = ast.Call(
+                     func=ast.Name(id='Pow', ctx=ast.Load()),
+-                    args=[right, ast.UnaryOp(op=ast.USub(), operand=ast.Num(1))],
+-                    keywords=[ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load()))],
++                    args=[right, ast.UnaryOp(op=ast.USub(), operand=ast.Constant(1))],
++                    keywords=[ast.keyword(arg='evaluate', value=ast.Constant(value=False, ctx=ast.Load()))],
+                     starargs=None,
+                     kwargs=None
+                 )
+@@ -1197,7 +1199,7 @@ class EvaluateFalseTransformer(ast.NodeT
+             new_node = ast.Call(
+                 func=ast.Name(id=sympy_class, ctx=ast.Load()),
+                 args=[left, right],
+-                keywords=[ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load()))],
++                keywords=[ast.keyword(arg='evaluate', value=ast.Constant(value=False, ctx=ast.Load()))],
+                 starargs=None,
+                 kwargs=None
+             )
+@@ -1212,7 +1214,7 @@ class EvaluateFalseTransformer(ast.NodeT
+     def visit_Call(self, node):
+         new_node = self.generic_visit(node)
+         if isinstance(node.func, ast.Name) and node.func.id in self.functions:
+-            new_node.keywords.append(ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load())))
++            new_node.keywords.append(ast.keyword(arg='evaluate', value=ast.Constant(value=False, ctx=ast.Load())))
+         return new_node
+ 
+ 

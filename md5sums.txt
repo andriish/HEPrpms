@@ -346,3 +346,5 @@ add69759ce00cb4a1876ce3bcb77f338  Professor/2.5.1/rpmbuild/SOURCES/professor-pro
 2275ddcd424e4f123dd54e4803085f00  Rivet/4.1.2/rpmbuild/SOURCES/Rivet-4.1.2.tar.gz
 6e54cd60a99010c1e3c7a97ae4f100ab  clhep/2.4.7.2/rpmbuild/SOURCES/CLHEP-CLHEP_2_4_7_2.tar.gz
 5e366182451e752b661b612cea5df30a  cernlib/2025.09.18.4/rpmbuild/SOURCES/cernlib-cernlib-2025.09.18.4-free.tar.gz
+d8707e8d4770fe707d8996a45be33e13  sympy/1.14.0/rpmbuild/SOURCES/sympy-1.14.0.tar.gz
+19a5188ccff452d9b5334be637bc92dd  sympy/1.12.4/rpmbuild/SOURCES/sympy-1.12.tar.gz
