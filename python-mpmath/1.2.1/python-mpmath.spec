@@ -63,9 +63,9 @@ This package contains the HTML documentation for %{name}.
 %prep
 %setup -q -n mpmath-%{version}
 %if 0%{?rhel} == 6 || 0%{?rhel} == 7
-%patch0 -p1 -b .sphinx
+%patch0 -P 0 -b .sphinx
 %endif
-%patch1 -p1
+%patch -P 1 -p1
 
 # Convert line encodings
 for doc in CHANGES LICENSE README.rst TODO mpmath/tests/runtests.py; do
