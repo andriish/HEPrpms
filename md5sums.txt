@@ -348,3 +348,5 @@ add69759ce00cb4a1876ce3bcb77f338  Professor/2.5.1/rpmbuild/SOURCES/professor-pro
 5e366182451e752b661b612cea5df30a  cernlib/2025.09.18.4/rpmbuild/SOURCES/cernlib-cernlib-2025.09.18.4-free.tar.gz
 d8707e8d4770fe707d8996a45be33e13  sympy/1.14.0/rpmbuild/SOURCES/sympy-1.14.0.tar.gz
 19a5188ccff452d9b5334be637bc92dd  sympy/1.12.4/rpmbuild/SOURCES/sympy-1.12.tar.gz
+e1660d8fe02a6c92dd5bbbcfef6d462f  python-mpmath/1.2.1/rpmbuild/SOURCES/python-mpmath-1.2.1.tar.gz
+bb37529bcfcc28b54e0209bf7c7626a2  python-mpmath/1.2.1/rpmbuild/SOURCES/570.patch

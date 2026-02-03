@@ -1,0 +1,70 @@
+From c811b37c65a4372a7ce613111d2a508c204f9833 Mon Sep 17 00:00:00 2001
+From: Vinzent Steinberg <Vinzent.Steinberg@gmail.com>
+Date: Wed, 10 Feb 2021 16:45:04 +0100
+Subject: [PATCH 1/2] Fix ReDOS vulnerability
+
+Fixes #548, with the workaround suggested by @yetingli.
+---
+ mpmath/ctx_mp.py             |  4 ++--
+ mpmath/tests/test_convert.py | 10 ++++++++++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/mpmath/ctx_mp.py b/mpmath/ctx_mp.py
+index 39fc9411..93594dd4 100644
+--- a/mpmath/ctx_mp.py
++++ b/mpmath/ctx_mp.py
+@@ -42,8 +42,8 @@
+ 
+ new = object.__new__
+ 
+-get_complex = re.compile(r'^\(?(?P<re>[\+\-]?\d*\.?\d*(e[\+\-]?\d+)?)??'
+-                         r'(?P<im>[\+\-]?\d*\.?\d*(e[\+\-]?\d+)?j)?\)?$')
++get_complex = re.compile(r'^\(?(?P<re>[\+\-]?\d*(\.\d*)?(e[\+\-]?\d+)?)??'
++                         r'(?P<im>[\+\-]?\d*(\.\d*)?(e[\+\-]?\d+)?j)?\)?$')
+ 
+ if BACKEND == 'sage':
+     from sage.libs.mpmath.ext_main import Context as BaseMPContext
+diff --git a/mpmath/tests/test_convert.py b/mpmath/tests/test_convert.py
+index 3e2f5559..cf1a91da 100644
+--- a/mpmath/tests/test_convert.py
++++ b/mpmath/tests/test_convert.py
+@@ -194,6 +194,16 @@ def test_mpmathify():
+     assert mpmathify('(1.2e-10 - 3.4e5j)') == mpc('1.2e-10', '-3.4e5')
+     assert mpmathify('1j') == mpc(1j)
+ 
++def test_issue548():
++    try:
++        # This expression is invalid, but may trigger the ReDOS vulnerability
++        # in the regular expression.
++        mpmathify('(' + '1' * 5000 + '!j')
++    except:
++        return
++    # The expression is invalid and should raise an exception.
++    assert False
++
+ def test_compatibility():
+     try:
+         import numpy as np
+
+From 2865c7d12b2a077d420427ad187eca831a48bff4 Mon Sep 17 00:00:00 2001
+From: Vinzent Steinberg <Vinzent.Steinberg@gmail.com>
+Date: Wed, 10 Feb 2021 16:47:57 +0100
+Subject: [PATCH 2/2] Improve comment
+
+---
+ mpmath/tests/test_convert.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mpmath/tests/test_convert.py b/mpmath/tests/test_convert.py
+index cf1a91da..cb1db5b5 100644
+--- a/mpmath/tests/test_convert.py
++++ b/mpmath/tests/test_convert.py
+@@ -197,7 +197,7 @@ def test_mpmathify():
+ def test_issue548():
+     try:
+         # This expression is invalid, but may trigger the ReDOS vulnerability
+-        # in the regular expression.
++        # in the regular expression for parsing complex numbers.
+         mpmathify('(' + '1' * 5000 + '!j')
+     except:
+         return
