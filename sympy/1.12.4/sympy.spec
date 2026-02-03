@@ -37,36 +37,36 @@ BuildRequires:  gcc-gfortran
 BuildRequires:  python3-devel
 BuildRequires:  %{py3_dist cython}
 BuildRequires:  %{py3_dist gmpy2}
-BuildRequires:  %{py3_dist llvmlite}
+#BuildRequires:  {py3_dist llvmlite}
 BuildRequires:  %{py3_dist matplotlib}
 BuildRequires:  %{py3_dist matplotlib-inline}
-BuildRequires:  %{py3_dist myst-parser}
+#BuildRequires:  {py3_dist myst-parser}
 BuildRequires:  %{py3_dist numexpr}
 BuildRequires:  python3-numpy-f2py
 BuildRequires:  %{py3_dist scipy}
-BuildRequires:  %{py3_dist wurlitzer}
+#BuildRequires:  {py3_dist wurlitzer}
 
 # Documentation
 BuildRequires:  graphviz
 BuildRequires:  ImageMagick
 BuildRequires:  librsvg2-tools
 BuildRequires:  make
-BuildRequires:  %{py3_dist furo}
-BuildRequires:  %{py3_dist linkify-it-py}
+#BuildRequires:  {py3_dist furo}
+#BuildRequires:  {py3_dist linkify-it-py}
 #BuildRequires:  #{py3_dist mpmath}
 BuildRequires:  %{py3_dist numpydoc}
-BuildRequires:  %{py3_dist sphinx-autobuild}
-BuildRequires:  %{py3_dist sphinx-copybutton}
-BuildRequires:  %{py3_dist sphinx-math-dollar}
-BuildRequires:  %{py3_dist sphinx-reredirects}
-BuildRequires:  %{py3_dist sphinxcontrib-jquery}
-BuildRequires:  python-mpmath-doc
+#BuildRequires:  {py3_dist sphinx-autobuild}
+#BuildRequires:  {py3_dist sphinx-copybutton}
+#BuildRequires:  {py3_dist sphinx-math-dollar}
+#BuildRequires:  {py3_dist sphinx-reredirects}
+#BuildRequires:  {py3_dist sphinxcontrib-jquery}
+#BuildRequires:  python-mpmath-doc
 BuildRequires:  tex(latex)
 BuildRequires:  tex-dvipng
 
 # Tests
 BuildRequires:  parallel
-BuildRequires:  %{py3_dist autowrap}
+#BuildRequires:  {py3_dist autowrap}
 BuildRequires:  xorg-x11-fonts-Type1
 BuildRequires:  xorg-x11-server-Xvfb
 
