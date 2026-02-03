@@ -116,7 +116,7 @@ This package contains example input for sympy.
 
 %prep
 %autosetup -p1 -n %{name}-%{name}-%{version}
-
+echo "matplotlib" > doc/requirements.txt
 fixtimestamp() {
   touch -r $1.orig $1
   rm -f $1.orig
