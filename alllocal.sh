@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-python-mpmath:1.2.1
+recola2:2.2.5
+#python-mpmath:1.2.1
 #sympy:1.12.4
 #cernlib:2025.09.18.4
 #rapgap:3.4.0
