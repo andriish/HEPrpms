@@ -59,7 +59,7 @@ next-to-leading order.
 %if 0%{?rhel} || 0%{?fedora}
 %cmake_install
 %if 0%{?fedora} || %{?rhel}%{!?rhel:0} >= 10
-chrpath --delete $RPM_BUILD_ROOT%{_libdir}/librecola.so
+chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libreco*.so
 chrpath --delete $RPM_BUILD_ROOT/usr/lib/python3.*/site-packages/pyrecola.so
 %endif
 %endif
