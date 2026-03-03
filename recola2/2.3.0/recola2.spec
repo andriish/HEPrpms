@@ -2,11 +2,10 @@
 Summary:  A Fortran95 computer program for the automated generation and numerical computation of EW and QCD amplitudes.
 Name: recola2
 Version: 2.3.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 Source0: https://gitlab.com/recola/recola2/-/archive/%{version}/recola2-%{version}.tar.gz
-#Patch0:         testing225.patch
 
 URL:   https://recola.gitlab.io/recola2/
 BuildRequires:      collier gcc-c++ recola2-SM 
@@ -36,11 +35,10 @@ numerical computation of EW and QCD amplitudes in the Standard Model at
 next-to-leading order. 
 %prep 
 %setup -q 
-#patch -P 0 -p1
 
 
 %build
-
+sed -i 's/2.2.5/2.3.0/g' CMakeLists.txt
 
 %if 0%{?rhel} || 0%{?fedora}
 %cmake   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/  -Dmodelfile_path=/usr/share/cmake  -Dwith_python3=On
