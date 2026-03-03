@@ -350,3 +350,4 @@ d8707e8d4770fe707d8996a45be33e13  sympy/1.14.0/rpmbuild/SOURCES/sympy-1.14.0.tar
 19a5188ccff452d9b5334be637bc92dd  sympy/1.12.4/rpmbuild/SOURCES/sympy-1.12.tar.gz
 e1660d8fe02a6c92dd5bbbcfef6d462f  python-mpmath/1.2.1/rpmbuild/SOURCES/python-mpmath-1.2.1.tar.gz
 bb37529bcfcc28b54e0209bf7c7626a2  python-mpmath/1.2.1/rpmbuild/SOURCES/570.patch
+aba3a13869f6d36a5d323e7d26a85479  recola2/2.3.0/rpmbuild/SOURCES/recola2-2.3.0.tar.gz
