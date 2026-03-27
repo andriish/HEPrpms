@@ -2,7 +2,7 @@
 Summary:  A model for recola2
 Name: recola2-SM
 Version: 2.2.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 #Source0: https://www.hepforge.org/archive/recola/recola2-{version}.tar.gz
@@ -44,13 +44,13 @@ next-to-leading order.
 %make_build 
 %endif
 %if   %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8
-%cmake  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
+%cmake  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/   -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build 
 %endif
 %endif
 
 %if 0%{?suse_version}
-%cmake   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  
+%cmake   -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/   -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %make_build 
 %endif
 
