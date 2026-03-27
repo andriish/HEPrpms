@@ -1,6 +1,6 @@
 Name:        rapgap
 Version:    3.4.0
-Release:    7%{?dist}
+Release:    8%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy Physics
 
 License:    Unknown
@@ -64,7 +64,7 @@ export FFLAGS="$FFLAGS  -fallow-argument-mismatch -fallow-invalid-boz -fno-stric
 export FCFLAGS="$FCFLAGS  -fallow-argument-mismatch -fallow-invalid-boz -fno-strict-aliasing"
 %endif
 
-%cmake -DCMAKE_SKIP_RPATH:BOOL=YES -DCMAKE_CXX_STANDARD=17
+%cmake -DCMAKE_SKIP_RPATH:BOOL=YES -DCMAKE_CXX_STANDARD=17 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build 
 
 
