@@ -4,7 +4,7 @@
 Summary:  A Fortran95 computer program for the automated generation and numerical computation of EW and QCD amplitudes
 Name: recola
 Version: 1.4.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 Source: https://www.hepforge.org/archive/recola/recola-%{version}.tar.gz
@@ -27,7 +27,7 @@ next-to-leading order.
 %setup -q 
 
 %build
-%cmake   -DCMAKE_SKIP_RPATH=ON  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/
+%cmake   -DCMAKE_SKIP_RPATH=ON  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/ -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build 
 
 %install
