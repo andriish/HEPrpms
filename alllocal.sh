@@ -5,7 +5,8 @@ export PATH=$PATH:$(pwd)
 #set -x 
 declare -a BUILDLIST=(
 #applgrid:1.6.36
-apfel:3.1.1
+TheP8I:2.0.4
+#apfel:3.1.1
 #fastnlo:2.5.0.2826
 #ginac:1.8.10
 #recola2:2.3.0
