@@ -353,3 +353,4 @@ bb37529bcfcc28b54e0209bf7c7626a2  python-mpmath/1.2.1/rpmbuild/SOURCES/570.patch
 aba3a13869f6d36a5d323e7d26a85479  recola2/2.3.0/rpmbuild/SOURCES/recola2-2.3.0.tar.gz
 cda8d7a4b4193ad457d71195f5b77ee0  ginac/1.8.10/rpmbuild/SOURCES/ginac-1.8.10.tar.bz2
 3265c789c47df91955cb236385e55af8  TheP8I/2.0.4/rpmbuild/SOURCES/TheP8I-2.0.4.tar.gz
+a70bbbd71da9fcd1f36e82aecdda9ddc  Delphes/3.5.1/rpmbuild/SOURCES/3.5.1.tar.gz
