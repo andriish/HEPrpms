@@ -1,6 +1,6 @@
 Name:           TheP8I
 Version:        2.0.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL
 Url:            https://gitlab.cern.ch/TheP8I/TheP8I
 Source0:        https://gitlab.cern.ch/TheP8I/TheP8I/-/archive/%{version}/%{name}-%{version}.tar.gz
@@ -29,9 +29,9 @@ Lund hadronisation for Herwig. Part of earlier ThePEG codes.
 %build
 export LDFLAGS=" "
 %if 0%{?suse_version}
-%cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir}/ThePEG -DTHEP8I_ENABLE_TEST=OFF -DTHEP8I_CXX_STANDARD=17 -DCMAKE_MODULE_LINKER_FLAGS=" "  -DCMAKE_SHARED_LINKER_FLAGS=" "
+%cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir}/ThePEG -DTHEP8I_ENABLE_TEST=OFF -DTHEP8I_CXX_STANDARD=17 -DCMAKE_MODULE_LINKER_FLAGS=" "  -DCMAKE_SHARED_LINKER_FLAGS=" " -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %else
-%cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir}/ThePEG -DTHEP8I_ENABLE_TEST=OFF
+%cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir}/ThePEG -DTHEP8I_ENABLE_TEST=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %endif
 %cmake_build
 
