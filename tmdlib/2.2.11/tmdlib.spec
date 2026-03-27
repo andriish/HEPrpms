@@ -14,7 +14,7 @@ BuildRequires: tex(latex) tex(sectsty.sty) gcc-c++  gcc-gfortran gsl-devel autoc
 Requires:       lhapdf libgfortran root root-core gsl wget root-tree-ntuple-utils
 %endif
 %if 0%{?fedora}
-BuildRequires: texlive-palatino texlive-helvetic
+BuildRequires: texlive-palatino texlive-helvetic texlive-mathpazo
 %endif
 %if 0%{?suse_version}
 BuildRequires: texlive-palatino texlive-helvetic texlive-courier tex(latex) tex(sectsty.sty) tex(listings.sty) tex(cite.sty) gcc-c++  gcc-fortran gsl gsl-devel autoconf automake libtool libLHAPDF LHAPDF-devel root6 root6-libs root6-devel boost-devel
