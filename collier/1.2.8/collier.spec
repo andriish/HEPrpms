@@ -2,7 +2,7 @@
 Summary:  A Fortran library for the numerical evaluation of one-loop scalar and tensor integrals 
 Name: collier
 Version:  1.2.8
-Release:  1%{?dist}
+Release:  2%{?dist}
 License:  GPLv3
 Prefix: %{_prefix}
 URL:      https://collier.hepforge.org/
@@ -36,9 +36,9 @@ BuildRequires: gcc-fortran
 %setup -q -n  COLLIER-%{version}
 %if 0%{?fedora} > 35 || %{?rhel}%{!?rhel:0} >8 
 export LDFLAGS=' '
-%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON  -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/
+%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON  -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/ -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %else
-%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON  -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  .
+%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON  -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/ -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .
 %endif
 %build
 
