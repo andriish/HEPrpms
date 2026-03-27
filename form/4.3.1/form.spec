@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           form
 Version:        4.3.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 License:        GPLv3
 Url:            https://github.com/vermaseren/form
 Source0:        https://github.com/vermaseren/form/releases/download/v%{version}/form-%{version}.tar.gz
@@ -34,6 +34,7 @@ BuildRequires: tex(xltabular.sty)
 BuildRequires: tex(ltablex.sty)
 BuildRequires: tex(tabularray.sty)
 BuildRequires: tex(ninecolors.sty)
+BuildRequires: tex(enumitems.sty)
 %endif
 Prefix: %{_prefix}
 
