@@ -4,7 +4,10 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-ginac:1.8.10
+#applgrid:1.6.36
+apfel:3.1.1
+#fastnlo:2.5.0.2826
+#ginac:1.8.10
 #recola2:2.3.0
 #python-mpmath:1.2.1
 #sympy:1.12.4

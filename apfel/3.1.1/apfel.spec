@@ -3,7 +3,7 @@
 %endif
 Name:           apfel
 Version:        3.1.1
-Release:        1006%{?dist}
+Release:        1007%{?dist}
 License:        GPL
 Url:            https://github.com/scarrazza/apfel
 Source:         https://github.com/scarrazza/apfel/archive/refs/tags/%{version}.tar.gz
@@ -55,6 +55,7 @@ This package provides the Python 3 bindings for HepMC3.
 
 
 %build
+sed -i 's|--incdir|--includedir|g' CMakeLists.txt
 %if %{?fedora}%{!?fedora:0} >= 39 || %{?rhel}%{!?rhel:0} >= 10
 %py3_shebang_fix  bin/apfel.in
 %endif

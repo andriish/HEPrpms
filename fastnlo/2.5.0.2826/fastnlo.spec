@@ -65,6 +65,7 @@ for observables in hadron-induced processes.
 
 
 sed -i 's|\#\$(DEPDIR)/fastnlo_wrap.Plo:|\$(DEPDIR)/fastnlo_wrap.Plo:|g' pyext/Makefile.in
+sed -i 's|--incdir|--includedir|g' configure
 %if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
 %configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum --enable-pyext3 
 %else
