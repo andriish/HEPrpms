@@ -1,7 +1,7 @@
 Summary:  A parton-level Monte Carlo event generator
 Name: MCFM
 Version: 10.3
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 URL:     https://mcfm.fnal.gov/
@@ -38,12 +38,12 @@ more details, including a list of available processes, view the documentation (P
 %build 
 
 %if 0%{?fedora} || %{?rhel}%{!?rhel:0} >= 8 
-export FFLAGS=" -g -I$(lhapdf-config --incdir) -fPIC -fno-var-tracking-assignments  "
+export FFLAGS=" -g -I$(lhapdf-config --includedir) -fPIC -fno-var-tracking-assignments  "
 export FCFLAGS=" -g -fPIC -fno-var-tracking-assignments "
 export CXXFLAGS="%{optflags}  -fPIC"
 export LDFLAGS=" "
 %else
-export FFLAGS="%{optflags} -I$(lhapdf-config --incdir) -fPIC -fno-var-tracking-assignments  "
+export FFLAGS="%{optflags} -I$(lhapdf-config --includedir) -fPIC -fno-var-tracking-assignments  "
 export FCFLAGS="%{optflags}  -fPIC -fno-var-tracking-assignments "
 export CFLAGS="%{optflags}  -fPIC"
 export CXXFLAGS="%{optflags}  -fPIC"
