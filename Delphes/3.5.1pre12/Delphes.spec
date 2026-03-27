@@ -69,7 +69,7 @@ This package provides HepMC manuals and examples.
 %if %{?rhel}%{!?rhel:0} == 8
 %cmake -DSET_RPATH:BOOL=OFF -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_LIBDIR=%_lib
 %else
-%cmake -DSET_RPATH:BOOL=OFF -DCMAKE_INSTALL_LIBDIR=%_lib
+%cmake -DSET_RPATH:BOOL=OFF -DCMAKE_INSTALL_LIBDIR=%_lib -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %endif
 
 %cmake_build

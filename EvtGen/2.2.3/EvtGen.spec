@@ -6,7 +6,7 @@
 
 Name:           EvtGen
 Version:        2.2.3
-Release:        6%{?dist}
+Release:        7%{?dist}
 License:        GPLv3
 Url:            http://evtgen.warwick.ac.uk
 Source0:        https://evtgen.hepforge.org/downloads/EvtGen-02.02.03.tar.gz
@@ -106,7 +106,7 @@ export CMAKE_CXX_STANDARD=17
  -DEVTGEN_TAUOLA:BOOL=ON \
  -DEVTGEN_HEPMC3:BOOL=ON  \
  -DEVTGEN_BUILD_DOC:BOOL=ON  \
- -DEVTGEN_BUILD_VALIDATIONS:BOOL=ON
+ -DEVTGEN_BUILD_VALIDATIONS:BOOL=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 make -C build %{?_smp_mflags} 
 %endif
 
@@ -121,7 +121,7 @@ export CMAKE_CXX_STANDARD=17
  -DEVTGEN_TAUOLA:BOOL=ON \
  -DEVTGEN_HEPMC3:BOOL=ON  \
  -DEVTGEN_BUILD_DOC:BOOL=ON  \
- -DEVTGEN_BUILD_VALIDATIONS:BOOL=ON  -DCMAKE_SHARED_LINKER_FLAGS=" "
+ -DEVTGEN_BUILD_VALIDATIONS:BOOL=ON  -DCMAKE_SHARED_LINKER_FLAGS=" " -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 make %{?_smp_mflags} SHELL='sh -x'
 %endif
 
