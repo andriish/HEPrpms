@@ -354,3 +354,4 @@ aba3a13869f6d36a5d323e7d26a85479  recola2/2.3.0/rpmbuild/SOURCES/recola2-2.3.0.t
 cda8d7a4b4193ad457d71195f5b77ee0  ginac/1.8.10/rpmbuild/SOURCES/ginac-1.8.10.tar.bz2
 3265c789c47df91955cb236385e55af8  TheP8I/2.0.4/rpmbuild/SOURCES/TheP8I-2.0.4.tar.gz
 a70bbbd71da9fcd1f36e82aecdda9ddc  Delphes/3.5.1/rpmbuild/SOURCES/3.5.1.tar.gz
+cd364a150cabe62acff3d82ff77e3775  cernlib/2026.01.08.0/rpmbuild/SOURCES/cernlib-cernlib-2026.01.08.0-free.tar.gz

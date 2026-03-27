@@ -9,12 +9,13 @@ declare -a BUILDLIST=(
 #TheP8I:2.0.4
 #apfel:3.1.1
 #fastnlo:2.5.0.2826
-rapgap:3.4.0
+#rapgap:3.4.0
 #ginac:1.8.10
 #recola2:2.3.0
 #python-mpmath:1.2.1
 #sympy:1.12.4
 #cernlib:2025.09.18.4
+cernlib:2026.01.08.0
 #rapgap:3.4.0
 #cascade:3.3.3
 #golem95:1.3.4
