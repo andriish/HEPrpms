@@ -6,7 +6,7 @@
 
 Name:           EvtGen
 Version:        2.2.3
-Release:        7%{?dist}
+Release:        8%{?dist}
 License:        GPLv3
 Url:            http://evtgen.warwick.ac.uk
 Source0:        https://evtgen.hepforge.org/downloads/EvtGen-02.02.03.tar.gz
@@ -100,14 +100,16 @@ export LDFLAGS=" "
 export CMAKE_CXX_STANDARD=17
 %endif
 
-%cmake -H. -Bbuild -DCMAKE_SKIP_RPATH=ON \
+#cmake -H. -Bbuild -DCMAKE_SKIP_RPATH=ON
+%cmake  -DCMAKE_SKIP_RPATH=ON \
  -DEVTGEN_PYTHIA:BOOL=ON \
  -DEVTGEN_PHOTOS:BOOL=ON \
  -DEVTGEN_TAUOLA:BOOL=ON \
  -DEVTGEN_HEPMC3:BOOL=ON  \
  -DEVTGEN_BUILD_DOC:BOOL=ON  \
  -DEVTGEN_BUILD_VALIDATIONS:BOOL=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-make -C build %{?_smp_mflags} 
+#make -C build {?_smp_mflags} 
+%cmake_build
 %endif
 
 %if 0%{?suse_version}
@@ -127,7 +129,8 @@ make %{?_smp_mflags} SHELL='sh -x'
 
 %install
 %if %{?rhel}%{!?rhel:0}  || %{?fedora}%{!?fedora:0}
-%make_install -C build
+#make_install -C build
+%cmake_install
 %endif
 %if 0%{?suse_version}
 %make_install -C build
