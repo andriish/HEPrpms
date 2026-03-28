@@ -2223,21 +2223,21 @@ static char tokval[100];
 static struct toktab {
         char *tokstr;
         int tval;
-} toktab[]= {{
-        "default",      DEFAULT,
-        "login",        LOGIN,
-        "password",     PASSWD,
-        "notify",       NOTIFY,
-        "write",        WRITE,
-        "yes",          YES,
-        "y",            YES,
-        "no",           NO,
-        "n",            NO,
-        "command",      COMMAND,
-        "force",        FORCE,
-        "machine",      MACHINE,
-        0,              0
-  }};
+} toktab[]= {
+  {"default",      DEFAULT},
+  {"login",        LOGIN},
+  {"password",     PASSWD},
+  {"notify",       NOTIFY},
+  {"write",        WRITE},
+  {"yes",          YES},
+  {"y",            YES},
+  {"no",           NO},
+  {"n",            NO},
+  {"command",      COMMAND},
+  {"force",        FORCE},
+  {"machine",      MACHINE},
+  {0,              0}
+};
  
 #ifdef IBMMVS
 static FILE *cfile;
@@ -2622,7 +2622,7 @@ token()
 #endif
  
 #ifndef BSDTTY
-#include <termio.h>
+#include <termios.h>
 #else
 //AV: Newer APPLE requires sys/ioctl_compat.h
 #include <sys/ioctl_compat.h>
@@ -2649,7 +2649,7 @@ getpass(prompt)
 const char    *prompt;
 {
 #ifndef BSDTTY
-        struct termio ttyb;
+        struct termios ttyb;
         unsigned short flags;
 #else
         struct sgttyb ttyb;

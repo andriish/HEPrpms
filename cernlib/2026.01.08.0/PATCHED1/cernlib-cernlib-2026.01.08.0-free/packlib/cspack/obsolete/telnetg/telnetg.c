@@ -75,7 +75,7 @@
 #ifdef USG
 #ifdef LINUX
 #define CEOF EOF
-#include <termios.h>
+# include <termios.h>
 #include <sys/ioctl.h>
 struct termio {
     unsigned short c_iflag;

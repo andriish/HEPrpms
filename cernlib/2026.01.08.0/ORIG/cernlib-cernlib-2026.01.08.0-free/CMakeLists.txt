@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.3.0...3.9 FATAL_ERROR)
 ###########################Options handeling#####################################
 ###########################Options#####################################
 option(CERNLIB_USE_INTERNAL_XBAE          "Forces using internal XBAE." ON)
@@ -19,10 +19,13 @@ option(CERNLIB_NO_SUFFIX                  "Do not append suffixes to binaries." 
 set(CERNLIB_BUILD_STATIC ON)  #This is always ON, but it is convenient to have it like this from the point of view of logic.
 ###########################Package@#####################################
 project(CERNLIB LANGUAGES C Fortran )
+# We have lots of functions without proper declarations, even varying number
+# of arguments. C23 does not like that, so we stick to C17 for now
+set(CMAKE_C_STANDARD 11)
 #The complicated way to set the version is used to assure the simple
 #replacement of version variable with sed will not break the CMakeLists.txt
 if (NOT __CL_VERSION__)
-  set(EXTERNAL_VERSION_STRING "2025.02.25")
+  set(EXTERNAL_VERSION_STRING "2026.01.08")
 else()
   set(EXTERNAL_VERSION_STRING "__CL_VERSION__.1")
 endif()

@@ -75,7 +75,7 @@
 #ifdef USG
 #ifdef LINUX
 #define CEOF EOF
-# include <termio.h>
+# include <termios.h>
 #else
 # include <sys/termio.h>
 #endif /* LINUX */

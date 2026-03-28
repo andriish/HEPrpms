@@ -1,12 +1,10 @@
 diff -Naur ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/obsolete/telnetg/telnetg.c PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/obsolete/telnetg/telnetg.c
---- ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/obsolete/telnetg/telnetg.c	2026-03-27 18:48:44.382027158 +0100
-+++ PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/obsolete/telnetg/telnetg.c	2026-03-27 18:48:44.382284308 +0100
-@@ -75,7 +75,16 @@
- #ifdef USG
+--- ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/obsolete/telnetg/telnetg.c	2026-03-29 00:34:22.967379275 +0100
++++ PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/obsolete/telnetg/telnetg.c	2026-03-29 00:36:46.987425482 +0100
+@@ -76,6 +76,15 @@
  #ifdef LINUX
  #define CEOF EOF
--# include <termio.h>
-+#include <termios.h>
+ # include <termios.h>
 +#include <sys/ioctl.h>
 +struct termio {
 +    unsigned short c_iflag;
@@ -20,14 +18,12 @@ diff -Naur ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/obsolete/telne
  # include <sys/termio.h>
  #endif /* LINUX */
 diff -Naur ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpaw.c PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpaw.c
---- ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpaw.c	2026-03-27 18:48:44.382071199 +0100
-+++ PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpaw.c	2026-03-27 18:48:44.382322740 +0100
-@@ -2622,7 +2622,16 @@
- #endif
+--- ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpaw.c	2026-03-29 00:39:01.775492864 +0100
++++ PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpaw.c	2026-03-29 00:39:02.668513208 +0100
+@@ -2623,6 +2623,15 @@
   
  #ifndef BSDTTY
--#include <termio.h>
-+#include <termios.h>
+ #include <termios.h>
 +#include <sys/ioctl.h>
 +struct termio {
 +    unsigned short c_iflag;
@@ -40,6 +36,15 @@ diff -Naur ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpaw.c 
  #else
  //AV: Newer APPLE requires sys/ioctl_compat.h
  #include <sys/ioctl_compat.h>
+@@ -2649,7 +2658,7 @@
+ const char    *prompt;
+ {
+ #ifndef BSDTTY
+-        struct termios ttyb;
++        struct termio ttyb;
+         unsigned short flags;
+ #else
+         struct sgttyb ttyb;
 diff -Naur ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpold.c PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpold.c
 --- ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpold.c	2026-03-27 18:48:44.382071199 +0100
 +++ PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpold.c	2026-03-27 18:48:44.382322740 +0100
@@ -62,14 +67,12 @@ diff -Naur ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/cspack/tcpaw/tcpold.c
  #include <sgtty.h>
  #endif
 diff -Naur ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c
---- ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c	2026-03-27 18:48:44.382111061 +0100
+--- ORIG1/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c	2026-03-29 00:35:57.064404319 +0100
 +++ PATCHED1/cernlib-cernlib-2025.04.04.0-free/packlib/kuip/code_kuip/getline.c	2026-03-27 18:48:44.382358670 +0100
-@@ -159,7 +159,16 @@
- 
+@@ -160,6 +160,15 @@
  #ifdef TERMIO_SYSV
  #include <sys/ioctl.h>
--#include <termio.h>
-+#include <termios.h>
+ #include <termios.h>
 +#include <sys/ioctl.h>
 +struct termio {
 +    unsigned short c_iflag;

@@ -159,7 +159,7 @@ static char typeahead_buffer[1024];
 
 #ifdef TERMIO_SYSV
 #include <sys/ioctl.h>
-#include <termio.h>
+#include <termios.h>
 static struct termio   new_termio, old_termio;
 #endif
 

@@ -2223,21 +2223,21 @@ static char tokval[100];
 static struct toktab {
         char *tokstr;
         int tval;
-} toktab[]= {{
-        "default",      DEFAULT,
-        "login",        LOGIN,
-        "password",     PASSWD,
-        "notify",       NOTIFY,
-        "write",        WRITE,
-        "yes",          YES,
-        "y",            YES,
-        "no",           NO,
-        "n",            NO,
-        "command",      COMMAND,
-        "force",        FORCE,
-        "machine",      MACHINE,
-        0,              0
-  }};
+} toktab[]= {
+  {"default",      DEFAULT},
+  {"login",        LOGIN},
+  {"password",     PASSWD},
+  {"notify",       NOTIFY},
+  {"write",        WRITE},
+  {"yes",          YES},
+  {"y",            YES},
+  {"no",           NO},
+  {"n",            NO},
+  {"command",      COMMAND},
+  {"force",        FORCE},
+  {"machine",      MACHINE},
+  {0,              0}
+};
  
 #ifdef IBMMVS
 static FILE *cfile;
