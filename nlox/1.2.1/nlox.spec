@@ -9,6 +9,7 @@ License:        GPL
 URL:            http://www.hep.fsu.edu/~nlox/
 Source0:        https://gitlab.cern.ch/averbyts/nlox/-/archive/1.2.2.atlas7/nlox-1.2.2.atlas7.zip
 BuildRequires:  cmake
+BuildRequires:  git
 BuildRequires:  gcc-gfortran
 BuildRequires:  gcc-c++
 BuildRequires:  python3
