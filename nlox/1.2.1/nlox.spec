@@ -2,7 +2,7 @@
 %global _lto_cflags %nil
 Name:           nlox
 Version:        1.2.1
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        nlox package 
 
 License:        GPL
@@ -24,12 +24,14 @@ nlox is a package .
 %setup -q -n nlox-1.2.2.atlas7
 
 %build
-export CXXFLAGS='%{optflags} -fno-var-tracking -Wno-reorder -Wno-sign-compare -Wno-unused-variable -std=c++17 '
+export CXXFLAGS='%{optflags} -fno-var-tracking -Wno-reorder -Wno-sign-compare -Wno-unused-variable -std=c++17 -fext-numeric-literals'
 sed -i 's|URL http://helac-phegas.web.cern.ch/helac-phegas/tar-files/OneLOop-3.6.tgz|URL http://madgraph.phys.ucl.ac.be/Downloads/OneLOop-3.6.tgz|g' CMakeLists.txt
+sed -i 's|https://github.com/andriish/qcdloop|https://github.com/scarrazza/qcdloop|g' CMakeLists.txt
+sed -i 's|GIT_TAG arm|GIT_TAG 2\.1\.0|g' CMakeLists.txt
 %if  %{?rhel}%{!?rhel:0} == 8
  sed -i 's/-fallow-argument-mismatch//g' CMakeLists.txt
 %endif
-%cmake .  -DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir}/nlox  -DDEFAULT_NLOX_PATH=%{_libdir}/nlox -DCMAKE_VERBOSE_MAKEFILE=OFF -DNLOX_PROCESSES="pp_Wpttbar;pp_Wmttbar;pp_Zttbar_as3ae1;pp_ttbarepem_as3ae2"
+%cmake .   -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir}/nlox  -DDEFAULT_NLOX_PATH=%{_libdir}/nlox -DCMAKE_VERBOSE_MAKEFILE=OFF -DNLOX_PROCESSES="pp_Wpttbar;pp_Wmttbar;pp_Zttbar_as3ae1;pp_ttbarepem_as3ae2"
 %cmake_build
 
 %install
