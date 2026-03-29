@@ -355,3 +355,5 @@ cda8d7a4b4193ad457d71195f5b77ee0  ginac/1.8.10/rpmbuild/SOURCES/ginac-1.8.10.tar
 3265c789c47df91955cb236385e55af8  TheP8I/2.0.4/rpmbuild/SOURCES/TheP8I-2.0.4.tar.gz
 a70bbbd71da9fcd1f36e82aecdda9ddc  Delphes/3.5.1/rpmbuild/SOURCES/3.5.1.tar.gz
 cd364a150cabe62acff3d82ff77e3775  cernlib/2026.01.08.0/rpmbuild/SOURCES/cernlib-cernlib-2026.01.08.0-free.tar.gz
+918e81d4386221d63de8b6c40f378937  nlox/1.2.1/rpmbuild/SOURCES/nlox-1.2.2.atlas7.zip
+

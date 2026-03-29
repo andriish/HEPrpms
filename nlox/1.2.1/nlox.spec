@@ -2,12 +2,12 @@
 %global _lto_cflags %nil
 Name:           nlox
 Version:        1.2.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        nlox package 
 
 License:        GPL
 URL:            http://www.hep.fsu.edu/~nlox/
-Source0:        https://gitlab.cern.ch/averbyts/nlox/-/archive/1.2.2.atlas5/nlox-1.2.2.atlas5.zip
+Source0:        https://gitlab.cern.ch/averbyts/nlox/-/archive/1.2.2.atlas7/nlox-1.2.2.atlas7.zip
 BuildRequires:  cmake
 BuildRequires:  gcc-gfortran
 BuildRequires:  gcc-c++
@@ -21,10 +21,11 @@ nlox is a package .
 
 
 %prep
-%setup -q -n nlox-1.2.2.atlas5
+%setup -q -n nlox-1.2.2.atlas7
 
 %build
-export CXXFLAGS='%{optflags} -fno-var-tracking -Wno-reorder -Wno-sign-compare -Wno-unused-variable'
+export CXXFLAGS='%{optflags} -fno-var-tracking -Wno-reorder -Wno-sign-compare -Wno-unused-variable -std=c++17 '
+sed -i 's|URL http://helac-phegas.web.cern.ch/helac-phegas/tar-files/OneLOop-3.6.tgz|URL http://madgraph.phys.ucl.ac.be/Downloads/OneLOop-3.6.tgz|g' CMakeLists.txt
 %if  %{?rhel}%{!?rhel:0} == 8
  sed -i 's/-fallow-argument-mismatch//g' CMakeLists.txt
 %endif
