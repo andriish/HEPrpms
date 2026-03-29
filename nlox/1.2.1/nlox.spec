@@ -2,7 +2,7 @@
 %global _lto_cflags %nil
 Name:           nlox
 Version:        1.2.1
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        nlox package 
 
 License:        GPL
@@ -14,6 +14,7 @@ BuildRequires:  gcc-gfortran
 BuildRequires:  gcc-c++
 BuildRequires:  python3
 BuildRequires:  libquadmath-devel
+BuildRequires:  qcdloop-devel
 
 
 
