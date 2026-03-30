@@ -32,6 +32,9 @@
 %if %{?rhel}%{!?rhel:0} < 5
 %define no_build_id 1
 %endif
+%if %{?fedora}%{!?fedora:0} > 43
+%global _cmake_generator "Unix Makefiles"
+%endif
 
 #define verdir {version}
 %define verdir 2026
