@@ -4,7 +4,7 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-JetVHeto:3.0.0
+#JetVHeto:3.0.0
 #qcdnum:18.00.00
 #nlox:1.2.1
 #applgrid:1.6.36
@@ -18,7 +18,7 @@ JetVHeto:3.0.0
 #python-mpmath:1.2.1
 #sympy:1.12.4
 #cernlib:2025.09.18.4
-#cernlib:2026.01.08.0
+cernlib:2026.01.08.0
 #rapgap:3.4.0
 #cascade:3.3.3
 #golem95:1.3.4
