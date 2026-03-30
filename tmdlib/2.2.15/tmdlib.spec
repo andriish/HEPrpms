@@ -20,7 +20,7 @@ BuildRequires: gsl-devel
 BuildRequires: lhapdf-devel
 BuildRequires: root root-core root-tree-ntuple-utils
 BuildRequires: boost boost-devel
-BuildRequires: tex(latex) tex(sectsty.sty)
+BuildRequires: tex(latex) tex(sectsty.sty) tex(courier)
 Requires:       lhapdf libgfortran root root-core gsl wget root-tree-ntuple-utils
 %endif
 
