@@ -1,6 +1,6 @@
-diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt
---- ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2026-03-29 00:33:03.745716894 +0100
-+++ PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2026-03-29 00:33:04.854740224 +0100
+diff -Naur ORIG/cernlib-cernlib-2026.01.08.0-free/CMakeLists.txt PATCHED/cernlib-cernlib-2026.01.08.0-free/CMakeLists.txt
+--- ORIG/cernlib-cernlib-2026.01.08.0-free/CMakeLists.txt	2026-03-30 10:52:39.012230715 +0200
++++ PATCHED/cernlib-cernlib-2026.01.08.0-free/CMakeLists.txt	2026-03-30 10:52:39.013230708 +0200
 @@ -75,7 +75,7 @@
    endif()
  endif()
@@ -29,9 +29,9 @@ diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt PATCHED/cernlib
  file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script "${FILE_CONTENTS}")
  install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script  DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME paw${COMPSUFFIXBIN} COMPONENT libs)
  ########################################################################
-diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c PATCHED/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c
---- ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c	2026-03-27 18:48:44.381931077 +0100
-+++ PATCHED/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c	2026-03-27 18:48:44.382209763 +0100
+diff -Naur ORIG/cernlib-cernlib-2026.01.08.0-free/graflib/higz/higzcc/imgpickpalette.c PATCHED/cernlib-cernlib-2026.01.08.0-free/graflib/higz/higzcc/imgpickpalette.c
+--- ORIG/cernlib-cernlib-2026.01.08.0-free/graflib/higz/higzcc/imgpickpalette.c	2026-03-30 10:52:39.012230715 +0200
++++ PATCHED/cernlib-cernlib-2026.01.08.0-free/graflib/higz/higzcc/imgpickpalette.c	2026-03-30 10:52:39.014230701 +0200
 @@ -29,6 +29,7 @@
  #include "higz/pilot.h"
  #if defined(CERNLIB_GIF)
