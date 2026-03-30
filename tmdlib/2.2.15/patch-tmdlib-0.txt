@@ -1,0 +1,53 @@
+diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
+--- ORIG/CMakeLists.txt	2026-03-30 14:30:29.494142358 +0200
++++ PATCHED/CMakeLists.txt	2026-03-30 15:19:13.113553381 +0200
+@@ -1,10 +1,10 @@
+ cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+ ###########################Package@#####################################
+ project(TMDLIB LANGUAGES C CXX Fortran)
+-set(PROJECT_VERSION 2.2.12)
++set(PROJECT_VERSION 2.2.15)
+ SET(TMDLIB_VERSION_MAJOR  2)
+ SET(TMDLIB_VERSION_MINOR  2)
+-SET(TMDLIB_VERSION_PATCH  12)
++SET(TMDLIB_VERSION_PATCH  15)
+ set(TMDLIB_VERSION "${TMDLIB_VERSION_MAJOR}.${TMDLIB_VERSION_MINOR}.${TMDLIB_VERSION_PATCH}")
+ 
+ set(CMAKE_VERBOSE_MAKEFILE ON)
+@@ -261,8 +261,8 @@
+ ## MANUAL  #############################################################
+ if (TMDLIB_BUILD_DOCS AND LATEX_FOUND AND LATEX_PDFLATEX_FOUND AND LATEX_MAKEINDEX_FOUND)
+   set( manual_sources 
+-       ${PROJECT_SOURCE_DIR}/manual/TMDLIB2.tex 
+-       ${PROJECT_SOURCE_DIR}/manual/TMDLIB2.bbl 
++       ${PROJECT_SOURCE_DIR}/manual/TMDlib2.tex 
++#       ${PROJECT_SOURCE_DIR}/manual/TMDLIB2.bbl 
+        ${PROJECT_SOURCE_DIR}/manual/mystyle-new.sty 
+        ${PROJECT_SOURCE_DIR}/manual/mcite.sty
+        ${PROJECT_SOURCE_DIR}/manual/PB-HERAPDF-collinear-mu100-new.pdf
+@@ -281,11 +281,11 @@
+                        COMMAND ${PDFLATEX_COMPILER} TMDLIB2
+                        COMMENT "Creating manual "
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/manual
+-                       DEPENDS ${PROJECT_SOURCE_DIR}/manual/TMDLIB2.tex
++                       DEPENDS ${PROJECT_SOURCE_DIR}/manual/TMDlib2.tex
+                       )
+      ADD_CUSTOM_TARGET(all-formats ALL) # Entry point of execution.
+      ADD_DEPENDENCIES( all-formats latexcompileall)
+-     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/manual/TMDLIB2.pdf DESTINATION  ${CMAKE_INSTALL_MANDIR} COMPONENT man)
++     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/manual/TMDlib2.pdf DESTINATION  ${CMAKE_INSTALL_MANDIR} COMPONENT man)
+ endif()
+ ### DATA ###############################################################
+ set(gbwlight   
+diff -Naur ORIG/src/TMDutils.cc PATCHED/src/TMDutils.cc
+--- ORIG/src/TMDutils.cc	2026-03-30 14:28:41.193998075 +0200
++++ PATCHED/src/TMDutils.cc	2026-03-30 14:28:40.570002008 +0200
+@@ -2,7 +2,7 @@
+ #include "tmdlib/TMDlib.h"
+ #include <iostream>
+ #include <fstream>
+-#include "yaml-cpp/yaml.h"
++#include <yaml-cpp/yaml.h>
+ #include <stdio.h>  /* printf, NULL */
+ #include <stdlib.h> /* strtod */
+ #include <string>

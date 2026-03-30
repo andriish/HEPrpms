@@ -69,7 +69,9 @@ BuildRequires: libXau-devel
 %endif
 
 # indirectly requires lesstif or openmotif and X libs
+%if 0%{?suse_version} || 0%{?fedora} || %{?rhel}%{!?rhel:0} < 10
 BuildRequires: xbae-devel
+%endif
 
 # for patchy build scripts
 BuildRequires: gawk
@@ -136,7 +138,9 @@ Requires: libnsl2-devel
 BuildRequires: libnsl-devel
 %endif
 # Motif and X devel libs are indirectly required through xbae
+%if 0%{?suse_version} || 0%{?fedora} || %{?rhel}%{!?rhel:0} < 10
 Requires: xbae-devel
+%endif
 
 %if %{?rhel}%{!?rhel:0} == 4 
 Requires:      xorg-x11-devel
