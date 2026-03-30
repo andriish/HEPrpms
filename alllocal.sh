@@ -4,13 +4,14 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+JetVHeto:3.0.0
 #qcdnum:18.00.00
 #nlox:1.2.1
 #applgrid:1.6.36
 #Delphes:3.5.1
 #TheP8I:2.0.4
 #apfel:3.1.1
-fastnlo:2.5.0.2826
+#fastnlo:2.5.0.2826
 #rapgap:3.4.0
 #ginac:1.8.10
 #recola2:2.3.0
