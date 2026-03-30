@@ -287,10 +287,10 @@ Utilities for extracting sources from patchy cards and cradles.
 
 %prep
 %setup -q -c 
-#patch -P 0 -p1
-#if #{?fedora}#{!?fedora:0} > 42
-#patch -P 1 -p1
-#endif
+%patch -P 0 -p1
+%if %{?fedora}%{!?fedora:0} > 42
+%patch -P 1 -p1
+%endif
 
 %build
 find cernlib-cernlib-%{version}-free -type f -name '.*' -exec rm -rf  {} \;
