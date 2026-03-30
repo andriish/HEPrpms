@@ -1,3 +1,6 @@
+%define _build_id_links none
+%global QA_RPATHS $(( 0x0001 ))
+
 Name:       tmdlib
 Version:    2.2.15
 Release:    1%{?dist}
