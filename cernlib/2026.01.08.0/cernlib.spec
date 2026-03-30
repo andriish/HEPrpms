@@ -72,6 +72,9 @@ BuildRequires: libXau-devel
 %if 0%{?suse_version} || 0%{?fedora} || %{?rhel}%{!?rhel:0} < 10
 BuildRequires: xbae-devel
 %endif
+%if  %{?rhel}%{!?rhel:0} >= 10
+BuildRequires: freetype-devel
+%endif
 
 # for patchy build scripts
 BuildRequires: gawk
@@ -140,6 +143,9 @@ BuildRequires: libnsl-devel
 # Motif and X devel libs are indirectly required through xbae
 %if 0%{?suse_version} || 0%{?fedora} || %{?rhel}%{!?rhel:0} < 10
 Requires: xbae-devel
+%endif
+%if  %{?rhel}%{!?rhel:0} >= 10
+Requires: freetype-devel
 %endif
 
 %if %{?rhel}%{!?rhel:0} == 4 
