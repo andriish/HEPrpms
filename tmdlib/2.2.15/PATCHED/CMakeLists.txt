@@ -38,20 +38,16 @@ message(STATUS "TMDLIB: TMDLIB_ENABLE_PYTHON  ${TMDLIB_ENABLE_PYTHON}")
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
 
 #### RPATH handling ####################################################
-set(CMAKE_MACOSX_RPATH 1)
-# use, i.e. don't skip the full RPATH for the build tree
-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-# when building, don't use the install RPATH already (but later on when installing)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-# add the automatically determined parts of the RPATH
-# which point to directories outside the build tree to the install RPATH
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-# the RPATH to be used when installing, but only if it's not a system directory
-LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
-IF("${isSystemDir}" STREQUAL "-1")
-   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-ENDIF("${isSystemDir}" STREQUAL "-1")
+if(APPLE)
+    set(CMAKE_MACOSX_RPATH 1)
+else()
+    # Linux: do NOT embed RPATH (required for RPM packaging)
+    set(CMAKE_SKIP_RPATH TRUE)
+    set(CMAKE_SKIP_BUILD_RPATH TRUE)
+    set(CMAKE_SKIP_INSTALL_RPATH TRUE)
+    set(CMAKE_INSTALL_RPATH "")
+endif()
+
 
 ###################Windows##############################################
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
