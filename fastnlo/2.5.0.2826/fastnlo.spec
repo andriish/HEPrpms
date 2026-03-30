@@ -7,8 +7,10 @@ Summary: Fast pQCD calculations for PDF fits.
 Source:  https://fastnlo.hepforge.org/code/v25/fastnlo_toolkit-2.5.0-2826.tar.gz
 URL:     https://fastnlo.hepforge.org/
 #A patch is needed to make this work with python
+Patch0: patch-fastnlo-0.txt
 
 %if 0%{?rhel} || 0%{?fedora}
+BuildRequires: autoconf
 BuildRequires: gcc-gfortran gcc-c++ lhapdf-devel lhapdf   root root-core root-tree-ntuple-utils
 BuildRequires: qcdnum qcdnum-devel hoppet  fastjet fastjet-devel  zlib zlib-devel
 BuildRequires: autoconf automake libtool tex(latex) swig doxygen texlive-epstopdf ghostscript
@@ -19,6 +21,7 @@ BuildRequires: yaml-cpp-devel
 Requires: yaml-cpp 
 %endif
 %if 0%{?suse_version}
+BuildRequires: autoconf
 BuildRequires: gcc-fortran gcc-c++ LHAPDF-devel libLHAPDF   root6 root6-libs root6-devel 
 BuildRequires: qcdnum qcdnum-devel hoppet fastjet fastjet-devel  pkgconfig(zlib) zlib-devel
 BuildRequires: autoconf automake libtool tex(latex) swig doxygen texlive-epstopdf ghostscript
@@ -60,8 +63,11 @@ for observables in hadron-induced processes.
 
 %prep 
 %setup -q -n fastnlo_toolkit-2.5.0-2826
+%patch -P 0 -p1
+
 
 %build 
+autoreconf -fi
 
 
 sed -i 's|\#\$(DEPDIR)/fastnlo_wrap.Plo:|\$(DEPDIR)/fastnlo_wrap.Plo:|g' pyext/Makefile.in
@@ -101,7 +107,7 @@ mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch
 ldconfig 
 
 %changelog
-* Wed Jun 20 2024 Andrii Verbytskyi 2.5.0
+* Thu Jun 20 2024 Andrii Verbytskyi 2.5.0
 - Drop YODA support
 * Fri Aug 12 2022 Andrii Verbytskyi 2.5.0
 - Use Python3
