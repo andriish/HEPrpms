@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.11..4.0 FATAL_ERROR)
 ###########################Package@#####################################
 project(TMDLIB LANGUAGES C CXX Fortran)
 set(PROJECT_VERSION 2.2.15)
