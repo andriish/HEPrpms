@@ -1,3 +1,5 @@
+%global _cmake_generator "Unix Makefiles"
+
 Summary:  A parton-level Monte Carlo event generator
 Name: MCFM
 Version: 10.3
