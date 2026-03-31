@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10...4.0)
 ###########################Package@#####################################
 project(cascade LANGUAGES C CXX Fortran )
-set(PROJECT_VERSION 3.2.05)
-SET(CASCADE_VERSION 3.2.05)
+set(PROJECT_VERSION 3.3.03)
+SET(CASCADE_VERSION 3.3.03)
 SET(CASCADE_VERSION_MAJOR  3)
-SET(CASCADE_VERSION_MINOR  2)
-SET(CASCADE_VERSION_PATCH  5)
+SET(CASCADE_VERSION_MINOR  3)
+SET(CASCADE_VERSION_PATCH  3)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
