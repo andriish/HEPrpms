@@ -23,10 +23,8 @@ INCLUDE= -I. `$(HOPPET_CONFIG) --fflags`
 endif
 endif
 
-LIBS = `$(HOPPET_CONFIG) --ldflags` `$(LHAPDF_CONFIG) --ldflags`
+LIBS = `$(HOPPET_CONFIG) --ldflags` `$(LHAPDF_CONFIG) --libs`
 
-CHAPLIN=${HOME}/lib
-#CHAPLIN=${HOME}/software/chaplin-1.2-install/lib 
 LDFLAGS = -L$(CHAPLIN) -lchaplin
 
 # select between smallR version of the code and the svn one
