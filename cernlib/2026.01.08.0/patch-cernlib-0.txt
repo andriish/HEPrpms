@@ -1,6 +1,6 @@
-diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt
---- ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2026-03-29 00:33:03.745716894 +0100
-+++ PATCHED/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt	2026-03-29 00:33:04.854740224 +0100
+diff -Naur ORIG/cernlib-cernlib-2026.01.08.0-free/CMakeLists.txt PATCHED/cernlib-cernlib-2026.01.08.0-free/CMakeLists.txt
+--- ORIG/cernlib-cernlib-2026.01.08.0-free/CMakeLists.txt	2026-03-30 10:52:39.012230715 +0200
++++ PATCHED/cernlib-cernlib-2026.01.08.0-free/CMakeLists.txt	2026-03-30 10:52:39.013230708 +0200
 @@ -75,7 +75,7 @@
    endif()
  endif()
@@ -29,9 +29,9 @@ diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/CMakeLists.txt PATCHED/cernlib
  file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script "${FILE_CONTENTS}")
  install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/pawlib/paw/programs/paw.script  DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME paw${COMPSUFFIXBIN} COMPONENT libs)
  ########################################################################
-diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c PATCHED/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c
---- ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c	2026-03-27 18:48:44.381931077 +0100
-+++ PATCHED/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpalette.c	2026-03-27 18:48:44.382209763 +0100
+diff -Naur ORIG/cernlib-cernlib-2026.01.08.0-free/graflib/higz/higzcc/imgpickpalette.c PATCHED/cernlib-cernlib-2026.01.08.0-free/graflib/higz/higzcc/imgpickpalette.c
+--- ORIG/cernlib-cernlib-2026.01.08.0-free/graflib/higz/higzcc/imgpickpalette.c	2026-03-30 10:52:39.012230715 +0200
++++ PATCHED/cernlib-cernlib-2026.01.08.0-free/graflib/higz/higzcc/imgpickpalette.c	2026-03-30 10:52:39.014230701 +0200
 @@ -29,6 +29,7 @@
  #include "higz/pilot.h"
  #if defined(CERNLIB_GIF)
@@ -40,3 +40,53 @@ diff -Naur ORIG/cernlib-cernlib-2025.04.04.0-free/graflib/higz/higzcc/imgpickpal
  #include <X11/Xutil.h>
  #include <stdio.h>
  #include <stdlib.h>
+diff -Naur ORIG/cernlib-cernlib-2026.01.08.0-free/mathlib/gen/divon/recpar.F PATCHED/cernlib-cernlib-2026.01.08.0-free/mathlib/gen/divon/recpar.F
+--- ORIG/cernlib-cernlib-2026.01.08.0-free/mathlib/gen/divon/recpar.F	2026-03-04 16:53:10.000000000 +0100
++++ PATCHED/cernlib-cernlib-2026.01.08.0-free/mathlib/gen/divon/recpar.F	2026-03-30 12:21:57.539408259 +0200
+@@ -37,8 +37,8 @@
+       TERMNL=.FALSE.
+       IRBUC=IBUC-(MAXWRD*(ENTBUC-1))
+       IRBUC=IBUC-(MAXWRD*(ENTBUC-1))
+-      CALL SPLIT(NDIM,UMINUS,UPLUS,FLOBD,FUPBD,TERMNL,ITREE,PARTN(ENTRE
+-     1E),BUCKTS(MAXWRD*(ENTBUC-1)+1),IRBUC)
++      CALL SPLITDVN(NDIM,UMINUS,UPLUS,FLOBD,FUPBD,TERMNL,ITREE,
++     1PARTN(ENTREE),BUCKTS(MAXWRD*(ENTBUC-1)+1),IRBUC)
+       TREE(4,ENTREE)=-ITREE
+       IF(TERMNL) RETURN
+       PNODES=PNODES+1
+@@ -67,8 +67,8 @@
+       UMINUS(JTREE)=PARTN(PARENT)
+  30   IRBUC=IBUC-(MAXWRD*(ENTBUC-1))
+       IRBUC=IBUC-(MAXWRD*(ENTBUC-1))
+-      CALL SPLIT(NDIM,UMINUS,UPLUS,FLOBD,FUPBD,TERMNL,ITREE,PARTN(ENTRE
+-     1E),BUCKTS(MAXWRD*(ENTBUC-1)+1),IRBUC)
++      CALL SPLITDVN(NDIM,UMINUS,UPLUS,FLOBD,FUPBD,TERMNL,ITREE,
++     1PARTN(ENTREE),BUCKTS(MAXWRD*(ENTBUC-1)+1),IRBUC)
+       TREE(4,ENTREE)=-ITREE
+       IF(.NOT.(.NOT.TERMNL)) GOTO 50
+       IF(JTREE.GE.0) GOTO 40
+@@ -120,8 +120,8 @@
+       UMINUS(-JTREE)=PARTN(PARENT)
+  110  IRBUC=IBUC-(MAXWRD*(ENTBUC-1))
+       IRBUC=IBUC-(MAXWRD*(ENTBUC-1))
+-      CALL SPLIT(NDIM,UMINUS,UPLUS,FLOBD,FUPBD,TERMNL,ITREE,PARTN(ENTRE
+-     1E),BUCKTS(MAXWRD*(ENTBUC-1)+1),IRBUC)
++      CALL SPLITDVN(NDIM,UMINUS,UPLUS,FLOBD,FUPBD,TERMNL,ITREE,
++     1PARTN(ENTREE),BUCKTS(MAXWRD*(ENTBUC-1)+1),IRBUC)
+       TREE(4,ENTREE)=-ITREE
+       IF(.NOT.(.NOT.TERMNL)) GOTO 130
+       IF(JTREE.LE.0) GOTO 120
+diff -Naur ORIG/cernlib-cernlib-2026.01.08.0-free/mathlib/gen/divon/split.F PATCHED/cernlib-cernlib-2026.01.08.0-free/mathlib/gen/divon/split.F
+--- ORIG/cernlib-cernlib-2026.01.08.0-free/mathlib/gen/divon/split.F	2026-03-04 16:53:10.000000000 +0100
++++ PATCHED/cernlib-cernlib-2026.01.08.0-free/mathlib/gen/divon/split.F	2026-03-30 12:21:20.235634672 +0200
+@@ -7,8 +7,8 @@
+ *
+ *
+ #include "gen/pilot.h"
+-      SUBROUTINE SPLIT (NDIM,UMINUS,UPLUS,FLOBD,FUPBD,TERMNL,DISCRM,PART
+-     1N,BUCKTS,IRBUC)
++      SUBROUTINE SPLITDVN(NDIM,UMINUS,UPLUS,FLOBD,FUPBD,TERMNL,DISCRM,
++     1PARTN,BUCKTS,IRBUC)
+       INTEGER NDIM, DISCRM, IRBUC
+       LOGICAL TERMNL
+       REAL FLOBD, FUPBD, PARTN

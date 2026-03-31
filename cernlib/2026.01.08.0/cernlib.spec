@@ -32,6 +32,9 @@
 %if %{?rhel}%{!?rhel:0} < 5
 %define no_build_id 1
 %endif
+%if %{?fedora}%{!?fedora:0} > 43
+%global _cmake_generator "Unix Makefiles"
+%endif
 
 #define verdir {version}
 %define verdir 2026
@@ -41,13 +44,12 @@
 
 Name:          cernlib
 Version:       2026.01.08.0
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       General purpose CERN library
 Group:         Development/Libraries
 License:       GPL+ and LGPLv2+
 URL:           http://cernlib.web.cern.ch/cernlib/
 Patch0:         patch-cernlib-0.txt
-Patch1:         patch-cernlib-1.txt
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 7
 BuildRequires: openssl-libs openssl-devel  lapack-devel blas-devel lapack blas
@@ -67,7 +69,12 @@ BuildRequires: libXau-devel
 %endif
 
 # indirectly requires lesstif or openmotif and X libs
+%if 0%{?suse_version} || 0%{?fedora} || %{?rhel}%{!?rhel:0} < 10
 BuildRequires: xbae-devel
+%endif
+%if  %{?rhel}%{!?rhel:0} >= 10
+BuildRequires: freetype-devel
+%endif
 
 # for patchy build scripts
 BuildRequires: gawk
@@ -134,7 +141,12 @@ Requires: libnsl2-devel
 BuildRequires: libnsl-devel
 %endif
 # Motif and X devel libs are indirectly required through xbae
+%if 0%{?suse_version} || 0%{?fedora} || %{?rhel}%{!?rhel:0} < 10
 Requires: xbae-devel
+%endif
+%if  %{?rhel}%{!?rhel:0} >= 10
+Requires: freetype-devel
+%endif
 
 %if %{?rhel}%{!?rhel:0} == 4 
 Requires:      xorg-x11-devel
@@ -284,10 +296,7 @@ Utilities for extracting sources from patchy cards and cradles.
 
 %prep
 %setup -q -c 
-#patch -P 0 -p1
-#if #{?fedora}#{!?fedora:0} > 42
-#patch -P 1 -p1
-#endif
+%patch -P 0 -p1
 
 %build
 find cernlib-cernlib-%{version}-free -type f -name '.*' -exec rm -rf  {} \;
@@ -303,14 +312,21 @@ export FC=gfortran
 cmake  -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=-gfortran -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF  -DCMAKE_Fortran_COMPILER=${FC} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %cmakeB
 %endif
+
 %if 0%{?fedora} || %{?rhel}%{!?rhel:0} >= 7
 export FC=gfortran
+
 %if %{?fedora}%{!?fedora:0} >= 41
 %cmake -DCMAKE_C_STANDARD=17 -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=-gfortran -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %else
+%if %{?rhel}%{!?rhel:0} >= 10
+%cmake -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=-gfortran -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=ON -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+%else
 %cmake -DCERNLIB_NO_SUFFIX=OFF -DCOMPSUFFIX=gfortran -DCOMPSUFFIXBIN=-gfortran -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -S cernlib-cernlib-%{version}-free -DCERNLIB_BUILD_SHARED=ON -DCERNLIB_USE_INTERNAL_XBAE=OFF -DCERNLIB_USE_INTERNAL_LAPACK=OFF                                                         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/cernlib/%{verdir}/lib -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/cernlib/%{verdir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 %endif
+%endif
 %cmakeB
+
 %endif
 
 %if 0%{?suse_version}

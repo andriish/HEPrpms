@@ -33,6 +33,7 @@ as resummation in the leading logarithms of the jet radius. It also
 %setup -q 
 %build 
 
+sed -i 's/\(LHAPDF_CONFIG\) --ldflags/\1 --ldflags --libs/' Makefile
 sed -i 's@CHAPLIN=@FOOCHAPLIN=@' Makefile
 make CHAPLIN=%{_libdir} FFLAGS="%{optflags}"
 

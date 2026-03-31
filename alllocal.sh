@@ -4,6 +4,7 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+#tmdlib:2.2.15
 JetVHeto:3.0.0
 #qcdnum:18.00.00
 #nlox:1.2.1
