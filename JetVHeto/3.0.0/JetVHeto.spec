@@ -5,6 +5,7 @@ Release: 3%{?dist}
 License: GPLv3
 Source: https://www.hepforge.org/downloads/JetVHeto/JetVHeto-%{version}.tgz
 URL:    https://jetvheto.hepforge.org/
+Patch0:     patch-JetVHeto-0.txt
 
 %if 0%{?rhel} || 0%{?fedora}
 Requires:      hoppet lhapdf chaplin
@@ -31,10 +32,12 @@ as resummation in the leading logarithms of the jet radius. It also
  performs NNLL resummation for the Higgs and Z-boson transverse momentum. 
 %prep 
 %setup -q 
+%patch -P 0 -p1
+
 %build 
 
-sed -i 's/\(LHAPDF_CONFIG\) --ldflags/\1 --ldflags --libs/' Makefile
-sed -i 's@CHAPLIN=@FOOCHAPLIN=@' Makefile
+#sed -i 's/\(LHAPDF_CONFIG\) --ldflags/\1 --ldflags --libs/' Makefile
+#sed -i 's@CHAPLIN=@FOOCHAPLIN=@' Makefile
 make CHAPLIN=%{_libdir} FFLAGS="%{optflags}"
 
 %install 
