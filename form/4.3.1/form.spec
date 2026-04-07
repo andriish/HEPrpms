@@ -36,6 +36,8 @@ BuildRequires: tex(tabularray.sty)
 BuildRequires: tex(ninecolors.sty)
 BuildRequires: tex(enumitem.sty)
 BuildRequires: tex(alphalph.sty)
+BuildRequires: texlive-psnfss
+
 %endif
 Prefix: %{_prefix}
 
