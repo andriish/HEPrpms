@@ -38,6 +38,7 @@ BuildRequires: tex(enumitem.sty)
 BuildRequires: tex(alphalph.sty)
 BuildRequires: texlive-psnfss
 BuildRequires: texlive-helvetic
+BuildRequires: texlive-courier
 
 %endif
 Prefix: %{_prefix}
