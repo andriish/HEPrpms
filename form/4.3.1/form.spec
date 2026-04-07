@@ -34,7 +34,7 @@ BuildRequires: tex(xltabular.sty)
 BuildRequires: tex(ltablex.sty)
 BuildRequires: tex(tabularray.sty)
 BuildRequires: tex(ninecolors.sty)
-#BuildRequires: tex(enumitems.sty)
+BuildRequires: tex(enumitem.sty)
 %endif
 Prefix: %{_prefix}
 
