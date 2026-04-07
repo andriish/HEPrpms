@@ -37,6 +37,7 @@ BuildRequires: tex(ninecolors.sty)
 BuildRequires: tex(enumitem.sty)
 BuildRequires: tex(alphalph.sty)
 BuildRequires: texlive-psnfss
+BuildRequires: texlive-helvetic
 
 %endif
 Prefix: %{_prefix}
