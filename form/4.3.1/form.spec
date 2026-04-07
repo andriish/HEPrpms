@@ -35,6 +35,7 @@ BuildRequires: tex(ltablex.sty)
 BuildRequires: tex(tabularray.sty)
 BuildRequires: tex(ninecolors.sty)
 BuildRequires: tex(enumitem.sty)
+BuildRequires: tex(alphalph.sty)
 %endif
 Prefix: %{_prefix}
 
