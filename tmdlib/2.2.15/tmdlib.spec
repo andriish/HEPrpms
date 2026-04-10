@@ -3,7 +3,7 @@
 
 Name:       tmdlib
 Version:    2.2.15
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Library and plotting tools for Transverse Momentum Dependent parton distributions
 Prefix:     %{_prefix}
 License:    GPLv3
@@ -59,7 +59,7 @@ The library documentation is available in the header files.
 %patch -P 0 -p1
 
 %build
-%cmake -DTMDLIB_BUILD_DOCS=ON -DTMDLIB_ENABLE_PYTHON=OFF
+%cmake -DTMDLIB_BUILD_DOCS=ON -DTMDLIB_ENABLE_PYTHON=OFF -DCMAKE_INSTALL_INCLUDEDIR=/usr/include/tmdlib/
 #-DTMDLIB_PYTHON_VERSIONS=3.X
 %cmake_build
 
@@ -77,7 +77,7 @@ rm -f %{buildroot}/usr/%_lib/*.la || true
 /usr/share/tmdlib/*
 
 %files devel
-/usr/include/*
+/usr/include/tmdlib/*
 
 %changelog
 * Mon Mar 30 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 2.2.15-2

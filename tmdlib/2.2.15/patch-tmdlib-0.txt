@@ -1,8 +1,9 @@
 diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
---- ORIG/CMakeLists.txt	2026-03-30 14:30:29.494142358 +0200
-+++ PATCHED/CMakeLists.txt	2026-03-30 15:19:13.113553381 +0200
+--- ORIG/CMakeLists.txt	2026-03-31 09:48:50.489223675 +0200
++++ PATCHED/CMakeLists.txt	2026-04-11 00:51:56.909259865 +0200
 @@ -1,10 +1,10 @@
- cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.11..4.0 FATAL_ERROR)
  ###########################Package@#####################################
  project(TMDLIB LANGUAGES C CXX Fortran)
 -set(PROJECT_VERSION 2.2.12)
@@ -14,7 +15,38 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
  set(TMDLIB_VERSION "${TMDLIB_VERSION_MAJOR}.${TMDLIB_VERSION_MINOR}.${TMDLIB_VERSION_PATCH}")
  
  set(CMAKE_VERBOSE_MAKEFILE ON)
-@@ -261,8 +261,8 @@
+@@ -38,20 +38,16 @@
+ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
+ 
+ #### RPATH handling ####################################################
+-set(CMAKE_MACOSX_RPATH 1)
+-# use, i.e. don't skip the full RPATH for the build tree
+-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+-# when building, don't use the install RPATH already (but later on when installing)
+-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+-# add the automatically determined parts of the RPATH
+-# which point to directories outside the build tree to the install RPATH
+-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+-# the RPATH to be used when installing, but only if it's not a system directory
+-LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
+-IF("${isSystemDir}" STREQUAL "-1")
+-   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+-ENDIF("${isSystemDir}" STREQUAL "-1")
++if(APPLE)
++    set(CMAKE_MACOSX_RPATH 1)
++else()
++    # Linux: do NOT embed RPATH (required for RPM packaging)
++    set(CMAKE_SKIP_RPATH TRUE)
++    set(CMAKE_SKIP_BUILD_RPATH TRUE)
++    set(CMAKE_SKIP_INSTALL_RPATH TRUE)
++    set(CMAKE_INSTALL_RPATH "")
++endif()
++
+ 
+ ###################Windows##############################################
+ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+@@ -261,8 +257,8 @@
  ## MANUAL  #############################################################
  if (TMDLIB_BUILD_DOCS AND LATEX_FOUND AND LATEX_PDFLATEX_FOUND AND LATEX_MAKEINDEX_FOUND)
    set( manual_sources 
@@ -25,7 +57,7 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
         ${PROJECT_SOURCE_DIR}/manual/mystyle-new.sty 
         ${PROJECT_SOURCE_DIR}/manual/mcite.sty
         ${PROJECT_SOURCE_DIR}/manual/PB-HERAPDF-collinear-mu100-new.pdf
-@@ -281,11 +281,11 @@
+@@ -281,11 +277,11 @@
                         COMMAND ${PDFLATEX_COMPILER} TMDLIB2
                         COMMENT "Creating manual "
                         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/manual
@@ -39,9 +71,18 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
  endif()
  ### DATA ###############################################################
  set(gbwlight   
+@@ -366,7 +362,7 @@
+ set(datarootdir     ${CMAKE_INSTALL_DATADIR})
+ set(datadir         ${CMAKE_INSTALL_DATADIR})
+ set(exec_prefix     "\$\{prefix\}")
+-set(includedir      "\$\{prefix\}/include")
++set(includedir      "\$\{prefix\}/include/tmdlib/")
+ set(libdir          "/${CMAKE_INSTALL_LIBDIR}")
+ set(datadir         "\$\{prefix\}/${CMAKE_INSTALL_DATADIR}")
+ set(datarootdir     "\$\{prefix\}/share")
 diff -Naur ORIG/src/TMDutils.cc PATCHED/src/TMDutils.cc
---- ORIG/src/TMDutils.cc	2026-03-30 14:28:41.193998075 +0200
-+++ PATCHED/src/TMDutils.cc	2026-03-30 14:28:40.570002008 +0200
+--- ORIG/src/TMDutils.cc	2026-03-31 09:48:50.489296608 +0200
++++ PATCHED/src/TMDutils.cc	2026-03-31 09:48:50.489435978 +0200
 @@ -2,7 +2,7 @@
  #include "tmdlib/TMDlib.h"
  #include <iostream>
