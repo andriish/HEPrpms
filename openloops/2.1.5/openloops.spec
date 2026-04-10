@@ -70,7 +70,7 @@ mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/%_lib/openloops
 sed -i  's@.*process_lib_dir.*@process_lib_dir = '$RPM_BUILD_ROOT'/usr/'%_lib'/openloops/proclib@g'  pyol/config/default.cfg
 sed -i  's@.*process_repositories.*@process_repositories = matrix,public,powheg,ATLAS@g'  pyol/config/default.cfg
-#./openloops libinstall  eett eettj heftpphj pph2 pphj2 pphjj2 pphll2 pphllj_ew ppjj ppjjj ppll pplla pplla_ew ppllaj ppllaj_ew ppllj pplljj pplljjj ppllll ppllll2 ppllll2_interf ppllll2_interf_notb ppllll2_nf4 ppllll2_nf5_massless ppllll2_nf5_notri ppllll2_noh ppllll2_onlyh ppllllbb ppllllbbbb_fac ppllllbb_split ppllllj ppllllj2 ppllllj2_interf ppllllj2_interf_notb ppllllj2_nf4 ppllllj2_nf5_notri ppllllj2_noh ppllllj2_onlyh ppllllj_ew ppln pplnj pptln pptt pptt2 ppttbb pptt_im ppttj ppttj_dec pptttt pptw pptwj ppwwbb_semileptonic tbw   compile_extra=1 debug=0;
+./openloops libinstall  eett eettj heftpphj pph2 pphj2 pphjj2 pphll2 pphllj_ew ppjj ppjjj ppll pplla pplla_ew ppllaj ppllaj_ew ppllj pplljj pplljjj ppllll ppllll2 ppllll2_interf ppllll2_interf_notb ppllll2_nf4 ppllll2_nf5_massless ppllll2_nf5_notri ppllll2_noh ppllll2_onlyh ppllllbb ppllllbbbb_fac ppllllbb_split ppllllj ppllllj2 ppllllj2_interf ppllllj2_interf_notb ppllllj2_nf4 ppllllj2_nf5_notri ppllllj2_noh ppllllj2_onlyh ppllllj_ew ppln pplnj pptln pptt pptt2 ppttbb pptt_im ppttj ppttj_dec pptttt pptw pptwj ppwwbb_semileptonic tbw   compile_extra=1 debug=0;
 
 #tbln
 #tbln_ew
