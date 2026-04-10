@@ -44,7 +44,7 @@
 
 Name:          cernlib
 Version:       2026.01.08.0
-Release:       2%{?dist}
+Release:       3%{?dist}
 Summary:       General purpose CERN library
 Group:         Development/Libraries
 License:       GPL+ and LGPLv2+
@@ -146,6 +146,9 @@ Requires: xbae-devel
 %endif
 %if  %{?rhel}%{!?rhel:0} >= 10
 Requires: freetype-devel
+BuildRequires: freetype-devel
+Requires: motif-devel
+BuildRequires: motif-devel
 %endif
 
 %if %{?rhel}%{!?rhel:0} == 4 
