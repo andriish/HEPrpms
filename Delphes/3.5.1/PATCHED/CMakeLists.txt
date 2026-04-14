@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5...4.0)
 
 project(Delphes)
 
-option(DELPHES_SKIP_EVE      "Skip Eve" OFF)
+option(DELPHES_SKIP_DISPLAY      "Skip Eve" OFF)
 add_compile_options(-fPIC -Wall -D_FILE_OFFSET_BITS=64 -DDROP_CGAL)
 
 if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
@@ -32,10 +32,10 @@ ENDIF(SET_RPATH)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 # Declare ROOT dependency
-if (DELPHES_SKIP_EVE)
-find_package(ROOT REQUIRED COMPONENTS EG Gui GuiHtml RGL)
+if (DELPHES_SKIP_DISPLAY)
+find_package(ROOT REQUIRED COMPONENTS EG Gui GuiHtml)
 else()
-find_package(ROOT REQUIRED COMPONENTS EG Eve Gui GuiHtml RGL)
+find_package(ROOT REQUIRED COMPONENTS EG Eve Gui GuiHtml)
 endif()
 if (NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD ${ROOT_CXX_STANDARD})
@@ -84,14 +84,13 @@ if(PYTHIA8_FOUND)
   target_link_libraries(Delphes PUBLIC ${PYTHIA8_LIBRARIES} ${CMAKE_DL_LIBS})
 endif()
 
+if ( NOT DELPHES_SKIP_EVE)
 add_library(DelphesDisplay SHARED
   $<TARGET_OBJECTS:display>
 )
 
-target_link_libraries(DelphesDisplay PUBLIC Delphes ROOT::Geom ROOT::Graf3d ROOT::RGL  ROOT::GuiHtml)
-if(TARGET ROOT::Eve)
-target_link_libraries(DelphesDisplay PUBLIC  ROOT::Eve)
-
+target_link_libraries(DelphesDisplay PUBLIC Delphes ROOT::Geom ROOT::Graf3d ROOT::RGL  ROOT::Eve ROOT::GuiHtml)
+install(TARGETS DelphesDisplay DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()
 
-install(TARGETS Delphes DelphesDisplay DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(TARGETS Delphes  DESTINATION ${CMAKE_INSTALL_LIBDIR})

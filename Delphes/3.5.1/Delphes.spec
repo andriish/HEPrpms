@@ -70,7 +70,7 @@ This package provides HepMC manuals and examples.
 %cmake -DSET_RPATH:BOOL=OFF -DCMAKE_INSTALL_LIBDIR=%_lib
 %endif
 %if 0%{?suse_version}
-%cmake -DSET_RPATH:BOOL=OFF -DCMAKE_INSTALL_LIBDIR=%_lib -DDELPHES_SKIP_EVE=ON
+%cmake -DSET_RPATH:BOOL=OFF -DCMAKE_INSTALL_LIBDIR=%_lib -DDELPHES_SKIP_DISPLAY=ON
 %endif
 
 %cmake_build
