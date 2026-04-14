@@ -33,9 +33,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 # Declare ROOT dependency
 if (DELPHES_SKIP_EVE)
-find_package(ROOT REQUIRED COMPONENTS EG Gui GuiHtml)
+find_package(ROOT REQUIRED COMPONENTS EG Gui GuiHtml RGL)
 else()
-find_package(ROOT REQUIRED COMPONENTS EG Eve Gui GuiHtml)
+find_package(ROOT REQUIRED COMPONENTS EG Eve Gui GuiHtml RGL)
 endif()
 if (NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD ${ROOT_CXX_STANDARD})
