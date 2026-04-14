@@ -4,7 +4,7 @@
 
 Name:           Professor
 Version:        2.5.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        Unknown
 Url:            http://professor.hepforge.org/
 Source0:        https://gitlab.com/hepcedar/professor/-/archive/professor-%{version}/professor-professor-%{version}.tar.gz
@@ -63,6 +63,7 @@ pathfix.py -pn -i %{__python3}  ./contrib/prof*
 %endif
 
 %if 0%{?suse_version}
+sed -i 's@c++11@c++14@1'   Makefile
 export PYTHON=/usr/bin/python3
 export CXXFLAGS='%{optflags} -O0 ' 
 export CPPFLAGS=-I/usr/include/eigen3
