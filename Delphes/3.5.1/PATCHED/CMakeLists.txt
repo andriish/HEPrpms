@@ -84,7 +84,7 @@ if(PYTHIA8_FOUND)
   target_link_libraries(Delphes PUBLIC ${PYTHIA8_LIBRARIES} ${CMAKE_DL_LIBS})
 endif()
 
-if ( NOT DELPHES_SKIP_EVE)
+if ( NOT DELPHES_SKIP_DISPLAY)
 add_library(DelphesDisplay SHARED
   $<TARGET_OBJECTS:display>
 )
