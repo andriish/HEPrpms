@@ -31,7 +31,8 @@ ENDIF(SET_RPATH)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 # Declare ROOT dependency
-find_package(ROOT REQUIRED COMPONENTS EG Eve Gui GuiHtml)
+find_package(ROOT REQUIRED COMPONENTS EG Gui GuiHtml)
+find_package(ROOT COMPONENTS Eve QUIET)
 if (NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD ${ROOT_CXX_STANDARD})
 endif()
@@ -83,6 +84,10 @@ add_library(DelphesDisplay SHARED
   $<TARGET_OBJECTS:display>
 )
 
-target_link_libraries(DelphesDisplay PUBLIC Delphes ROOT::Geom ROOT::Graf3d ROOT::RGL ROOT::Eve ROOT::GuiHtml)
+target_link_libraries(DelphesDisplay PUBLIC Delphes ROOT::Geom ROOT::Graf3d ROOT::RGL  ROOT::GuiHtml)
+if(TARGET ROOT::Eve)
+target_link_libraries(DelphesDisplay PUBLIC  ROOT::Eve)
+
+endif()
 
 install(TARGETS Delphes DelphesDisplay DESTINATION ${CMAKE_INSTALL_LIBDIR})
