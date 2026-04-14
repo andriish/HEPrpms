@@ -11,7 +11,7 @@
 
 Name:           SHERPA-MC
 Version:        3.0.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://gitlab.com/sherpa-team/sherpa/-/archive/v%{version}/sherpa-v%{version}.tar.gz
@@ -161,7 +161,7 @@ This package provides the Python 2 bindings for %{name}-openmpi
 
 
 %{_openmpi_load}
-mkdir $MPI_COMPILER; 
+mkdir  -p $MPI_COMPILER; 
 cd $MPI_COMPILER
 %cmake -DSHERPA_ENABLE_ANALYSIS:BOOL=ON -DSHERPA_ENABLE_BINRELOC:BOOL=ON -DSHERPA_ENABLE_BLACKHAT:BOOL=ON \
 -DSHERPA_ENABLE_DIHIGGS:BOOL=OFF -DSHERPA_ENABLE_EXAMPLES:BOOL=ON  \
@@ -206,7 +206,7 @@ TOP=$(pwd)
 
 #{_openmpi_load}
 %setup_openmpi
-mkdir $TOP/$MPI_COMPILER; 
+mkdir -p  $TOP/$MPI_COMPILER; 
 cd $TOP/$MPI_COMPILER
 %cmake -DSHERPA_ENABLE_ANALYSIS:BOOL=ON -DSHERPA_ENABLE_BINRELOC:BOOL=ON -DSHERPA_ENABLE_BLACKHAT:BOOL=ON \
 -DSHERPA_ENABLE_DIHIGGS:BOOL=OFF -DSHERPA_ENABLE_EXAMPLES:BOOL=ON  \
