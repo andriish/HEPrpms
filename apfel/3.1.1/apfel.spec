@@ -3,10 +3,11 @@
 %endif
 Name:           apfel
 Version:        3.1.1
-Release:        1007%{?dist}
+Release:        1008%{?dist}
 License:        GPL
 Url:            https://github.com/scarrazza/apfel
 Source:         https://github.com/scarrazza/apfel/archive/refs/tags/%{version}.tar.gz
+Patch1:         patch-apfel-1.txt
 Summary:        A PDF Evolution Library
 Prefix: %{_prefix}
 BuildRequires:  gcc-c++   cmake swig  python3
@@ -52,6 +53,7 @@ This package provides the Python 3 bindings for HepMC3.
 
 %prep
 %setup  -q -n %{name}-%{version}
+%patch -P 1  -p1
 
 
 %build

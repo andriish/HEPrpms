@@ -4,8 +4,9 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+apfel:3.1.1
 #tmdlib:2.2.15
-openloops:2.1.5
+#openloops:2.1.5
 #cascade:3.3.3
 #JetVHeto:3.0.0
 #qcdnum:18.00.00
