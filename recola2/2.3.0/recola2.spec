@@ -45,9 +45,7 @@ sed -i 's/2.2.5/2.3.0/g' CMakeLists.txt
 %cmake_build 
 %endif
 %if 0%{?suse_version}
-LDFLAGS="$(echo $LDFLAGS | sed 's/-Wl,--no-undefined//')"
-export LDFLAGS
-%cmake  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/ -Dmodelfile_path=/usr/share/cmake   -Dwith_python3=On
+%cmake  -DCOLLIER_LIB_PATH=/usr/share/cmake -DSYSCONFIG_INSTALL_DIR=%{_prefix}/share/cmake/  -Dcollier_DIR=/usr/share/cmake/ -Dmodelfile_path=/usr/share/cmake   -Dwith_python3=On -DCMAKE_SHARED_LINKER_FLAGS=
 %make_build
 %endif
 
