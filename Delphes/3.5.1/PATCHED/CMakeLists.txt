@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5...4.0)
 
 project(Delphes)
 
+option(DELPHES_SKIP_EVE      "Skip Eve" OFF)
 add_compile_options(-fPIC -Wall -D_FILE_OFFSET_BITS=64 -DDROP_CGAL)
 
 if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
@@ -31,8 +32,11 @@ ENDIF(SET_RPATH)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 # Declare ROOT dependency
+if (DELPHES_SKIP_EVE)
 find_package(ROOT REQUIRED COMPONENTS EG Gui GuiHtml)
-find_package(ROOT COMPONENTS Eve QUIET)
+else()
+find_package(ROOT REQUIRED COMPONENTS EG Eve Gui GuiHtml)
+endif()
 if (NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD ${ROOT_CXX_STANDARD})
 endif()

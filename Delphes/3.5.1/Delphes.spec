@@ -66,10 +66,11 @@ This package provides HepMC manuals and examples.
 %patch -P 0 -p1
 
 %build
-%if %{?rhel}%{!?rhel:0} == 8
-%cmake -DSET_RPATH:BOOL=OFF -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_LIBDIR=%_lib
-%else
-%cmake -DSET_RPATH:BOOL=OFF -DCMAKE_INSTALL_LIBDIR=%_lib -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
+%cmake -DSET_RPATH:BOOL=OFF -DCMAKE_INSTALL_LIBDIR=%_lib
+%endif
+%if 0%{?suse_version}
+%cmake -DSET_RPATH:BOOL=OFF -DCMAKE_INSTALL_LIBDIR=%_lib -DDELPHES_SKIP_EVE=ON
 %endif
 
 %cmake_build
