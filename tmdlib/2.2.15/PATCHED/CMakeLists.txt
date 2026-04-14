@@ -25,6 +25,7 @@ option(TMDLIB_BUILD_DOCS           "Enables building of documentation" OFF)
 option(TMDLIB_CREATE_VERSION_FILES "Enables creation of version files" OFF)
 option(TMDLIB_ENABLE_PYTHON "Enables creation of python interfaces" ON)
 option(TMDLIB_ENABLE_TEST        "Enables building of tests." ON)
+option(TMDLIB_ENABLE_ROOT        "Enables building with ROOT." ON)
 
 if (NOT TMDLIB_PYTHON_VERSIONS)
   set(TMDLIB_PYTHON_VERSIONS "2.X,3.X")
@@ -86,7 +87,9 @@ message(STATUS "TMDLIB: LHAPDF_VERSION=${LHAPDF_VERSION} LHAPDF_LIBRARIES=${LHAP
 
 find_package(GSL REQUIRED)
 message(STATUS "TMDLIB: GSL_VERSION=${GSL_VERSION} GSL_LIBRARIES=${GSL_LIBRARIES} GSL_INCLUDE_DIRS=${GSL_INCLUDE_DIRS}")
+if (TMDLIB_ENABLE_ROOT)
 find_package(ROOT QUIET)
+endif()
 
 if(NOT ROOT_FOUND)
     message(STATUS "ROOT package not found, continuing without ROOT support. TMDPlotter cannot be built")

@@ -59,7 +59,12 @@ The library documentation is available in the header files.
 %patch -P 0 -p1
 
 %build
+%if 0%{?rhel} || 0%{?fedora}
 %cmake -DTMDLIB_BUILD_DOCS=ON -DTMDLIB_ENABLE_PYTHON=OFF -DCMAKE_INSTALL_INCLUDEDIR=/usr/include/tmdlib/
+%endif
+%if 0%{?suse_version}
+%cmake -DTMDLIB_BUILD_DOCS=ON -DTMDLIB_ENABLE_PYTHON=OFF -DCMAKE_INSTALL_INCLUDEDIR=/usr/include/tmdlib/ -DTMDLIB_ENABLE_ROOT=OFF
+%endif
 #-DTMDLIB_PYTHON_VERSIONS=3.X
 %cmake_build
 
