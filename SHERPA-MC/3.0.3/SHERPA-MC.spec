@@ -11,7 +11,7 @@
 
 Name:           SHERPA-MC
 Version:        3.0.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://gitlab.com/sherpa-team/sherpa/-/archive/v%{version}/sherpa-v%{version}.tar.gz
@@ -229,13 +229,12 @@ cd $TOP
 
 
 %install
+
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 %cmake_install
 mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
 echo %{_libdir}/%{name} >   %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 %py3_shebang_fix %{buildroot}//usr/share/SHERPA-MC/plot_graphs
-
-
 %{_openmpi_load}
 cd $MPI_COMPILER
 %cmake_install
@@ -243,30 +242,27 @@ cd $MPI_COMPILER
 rm -rf %{buildroot}/$MPI_HOME/share
 cd ..
 %{_openmpi_unload}
-
-
 rm -rf $RPM_BUILD_ROOT/usr/share/info/dir
 export QA_RPATHS=3
-%else
+%endif
+
+
+%if 0%{?suse_version}
 TOP=$(pwd)
 %cmake_install
 mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
 echo %{_libdir}/%{name} >   %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
-%py3_shebang_fix %{buildroot}//usr/share/SHERPA-MC/plot_graphs
-
+%python3_fix_shebang %{buildroot}//usr/share/SHERPA-MC/plot_graphs
 %setup_openmpi
 #{_openmpi_load}
 cd $TOP/$MPI_COMPILER
 %cmake_install
-%py3_shebang_fix %{buildroot}/$MPI_HOME/share/SHERPA-MC/plot_graphs
+%python3_fix_shebang %{buildroot}/$MPI_HOME/share/SHERPA-MC/plot_graphs
 rm -rf %{buildroot}/$MPI_HOME/share
 cd ..
 #{_openmpi_unload}
-
-
 rm -rf $RPM_BUILD_ROOT/usr/share/info/dir
 export QA_RPATHS=3
-
 %endif
 
 
