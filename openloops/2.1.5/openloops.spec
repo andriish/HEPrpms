@@ -48,6 +48,13 @@ BuildRequires: python3-devel python3-scons
 %patch -P 0 -p1
 
 %build
+%if %{?fedora}%{!?fedora:0} >= 44
+export CXXFLAGS='%{optflags} -fno-var-tracking -g0'
+export FFLAGS='%{optflags} -fno-var-tracking -g0'
+%else
+export CXXFLAGS='%{optflags} -fno-var-tracking'
+export FFLAGS='%{optflags} -fno-var-tracking'
+%endif
 sed -i  's@.*process_lib_dir.*@process_lib_dir = /usr/'%_lib'/openloops/proclib@g'  pyol/config/default.cfg
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
