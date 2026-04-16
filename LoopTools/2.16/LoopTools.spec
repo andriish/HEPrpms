@@ -7,10 +7,10 @@ Name: LoopTools
 Version: 2.16
 Release: 12%{?dist}
 License: LGPLv3
-Source: https://www.feynarts.de/looptools/LoopTools-%{version}.tar.gz
-Patch0:         patch-LoopTools-0.txt
-URL:    http://www.feynarts.de/looptools/
-Prefix: %{_prefix}
+Source:  https://www.feynarts.de/looptools/LoopTools-%{version}.tar.gz
+Patch0:  patch-LoopTools-0.txt
+URL:     http://www.feynarts.de/looptools/
+Prefix:  %{_prefix}
 
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires: gcc-gfortran gcc-c++
@@ -59,10 +59,10 @@ export CFLAGS="%{optflags} -fPIC"
 ldconfig 
 
 %changelog
-* Fri May 21 2021 Andrii Verbytskyi
-- 2.16
-* Fri Nov 29 2019 Andrii Verbytskyi
-- 2.15        
-* Tue Apr 8 2014 Ben Meekhof <bmeekhof@umich.edu> - 2.10-1
-- initial packaging
+* Wed Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 2.16
+- Update to 2.16
+* Fri Nov 29 2019 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 2.15
+- Update to 2.15
+* Tue Apr  8 2014 Ben Meekhof <bmeekhof@umich.edu> + 2.10-1
+- Initial packaging
 

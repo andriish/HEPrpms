@@ -82,11 +82,11 @@ rm -rf %{buildroot}
 ldconfig 
 
 %changelog
-* Fri Mar 10 2023 Andrii Verbytskyi 10.3
+* Wed Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 10.3
 - Update to 10.3
-* Fri Aug 12 2022 Andrii Verbytskyi 10.2.1
-- Bump to 10.2.1   
-* Mon Nov 15 2021 Andrii Verbytskyi 10.0.1
-- Bump to 10.0.1           
-* Thu Nov 28 2019 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 8.1
+* Fri Aug 12 2022 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 10.2.1
+- Bump to 10.2.1
+* Mon Nov 15 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 10.0.1
+- Bump to 10.0.1
+* Thu Nov 28 2019 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 8.1
 - Initial

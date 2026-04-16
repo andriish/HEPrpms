@@ -3,9 +3,9 @@ Name: JetVHeto
 Version: 3.0.0
 Release: 3%{?dist}
 License: GPLv3
-Source: https://www.hepforge.org/downloads/JetVHeto/JetVHeto-%{version}.tgz
-URL:    https://jetvheto.hepforge.org/
-Patch0:     patch-JetVHeto-0.txt
+Source:  https://www.hepforge.org/downloads/JetVHeto/JetVHeto-%{version}.tgz
+URL:     https://jetvheto.hepforge.org/
+Patch0:  patch-JetVHeto-0.txt
 
 %if 0%{?rhel} || 0%{?fedora}
 Requires:      hoppet lhapdf chaplin

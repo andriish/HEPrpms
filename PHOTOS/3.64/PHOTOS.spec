@@ -90,10 +90,10 @@ install -m 644 documentation/doxygen/html/*   %{buildroot}/%{_docdir}/%{name}/ht
 
 
 %changelog
-* Wed Feb 19 2020 Andrii Verbytskyi 3.64
-+ New version Prerelease.
-*Mon Jan 27 2020 Andrii Verbytskyi 3.62
-+ HepMC3
-* Mon Feb 3 2014 Andrii Verbytskyi 3.54
-+ Initial spec file
+* Wed Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 3.64
+- Update to 3.64
+* Mon Jan 27 2020 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 3.62
+- Add HepMC3 support
+* Mon Feb  3 2014 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 3.54
+- Initial spec file
 

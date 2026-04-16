@@ -37,5 +37,7 @@ make %{?_smp_mflags}
 %{_includedir}/HJets/*
 
 %changelog
-* Mon Feb 3 2014 Andrii Verbytskyi 1.0.4
+* Wed Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 1.3
+- Update to 1.3
+* Mon Feb  3 2014 Andrii Verbytskyi 1.0.4
 + Initial spec file

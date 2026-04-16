@@ -48,7 +48,9 @@ find %{buildroot} -name '*.la' -delete
 
 
 %changelog
-* Sun Feb 21 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
- - Cleanup 
+* Wed Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 2.1.1
+- Update to 2.1.1
+* Sun Feb 21 2021 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Cleanup
 * Thu May 26 2016 Andrii Verbytskyi 2.0.0
 + Initial spec file

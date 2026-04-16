@@ -91,6 +91,8 @@ rm -rf $RPM_BUILD_ROOT/%{python3_sitearch}/site.py
 
 
 %changelog
+* Wed Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 2.5.1
+- Update to 2.5.1
 * Mon Dec 30 2024 Andrii Verbytskyi 2.5.0
 - Update to 2.5.0
 * Fri Jan 20 2012 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 1.4.0

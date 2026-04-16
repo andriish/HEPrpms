@@ -44,5 +44,5 @@ sed -i 's|GIT_TAG arm|GIT_TAG 2\.1\.0|g' CMakeLists.txt
 
 
 %changelog
-* Thu Oct 24 2024 Your Name <you@example.com> - 1.0.0-1
-•  Initial package with patch and devel subpackage
+* Wed Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 1.2.1
+- Initial package with patch and devel subpackage
