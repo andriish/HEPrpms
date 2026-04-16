@@ -96,6 +96,8 @@ This package contains python bindings for %{name}.
 
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 3.5.1
 * Mon Dec 30 2024 Andrii Verbytskyi 3.4.3
 - Update to 3.4.3
 * Thu Nov 2 2023 Andrii Verbytskyi 3.4.2

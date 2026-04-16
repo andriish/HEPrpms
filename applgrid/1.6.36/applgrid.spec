@@ -2,7 +2,6 @@ Name:           applgrid
 Version:        1.6.36
 Release:        2%{?dist}
 License:        GPL
-Prefix:         %{_prefix}
 Summary:        A fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution 
 Source:         https://www.hepforge.org/archive/applgrid/applgrid-%{version}.tgz
 Patch0:         patch-applgrid-0.txt
@@ -49,6 +48,8 @@ autoreconf --force --install --verbose .
 ldconfig 
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Bump to 1.6.36
 * Fri Mar 10 2023 Andrii Verbytskyi 1.6.32
 - Bump to 1.6.32
 * Tue Jul 12 2022 Andrii Verbytskyi 1.6.27

@@ -1,7 +1,7 @@
 Name:           chaplin
 Version:        1.2
 Release:        3%{?dist}
-License:        Standard CPC licence
+License:        CPC License
 Url:            http://chaplin.hepforge.org/
 Source0:        https://chaplin.hepforge.org/code/%{name}-%{version}.tar
 Summary:        Complex Harmonic Polylogarithms in FORTRAN.

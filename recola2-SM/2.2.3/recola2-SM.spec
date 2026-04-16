@@ -73,7 +73,6 @@ cd build
 %endif
 
 
-
 %files
 %defattr(-,root,root)
 %{_includedir}/*

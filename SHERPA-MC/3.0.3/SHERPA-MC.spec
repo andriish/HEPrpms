@@ -9,10 +9,10 @@
 
 
 
-Name:           SHERPA-MC
-Version:        3.0.3
-Release:        4%{?dist}
-License:        GPLv2
+Name:             SHERPA-MC
+Version:          3.0.3
+Release:          4%{?dist}
+License:          GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://gitlab.com/sherpa-team/sherpa/-/archive/v%{version}/sherpa-v%{version}.tar.gz
 Summary:          Multipurpose Monte Carlo Event Generator for High Energy physics
@@ -89,9 +89,6 @@ Provides:       %{name}-common = %{version}-%{release}
 Contains the common files and header files needed to
 develop programs which make use of %{name}.
 The library documentation is available on header files.
-
-
-
 
 
 %package  openmpi
@@ -313,6 +310,8 @@ export QA_RPATHS=3
 %endif
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 3.0.3
 * Mon Nov 29 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
 - Bump to 3.0.0alpha1
 * Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de

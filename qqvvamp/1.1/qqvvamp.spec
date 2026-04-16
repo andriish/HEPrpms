@@ -61,5 +61,5 @@ export LDFLAGS='-Wl,--as-needed'
 %{_datadir}/cmake/qqvvamp
 
 %changelog
-* Thu Oct 24 2024 Your Name <you@example.com> - 1.0.0-1
-•  Initial package with patch and devel subpackage
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 1.1

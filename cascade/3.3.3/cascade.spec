@@ -45,7 +45,7 @@ for small x processes and used only gluon chains in the initial state cascade.
 With the development of the Parton Branching TMDs, which are valid over 
 a large range in x and Q2, a new development has started (CASCADE3, 
 CASCADE-lhe): CASCADE-lhe makes use of LHE files (either from collinear 
-NLO calcualtions like POWHEG or MC@NLO or off-shell calculations from KaTie) 
+NLO calculations like POWHEG or MC@NLO or off-shell calculations from KaTie) 
 and has a full flavor initial state parton shower, which follows directly 
 the TMD from the Parton Brachning method. Different sets of TMDs are 
 now accessed via TMDlib. 

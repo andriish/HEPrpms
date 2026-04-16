@@ -179,6 +179,8 @@ rm -fr %{buildroot}/%_libdir/python*/site-packages/site.py
 
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 2.1.2
 * Mon Dec 30 2024 Andrii Verbytskyi 2.0.2
 - Update to 2.0.2
 * Sun Apr 30 2023 Andrii Verbytskyi 1.9.8

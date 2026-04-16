@@ -148,6 +148,8 @@ sed -i 's/-spec[^[:blank:]]*//g' %{buildroot}/%{_bindir}/rivet-build
 
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 4.1.2
 * Mon Dec 30 2024 Andrii Verbytskyi 4.0.2
 - Update to 4.0.2
 * Wed Apr 26 2023 Andrii Verbytskyi 3.1.8

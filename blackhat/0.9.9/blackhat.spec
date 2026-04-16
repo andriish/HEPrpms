@@ -6,7 +6,7 @@
 Name:           blackhat
 Version:        0.9.9
 Release:        7%{?dist}
-License:        Unknown
+License:        GPL-3.0
 Url:            http://www.blackhat.hepforge.org
 Source0:        https://www.hepforge.org/archive/blackhat/%{name}-%{version}.tar.gz
 Patch0:         patch-blackhat-0.txt
@@ -54,15 +54,14 @@ The library documentation is available on header files.
 Summary:    Blackhat files
 
 %description data
-This package contains the headers required for compiling software that uses
-the %{name} library
+This package contains data files for %{name}.
 
 
 %prep
 %setup -q
 %patch -P 0 -p1
 %patch -P 1 -p1
-%patch  -P 2 -p1
+%patch -P 2 -p1
 %if 0%{?suse_version}
 %patch -P 3 -p1
 %endif

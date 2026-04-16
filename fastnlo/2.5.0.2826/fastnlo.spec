@@ -107,6 +107,8 @@ mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch
 ldconfig 
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 2.5.0.2826
 * Thu Jun 20 2024 Andrii Verbytskyi 2.5.0
 - Drop YODA support
 * Fri Aug 12 2022 Andrii Verbytskyi 2.5.0

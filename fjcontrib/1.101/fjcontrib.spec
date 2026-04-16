@@ -62,6 +62,8 @@ ldconfig
 
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 1.101
 * Mon Dec 30 2024 Andrii Verbytskyi 1.100
 - Update to 1.100
 * Thu Nov 2 2023 Andrii Verbytskyi 1.0.53

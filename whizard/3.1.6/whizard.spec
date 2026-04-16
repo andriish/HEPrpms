@@ -264,6 +264,8 @@ rm -rf %{buildroot}
 ldconfig 
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 3.1.6
 * Mon Dec 30 2024 Andrii Verbytskyi 3.1.5
 - Update to 3.1.5
 * Fri Nov 10 2023 Andrii Verbytskyi 3.1.3

@@ -115,6 +115,8 @@ echo %{_libdir}/%{name} >  %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_ar
 %_includedir/ThePEG
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 2.3.0
 * Tue Jul 12 2022 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
   - 2.2.3
 * Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de

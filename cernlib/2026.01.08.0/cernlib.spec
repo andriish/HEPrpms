@@ -633,6 +633,8 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %endif
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 2026.01.08.0
 * Mon Dec 30 2024 Andrii Verbytskyi 2024.09.16.0
 - Update to 2024.09.16.0
 * Thu Dec 21 2023 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>

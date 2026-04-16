@@ -21,7 +21,7 @@ BuildRequires: lhapdf-devel
 BuildRequires: root root-core root-tree-ntuple-utils
 BuildRequires: boost boost-devel
 BuildRequires: tex(latex) tex(sectsty.sty) texlive-courier
-Requires:       lhapdf libgfortran root root-core gsl wget root-tree-ntuple-utils
+Requires:      lhapdf libgfortran root root-core gsl wget root-tree-ntuple-utils
 %endif
 
 %if 0%{?fedora}
@@ -37,7 +37,7 @@ BuildRequires: root6 root6-libs root6-devel
 BuildRequires: boost-devel
 BuildRequires: texlive-palatino texlive-helvetic texlive-courier
 BuildRequires: tex(latex) tex(sectsty.sty) tex(listings.sty) tex(cite.sty) tex(lineno.sty)
-Requires:       libLHAPDF libgfortran5 root6 root6-libs gsl wget
+Requires:      libLHAPDF libgfortran5 root6 root6-libs gsl wget
 %endif
 
 %description

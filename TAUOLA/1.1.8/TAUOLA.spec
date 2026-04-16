@@ -39,8 +39,6 @@ is based on that property. The interface supplements events generated
 by other programs, with tau decays
 
 
-
-
 %package  devel
 Summary:        Libraries and headers for %{name}
 Requires:       %{libname} = %{version}
@@ -103,7 +101,6 @@ install -m 644 documentation/doxy_documentation/html/*   %{buildroot}/%{_docdir}
 
 %files -n %{name}-doc
 %{_docdir}/%{name}/*
-
 
 
 %changelog

@@ -76,5 +76,7 @@ rm -f  $RPM_BUILD_ROOT/%{_bindir}/fcc
 %{_includedir}/*.h
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 2.19.0
 * Tue Nov 15 2022 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> 2.19
 - Version 2.19

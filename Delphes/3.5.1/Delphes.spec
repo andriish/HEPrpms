@@ -7,7 +7,7 @@ Summary:    Delphes is a C++ framework, performing a fast multipurpose detector 
 License:    GPLv3
 URL:        https://cp3.irmp.ucl.ac.be/projects/delphes
 Source0:    https://github.com/delphes/delphes/archive/%{version}.tar.gz
-Patch0:         patch-Delphes-0.txt
+Patch0:     patch-Delphes-0.txt
 
 #The ROOT cmake file used by this project requires cmake 3.4.3
 BuildRequires:    cmake >= 3.4.3
@@ -107,8 +107,8 @@ mv %{buildroot}/%{_prefix}/include/TrackCovariance  %{buildroot}/%{_includedir}/
 
 
 %changelog
-* Thu Apr 16 2026 Andrii Verbytskyi 3.5.1
-- Update to 3.5.1
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
++ 3.5.1
 * Mon Dec 30 2024 Andrii Verbytskyi 3.5.1pre11
 - Update to 3.5.1pre11
 * Thu Nov 28 2019 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 3.4.2-0

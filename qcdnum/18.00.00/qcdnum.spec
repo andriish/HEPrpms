@@ -61,8 +61,8 @@ rm -f %{buildroot}/%_libdir/*.la
 ldconfig 
 
 %changelog
-* Fri Mar 10 2023 Andrii Verbytskyi 18.00.00
-- Update to 18.00.00
+* Fri Mar 10 2023 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
++ 18.00.00
 * Mon Nov 15 2021 Andrii Verbytskyi 17.01.83
 - Bump to 17.01.83    
 *  Wed Feb 26 2020 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>

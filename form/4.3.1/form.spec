@@ -97,7 +97,8 @@ make %{?_smp_mflags} -C doc html
 
 
 %changelog
-* Thu Nov 2 2023 Andrii Verbytskyi 4.3.1
+* Thu Nov 2 2023 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 4.3.1
 - Update to 4.3.1
 * Fri Mar 10 2023 Andrii Verbytskyi 4.3.0
 - Update to 4.3.0

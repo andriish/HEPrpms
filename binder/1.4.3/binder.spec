@@ -32,7 +32,6 @@ that it handles special features new in C++11.
 
 %prep
 %setup -q -n binder-%{version}
-sed -i 's/1.4.1/1.4.2/g' CMakeLists.txt
 
 %build
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
@@ -48,7 +47,7 @@ sed -i 's/CMAKE_CXX_STANDARD 14/CMAKE_CXX_STANDARD 17/g' CMakeLists.txt
 %endif
 
 %if 0%{?suse_version}
-cmake .  -DCMAKE_INSTALL_PREFIX=/usr -DBINDER_ENABLE_TEST=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+cmake .  -DCMAKE_INSTALL_PREFIX=/usr -DBINDER_ENABLE_TEST=OFF
 make
 %endif
 
@@ -66,6 +65,8 @@ make
 %{_bindir}/*
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
++ 1.4.3
 * Tue May 28 2024 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 + 1.4.2
 * Thu Dec 21 2023 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>

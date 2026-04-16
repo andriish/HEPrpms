@@ -20,7 +20,7 @@ BuildRequires:  gcc-fortran  libHepMC4 libHepMC3-4   HepMC3-devel HepMC2-devel l
 Requires:       gcc-fortran libHepMC4 libHepMC3-4 libLHAPDF   Rivet YODA
 BuildRequires:  fastjet-devel fastjet pkgconfig(zlib) zlib-devel unzip 
 Requires:       fastjet pkgconfig(zlib)  
-BuildRequires:   libpythia8 pythia-devel texlive-palatino texlive-helvetic texlive-courier tex(latex) ghostscript tex(sectsty.sty) tex(cite.sty)
+BuildRequires:  libpythia8 pythia-devel texlive-palatino texlive-helvetic texlive-courier tex(latex) ghostscript tex(sectsty.sty) tex(cite.sty)
 %endif
 
 %if %{?rhel}%{!?rhel:0} == 8 || %{?fedora}%{!?fedora:0} >= 31
@@ -86,6 +86,8 @@ export FCFLAGS="$FCFLAGS  -fallow-argument-mismatch -fallow-invalid-boz -fno-str
 /usr/share/rapgap
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 3.4.0
 * Tue Jan 25 2022 Andrii verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 3.310
 - Bump to 3.310
 * Mon Jan 17 2022 Andrii verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 3.308

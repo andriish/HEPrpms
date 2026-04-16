@@ -99,6 +99,8 @@ find %{buildroot} -name '*.*a' -delete
 
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Version bump to 4.2.2
 * Tue Jul 12 2022 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de 4.2.1-1
  - Version bump
 * Sun Feb 21 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de 4.2.1-1

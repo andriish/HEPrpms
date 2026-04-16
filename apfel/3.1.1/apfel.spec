@@ -48,7 +48,7 @@ Summary:  %{name} Python 3 bindings
 Requires:  %{name}%{?_isa} = %{version}-%{release}
 
 %description -n python%{python3_pkgversion}-%{name}
-This package provides the Python 3 bindings for HepMC3.
+This package provides the Python 3 bindings for APFEL.
  
 
 %prep

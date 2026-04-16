@@ -71,8 +71,8 @@ cp -a ugs.a $RPM_BUILD_ROOT/usr/%_lib/libugs.a
 %doc README doc test
 
 %changelog
-* Thu Nov 23 2017 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
- - 2.10e for RedHat7
+* Thu Nov 23 2017 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- 2.10e for RedHat7
 * Tue Oct 16 2007 Hiroyuki Okamura <okamura@rcnp.osaka-u.ac.jp>
 - updated for Vine-4.1 (Copyright => License)
 

@@ -161,6 +161,8 @@ mv %{buildroot}%{_datadir}/EvtGen/*.*  %{buildroot}%{_datadir}/
 %endif
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
++ 2.2.3
 * Tue Jul 12 2022 Andrii Verbytskyi 2.2.0
 + 2.2.0
 * Thu Oct 28 2021 Andrii Verbytskyi 2.1.1

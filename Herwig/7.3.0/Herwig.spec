@@ -127,8 +127,6 @@ FFLAGS="-fallow-argument-mismatch"
 make %{?_smp_mflags}
 %endif
 
-
-
 %if 0%{?suse_version}
 #pathfix.py -i /usr/bin/python3  -p -n  ./
 autoreconf --force --install --verbose .
@@ -152,13 +150,13 @@ export QA_RPATHS=3
 %_datadir/Herwig
 %_libdir/Herwig
 
-
-
 %files -n %{libnamedev}
 %_bindir/herwig-config
 %_includedir/Herwig
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 7.3.0
+- Update to 7.3.0
 * Tue Jul 12 2022 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
   - 7.2.3
 * Fri Sep 17 2021 Andrii Verbytskyi 7.2.2

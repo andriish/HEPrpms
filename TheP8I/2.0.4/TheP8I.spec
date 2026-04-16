@@ -18,8 +18,6 @@ BuildRequires: gcc-c++ gcc ThePEG-devel ThePEG gsl-devel
 BuildRequires: cmake >= 3.4.3
 
 
-
-
 %description
 Lund hadronisation for Herwig. Part of earlier ThePEG codes.
 
@@ -44,6 +42,8 @@ export LDFLAGS=" "
 %_datadir/TheP8I/*in
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 2.0.4
 * Tue Jul 12 2022 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
   - Deal with comp. failures
 * Sun Aug 01 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de

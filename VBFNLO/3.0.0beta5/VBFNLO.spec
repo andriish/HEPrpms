@@ -80,13 +80,12 @@ make DESTDIR=%{buildroot} install
 /usr/%_lib/VBFNLO/*
 /usr/share/VBFNLO/*
 
-%clean
-rm -rf %{buildroot}
-
 %post 
 ldconfig 
 
 %changelog             
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 3.0.0beta5
 * Thu Nov 23 2017 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
  - 2.7.1
 * Thu Nov 23 2017 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de

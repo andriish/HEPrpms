@@ -2,7 +2,7 @@ Name:          ariadne
 Version:       4.12
 Release:       8%{?dist}
 Summary:       Multipurpose Monte Carlo Event Generator for High Energy physics.
-License:       Public domain as stated by Leif 
+License:       Public Domain 
 URL:           http://home.thep.lu.se/~leif/ariadne
 Source0:       https://home.thep.lu.se/~leif/ariadne/ariadne-4.12.tgz
 Patch0:        patch-ariadne-0.txt
@@ -30,9 +30,6 @@ make %{?_smp_mflags}  libar4p5.so "FFLAGS=%{optflags} -fPIC" "LDFLAGS=%{build_ld
 
 %install
 make install INSTALLDIR=%{buildroot}%_prefix
-
-
-%clean
 
 %post -p /sbin/ldconfig
 
