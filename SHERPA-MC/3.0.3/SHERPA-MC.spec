@@ -248,6 +248,7 @@ export QA_RPATHS=3
 
 %if 0%{?suse_version}
 TOP=$(pwd)
+export MPI_HOME=/usr/lib64/mpi/gcc/openmpi5
 %cmake_install
 mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
 echo %{_libdir}/%{name} >   %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
