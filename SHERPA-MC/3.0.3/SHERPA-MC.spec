@@ -280,9 +280,7 @@ export QA_RPATHS=3
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
 %files  -n python3-%{name}
-#{python3_sitearch}/*Sherpa*
 /usr/lib/python%{python3_version}/site-packages/*
-
 
 %files  -n python3-%{name}-openmpi
 /usr/%_lib/openmpi/lib/python%{python3_version}/site-packages/*
@@ -304,6 +302,15 @@ export QA_RPATHS=3
 /usr/%_lib/openmpi/include/SHERPA-MC/*
 %endif
 
+
+%if 0%{?suse_version}
+%files  -n %{openmpiname} 
+/usr/%_lib/openmpi5/%_lib/SHERPA-MC/*
+/usr/%_lib/openmpi5/bin/*
+
+%files -n %{openmpiname}-devel
+/usr/%_lib/openmpi5/include/SHERPA-MC/*
+%endif
 
 %changelog
 * Mon Nov 29 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
