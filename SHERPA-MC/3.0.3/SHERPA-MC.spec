@@ -204,6 +204,8 @@ TOP=$(pwd)
 
 #{_openmpi_load}
 %setup_openmpi
+export MPI_HOME=/usr/lib64/mpi/gcc/openmpi5
+
 mkdir -p  $TOP/$MPI_COMPILER; 
 cd $TOP/$MPI_COMPILER
 %cmake -DSHERPA_ENABLE_ANALYSIS:BOOL=ON -DSHERPA_ENABLE_BINRELOC:BOOL=ON -DSHERPA_ENABLE_BLACKHAT:BOOL=ON \
