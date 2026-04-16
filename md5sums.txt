@@ -358,4 +358,5 @@ cd364a150cabe62acff3d82ff77e3775  cernlib/2026.01.08.0/rpmbuild/SOURCES/cernlib-
 918e81d4386221d63de8b6c40f378937  nlox/1.2.1/rpmbuild/SOURCES/nlox-1.2.2.atlas7.zip
 45394da0a13b62bed8950c3b128b54d1  tmdlib/2.2.15/rpmbuild/SOURCES/tmdlib-2.2.15.tar.gz
 7657d45794b55d044525f819b1b541e4  openloops/2.1.5/rpmbuild/SOURCES/OpenLoops-OpenLoops-2.1.5.tar.gz
+046d3d3a5142e4a91cf5d38a261876e4  binder/1.4.3/rpmbuild/SOURCES/v1.4.3.tar.gz
 

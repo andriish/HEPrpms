@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-apfel:3.1.1
+#apfel:3.1.1
+binder:1.4.3
 #tmdlib:2.2.15
 #openloops:2.1.5
 #cascade:3.3.3
