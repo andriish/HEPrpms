@@ -252,12 +252,12 @@ TOP=$(pwd)
 %cmake_install
 mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
 echo %{_libdir}/%{name} >   %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
-%python3_fix_shebang %{buildroot}//usr/share/SHERPA-MC/plot_graphs
+#python3_fix_shebang #{buildroot}//usr/share/SHERPA-MC/plot_graphs
 %setup_openmpi
 #{_openmpi_load}
 cd $TOP/$MPI_COMPILER
 %cmake_install
-%python3_fix_shebang %{buildroot}/$MPI_HOME/share/SHERPA-MC/plot_graphs
+#python3_fix_shebang #{buildroot}/$MPI_HOME/share/SHERPA-MC/plot_graphs
 rm -rf %{buildroot}/$MPI_HOME/share
 cd ..
 #{_openmpi_unload}
