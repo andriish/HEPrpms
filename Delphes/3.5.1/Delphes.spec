@@ -86,7 +86,9 @@ mv %{buildroot}/%{_prefix}/examples   %{buildroot}/%{_pkgdocdir}/examples
 mv %{buildroot}/%{_prefix}/lib/*pcm        %{buildroot}/%{_libdir}
 mv %{buildroot}/%{_prefix}/include/ExRootAnalysis  %{buildroot}/%{_includedir}/%{name}/
 mv %{buildroot}/%{_prefix}/include/modules  %{buildroot}/%{_includedir}/%{name}/
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
 mv %{buildroot}/%{_prefix}/include/display  %{buildroot}/%{_includedir}/%{name}/
+%endif
 mv %{buildroot}/%{_prefix}/include/classes  %{buildroot}/%{_includedir}/%{name}/
 mv %{buildroot}/%{_prefix}/include/TrackCovariance  %{buildroot}/%{_includedir}/%{name}/
 
@@ -105,6 +107,8 @@ mv %{buildroot}/%{_prefix}/include/TrackCovariance  %{buildroot}/%{_includedir}/
 
 
 %changelog
+* Thu Apr 16 2026 Andrii Verbytskyi 3.5.1
+- Update to 3.5.1
 * Mon Dec 30 2024 Andrii Verbytskyi 3.5.1pre11
 - Update to 3.5.1pre11
 * Thu Nov 28 2019 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 3.4.2-0
