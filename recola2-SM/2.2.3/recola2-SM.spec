@@ -71,7 +71,7 @@ cd build
 %make_install
 %endif
 
-
+x
 %files
 %defattr(-,root,root)
 %{_includedir}/*

@@ -66,7 +66,7 @@ chrpath --delete $RPM_BUILD_ROOT/usr/lib/python3.*/site-packages/pyrecola.so
 %endif
 
 %files
-%defattr(-,root,root)
+%defattr(-,root,root) 
 %{_includedir}/*
 %{_libdir}/*
 %{_prefix}/share/cmake/*

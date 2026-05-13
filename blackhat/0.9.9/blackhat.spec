@@ -6,7 +6,7 @@
 Name:           blackhat
 Version:        0.9.9
 Release:        7%{?dist}
-License:        GPL-3.0
+License:        Unknown
 Url:            http://www.blackhat.hepforge.org
 Source0:        https://www.hepforge.org/archive/blackhat/%{name}-%{version}.tar.gz
 Patch0:         patch-blackhat-0.txt
