@@ -304,11 +304,11 @@ export QA_RPATHS=3
 
 %if 0%{?suse_version}
 %files  -n %{openmpiname} 
-/usr/%_lib/openmpi5/%_lib/SHERPA-MC/*
-/usr/%_lib/openmpi5/bin/*
+/usr/%_lib/mpi/gcc/openmpi5/%_lib/SHERPA-MC/*
+/usr/%_lib/mpi/gcc/openmpi5/bin/*
 
 %files -n %{openmpiname}-devel
-/usr/%_lib/openmpi5/include/SHERPA-MC/*
+/usr/%_lib/mpi/gcc/openmpi5/include/SHERPA-MC/*
 %endif
 
 %changelog
