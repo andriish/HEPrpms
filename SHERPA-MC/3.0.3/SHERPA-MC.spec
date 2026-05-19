@@ -202,7 +202,7 @@ TOP=$(pwd)
 #{_openmpi_load}
 %setup_openmpi
 export MPI_HOME=/usr/lib64/mpi/gcc/openmpi5
-
+export MPI_COMPILER=openmpi5-%_arch
 mkdir -p  $TOP/$MPI_COMPILER; 
 cd $TOP/$MPI_COMPILER
 %cmake -DSHERPA_ENABLE_ANALYSIS:BOOL=ON -DSHERPA_ENABLE_BINRELOC:BOOL=ON -DSHERPA_ENABLE_BLACKHAT:BOOL=ON \
@@ -249,6 +249,7 @@ export QA_RPATHS=3
 %if 0%{?suse_version}
 TOP=$(pwd)
 export MPI_HOME=/usr/lib64/mpi/gcc/openmpi5
+export MPI_COMPILER=openmpi5-%_arch
 %cmake_install
 mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
 echo %{_libdir}/%{name} >   %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
