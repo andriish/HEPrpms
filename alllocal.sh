@@ -64,7 +64,7 @@ declare -a BUILDLIST=(
 #gosam:2.1.2
 ###################
 #cernlib:2024.09.16.0
-SHERPA-MC:3.0.3
+SHERPA-MC:3.0.4
 #nlox:1.2.1
 #qqvvamp:1.1
 #ggvvamp:1.0
