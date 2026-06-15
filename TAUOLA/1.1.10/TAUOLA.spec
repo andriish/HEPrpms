@@ -5,8 +5,8 @@
 
 
 Name:           TAUOLA
-Version:        1.1.8
-Release:        9%{?dist}
+Version:        1.1.10
+Release:        1%{?dist}
 License:        Unknown
 Url:            http://tauolapp.web.cern.ch/tauolapp
 Source0:        https://tauolapp.web.cern.ch/tauolapp/resources/%{name}.%{version}/%{name}.%{version}.tar.gz
@@ -68,7 +68,6 @@ develop programs which make use of %{name}.
 %build
 export FC=gfortran
 export F77=gfortran
-
 autoreconf -fisv
 %configure  --with-hepmc=%prefix --with-hepmc3=%prefix --with-pythia8=%prefix  --with-lhapdf=%prefix
 make 
@@ -87,11 +86,11 @@ install -m 644 documentation/doxy_documentation/html/*   %{buildroot}/%{_docdir}
 
 %files -n %{libname}
 %{_libdir}/*a
-%{_libdir}/libTauolaHepMC3.so.1.1.8
-%{_libdir}/libTauolaCxxInterface.so.1.1.8
-%{_libdir}/libTauolaHEPEVT.so.1.1.8
-%{_libdir}/libTauolaHepMC.so.1.1.8
-%{_libdir}/libTauolaFortran.so.1.1.8
+%{_libdir}/libTauolaHepMC3.so.%{version}
+%{_libdir}/libTauolaCxxInterface.so.%{version}
+%{_libdir}/libTauolaHEPEVT.so.%{version}
+%{_libdir}/libTauolaHepMC.so.%{version}
+%{_libdir}/libTauolaFortran.so.%{version}
 %{_libdir}/libTauolaHepMC3.so
 %{_libdir}/libTauolaCxxInterface.so
 %{_libdir}/libTauolaHEPEVT.so
