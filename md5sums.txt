@@ -362,3 +362,5 @@ cd364a150cabe62acff3d82ff77e3775  cernlib/2026.01.08.0/rpmbuild/SOURCES/cernlib-
 d27fd1c773878556bd5d61e01ab2e10f  SHERPA-MC/3.0.4/rpmbuild/SOURCES/sherpa-v3.0.4.tar.gz
 0ca731f9fbadd7f81b9ce035b4251659  YODA/2.1.3/rpmbuild/SOURCES/YODA-2.1.3.tar.gz
 910d4f44c592a7433e62beaf8145b0da  Rivet/4.1.3/rpmbuild/SOURCES/Rivet-4.1.3.tar.gz
+3c52535d2661781345134d1cca65bad0  TAUOLA/1.1.9/rpmbuild/SOURCES/TAUOLA.1.1.9.tar.gz
+c045bde03a366a578395d4cfc9c2886b  TAUOLA/1.1.10/rpmbuild/SOURCES/TAUOLA.1.1.10.tar.gz

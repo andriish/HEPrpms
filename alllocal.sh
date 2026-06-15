@@ -4,7 +4,10 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-Rivet:4.1.3
+TAUOLA:1.1.8
+#TAUOLA:1.1.9
+#TAUOLA:1.1.10
+#Rivet:4.1.3
 #YODA:2.1.3
 #apfel:3.1.1
 #binder:1.4.3
