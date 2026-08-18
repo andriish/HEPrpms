@@ -17,8 +17,13 @@ fi
 rm -rf $TOPDIR/$PACKAGE/$VERSION/rpmbuild/{SOURCES,SPECS,SRPMS} 
 mkdir -p $TOPDIR/$PACKAGE/$VERSION/rpmbuild/{SOURCES,SPECS,RPMS,SRPMS} 
 for a in $($SPECTOOL $TOPDIR/$PACKAGE/$VERSION/$PACKAGE.spec | tr -s ' '| cut -f 2 -d' ' | grep '://' ); do
-wget --no-check-certificate  --no-cache $a -P $TOPDIR/$PACKAGE/$VERSION/rpmbuild/SOURCES
-s=$(md5sum $PACKAGE/$VERSION/rpmbuild/SOURCES/$(basename $a))
+fname=$(basename "$a")
+# downloader?f=<file> style URLs (e.g. hepforge) name the file in the query string, not the path
+case "$fname" in
+*'f='*) fname=${fname##*f=} ;;
+esac
+wget --no-check-certificate  --no-cache "$a" -O "$TOPDIR/$PACKAGE/$VERSION/rpmbuild/SOURCES/$fname"
+s=$(md5sum $PACKAGE/$VERSION/rpmbuild/SOURCES/$fname)
 if grep -Fxq "$s" $TOPDIR/md5sums.txt
 then
 echo "MD5 sum->"$s"<-     Found in "$TOPDIR"/md5sums.txt"

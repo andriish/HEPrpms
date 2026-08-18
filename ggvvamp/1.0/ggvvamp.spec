@@ -7,7 +7,7 @@ Summary:        ggvvamp package from vvamp.hepforge.org
 
 License:        GPL
 URL:            https://vvamp.hepforge.org/
-Source0:        https://www.hepforge.org/archive/vvamp/%{name}-%{version}.tar.gz
+Source0:        https://vvamp.hepforge.org/downloader?f=%{name}-%{version}.tar.gz
 Patch0:         patch-0.txt
 
 BuildRequires:  cmake
