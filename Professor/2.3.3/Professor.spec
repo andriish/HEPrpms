@@ -7,7 +7,7 @@ Version:        2.3.3
 Release:        4%{?dist}
 License:        Unknown
 Url:            http://professor.hepforge.org/
-Source0:        https://www.hepforge.org/archive/professor/%{name}-%{version}.tar.gz
+Source0:        https://professor.hepforge.org/downloader?f=%{name}-%{version}.tar.gz
 Patch0:         patch-Professor-0.txt
 Prefix:         %{_prefix}
 Summary:        A tuning tool for Monte Carlo event generators.

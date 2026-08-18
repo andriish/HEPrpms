@@ -12,7 +12,7 @@ Release:        1007%{?dist}
 
 Summary:        Herwig is a multi-purpose particle physics event generator.
 License:        GPLv3
-Source0:        http://www.hepforge.org/archive/herwig/%{name}-%{version}.tar.bz2
+Source0:        https://herwig.hepforge.org/downloader?f=%{name}-%{version}.tar.bz2
 Patch0:         patch-Herwig-0.txt
 Url:            https://herwig.hepforge.org/
 BuildRequires:  MG5_aMC lhapdf-sets-Herwig zlib zlib-devel fastjet-devel 

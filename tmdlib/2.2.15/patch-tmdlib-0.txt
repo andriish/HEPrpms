@@ -1,6 +1,6 @@
 diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
 --- ORIG/CMakeLists.txt	2026-03-31 09:48:50.489223675 +0200
-+++ PATCHED/CMakeLists.txt	2026-04-11 00:51:56.909259865 +0200
++++ PATCHED/CMakeLists.txt	2026-04-14 19:38:25.351186485 +0200
 @@ -1,10 +1,10 @@
 -cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 +cmake_minimum_required(VERSION 3.11..4.0 FATAL_ERROR)
@@ -15,7 +15,15 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
  set(TMDLIB_VERSION "${TMDLIB_VERSION_MAJOR}.${TMDLIB_VERSION_MINOR}.${TMDLIB_VERSION_PATCH}")
  
  set(CMAKE_VERBOSE_MAKEFILE ON)
-@@ -38,20 +38,16 @@
+@@ -25,6 +25,7 @@
+ option(TMDLIB_CREATE_VERSION_FILES "Enables creation of version files" OFF)
+ option(TMDLIB_ENABLE_PYTHON "Enables creation of python interfaces" ON)
+ option(TMDLIB_ENABLE_TEST        "Enables building of tests." ON)
++option(TMDLIB_ENABLE_ROOT        "Enables building with ROOT." ON)
+ 
+ if (NOT TMDLIB_PYTHON_VERSIONS)
+   set(TMDLIB_PYTHON_VERSIONS "2.X,3.X")
+@@ -38,20 +39,16 @@
  set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
  
  #### RPATH handling ####################################################
@@ -46,7 +54,35 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
  
  ###################Windows##############################################
  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-@@ -261,8 +257,8 @@
+@@ -78,7 +75,7 @@
+   set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS}  ")
+ elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "XL")
+   set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} -qfixed=256  -qnosave -qextname")
+-elseif()
++else()
+   message(STATUS "TMDLIB examples: Don't know how to set Fortran FLAGS for  ${Fortran_COMPILER_NAME} with ID ${Fortran_COMPILER_ID}")
+ endif ()
+ 
+@@ -90,7 +87,9 @@
+ 
+ find_package(GSL REQUIRED)
+ message(STATUS "TMDLIB: GSL_VERSION=${GSL_VERSION} GSL_LIBRARIES=${GSL_LIBRARIES} GSL_INCLUDE_DIRS=${GSL_INCLUDE_DIRS}")
++if (TMDLIB_ENABLE_ROOT)
+ find_package(ROOT QUIET)
++endif()
+ 
+ if(NOT ROOT_FOUND)
+     message(STATUS "ROOT package not found, continuing without ROOT support. TMDPlotter cannot be built")
+@@ -236,7 +235,7 @@
+        file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/intelTMDlib.supp" "{\n<TMDlib_at_Linux_with_Intel_1>\nMemcheck:Addr32\nfun:__intel_*\n}\n{\n<TMDlib_at_Linux_with_Intel_2>\nMemcheck:Cond\nfun:*strchr\n}\n"  )
+        set( MEMORYCHECK_COMMAND_OPTIONS  "${MEMORYCHECK_COMMAND_OPTIONS} --suppressions=${CMAKE_CURRENT_BINARY_DIR}/IntelTMDlib.supp")
+     endif()
+-  elseif()
++  else()
+     message(STATUS "TMDlib test: valgrind package not found or disabled.  memory check tests disabled.")
+   endif()
+ ##  add_executable(TMDlib_test  ${CMAKE_CURRENT_SOURCE_DIR}/examples-c++/TMDlib_test.cc)
+@@ -261,8 +260,8 @@
  ## MANUAL  #############################################################
  if (TMDLIB_BUILD_DOCS AND LATEX_FOUND AND LATEX_PDFLATEX_FOUND AND LATEX_MAKEINDEX_FOUND)
    set( manual_sources 
@@ -57,7 +93,7 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
         ${PROJECT_SOURCE_DIR}/manual/mystyle-new.sty 
         ${PROJECT_SOURCE_DIR}/manual/mcite.sty
         ${PROJECT_SOURCE_DIR}/manual/PB-HERAPDF-collinear-mu100-new.pdf
-@@ -281,11 +277,11 @@
+@@ -281,11 +280,11 @@
                         COMMAND ${PDFLATEX_COMPILER} TMDLIB2
                         COMMENT "Creating manual "
                         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/manual
@@ -71,7 +107,7 @@ diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
  endif()
  ### DATA ###############################################################
  set(gbwlight   
-@@ -366,7 +362,7 @@
+@@ -366,7 +365,7 @@
  set(datarootdir     ${CMAKE_INSTALL_DATADIR})
  set(datadir         ${CMAKE_INSTALL_DATADIR})
  set(exec_prefix     "\$\{prefix\}")

@@ -6,7 +6,7 @@ Release:  1%{?dist}
 License:  GPLv3
 Prefix: %{_prefix}
 URL:      https://collier.hepforge.org/
-Source:   https://www.hepforge.org/archive/collier/collier-%{version}.tar.gz
+Source:   https://collier.hepforge.org/downloader?f=collier-%{version}.tar.gz
 Requires: fastjet fastjet-devel hoppet
 BuildRequires: fastjet-devel hoppet gcc-c++
 BuildRequires: cmake >= 3.4.3

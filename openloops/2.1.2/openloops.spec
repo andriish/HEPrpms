@@ -9,7 +9,7 @@ Version:        2.1.2
 Release:        6%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
-Source0:        https://www.hepforge.org/archive/openloops/OpenLoops-%{version}.tar.gz
+Source0:        https://openloops.hepforge.org/downloader?f=OpenLoops-%{version}.tar.gz
 Patch0:         patch-openloops-0.txt
 Prefix:         %{_prefix}
 Summary:        Automated calculation of one-loop amplitudes 

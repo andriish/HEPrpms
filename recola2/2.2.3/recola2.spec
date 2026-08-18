@@ -5,8 +5,8 @@ Version: 2.2.3
 Release: 1%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
-Source0: https://www.hepforge.org/archive/recola/recola2-%{version}.tar.gz
-Source1: https://www.hepforge.org/archive/recola/SM_%{version}.tar.gz
+Source0: https://recola.hepforge.org/downloader?f=recola2-%{version}.tar.gz
+Source1: https://recola.hepforge.org/downloader?f=SM_%{version}.tar.gz
 URL:   https://recola.gitlab.io/recola2/
 BuildRequires:      collier gcc-c++ 
 Requires:      collier

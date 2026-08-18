@@ -8,7 +8,7 @@ Version:        0.9.9
 Release:        7%{?dist}
 License:        Unknown
 Url:            http://www.blackhat.hepforge.org
-Source0:        https://www.hepforge.org/archive/blackhat/%{name}-%{version}.tar.gz
+Source0:        https://blackhat.hepforge.org/downloader?f=%{name}-%{version}.tar.gz
 Patch0:         patch-blackhat-0.txt
 Patch1:         patch-blackhat-1.txt
 Patch2:         patch-blackhat-2.txt

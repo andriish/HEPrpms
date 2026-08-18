@@ -7,7 +7,7 @@ Version: 1.4.4
 Release: 2%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
-Source: https://www.hepforge.org/archive/recola/recola-%{version}.tar.gz
+Source: https://recola.hepforge.org/downloader?f=recola-%{version}.tar.gz
 URL:   https://recola.gitlab.io/recola2/
 BuildRequires: collier  gcc-c++ 
 Requires: collier
