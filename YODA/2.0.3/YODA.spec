@@ -7,7 +7,7 @@ Version:        2.0.3
 Release:        1003
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
-Source0:        https://yoda.hepforge.org/downloader?f=%{name}-%{version}.tar.gz
+Source0:        https://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
 Patch0:         patch-YODA-0.txt
 Prefix:         %{_prefix}
 Summary:        Plotting and histogramming tool

@@ -7,7 +7,7 @@ Version:        2.0.0
 Release:        1002
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
-Source0:        https://yoda.hepforge.org/downloader?f=%{name}-%{version}.tar.gz
+Source0:        https://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
 Prefix:         %{_prefix}
 Summary:        Plotting and histogramming tool
 BuildRequires:   autoconf binutils automake libtool  zlib-devel

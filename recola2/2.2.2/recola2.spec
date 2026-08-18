@@ -9,13 +9,13 @@ Version: 2.2.2
 Release: 3%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
-Source0: https://recola.hepforge.org/downloader?f=recola2-%{version}.tar.gz
-Source1: https://recola.hepforge.org/downloader?f=SM_2.2.3.tar.gz
-#Source2: https://recola.hepforge.org/downloader?f=SM_BFM_2.2.3.tar.gz
-#Source3: https://recola.hepforge.org/downloader?f=SM_FERM_2.2.3.tar.gz
-#Source4: https://recola.hepforge.org/downloader?f=SM_FERM_YUK_2.2.3.tar.gz
-#Source5: https://recola.hepforge.org/downloader?f=SM_NF5_2.2.3.tar.gz
-#Source6: https://recola.hepforge.org/downloader?f=SM_NF4_2.2.3.tar.gz
+Source0: https://www.hepforge.org/archive/recola/recola2-%{version}.tar.gz
+Source1: https://www.hepforge.org/archive/recola/SM_2.2.3.tar.gz
+#Source2: https://www.hepforge.org/archive/recola/SM_BFM_2.2.3.tar.gz
+#Source3: https://www.hepforge.org/archive/recola/SM_FERM_2.2.3.tar.gz
+#Source4: https://www.hepforge.org/archive/recola/SM_FERM_YUK_2.2.3.tar.gz
+#Source5: https://www.hepforge.org/archive/recola/SM_NF5_2.2.3.tar.gz
+#Source6: https://www.hepforge.org/archive/recola/SM_NF4_2.2.3.tar.gz
 
 
 Requires: collier

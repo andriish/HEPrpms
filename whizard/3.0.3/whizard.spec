@@ -5,7 +5,7 @@ Version: 3.0.3
 Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
-Source: https://whizard.hepforge.org/downloader?f=whizard-%{version}.tar.gz
+Source: https://www.hepforge.org/archive/whizard/whizard-%{version}.tar.gz
 URL:    https://whizard.hepforge.org/
 Patch0:         patch-whizard-0.txt
 

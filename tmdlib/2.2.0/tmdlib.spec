@@ -5,7 +5,7 @@ Summary:    TMDlib and TMDplotter: library and plotting tools for Transverse Mom
 Prefix:     %{_prefix}
 License:    GPLv3
 URL:        https://tmdlib.hepforge.org/
-Source0:    https://tmdlib.hepforge.org/downloader?f=tmdlib-%{version}.tar.gz
+Source0:    http://www.hepforge.org/archive/tmdlib/tmdlib-%{version}.tar.gz
 Patch0:     patch-tmdlib-0.txt
 
 

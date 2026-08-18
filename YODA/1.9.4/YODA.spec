@@ -7,7 +7,7 @@ Version:        1.9.4
 Release:        1001
 License:        GPLv3
 Url:            http://yoda.hepforge.org/
-Source0:        https://yoda.hepforge.org/downloader?f=%{name}-%{version}.tar.gz
+Source0:        http://www.hepforge.org/archive/yoda/%{name}-%{version}.tar.gz
 #Patch0:         patch-YODA-0.txt
 Prefix:         %{_prefix}
 Summary:        Plotting and histogramming tool
