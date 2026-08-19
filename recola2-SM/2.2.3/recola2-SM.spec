@@ -2,7 +2,7 @@
 Summary:  A model for recola2
 Name: recola2-SM
 Version: 2.2.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv3
 Prefix: %{_prefix}
 Source0: https://recola.hepforge.org/downloader?f=SM_2.2.3.tar.gz
@@ -71,7 +71,6 @@ cd build
 %make_install
 %endif
 
-x
 %files
 %defattr(-,root,root)
 %{_includedir}/*
