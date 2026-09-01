@@ -4,7 +4,8 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
-MG5_aMC:3.7.2
+TheP8I:2.0.6
+#MG5_aMC:3.7.2
 #f90cache:0.99h
 #Rivet:4.1.3
 #YODA:2.1.3

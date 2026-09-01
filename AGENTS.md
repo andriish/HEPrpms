@@ -31,6 +31,8 @@ When creating a spec file for a new package version, follow these steps:
 - Identify the package directory and latest version subfolder under the package name.
 - Copy the existing `.spec` file and any relevant `.patch` files from the current version directory as a starting point.
 - Update version-related fields in the spec file: `Version:`, `Release:`, source URL(s), checksums, and any version-specific build logic.
+- Preserve existing changelog history; keep the old changelog entries and append the new version note to the top of `%changelog`.
+- Verify changelog entry dates are valid and use the correct weekday; RPM warns on bogus changelog dates.
 - Verify the upstream source tarball or archive location and update `Source0` / `Source1` accordingly.
 - Add or update patch references only if the new version still requires the same fixes; remove obsolete patches and add new ones when necessary.
 - Check `BuildRequires:` and runtime `Requires:` for new or changed dependencies introduced by the new upstream release.

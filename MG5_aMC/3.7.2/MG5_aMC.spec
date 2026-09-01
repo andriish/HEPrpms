@@ -1,5 +1,6 @@
+%global __python3_bytecompile_exclude %{buildroot}/%{python3_sitearch}/madgraph/iolibs/template_files/f2py_splitter.py
 %global _python_bytecompile_errors_terminate_build 0
-%global _python_bytecompile_extra "madgraph/iolibs/template_files/f2py_splitter\.py$"
+
 
 %define major            0
 %define libname          MG5_aMC
