@@ -8,7 +8,7 @@
 
 Name:          MG5_aMC
 Version:       3.6.7
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       MG5_aMC is a multi-purpose particle physics event generator.
 License:       http://www.opensource.org/licenses/UoI-NCSA.php
