@@ -142,7 +142,7 @@ This package provides the Python 2 bindings for %{name}-openmpi
 %setup -q -n sherpa-v%{version}
 %patch -P 0 -p1
 sed -i 's/PyString/PyUnicode/g' AddOns/Python/Exception.i
-
+sed -i 's/PyInt_FromLong/PyLong_FromLong/g' AddOns/Python/MEProcess.i
 %build
 # Build serial version, dummy arguments
 
