@@ -1,7 +1,7 @@
 
 Name:           gosam-contrib
 Version:        2.0.20200904
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        Custom
 Url:            https://github.com/gudrunhe/gosam-contrib
 Source0:        https://github.com/gudrunhe/gosam-contrib/archive/gosam-contrib-2.0-20200904.tar.gz

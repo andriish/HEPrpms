@@ -1,6 +1,6 @@
 Name:           LCIO
 Version:        2.22.02
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        LCIO (Linear Collider I/O) is a persistency framework and event data model for linear collider detector studies.
 
 Group:          Development/Tools
@@ -133,6 +133,8 @@ cp $RPM_BUILD_ROOT/%{_libdir}/cmake/SIO/*cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 %endif
 
 %changelog
+* Tue Sep 01 2026 Andrii Verbytskyi <andrii.verbytskyi@cern.ch> - 2.22.02-7
+- Bump release to 7 for packaging
 * Mon Dec 30 2024 Andrii Verbytskyi 2.22.2
 - Update to 2.22.2
 * Thu Dec 21 2023 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>

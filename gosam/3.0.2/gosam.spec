@@ -7,7 +7,7 @@
 
 Name:           gosam
 Version:        3.0.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPLv3
 Url:            https://github.com/gudrunhe/gosam
 Source0:        https://github.com/gudrunhe/gosam/archive/refs/tags/v%{version}.tar.gz
@@ -72,6 +72,8 @@ rm -rf %{buildroot}/%{_bindir}/gosam_setup_env.sh
 %{_datadir}/templates/
 
 %changelog
+* Tue Sep 01 2026 Andrii Verbytskyi <andrii.verbytskyi@cern.ch> - 3.0.2-2
+- Bump release to 2 for packaging
 * Fri Sep 12 2025 Andrii Verbytskyi <andrii.verbytskyi@cern.ch> - 3.0.2-1
 - Switched to Meson build system
 - Updated build dependencies and macros
