@@ -1,6 +1,6 @@
 Name:           applgrid
 Version:        1.6.36
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPL
 Prefix:         %{_prefix}
 Summary:        A fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution 
@@ -27,6 +27,9 @@ with the PDF are available from the calculation.
 %prep 
 %setup -q 
 %patch -P 0 -p1
+# Fix modern ROOT rootcint invocation: request C++ module generation.
+# This avoids the failure "No selection rules specified" on current ROOT versions.
+sed -i 's|$(CINT) -f $@ -c $< -I..|$(CINT) --cxxmodule -f $@ -c $< -I..|' src/Makefile.am
 
 %build 
 autoreconf --force --install --verbose .
