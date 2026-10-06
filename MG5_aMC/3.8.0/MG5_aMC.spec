@@ -8,12 +8,12 @@
 %undefine _debugsource_packages
 
 Name:          MG5_aMC
-Version:       3.7.2
-Release:       2%{?dist}
+Version:       3.8.0
+Release:       1%{?dist}
 
 Summary:       MG5_aMC is a multi-purpose particle physics event generator.
 License:       http://www.opensource.org/licenses/UoI-NCSA.php
-Source0:       https://launchpad.net/mg5amcnlo/3.0/3.7.x/+download/%{name}_v%{version}.tar.gz
+Source0:       https://launchpad.net/mg5amcnlo/3.0/3.8.x/+download/%{name}_v%{version}.tar.gz
 Url:           http://amcatnlo.web.cern.ch/amcatnlo/list_refs.htm
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-c++ 
@@ -67,7 +67,7 @@ references can be found here:
 http://amcatnlo.web.cern.ch/amcatnlo/list_refs.htm
 
 %prep
-%setup -q  -n MG5_aMC_v3_7_2
+%setup -q  -n MG5_aMC_v3_8_0
 find . \( -name '._*' -o -name '.DS_Store' \) -delete
 
 %build
@@ -76,6 +76,7 @@ sed -i 's/programs =/programs = []#/g' bin/.compile.py
 sed -i 's/self.precompilation/#/g' bin/.compile.py
 sed -i 's/self.test_output_/#/g' bin/.compile.py
 bin/.compile.py
+mkdir -p HEPTools
 
 %install
 
