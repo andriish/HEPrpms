@@ -368,3 +368,4 @@ d27fd1c773878556bd5d61e01ab2e10f  SHERPA-MC/3.0.4/rpmbuild/SOURCES/sherpa-v3.0.4
 3c52535d2661781345134d1cca65bad0  TAUOLA/1.1.9/rpmbuild/SOURCES/TAUOLA.1.1.9.tar.gz
 c045bde03a366a578395d4cfc9c2886b  TAUOLA/1.1.10/rpmbuild/SOURCES/TAUOLA.1.1.10.tar.gz
 f3401c9e4ef4ca4ea53d55e560ade4fe  MG5_aMC/3.8.0/rpmbuild/SOURCES/MG5_aMC_v3.8.0.tar.gz
+45dfa006d0ddc4822f974f859e6aa2bc  MG5_aMC/3.8.1/rpmbuild/SOURCES/MG5_aMC_v3.8.1.tar.gz
