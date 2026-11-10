@@ -18,10 +18,12 @@ Url:           http://amcatnlo.web.cern.ch/amcatnlo/list_refs.htm
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-c++ 
 BuildRequires:  gcc-gfortran
+BuildRequires:  libtirpc-devel
 %endif
 %if 0%{?suse_version}
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-fortran
+BuildRequires:  libtirpc-devel
 BuildRequires:  python-rpm-macros
 %endif
 
@@ -119,6 +121,7 @@ cp VERSION $RPM_BUILD_ROOT/%{python_sitearch}/madgraph
 %changelog
 * Tue Nov 10 2026 Andrii Verbytskyi 3.8.1
 - Update to 3.8.1
+- Add BuildRequires: libtirpc-devel (needed by StdHEP mcfio, rpc/types.h)
 * Tue Sep 01 2026 Andrii Verbytskyi 3.7.2
 - Update to 3.7.2
 * Mon Dec 30 2024 Andrii Verbytskyi 3.5.7
