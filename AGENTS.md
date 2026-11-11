@@ -47,6 +47,7 @@ When adding a package that does not yet exist in the repository (for example `Op
 - RPM `Version:` cannot contain `-`. If the upstream tag does, e.g. `v0.6-5`, use `Version: 0.6.5` and a `%global upstream_ver 0.6-5` macro for `Source0` and `%setup -n`. The downloaded file keeps the upstream name (`v0.6-5.tar.gz`), and that name is what `srpmsbuild.sh` stores in `rpmbuild/SOURCES`.
 - Run `sh srpmsbuild.sh <package> <version>` once; it fails on an unknown checksum and writes it to `md5sums.txt.rej`. After checking the source, add the line `<md5>  <package>/<version>/rpmbuild/SOURCES/<file>` to `md5sums.txt` and rerun.
 - Add a row for the package to the table in `README.md`, keeping the alphabetical order.
+- Once the package is committed and pushed, register it in COPR with `scripts/copr-add-package.sh <package> <version>`.
 - Add the package to `DEPENDENCIES.md` (dependency table, build-order layer, reverse dependencies, graph, and distribution dependencies). Add it to the `HEPrpms` meta package only if it is meant to be part of the full collection.
 - If the build needs distribution packages that are not installed locally (such as `glew-devel`), verify the binary build in a clean chroot, e.g. `mock -r fedora-rawhide-x86_64 <package>.src.rpm`, instead of relying on `--nodeps`.
 - Check whether upstream installs files relative to the prefix (for example `lib/` or `tests/`) rather than to `%{_libdir}`; relocate them in `%install` so that the package passes the unpackaged-files check.
@@ -63,6 +64,14 @@ This repository supports local package builds for verification.
 - Local build output and failure details are stored in `logs/`, and the AI agent should read and analyze those logs when diagnosing build issues.
 - Use `alllocal.sh` as a template: uncomment or add the desired `package:version` lines, then run `sh alllocal.sh` from the repo root.
 - Local builds require `rpmdevtools`, `wget`, and network access to download upstream source archives.
+
+## Scripts and COPR project maintenance
+- All helper scripts for repository maintenance live in the `scripts/` directory (`srpmsbuild.sh` and `alllocal.sh` remain in the repository root because the COPR package definitions call `srpmsbuild.sh` from there).
+- `scripts/copr-add-package.sh [--projects LIST] [--build] [--dry-run] <package> [<version>]` registers a package in the COPR project(s) as a custom source that clones `https://github.com/andriish/HEPrpms.git` and runs `srpmsbuild.sh <package> <version>`; if the package already exists in COPR it is updated instead. The default project is `HEPrpms`; use `--projects HEPrpms,HEPrpmsSUSE` for both. The package must be committed and pushed to GitHub before COPR can build it. It needs a valid `~/.config/copr` token; use `--dry-run` to only print the `copr-cli` commands.
+- `scripts/git-rm-unused.sh [--run] [--keep NAME]` prints (or with `--run` executes) the `git rm` command that removes unused package/version directories. The COPR package list is read with `copr-cli list-packages`, and the version of each package is taken from the `srpmsbuild.sh <package> <version>` line of its COPR script.
+- Retention rules: a `<package>/<version>` directory stays in the repository if (1) that version is built in the `HEPrpms` or `HEPrpmsSUSE` COPR project, or (2) its version is newer than the newest version of that package built in those projects (a pending update), or (3) the package is protected, which by default is the `HEPrpms` meta package. All other directories, including packages that are not built in COPR at all, are removed. Do not delete package directories by hand; use the script, and do not add a version directory for an old version that is not built in COPR.
+- Packages that were removed under these rules (`CGAL`, `DD4hep`, `imake`, `motif`, `pythia8`, `transfig`) are taken from the distribution by their dependents; see `DEPENDENCIES.md`. If one of them has to be built again, add it back with the "Adding a new package" steps and register it in COPR.
+- After running `scripts/git-rm-unused.sh --run`, update `DEPENDENCIES.md` (and the table in `README.md`) for the removed packages, and review `git status` before committing.
 
 ## Best practices
 - Keep changes aligned with RPM packaging conventions used in this repository.
