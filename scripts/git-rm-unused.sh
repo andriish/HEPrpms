@@ -42,34 +42,10 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-command -v copr-cli >/dev/null || die "copr-cli is not installed"
-command -v jq >/dev/null || die "jq is not installed"
 cd "$(dirname "$0")/.."
-
-in_list() { local x=$1; shift; local y; for y in "$@"; do [ "$x" = "$y" ] && return 0; done; return 1; }
-# pre-release tags (3.5.1pre12, 3.0.01-beta01) are older than the release: sort -V puts '~' first
-norm() { sed -E 's/([0-9])-?(pre|alpha|beta|rc)/\1~\2/' <<< "$1"; }
-is_newer() {  # is_newer A B: A is a newer version than B
-  [ "$1" != "$2" ] && [ "$(printf '%s\n%s\n' "$(norm "$1")" "$(norm "$2")" | sort -V | tail -1)" = "$(norm "$1")" ]
-}
-
-# package/version pairs built in COPR
-declare -A NEWEST   # package -> newest version built in COPR
-declare -A USED     # package/version -> 1
-IFS=',' read -r -a PROJ <<< "$PROJECTS"
-for proj in "${PROJ[@]}"; do
-  json=$(copr-cli list-packages "$OWNER/$proj" --output-format json) || die "cannot list packages of $OWNER/$proj"
-  n=0
-  while read -r pkg ver; do
-    [ -n "$pkg" ] || continue
-    n=$((n + 1))
-    USED["$pkg/$ver"]=1
-    if [ -z "${NEWEST[$pkg]:-}" ] || is_newer "$ver" "${NEWEST[$pkg]}"; then NEWEST[$pkg]=$ver; fi
-  done < <(jq -r '.[].source_dict.script // empty' <<< "$json" |
-           sed -nE 's/.*srpmsbuild\.sh[[:space:]]+([^[:space:]]+)[[:space:]]+([^[:space:]]+).*/\1 \2/p')
-  [ "$n" -gt 0 ] || die "found no packages in $OWNER/$proj, refusing to continue"
-  echo "$OWNER/$proj: $n packages" >&2
-done
+# shellcheck source=scripts/lib-copr.sh
+. scripts/lib-copr.sh
+copr_used_versions "$OWNER" "$PROJECTS" || exit 1
 
 REMOVE=()
 KEPT_NEWER=()

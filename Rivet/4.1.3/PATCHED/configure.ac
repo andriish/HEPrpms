@@ -206,7 +206,7 @@ if test -f "$FJCONFIG"; then
   fi
   # Only keep -l flags (library names)
   FASTJETLIBADD=`echo "$($FJCONFIG --libs --plugins )" | tr ' ' '\n' | grep '^-l' | tr '\n' ' '`
-  FASTJETLDFLAGS=`echo "$($FJCONFIG --libs --plugins)" | tr ' ' '\n' | grep '^-L' | tr '\n' ' '`
+  FASTJETLDFLAGS=`echo "$($FJCONFIG --libs --plugins )" | tr ' ' '\n' | grep '^-L' | tr '\n' ' '`
 else
   FASTJETLIBADD="-l$FASTJETLIBNAME -lfastjetplugins"
   FASTJETLDFLAGS="-L$FASTJETLIBPATH"

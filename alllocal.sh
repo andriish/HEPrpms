@@ -4,6 +4,15 @@ export PATH=$PATH:$(pwd)
 
 #set -x 
 declare -a BUILDLIST=(
+# Bump of 2026-11-12, in dependency order (see DEPENDENCIES.md); the builds are started in this order
+fastjet:3.5.3
+YODA:2.1.4
+fjcontrib:1.105
+collier:1.2.10
+applgrid:1.6.49
+recola:1.5.0
+Professor:2.5.9
+Rivet:4.1.3
 #applgrid:1.6.36
 #TheP8I:2.0.6
 #MG5_aMC:3.8.1
