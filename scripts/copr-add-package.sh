@@ -7,7 +7,7 @@
 #
 # Usage: scripts/copr-add-package.sh [options] <package> [<version>]
 #   <version>            version directory to build; the newest directory under <package>/ is used by default
-#   --projects LIST      comma-separated COPR projects (default: HEPrpms,HEPrpmsSUSE)
+#   --projects LIST      comma-separated COPR projects (default: HEPrpms; use HEPrpms,HEPrpmsSUSE to add it to both)
 #   --owner NAME         COPR owner (default: averbyts)
 #   --build              start a build after the package has been added
 #   --dry-run            only print the copr-cli commands
@@ -22,7 +22,7 @@
 set -euo pipefail
 
 OWNER=averbyts
-PROJECTS=HEPrpms,HEPrpmsSUSE
+PROJECTS=HEPrpms
 GIT_URL=https://github.com/andriish/HEPrpms.git
 BUILD=0
 DRYRUN=0
