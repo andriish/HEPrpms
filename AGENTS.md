@@ -25,6 +25,7 @@ When helping with this repo, prioritize tasks around:
 - Use `README.md` and the COPR repo pages as the authoritative high-level repository documentation.
 - If a change touches packaging, check for related `.patch` files, `srpmsbuild.sh`, `alllocal.sh`, and `spectool` usage.
 - If asked to add or change packages, prefer minimal, semantic edits rather than broad refactors.
+- Consult `DEPENDENCIES.md` in the repository root to understand the dependencies between the packages in this repository (direct dependencies, reverse dependencies, build order, and the distribution packages they rely on). Use it to decide which packages must be built first and which packages are affected by a change. When a package's `BuildRequires:`/`Requires:` on another repository package changes, or a package is added, update `DEPENDENCIES.md` too.
 
 ## New version packaging workflow
 When creating a spec file for a new package version, follow these steps:
@@ -39,6 +40,16 @@ When creating a spec file for a new package version, follow these steps:
 - Run local package tools like `spectool` or `rpmbuild -bp` if available to validate sources and syntax.
 - Keep the new version directory layout consistent with the repository convention and include any package-specific build helper scripts if needed.
 - Provide reasonable changelog entries explaining the version update and any packaging changes.
+
+## Adding a new package
+When adding a package that does not yet exist in the repository (for example `OpenPHIGS`):
+- Create `<package>/<version>/<package>.spec`, plus any patches and a `do.sh` if patches are generated from `ORIG/` and `PATCHED/` trees.
+- RPM `Version:` cannot contain `-`. If the upstream tag does, e.g. `v0.6-5`, use `Version: 0.6.5` and a `%global upstream_ver 0.6-5` macro for `Source0` and `%setup -n`. The downloaded file keeps the upstream name (`v0.6-5.tar.gz`), and that name is what `srpmsbuild.sh` stores in `rpmbuild/SOURCES`.
+- Run `sh srpmsbuild.sh <package> <version>` once; it fails on an unknown checksum and writes it to `md5sums.txt.rej`. After checking the source, add the line `<md5>  <package>/<version>/rpmbuild/SOURCES/<file>` to `md5sums.txt` and rerun.
+- Add a row for the package to the table in `README.md`, keeping the alphabetical order.
+- Add the package to `DEPENDENCIES.md` (dependency table, build-order layer, reverse dependencies, graph, and distribution dependencies). Add it to the `HEPrpms` meta package only if it is meant to be part of the full collection.
+- If the build needs distribution packages that are not installed locally (such as `glew-devel`), verify the binary build in a clean chroot, e.g. `mock -r fedora-rawhide-x86_64 <package>.src.rpm`, instead of relying on `--nodeps`.
+- Check whether upstream installs files relative to the prefix (for example `lib/` or `tests/`) rather than to `%{_libdir}`; relocate them in `%install` so that the package passes the unpackaged-files check.
 
 ## Local build workflow
 This repository supports local package builds for verification.
