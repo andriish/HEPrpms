@@ -1,0 +1,177 @@
+diff -Naur ORIG/Makefile PATCHED/Makefile
+--- ORIG/Makefile	2026-08-14 17:31:34.000000000 +0200
++++ PATCHED/Makefile	2026-11-12 01:05:08.611074379 +0100
+@@ -1,7 +1,34 @@
+ ## Makefile for Professor 2.x
+ 
+ ## Include the config
+-include Makefile.inc
++#include Makefile.inc
++VERSION := 2.5.9
++
++SHELL := /bin/bash
++
++ifndef PREFIX
++  PREFIX := /usr/local
++endif
++
++CXXSTD := c++14
++
++ifndef CXX
++  CXX := g++
++endif
++
++ifndef PYTHON
++  PYTHON := python3
++endif
++
++ifndef CYTHON
++  CYTHON := cython
++endif
++
++ifndef ROOTCONFIG
++  ROOTCONFIG := root-config
++endif
++
++EIGEN_CPPFLAGS := -I/usr/include/eigen3
+ 
+ DESTDIR ?=
+ PIP_PREFIX := $(DESTDIR)$(PREFIX)
+@@ -82,36 +109,33 @@
+ 
+ .PHONY: all lib pyext pyext-user tests cxxtests pytests pydeps check icheck clean root dist
+ 
+-all: lib pyext tests Makefile.inc
++all: lib pyext tests
+ 	@true
+ 
+-lib: lib/libProfessor2.so Makefile.inc
++lib: lib/libProfessor2.so
+ 	@true
+ 
+-Makefile.inc: Makefile configure
+-	if [[ -e Makefile.inc ]]; then cat Makefile.inc | sed -n 's:^# \(\./configure.*\):\1:p'; else echo "You need to run 'configure' first"; fi
+-
+ lib/libProfessor2.so: $(LIBOBJECTS)
+ 	mkdir -p lib
+ 	$(CXX) -shared -o $@ $(LIBOBJECTS)
+ 
+ obj/%.o: src/%.cc $(LIBHEADERS)
+ 	mkdir -p obj
+-	$(CXX) -std=$(CXXSTD) -DPROF_VERSION="$(VERSION)" -I include $(CPPFLAGS) $(CXXFLAGS) -c -fPIC $< -o $@
++	$(CXX) -std=$(CXXSTD) -DPROF_VERSION="$(VERSION)" -I./ -I./include $(CPPFLAGS) $(CXXFLAGS) -c -fPIC $< -o $@
+ 
+ obj/Version.o: src/Version.cc $(LIBHEADERS) Makefile
+ 	mkdir -p obj
+ 	$(CXX) -std=$(CXXSTD) -DPROF_VERSION="$(VERSION)" -Iinclude $(CPPFLAGS) $(CXXFLAGS) -c -fPIC $< -o $@
+ 
+-pydeps: Makefile.inc
+-	@$(PYTHON) -m pip &> /dev/null || { echo "Python doesn't have pip support, run ${PYTHON} -m ensurepip"; exit 1; }
+-	@$(PYTHON) -c "import setuptools" &> /dev/null || { echo "Python setuptools needs to be installed: ${PYTHON} -m pip install setuptools"; exit 1; }
+-	@$(PYTHON) -c "import cython" &> /dev/null || { echo "Cython needs to be installed: ${PYTHON} -m pip install Cython"; exit 1; }
+-	@$(PYTHON) -c "import numpy" &> /dev/null || { echo "numpy needs to be installed: ${PYTHON} -m pip install numpy"; exit 1; }
+-
+-pyext: pydeps pyext/professor2/core.cpp $(wildcard pyext/professor2/*.py) Makefile.inc
+-	cd pyext/ && PROF_VERSION=$(VERSION) PROF_ROOT=$(PWD) \
+-	  $(PYTHON) -m pip wheel -v --no-deps -w dist ./
++pydeps:
++#	@$(PYTHON) -m pip &> /dev/null || { echo "Python doesn't have pip support, run ${PYTHON} -m ensurepip"; exit 1; }
++#	@$(PYTHON) -c "import setuptools" &> /dev/null || { echo "Python setuptools needs to be installed: ${PYTHON} -m pip install setuptools"; exit 1; }
++#	@$(PYTHON) -c "import cython" &> /dev/null || { echo "Cython needs to be installed: ${PYTHON} -m pip install Cython"; exit 1; }
++#	@$(PYTHON) -c "import numpy" &> /dev/null || { echo "numpy needs to be installed: ${PYTHON} -m pip install numpy"; exit 1; }
++
++pyext: pydeps pyext/professor2/core.cpp $(wildcard pyext/professor2/*.py)
++#	cd pyext/ && PROF_VERSION=$(VERSION) PROF_ROOT=$(PWD) \
++#	  $(PYTHON) -m pip wheel -v --no-deps -w dist ./
+ 
+ pyext-user: pydeps pyext/professor2/core.cpp $(wildcard pyext/professor2/*.py)
+ 	@echo "Installing professor2 Python bindings into the current Python environment (dev convenience)"
+@@ -119,7 +143,7 @@
+ 	  $(PYTHON) -m pip install -vv ./
+ 
+ pyext/professor2/core.cpp: $(LIBHEADERS) $(CYTHONSOURCES) lib
+-	$(CYTHON) pyext/professor2/core.pyx --cplus
++	$(CYTHON) pyext/professor2/core.pyx --cplus -Ipyext/professor2
+ 
+ # pyext/professor2/core.so: pyext/professor2/core.cpp
+ # 	PROF_VERSION=$(VERSION) $(PYTHON) pyext/setup.py build_ext -i --force
+@@ -127,21 +151,21 @@
+ tests: cxxtests pytests
+ 	@true
+ 
+-cxxtests: $(TESTPROGS) Makefile.inc
++cxxtests: $(TESTPROGS)
+ 	@true
+ 
+ test/%: test/%.cc $(LIBHEADERS) lib
+ 	$(CXX) -std=$(CXXSTD) -Iinclude $(CPPFLAGS) $(CXXFLAGS) $< -Llib -lProfessor2 -o $@
+ 
+ ifdef HAVE_ROOT
+-root: src/testRoot.cc $(LIBHEADERS) lib Makefile.inc
++root: src/testRoot.cc $(LIBHEADERS) lib
+ 	$(CXX) -std=$(CXXSTD) $(CPPFLAGS) $(CXXFLAGS) $< -Iinclude `root-config --cflags --libs` -Llib -lProfessor2 -o test/test$@
+ endif
+ 
+ pytests: pyext
+ 	@true
+ 
+-check: tests Makefile.inc
++check: tests
+ 	@echo
+ 	@echo "testParamPoints" && test/testParamPoints && echo "\n\n"
+ 	@echo "testIpol" && test/testIpol && echo "\n\n"
+@@ -152,15 +176,12 @@
+ 	test/testPython2D
+ 
+ install: all
+-	mkdir -p $(PREFIX)/bin && cp bin/prof2-* $(PREFIX)/bin/
+-	#mkdir -p $(PREFIX)/contrib && cp contrib/* $(PREFIX)/contrib/
++	mkdir -p $(DESTDIR)$(PREFIX)/bin && cp bin/prof2-* $(DESTDIR)$(PREFIX)/bin/
++	mkdir -p $(DESTDIR)$(PREFIX)/contrib && cp contrib/* $(DESTDIR)$(PREFIX)/contrib/
+ 	#mkdir -p $(PREFIX)/jupyter && cp jupyter/* $(PREFIX)/jupyter/
+-	mkdir -p $(PREFIX)/include && cp -r include/Professor $(PREFIX)/include/
+-	test -d lib   && mkdir -p $(PREFIX)/lib   && cp -r lib/* $(PREFIX)/lib/ || true
+-	test -d lib64 && mkdir -p $(PREFIX)/lib64 && cp -r lib64/* $(PREFIX)/lib64/ || true
+-	# TODO: use proper install mechanism, bundle via PyPI
+-	cd pyext/ && PROF_VERSION=$(VERSION) PROF_ROOT=$(PWD) \
+-	  $(PYTHON) -m pip install -v --no-deps --no-user --prefix "$(PIP_PREFIX)" --force-reinstall dist/*$(VERSION)*.whl
++	mkdir -p $(DESTDIR)$(PREFIX)/include && cp -r include/Professor $(DESTDIR)$(PREFIX)/include/
++	test -d lib   && mkdir -p $(DESTDIR)$(LIBDIR)   && cp -r lib/libProfessor2.so $(DESTDIR)$(LIBDIR)/ || true
++	cd pyext && PROF_VERSION=$(VERSION) $(PYTHON) setup.py install --prefix=$(DESTDIR)$(PREFIX)
+ #	cp setup.sh $(PREFIX)
+ 
+ dist: all
+diff -Naur ORIG/pyext/setup.py PATCHED/pyext/setup.py
+--- ORIG/pyext/setup.py	2026-08-14 17:31:34.000000000 +0200
++++ PATCHED/pyext/setup.py	2026-11-12 01:04:57.070010938 +0100
+@@ -2,10 +2,9 @@
+ from glob import glob
+ 
+ import os
+-#srcdir = os.path.abspath(os.path.join("./")
+-srcdir = os.environ["PROF_ROOT"]
+-libdir = os.path.abspath(os.path.join(srcdir, "lib"))
+-incdir = os.path.abspath(os.path.join(srcdir, "include"))
++srcdir = os.path.relpath("./")
++libdir = os.path.relpath("../lib")
++incdir = os.path.relpath("../include")
+ os.environ.setdefault("CC", "g++")
+ os.environ.setdefault("CXX", "g++")
+ 
+@@ -17,13 +16,13 @@
+                 ["professor2/core.cpp"],
+                 language="C++",
+                 depends=glob("../include/*.h"),
+-                include_dirs=[incdir, os.path.join(srcdir, "pyext", "professor2")],
+-                extra_compile_args="-O3 -Wno-unused-but-set-variable -Wno-sign-compare".split(),
++                include_dirs=[incdir, os.path.join(srcdir, "pyext", "professor2","../include", "../", "./")],
++                extra_compile_args="-I. -I./include -I../ -I../include -O3 -Wno-unused-but-set-variable -Wno-sign-compare".split(),
+                 library_dirs=[libdir],
+                 runtime_library_dirs=[],
+                 libraries=["Professor2"])
+ 
+-v = os.environ.get("PROF_VERSION", "X.Y.Z")
++v = os.environ.get("PROF_VERSION", "2.5.9")
+ setup(name = "professor2",
+       version=v,
+       ext_modules = [ext],
