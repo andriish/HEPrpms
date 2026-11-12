@@ -78,7 +78,7 @@ autoreconf -fi
 sed -i 's|\#\$(DEPDIR)/fastnlo_wrap.Plo:|\$(DEPDIR)/fastnlo_wrap.Plo:|g' pyext/Makefile.in
 sed -i 's|LHAPDFBIN --incdir|LHAPDFBIN --includedir|g' configure
 %if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
-%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum --enable-pyext3 
+%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum --enable-pyext
 %else
 %configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum
 %endif
@@ -90,7 +90,11 @@ make %{?_smp_mflags}
 %make_install
 %if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
 mkdir -p %{buildroot}/%{python3_sitearch}/
-mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch}/
+for d in %{buildroot}/usr/lib/python*/site-packages; do
+  if [ -d "$d" ] && [ "$d" != "%{buildroot}/%{python3_sitearch}" ]; then
+    mv "$d"/* %{buildroot}/%{python3_sitearch}/
+  fi
+done
 %endif
 
 %files
@@ -117,6 +121,7 @@ ldconfig
 - Update to 2.5.1.3034
 - Package the new fnlo-py-print.py script
 - EL8/EL9: lower AC_PREREQ to 2.69 (patch-fastnlo-1.txt)
+- EL8/EL9: use --enable-pyext (renamed from --enable-pyext3 upstream) and make the python module relocation robust
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 - Update to 2.5.0.2826
 * Thu Jun 20 2024 Andrii Verbytskyi 2.5.0
