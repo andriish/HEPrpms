@@ -91,6 +91,7 @@ mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch
 %files
 %defattr(-,root,root)
 /usr/bin/fnlo-tk*
+/usr/bin/fnlo-py-*
 /usr/%_lib/libfastnlotoolkit*
 /usr/share/fastnlo_toolkit/modify/SteerModify.str
 
@@ -109,6 +110,7 @@ ldconfig
 %changelog
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Update to 2.5.1.3034
+- Package the new fnlo-py-print.py script
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 - Update to 2.5.0.2826
 * Thu Jun 20 2024 Andrii Verbytskyi 2.5.0
