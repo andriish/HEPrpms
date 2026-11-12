@@ -149,7 +149,7 @@ rm -fr %{buildroot}/%_libdir/python*/site-packages/site.py
 
 %files -n %{libname}
 /etc/bash_completion.d/yoda-completion
-%doc AUTHORS COPYING
+%doc AUTHORS
 /usr/%_lib/lib*
 /usr/%_lib/pkgconfig/*.pc
 %_bindir/*

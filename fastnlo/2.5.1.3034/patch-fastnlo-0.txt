@@ -1,0 +1,31 @@
+diff -Naur ORIG/configure.ac PATCHED/configure.ac
+--- ORIG/configure.ac	2026-11-12 01:57:16.148647686 +0100
++++ PATCHED/configure.ac	2026-11-12 01:57:25.469526056 +0100
+@@ -27,7 +27,6 @@
+ # which must be included first into all respective source files
+ AC_CONFIG_SRCDIR([config.h.in])
+ AC_CONFIG_HEADERS([config.h])
+-AC_CONFIG_MACRO_DIR([m4])
+ 
+ # Set default installation directory
+ AC_PREFIX_DEFAULT(${HOME}/local)
+diff -Naur ORIG/src/Makefile.am PATCHED/src/Makefile.am
+--- ORIG/src/Makefile.am	2026-11-12 01:57:16.149547109 +0100
++++ PATCHED/src/Makefile.am	2026-11-12 01:57:16.152446580 +0100
+@@ -105,11 +105,11 @@
+ fnlo_tk_yodaout_LDFLAGS = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(YODALDFLAGS)
+ fnlo_tk_statunc_LDFLAGS = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(YODALDFLAGS)
+ fnlo_tk_rootout_LDFLAGS = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
+-fnlo_tk_merge_LDFLAGS   = $(my_lib_dirs) $(AM_LDFLAGS)
+-fnlo_tk_merge2_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS)
+-fnlo_tk_append_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS)
+-fnlo_tk_modify_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS)
+-fnlo_tk_cat_LDFLAGS     = $(my_lib_dirs) $(AM_LDFLAGS)
++fnlo_tk_merge_LDFLAGS   = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
++fnlo_tk_merge2_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
++fnlo_tk_append_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
++fnlo_tk_modify_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
++fnlo_tk_cat_LDFLAGS     = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
+ 
+ # Files that are required to build the project but that can be
+ # recreated IF the necessary autotools etc. are available by:

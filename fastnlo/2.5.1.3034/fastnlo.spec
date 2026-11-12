@@ -1,0 +1,123 @@
+Name: fastnlo
+Version: 2.5.1.3034
+Release: 1%{?dist}
+License: GPL
+Prefix: %{_prefix}
+Summary: Fast pQCD calculations for PDF fits.
+Source:  https://fastnlo.hepforge.org/code/v25/fastnlo_toolkit-2.5.1-3034.tar.gz
+URL:     https://fastnlo.hepforge.org/
+#A patch is needed to make this work with python
+Patch0: patch-fastnlo-0.txt
+
+%if 0%{?rhel} || 0%{?fedora}
+BuildRequires: autoconf
+BuildRequires: gcc-gfortran gcc-c++ lhapdf-devel lhapdf   root root-core root-tree-ntuple-utils
+BuildRequires: qcdnum qcdnum-devel hoppet  fastjet fastjet-devel  zlib zlib-devel
+BuildRequires: autoconf automake libtool tex(latex) swig doxygen texlive-epstopdf ghostscript
+Requires:     qcdnum fastjet 
+%endif
+%if 0%{?rhel} || 0%{?fedora}
+BuildRequires: yaml-cpp-devel 
+Requires: yaml-cpp 
+%endif
+%if 0%{?suse_version}
+BuildRequires: autoconf
+BuildRequires: gcc-fortran gcc-c++ LHAPDF-devel libLHAPDF   root6 root6-libs root6-devel 
+BuildRequires: qcdnum qcdnum-devel hoppet fastjet fastjet-devel  pkgconfig(zlib) zlib-devel
+BuildRequires: autoconf automake libtool tex(latex) swig doxygen texlive-epstopdf ghostscript
+Requires:      qcdnum fastjet 
+%endif
+
+
+%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
+BuildRequires: python3 python3-devel
+%endif
+%if 0%{?suse_version}
+BuildRequires: python3 python3-devel
+%endif
+
+
+%package  devel
+Summary:        Libraries and headers for %{name}
+Provides:       %{name}-devel = %{version}-%{release}
+
+%description  devel
+Contains the libraries and header files needed to
+develop programs which make use of %{name}.
+The library documentation is available on header files.
+
+
+%if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
+%package  -n python-%{name}
+Summary:        python bindings for %{name}
+Provides:       python3-%{name} = %{version}-%{release}
+
+%description -n python-%{name}
+python-%{name} contains python bindings for %{name}.
+%endif
+
+%description
+The fastNLO project provides computer code to create and evaluate fast 
+interpolation tables of pre-computed coefficients in perturbation theory 
+for observables in hadron-induced processes.
+
+%prep 
+%setup -q -n fastnlo_toolkit-2.5.1-3034
+%patch -P 0 -p1
+
+
+%build 
+autoreconf -fi
+
+
+sed -i 's|\#\$(DEPDIR)/fastnlo_wrap.Plo:|\$(DEPDIR)/fastnlo_wrap.Plo:|g' pyext/Makefile.in
+sed -i 's|LHAPDFBIN --incdir|LHAPDFBIN --includedir|g' configure
+%if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
+%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum --enable-pyext3 
+%else
+%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum
+%endif
+
+
+make %{?_smp_mflags}
+
+%install 
+%make_install
+%if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
+mkdir -p %{buildroot}/%{python3_sitearch}/
+mv %{buildroot}/usr/lib/python*/site-packages/*  %{buildroot}/%{python3_sitearch}/
+%endif
+
+%files
+%defattr(-,root,root)
+/usr/bin/fnlo-tk*
+/usr/%_lib/libfastnlotoolkit*
+/usr/share/fastnlo_toolkit/modify/SteerModify.str
+
+%files devel
+/usr/include/*
+
+
+%if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
+%files -n python-%{name}
+%{python3_sitearch}/*
+%endif
+
+%post 
+ldconfig 
+
+%changelog
+* Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Update to 2.5.1.3034
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 2.5.0.2826
+* Thu Jun 20 2024 Andrii Verbytskyi 2.5.0
+- Drop YODA support
+* Fri Aug 12 2022 Andrii Verbytskyi 2.5.0
+- Use Python3
+* Mon Nov 15 2021 Andrii Verbytskyi 2.5.0
+- Bump to 2.5.0
+* Sun Feb 21 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+ - Cleanup           
+* Thu Nov 23 2017 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
+ - Initial
