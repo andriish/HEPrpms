@@ -8,6 +8,8 @@ Source:  https://fastnlo.hepforge.org/code/v25/fastnlo_toolkit-2.5.1-3034.tar.gz
 URL:     https://fastnlo.hepforge.org/
 #A patch is needed to make this work with python
 Patch0: patch-fastnlo-0.txt
+# autoconf 2.69 on EL8/EL9
+Patch1: patch-fastnlo-1.txt
 
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires: autoconf
@@ -64,6 +66,9 @@ for observables in hadron-induced processes.
 %prep 
 %setup -q -n fastnlo_toolkit-2.5.1-3034
 %patch -P 0 -p1
+%if 0%{?rhel} && 0%{?rhel} < 10
+%patch -P 1 -p1
+%endif
 
 
 %build 
@@ -111,6 +116,7 @@ ldconfig
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Update to 2.5.1.3034
 - Package the new fnlo-py-print.py script
+- EL8/EL9: lower AC_PREREQ to 2.69 (patch-fastnlo-1.txt)
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 - Update to 2.5.0.2826
 * Thu Jun 20 2024 Andrii Verbytskyi 2.5.0

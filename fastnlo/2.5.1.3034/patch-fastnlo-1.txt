@@ -1,0 +1,14 @@
+diff -Naur ORIG_EL9/configure.ac PATCHED_EL9/configure.ac
+--- ORIG_EL9/configure.ac	2026-11-12 10:34:14.732584096 +0100
++++ PATCHED_EL9/configure.ac	2026-11-12 10:34:14.734560219 +0100
+@@ -7,8 +7,8 @@
+ #
+ # -----------------------------------------------------------------------------
+ # Process this file with autoconf to produce a configure script.
+-# Require minimal autoconf version, 2.71 is from 2021
+-AC_PREREQ([2.71])
++# Require minimal autoconf version, 2.69 is enough (EL8 and EL9 only have 2.69)
++AC_PREREQ([2.69])
+ # Define subproject fastNLO_toolkit
+ AC_INIT([fastNLO_toolkit],[2.5.1],[Daniel.Britzger@desy.de, Klaus.Rabbertz@kit.edu, Georg Sieber, Fred Stober, wobisch@latech.edu])
+ #Suppress verbose output when compiling (use make V=99 for verbose output)
