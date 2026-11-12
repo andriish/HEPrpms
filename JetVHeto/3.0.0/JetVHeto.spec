@@ -1,9 +1,9 @@
 Summary:  A program to perform NNLL resummation for jet-veto efficiencies and cross sections in Higgs and Z-boson production
 Name: JetVHeto
 Version: 3.0.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv3
-Source:  https://www.hepforge.org/downloads/JetVHeto/JetVHeto-%{version}.tgz
+Source:  https://jetvheto.hepforge.org/downloads/JetVHeto-%{version}.tgz
 URL:     https://jetvheto.hepforge.org/
 Patch0:  patch-JetVHeto-0.txt
 
@@ -53,5 +53,7 @@ cp -a jetvheto $RPM_BUILD_ROOT/%{_bindir}
 ldconfig 
 
 %changelog             
+* Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 3.0.0-4
+- New download URL (jetvheto.hepforge.org/downloads)
 * Fri Nov 29 2019 Andrii Verbytskyi 3.0.0
  - Initial
