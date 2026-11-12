@@ -1,0 +1,70 @@
+Name:           applgrid
+Version:        1.6.49
+Release:        1%{?dist}
+License:        GPL
+Prefix:         %{_prefix}
+Summary:        A fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution 
+Source:         https://applgrid.hepforge.org/downloader?f=applgrid-%{version}.tgz
+Patch0:         patch-applgrid-0.txt
+URL:            https://applgrid.hepforge.org/
+%if 0%{?rhel} || 0%{?fedora}
+BuildRequires:  gcc-c++ gcc-gfortran hoppet root root-tree-ntuple-utils  autoconf binutils automake libtool zlib zlib-devel
+Requires:       hoppet root zlib root-tree-ntuple-utils
+%endif
+%if 0%{?suse_version}
+BuildRequires:  gcc-c++ gcc-fortran hoppet root6-config root6-libs root6-devel root6  autoconf binutils automake libtool pkgconfig(zlib)
+Requires:       hoppet root6-config root6-libs root6-devel libgfortran5 pkgconfig(zlib)
+%endif
+
+%description
+The APPLgrid project provides a fast and flexible way to reproduce the results 
+of full NLO calculations with any input parton distribution set in only a few 
+milliseconds rather than the weeks normally required to gain adequate statistics.
+Written in C++ (although a fortran interface is included) it can be used for the 
+calculation of any process where the hard subprocess weights from the convolution 
+with the PDF are available from the calculation.
+
+%prep 
+%setup -q 
+%patch -P 0 -p1
+# Fix modern ROOT rootcint invocation: request C++ module generation.
+# This avoids the failure "No selection rules specified" on current ROOT versions.
+sed -i 's|$(CINT) -f $@ -c $< -I..|$(CINT) --cxxmodule -f $@ -c $< -I..|' src/Makefile.am
+
+%build 
+autoreconf --force --install --verbose .
+
+
+%configure
+%make_build
+
+%install 
+%make_install
+
+%files
+%defattr(-,root,root)
+%{_bindir}/*
+%{_libdir}/*
+%{_includedir}/*
+
+
+%post 
+ldconfig 
+
+%changelog
+* Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Update to 1.6.49
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Bump to 1.6.36
+* Fri Mar 10 2023 Andrii Verbytskyi 1.6.32
+- Bump to 1.6.32
+* Tue Jul 12 2022 Andrii Verbytskyi 1.6.27
+- Bump to 1.6.27
+* Mon Nov 15 2021 Andrii Verbytskyi 1.6.22
+- Bump to 1.6.22
+* Tue Apr 20 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
++ Preparation for release
+* Sat Apr 03 2021  Andrii Verbytskyi 
++ Cleanup.
+* Fri Nov 29 2019 Andrii Verbytskyi 1.5.40
+ - Initial

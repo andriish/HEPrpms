@@ -370,3 +370,10 @@ c045bde03a366a578395d4cfc9c2886b  TAUOLA/1.1.10/rpmbuild/SOURCES/TAUOLA.1.1.10.t
 f3401c9e4ef4ca4ea53d55e560ade4fe  MG5_aMC/3.8.0/rpmbuild/SOURCES/MG5_aMC_v3.8.0.tar.gz
 45dfa006d0ddc4822f974f859e6aa2bc  MG5_aMC/3.8.1/rpmbuild/SOURCES/MG5_aMC_v3.8.1.tar.gz
 6d560d4ad2fb3a14bdd878df2b05c336  OpenPHIGS/0.6.5/rpmbuild/SOURCES/v0.6-5.tar.gz
+c89e430702401793a2311994370e57ec  applgrid/1.6.49/rpmbuild/SOURCES/applgrid-1.6.49.tgz
+8552c8154d21ed9450b416f208d4c842  collier/1.2.10/rpmbuild/SOURCES/collier-1.2.10.tar.gz
+ba89ba3f34bd93aea8ba39651b0cbeb3  fastjet/3.5.3/rpmbuild/SOURCES/fastjet-3.5.3.tar.gz
+6b888ad192c1ed1285448d68b670808c  fjcontrib/1.105/rpmbuild/SOURCES/fjcontrib-1.105.tar.gz
+865f0c4ee0cfef87f86940a4a728f733  Professor/2.5.9/rpmbuild/SOURCES/professor-professor-2.5.9.tar.gz
+156b05b663e8425d6c62f6cb8c82cbe4  recola/1.5.0/rpmbuild/SOURCES/recola-1.5.0.tar.gz
+86aac94d350b8a11dbaff40afc40e41d  YODA/2.1.4/rpmbuild/SOURCES/YODA-2.1.4.tar.gz
