@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
 project(SHERPA-MC LANGUAGES C  CXX)
 #The complicated way to set the version is used to assure the simple
 #replacement of version variable with sed will not break the CMakeLists.txt
-set(EXTERNAL_VERSION_STRING "3.0.4")
+set(EXTERNAL_VERSION_STRING "3.0.5")
 string(REPLACE "."  ";" EXTERNAL_VERSION_LIST "${EXTERNAL_VERSION_STRING}")
 list(GET EXTERNAL_VERSION_LIST 0 SHERPA_VERSION_MAJOR)
 list(GET EXTERNAL_VERSION_LIST 1 SHERPA_VERSION_MINOR)
@@ -200,7 +200,7 @@ message(STATUS "SHERPA: CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
 ########################################################################
 
 set ( NEW_CMAKE_C_FLAGS " ")
-string(REPLACE " " ";" LIST_CMAKE_C_FLAGS "${C_C_FLAGS_TO_CHECK} ${CMAKE_C_FLAGS}")
+string(REPLACE " -" ";-" LIST_CMAKE_C_FLAGS "${C_C_FLAGS_TO_CHECK} ${CMAKE_C_FLAGS}")
 foreach(fx IN LISTS LIST_CMAKE_C_FLAGS)
   if (fx)
     check_c_compiler_flag(${fx} C_COMPILER_SUPPORTS_${fx})
@@ -219,7 +219,7 @@ message(STATUS "SHERPA: CMAKE_C_FLAGS=${CMAKE_C_FLAGS}")
 if (SHERPA_ENABLE_FORTRAN)
   include(CheckFortranCompilerFlag)
   set ( NEW_CMAKE_Fortran_FLAGS " ")
-  string(REPLACE " " ";" LIST_CMAKE_Fortran_FLAGS  "${F_Fortran_FLAGS_TO_CHECK} ${CMAKE_Fortran_FLAGS}")
+  string(REPLACE " -" ";-" LIST_CMAKE_Fortran_FLAGS  "${F_Fortran_FLAGS_TO_CHECK} ${CMAKE_Fortran_FLAGS}")
   foreach(fl IN LISTS LIST_CMAKE_Fortran_FLAGS)
     if (fl)
       check_Fortran_compiler_flag(${fl} Fortran_COMPILER_SUPPORTS_${fl})
@@ -631,7 +631,6 @@ foreach ( IDIR ${IDIRS} )
                              PATTERN "*MODEL/SMGold*" EXCLUDE
                              PATTERN "*MODEL/TauPi*" EXCLUDE
                              PATTERN "*PDF/CT14*" EXCLUDE
-                             PATTERN "*PDF/GRS/GRSGrid*" EXCLUDE
                              PATTERN "*PDF/SAL/SALGrid*" EXCLUDE
                              PATTERN "*PDF/CJK/CJKHOGrid*" EXCLUDE
                              PATTERN "*PDF/CJK/CJK1Grid*" EXCLUDE
@@ -1054,6 +1053,18 @@ $<IF:$<BOOL:${SHERPA_ENABLE_BINRELOC}>,#define ENABLE_BINRELOC \"1\",/* #undef E
 /* Using colour */\n\
 #define USING__COLOUR \"1\"\n\n\
 #define PYTHON_LIBS \"${SHERPA_Python_SITEARCH}\"\n\n\
+#if defined(__has_cpp_attribute)\n\
+#if __has_cpp_attribute(maybe_unused)\n\
+#define SHERPA_MAYBE_UNUSED [[maybe_unused]]\n\
+#endif\n\
+#endif\n\
+#ifndef SHERPA_MAYBE_UNUSED\n\
+#if defined(__GNUC__) || defined(__clang__)\n\
+#define SHERPA_MAYBE_UNUSED __attribute__((unused))\n\
+#else\n\
+#define SHERPA_MAYBE_UNUSED\n\
+#endif\n\
+#endif\n\
 #endif\n")
 file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ATOOLS/Org/CXXFLAGS.H CONTENT "${CXXFLAGS_H_CONTENT}")
 ########################################################################

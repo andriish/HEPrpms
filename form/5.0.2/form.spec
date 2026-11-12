@@ -1,0 +1,113 @@
+%global debug_package %{nil}
+Name:           form
+Version:        5.0.2
+Release:        1%{?dist}
+License:        GPLv3
+Url:            https://github.com/vermaseren/form
+Source0:        https://github.com/vermaseren/form/releases/download/v%{version}/form-%{version}.tar.gz
+Summary:        The FORM project for symbolic manipulation of very big expressions
+BuildRequires:  autoconf automake libtool  gcc-c++ doxygen 
+%if 0%{?rhel} || 0%{?fedora}
+BuildRequires:  gcc-gfortran gmp-devel zlib-devel
+%endif
+%if 0%{?suse_version}
+BuildRequires:  gcc-fortran texlive-tex4ht texlive-helvetic texlive-wasy texlive-courier texlive-filesystem texlive-changepage
+%endif
+BuildRequires:  tex(latex) ghostscript 
+BuildRequires:  tex(tabu.sty) tex(multirow.sty) tex(multicol.sty) tex(adjustbox.sty) tex(sectsty.sty) tex(tocloft.sty) 
+BuildRequires:   tex(ulem.sty)  tex(wasysym.sty) tex(float.sty) 
+%if 0%{?suse_version}
+BuildRequires: tex(hanging.sty) tex(stackengine.sty)  tex(newunicodechar.sty) tex(etoc.sty) tex(fancyvrb.sty)  tex(enumitem.sty) tex(alphalph.sty)
+BuildRequires: tex(xltabular.sty)
+BuildRequires: tex(ltablex.sty)
+BuildRequires: tex(tabularray.sty)
+BuildRequires: tex(ninecolors.sty)
+%endif
+%if  %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} > 8 
+BuildRequires: tex(hanging.sty) tex(stackengine.sty)  tex(newunicodechar.sty) tex(etoc.sty) tex(ulem.sty) 
+%endif
+%if %{?rhel}%{!?rhel:0} >= 8 || %{?fedora}%{!?fedora:0} >= 31
+BuildRequires: ghostscript-tools-dvipdf texlive-wasy
+%endif
+%if %{?fedora}%{!?fedora:0} >= 44
+BuildRequires: tex(xltabular.sty)
+BuildRequires: tex(ltablex.sty)
+BuildRequires: tex(tabularray.sty)
+BuildRequires: tex(ninecolors.sty)
+BuildRequires: tex(enumitem.sty)
+BuildRequires: tex(alphalph.sty)
+BuildRequires: texlive-psnfss
+BuildRequires: texlive-helvetic
+BuildRequires: texlive-courier
+
+%endif
+Prefix: %{_prefix}
+
+%description
+FORM is a Symbolic Manipulation System. It reads symbolic expressions from files and executes 
+symbolic/algebraic transformations upon them. The answers are returned in a textual 
+mathematical representation. As its landmark feature, the size of the considered 
+expressions in FORM is only limited by the available disk space and not by 
+the available RAM.
+FORM's original author is Jos Vermaseren of NIKHEF, the Dutch institute for 
+subatomic physics. Other people that have made contributions can be found in 
+the file "AUTHORS".
+
+%package doc
+Summary:       Documentation for %{name} 
+
+%description doc
+Documentation for %{name}.
+
+%prep 
+%setup -q -n form-%{version}
+
+%build
+autoreconf -fisv
+
+%if 0%{?rhel} || 0%{?fedora}
+%configure  --with-gmp=/usr --with-zlib=/usr
+%else
+%configure  
+%endif
+make %{?_smp_mflags}
+cat <<EOF > doc/doxygen/version.sh
+repo_version='%{version}'
+repo_version_desc='v%{version}'
+repo_revision='v%{version}'
+repo_date='$(date +"%%d %%B %%Y")'
+repo_major_version='5'
+repo_minor_version='0'
+repo_patch_version='2'
+repo_version_suffix=''
+EOF
+make %{?_smp_mflags} -C doc pdf
+make %{?_smp_mflags} -C doc html
+
+%install
+%make_install 
+
+%files 
+%_bindir/*
+
+%files  doc
+%{_mandir}/man1/form.1.gz
+%doc doc/manual/manual.pdf
+%doc doc/devref/devref.pdf
+
+
+%changelog
+* Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Update to 5.0.2
+* Thu Nov 2 2023 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
+- Update to 4.3.1
+- Update to 4.3.1
+* Fri Mar 10 2023 Andrii Verbytskyi 4.3.0
+- Update to 4.3.0
+* Fri Feb 19 2021 Andrii Verbytskyi 4.2.1
++ Initial spec file fro 4.2.1
+* Sat Sep 23 2017 Andrii Verbytskyi 4.2
++ Initial spec file
+* Thu May 26 2016 Andrii Verbytskyi 4.1
++ Initial spec file
+

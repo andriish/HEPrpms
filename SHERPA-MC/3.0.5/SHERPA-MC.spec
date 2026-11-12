@@ -10,8 +10,8 @@
 
 
 Name:             SHERPA-MC
-Version:          3.0.4
-Release:          2%{?dist}
+Version:          3.0.5
+Release:          1%{?dist}
 License:          GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://gitlab.com/sherpa-team/sherpa/-/archive/v%{version}/sherpa-v%{version}.tar.gz
@@ -141,7 +141,8 @@ This package provides the Python 2 bindings for %{name}-openmpi
 %prep
 %setup -q -n sherpa-v%{version}
 %patch -P 0 -p1
-
+sed -i 's/PyString/PyUnicode/g' AddOns/Python/Exception.i
+sed -i 's/PyInt_FromLong/PyLong_FromLong/g' AddOns/Python/MEProcess.i
 %build
 # Build serial version, dummy arguments
 
@@ -312,6 +313,8 @@ export QA_RPATHS=3
 %endif
 
 %changelog
+* Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Update to 3.0.5; port patch (only the Threads link fix is still needed)
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 - Update to 3.0.3
 * Mon Nov 29 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
