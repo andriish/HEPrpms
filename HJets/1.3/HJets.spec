@@ -1,9 +1,9 @@
 Name:           HJets
 Version:        1.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPL
 Url:            http://HJets.hepforge.org/
-Source0:        https://hjets.hepforge.org/downloads/HJets-%{version}.tar.gz
+Source0:        https://hjets.hepforge.org/downloads/?f=HJets-%{version}.tar.gz
 Summary:        HJets is a tool for calculating electroweak cross sections for Higgs plus up to three jets at NLO in QCD. 
 BuildRequires:   gcc-c++ Herwig Herwig-devel ThePEG ThePEG-devel gsl gsl-devel  boost-devel zlib zlib-devel
 %if 0%{?rhel} || 0%{?fedora}
@@ -37,6 +37,8 @@ make %{?_smp_mflags}
 %{_includedir}/HJets/*
 
 %changelog
+* Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 1.3-3
+- New download URL (downloads/?f=); upstream re-rolled the 1.3 tarball
 * Wed Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 1.3
 - Update to 1.3
 * Mon Feb  3 2014 Andrii Verbytskyi 1.0.4
