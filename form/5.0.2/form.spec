@@ -8,9 +8,10 @@ Source0:        https://github.com/vermaseren/form/releases/download/v%{version}
 Summary:        The FORM project for symbolic manipulation of very big expressions
 BuildRequires:  autoconf automake libtool  gcc-c++ doxygen 
 %if 0%{?rhel} || 0%{?fedora}
-BuildRequires:  gcc-gfortran gmp-devel zlib-devel
+BuildRequires:  gcc-gfortran gmp-devel mpfr-devel zlib-devel
 %endif
 %if 0%{?suse_version}
+BuildRequires:  gmp-devel mpfr-devel zlib-devel
 BuildRequires:  gcc-fortran texlive-tex4ht texlive-helvetic texlive-wasy texlive-courier texlive-filesystem texlive-changepage
 %endif
 BuildRequires:  tex(latex) ghostscript 
@@ -99,6 +100,7 @@ make %{?_smp_mflags} -C doc html
 %changelog
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Update to 5.0.2
+- Add mpfr-devel (needed by the float feature)
 * Thu Nov 2 2023 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 - Update to 4.3.1
 - Update to 4.3.1
