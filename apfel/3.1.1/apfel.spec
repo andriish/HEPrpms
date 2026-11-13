@@ -79,12 +79,12 @@ pathfix.py -pn -i %{__python3}  bin/apfel.in
 %{_docdir}/*
 %endif
 %if 0%{?suse_version}
-/usr/share/APFEL/*
-/usr/share/doc/packages/apfel/*
+/usr/share/APFEL
+/usr/share/doc/packages/apfel
 %endif
 
 %files devel
-%{_includedir}/APFEL/*
+%{_includedir}/APFEL
 
 %files -n python%{python3_pkgversion}-%{name}
 %{python3_sitearch}/*

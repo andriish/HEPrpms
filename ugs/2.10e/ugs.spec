@@ -62,8 +62,10 @@ make
 %install
 mkdir -p $RPM_BUILD_ROOT/usr/%_lib
 cp -a ugs.a $RPM_BUILD_ROOT/usr/%_lib/libugs.a
-
-%clean
+%if 0%{?suse_version}
+# the test programs are packaged as documentation, they must not be executable
+chmod 644 test/tryps test/trytek test/tryxw
+%endif
 
 %files
 %defattr(-,root,root)

@@ -58,7 +58,7 @@ ldconfig
 %_libdir/*
 
 %files devel
-%_includedir/fastjet/contrib/*
+%_includedir/fastjet/contrib
 
 
 %changelog

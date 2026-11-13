@@ -32,6 +32,8 @@ RPMLINT_FILTERS=(
   devel-file-in-non-devel-package   # static libraries and headers in the main package, as in the Fedora/EPEL layout
   lto-no-text-in-archive            # static libraries built with LTO but without fat objects
   static-library-without-debuginfo  # static libraries without debug info
+  explicit-lib-dependency           # explicit library Requires: kept as in the Fedora/EPEL spec files
+  arch-dependent-file-in-usr-share  # binaries in the documentation directories
 )
 DRYRUN=0
 PACKAGE=

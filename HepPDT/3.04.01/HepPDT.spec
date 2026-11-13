@@ -1,5 +1,5 @@
 %if 0%{?suse_version}
-%define _pkgdocdir %{buildroot}%{_docdir}/%{name}
+%define _pkgdocdir %{_docdir}/%{name}
 %endif
 Name:		HepPDT
 Version:	3.04.01
@@ -61,7 +61,6 @@ mv %{buildroot}/usr/data %{buildroot}%{_datadir}/%{name}/
 %{_includedir}/HepPID
 
 %files doc
-%dir %{_pkgdocdir}
 %dir  %{_datadir}/%{name}/
 %{_datadir}/%{name}/*
 %doc %{_pkgdocdir}/
