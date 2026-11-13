@@ -1,0 +1,203 @@
+diff -Naur ORIG/analyze/ANALYZE.C PATCHED/analyze/ANALYZE.C
+--- ORIG/analyze/ANALYZE.C	2026-01-16 09:04:26.311191441 +0100
++++ PATCHED/analyze/ANALYZE.C	2026-01-16 09:04:26.312012276 +0100
+@@ -1,3 +1,21 @@
++#include "TObjArray.h"
++#include "TList.h"
++#include "GenerationDescription.H"
++#include "TFile.h"
++#include "TH1.h"
++#include "TKey.h"
++#include "TDecayMode.H"
++#include "TDecayResult.H"
++#include "TInterpreter.h"
++#include "HEPParticle.H"
++#include <iostream>
++using namespace std;
++void ReadResults(TFile *f, TList &a,TObjArray &user_histos,int generator);
++void ProcessModes(TObjArray &modes1, TObjArray &modes2 , TFile *outfile);
++void ProcessUserHistos(TObjArray &histos1, TObjArray &histos2 , TFile *outfile);
++void ANALYZE(TString work_dir,TString path1, TString path2 );
++void LaTeXOut(TString work_dir);
++
+ TObjArray results1;
+ TObjArray results2;
+ 
+@@ -109,7 +127,7 @@
+ 
+ 
+     TIter next2(&tmp_results2);
+-    TDecayMode *m=0;
++    m=0;
+     while (m=(TDecayMode*)next2()) {
+     
+ 	TDecayMode *m2 = (TDecayMode*) tmp_results1.FindObject(m->GetName());
+@@ -350,8 +368,8 @@
+ 	    }
+ 	    char name[128];
+ 	    char title[128];
+-	    char *hname=h1->GetName();
+-	    char *htitle=h1->GetTitle();
++	    const char *hname=h1->GetName();
++	    const char *htitle=h1->GetTitle();
+ 	    sprintf(name,"%s",hname);
+ 	    sprintf(title,"Comparison of %s",htitle);
+ 
+@@ -458,8 +476,8 @@
+     TDirectory *histdir=subdir->mkdir("histograms");
+     
+     for (int i=0; i<histos1.GetEntries();i++) {
+-	TH1D *h1=histos1[i];
+-	TH1D *h2=histos2.FindObject(h1->GetName());
++	TH1D *h1=(TH1D*)histos1[i];
++	TH1D *h2=(TH1D*)histos2.FindObject(h1->GetName());
+     
+ 	if (!h2) {
+ 	    printf("histo2 not found...\n");
+@@ -641,7 +659,7 @@
+ 
+ 
+ 	char ver2[4096];
+-	TString resv=Setup::ResolvePath(Setup::gen2_path,ver2);   //fix for dir with "_" character
++	resv=Setup::ResolvePath(Setup::gen2_path,ver2);   //fix for dir with "_" character
+ 	if (resv) fprintf(fRES,"\\item{From directory:} \\\\ {\\tt %s}\n",(const char *)resv.ReplaceAll("_","\\_"));
+ 	strcat(ver2,"/version");
+ 	FILE *fVer2=fopen(ver2,"r");
+@@ -734,11 +752,11 @@
+ 
+ 
+ 
+-    TIter next1(&results1);
+-    TIter next2(&results2);
++    TIter nextA1(&results1);
++    TIter nextA2(&results2);
+     TString mode_label;
+ 
+-    while ( (m1=(TDecayMode*)next1()) && (m2=(TDecayMode*)next2()) ) {
++    while ( (m1=(TDecayMode*)nextA1()) && (m2=(TDecayMode*)nextA2()) ) {
+ 
+ 	double error1=0.0;
+ 	double error2=0.0;
+diff -Naur ORIG/analyze/BOOKLET.C PATCHED/analyze/BOOKLET.C
+--- ORIG/analyze/BOOKLET.C	2026-01-16 09:04:26.311670999 +0100
++++ PATCHED/analyze/BOOKLET.C	2026-01-16 09:04:26.312299797 +0100
+@@ -1,3 +1,13 @@
++#include "TFile.h"
++#include "TKey.h"
++#include "TSystem.h"
++#include "TROOT.h"
++#include "TDecayResult.H"
++#include <iostream>
++using namespace std;
++void BOOKLET(TString work_dir);
++
++
+ void BOOKLET()
+ {
+   BOOKLET(".");
+diff -Naur ORIG/configure.in PATCHED/configure.in
+--- ORIG/configure.in	2026-01-16 09:04:26.311670999 +0100
++++ PATCHED/configure.in	2026-01-16 09:04:26.312299797 +0100
+@@ -173,6 +173,7 @@
+ ROOTLIBPATH=`root-config --libdir`
+ 
+ AC_SUBST(prefix)
++AC_SUBST(docdir)
+ AC_SUBST(with_HepMC)
+ AC_SUBST(with_HepMC3)
+ AC_SUBST(with_Pythia8)
+diff -Naur ORIG/HEPEvent/Makefile PATCHED/HEPEvent/Makefile
+--- ORIG/HEPEvent/Makefile	2026-01-16 09:04:26.311191441 +0100
++++ PATCHED/HEPEvent/Makefile	2026-01-16 09:04:26.312012276 +0100
+@@ -73,6 +73,7 @@
+ 
+ $(LIB): $(LIB_OBJ)
+ 	$(LD) $(LDFLAGS) $(SOFLAGS) -o $(LIB) $(LIB_OBJ) -L$(ROOTLIBPATH) -lCore $(LCINT)
++	if [ -f $(DICT_SRC:.cxx=_rdict.pcm) -a -d $(LIB_DIR) ]; then cp -a $(DICT_SRC:.cxx=_rdict.pcm) $(LIB_DIR); fi
+ 
+ $(LIB_A): $(LIB_OBJ)
+ 	ar cr $(LIB_A) $(LIB_OBJ)
+diff -Naur ORIG/HepMC3Event/Makefile PATCHED/HepMC3Event/Makefile
+--- ORIG/HepMC3Event/Makefile	2026-01-16 09:04:26.311191441 +0100
++++ PATCHED/HepMC3Event/Makefile	2026-01-16 09:04:26.312012276 +0100
+@@ -49,6 +49,7 @@
+ 
+ $(LIB): $(LIB_OBJ)
+ 	$(LD)  $(SOFLAGS) -o $(LIB) $(LIB_OBJ) -L$(ROOTLIBPATH) -lCore $(LCINT) -L$(CURDIR)/../lib -lHEPEvent
++	if [ -f $(DICT3_SRC:.cxx=_rdict.pcm) -a -d $(LIB_DIR) ]; then cp -a $(DICT3_SRC:.cxx=_rdict.pcm) $(LIB_DIR); fi
+ 
+ $(LIB_A): $(LIB_OBJ)
+ 	ar cr $(LIB_A) $(LIB_OBJ)
+diff -Naur ORIG/HepMCEvent/Makefile PATCHED/HepMCEvent/Makefile
+--- ORIG/HepMCEvent/Makefile	2026-01-16 09:04:26.311191441 +0100
++++ PATCHED/HepMCEvent/Makefile	2026-01-16 09:04:26.312012276 +0100
+@@ -49,6 +49,7 @@
+ 
+ $(LIB): $(LIB_OBJ)
+ 	$(LD) $(LDFLAGS) $(SOFLAGS) -o $(LIB) $(LIB_OBJ) -L$(ROOTLIBPATH) -lCore $(LCINT) -L$(CURDIR)/../lib -lHEPEvent
++	if [ -f $(DICT_SRC:.cxx=_rdict.pcm) -a -d $(LIB_DIR) ]; then cp -a $(DICT_SRC:.cxx=_rdict.pcm) $(LIB_DIR); fi
+ 
+ $(LIB_A): $(LIB_OBJ)
+ 	ar cr $(LIB_A) $(LIB_OBJ)
+diff -Naur ORIG/Makefile PATCHED/Makefile
+--- ORIG/Makefile	2026-01-16 09:04:26.311191441 +0100
++++ PATCHED/Makefile	2026-01-16 09:04:26.312012276 +0100
+@@ -31,10 +31,26 @@
+ 	@echo "HepMC3 interface library libHepMC3Event created."
+ endif
+ install:
+-	mkdir -p  $(DESTDIR)/$(PREFIX)/include
+-	cp include/*  $(DESTDIR)/$(PREFIX)/include/.
++	mkdir -p  $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp include/*  $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
+ 	mkdir -p  $(DESTDIR)$(LIBDIR)/
+ 	cp lib/*  $(DESTDIR)$(LIBDIR)/
++	mkdir -p  $(DESTDIR)$(PREFIX)/share/doc/MC-TESTER/
++	cp -r analyze $(DESTDIR)$(PREFIX)/share/doc/MC-TESTER/
++	cp src/GenerationDescription.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/TDecayMode.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/TDecayResult.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/TUserAnalysis.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/UserEventAnalysis.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/UserTreeAnalysis.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/Generate.h $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/MCTester-F77.h $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/MCTesterEvent.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/MCTest01.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/MCTest02.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/MCTest03.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++	cp src/MCTest04.H $(DESTDIR)/$(PREFIX)/include/MC-TESTER/
++
+ 
+ make.inc:
+ 	@echo ""
+diff -Naur ORIG/src/Generate.cxx PATCHED/src/Generate.cxx
+--- ORIG/src/Generate.cxx	2026-01-16 09:04:26.311670999 +0100
++++ PATCHED/src/Generate.cxx	2026-01-16 09:04:26.312299797 +0100
+@@ -122,10 +122,11 @@
+         bufline += Setup::UserTreeAnalysis;
+         bufline += ".C+";
+         gSystem->AddIncludePath("-I${MCTESTERLOCATION}/include/");
+-        gSystem->AddLinkedLibs("${MCTESTERLOCATION}/lib/libMCTester.so");
+-        gSystem->AddLinkedLibs("${MCTESTERLOCATION}/lib/libHEPEvent.so");
+-        gSystem->AddLinkedLibs("${MCTESTERLOCATION}/lib/libHepMCEvent.so");
+-        gSystem->AddLinkedLibs("-L${HEPMCLOCATION}/lib -lHepMC");
++        gSystem->AddLinkedLibs("-L${MCTESTERLOCATIONLIB} -lMCTester");
++        gSystem->AddLinkedLibs("-L${MCTESTERLOCATIONLIB} -lHEPEvent");
++        gSystem->AddLinkedLibs("-L${MCTESTERLOCATIONLIB}  -lHepMCEvent");
++        gSystem->AddLinkedLibs("-L${HEPMCLOCATIONLIB}  -lHepMC");
++        gSystem->AddLinkedLibs("-L${HEPMC3LOCATIONLIB} -lHepMC3");
+         gROOT->ProcessLine(bufline.c_str());
+ 
+         userTreeAnalysis=new TMethodCall(Setup::UserTreeAnalysis,
+diff -Naur ORIG/src/Makefile PATCHED/src/Makefile
+--- ORIG/src/Makefile	2026-01-16 09:04:26.311968519 +0100
++++ PATCHED/src/Makefile	2026-01-16 09:04:26.312515866 +0100
+@@ -54,6 +54,7 @@
+ 
+ $(LIB): $(LIB_OBJ)
+ 	$(LD) $(LDFLAGS) $(SOFLAGS) -o $(LIB) $(LIB_OBJ) -L$(ROOTLIBPATH) -lCore $(LCINT) -lHist -lGpad -lGraf -lRIO -L$(CURDIR)/../lib -lHEPEvent
++	if [ -f $(DICT_SRC:.cxx=_rdict.pcm) -a -d $(LIB_DIR) ]; then cp -a $(DICT_SRC:.cxx=_rdict.pcm) $(LIB_DIR); fi
+ 
+ $(LIB_A): $(LIB_OBJ)
+ 	ar cr $(LIB_A) $(LIB_OBJ) 

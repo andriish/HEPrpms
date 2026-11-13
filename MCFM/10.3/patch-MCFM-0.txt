@@ -1,0 +1,64 @@
+diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
+--- ORIG/CMakeLists.txt	2026-01-16 09:04:26.313781004 +0100
++++ PATCHED/CMakeLists.txt	2026-01-26 10:02:56.934443162 +0100
+@@ -1,6 +1,7 @@
+ cmake_minimum_required (VERSION 3.13)
+ enable_language(Fortran)
+ project (mcfm C CXX Fortran)
++include("GNUInstallDirs")
+ 
+ if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -cpp -finit-local-zero -ffixed-line-length-none -ffree-line-length-512 -fopenmp -ffpe-summary=none")
+@@ -63,7 +64,7 @@
+     SOURCE_DIR ${CMAKE_BINARY_DIR}/lib/qcdloop-2.0.9
+     BUILD_IN_SOURCE ON
+     PATCH_COMMAND mkdir -p ${CMAKE_BINARY_DIR}/local
+-    CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DENABLE_FORTRAN_WRAPPER=ON -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/local -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_INSTALL_LIBDIR=lib
++    CMAKE_ARGS  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DENABLE_FORTRAN_WRAPPER=ON -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/local -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_INSTALL_LIBDIR=lib
+     BUILD_COMMAND ${MAKE}
+     INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
+ )
+@@ -73,7 +74,7 @@
+     PREFIX ${CMAKE_BINARY_DIR}/lib/oneloop
+     SOURCE_DIR ${CMAKE_BINARY_DIR}/lib/oneloop
+     BUILD_IN_SOURCE ON
+-    CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_Fortran_COMPILER=${CMAKE_Fortran_COMPILER} -DCMAKE_Fortran_FLAGS=-fPIC
++    CMAKE_ARGS -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_Fortran_COMPILER=${CMAKE_Fortran_COMPILER} -DCMAKE_Fortran_FLAGS=-fPIC
+     BUILD_COMMAND ${MAKE}
+     INSTALL_COMMAND mkdir -p ${CMAKE_BINARY_DIR}/local/include && cp ${CMAKE_BINARY_DIR}/lib/oneloop/avh_olo.mod ${CMAKE_BINARY_DIR}/local/include 
+ )
+@@ -99,6 +100,7 @@
+ 
+ option(with_vvamp "Build with VVAmp for WW,WZ and ZZ processes" ON)
+ 
++include_directories(${CMAKE_BINARY_DIR}/local/include/qd ${CMAKE_BINARY_DIR}/local/include)
+ string(ASCII 27 Esc)
+ set(BoldRed "${Esc}[1;31m")
+ set(ColorReset "${Esc}[m")
+@@ -167,6 +169,7 @@
+        target_include_directories(mltest2 PRIVATE src/Inc)
+        target_compile_definitions(mltest2 PUBLIC LIB_SUFFIX="${CMAKE_SHARED_LIBRARY_SUFFIX}")
+     endif()
++    install(TARGETS libmcfm DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ endif()
+ 
+ add_subdirectory(src)
+@@ -334,10 +337,14 @@
+ 
+ ## Installation
+ 
+-install(FILES "${CMAKE_SOURCE_DIR}/Bin/process.DAT" DESTINATION "${CMAKE_BINARY_DIR}")
+-install(FILES "${CMAKE_SOURCE_DIR}/Bin/br.sm1" DESTINATION "${CMAKE_BINARY_DIR}")
+-install(FILES "${CMAKE_SOURCE_DIR}/Bin/br.sm2" DESTINATION "${CMAKE_BINARY_DIR}")
+-install(DIRECTORY "${CMAKE_SOURCE_DIR}/Bin/PDFs" DESTINATION "${CMAKE_BINARY_DIR}")
++install(TARGETS mcfm DESTINATION ${CMAKE_INSTALL_BINDIR})
++install(FILES "${CMAKE_SOURCE_DIR}/Bin/process.DAT" DESTINATION ${CMAKE_INSTALL_BINDIR})
++install(FILES "${CMAKE_SOURCE_DIR}/Bin/br.sm1" DESTINATION ${CMAKE_INSTALL_BINDIR})
++install(FILES "${CMAKE_SOURCE_DIR}/Bin/br.sm2" DESTINATION ${CMAKE_INSTALL_BINDIR})
++install(DIRECTORY "${CMAKE_SOURCE_DIR}/src/Inc/MCFM" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++if(use_internal_lhapdf)
++  install(DIRECTORY "${CMAKE_SOURCE_DIR}/Bin/PDFs" DESTINATION "${CMAKE_BINARY_DIR}")
++endif()
+ 
+ if(${with_library})
+     if ((DEFINED OLDIR) OR (DEFINED RCLDIR) OR (DEFINED MLDIR))

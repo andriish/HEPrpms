@@ -1,0 +1,21 @@
+diff -Naur ORIG/configure.in PATCHED/configure.in
+--- ORIG/configure.in	2026-01-16 09:04:26.322557059 +0100
++++ PATCHED/configure.in	2026-01-16 09:04:26.322557059 +0100
+@@ -63,13 +63,13 @@
+   [AS_HELP_STRING([--enable-debug],[Enable debug flags])],
+   [
+     AC_MSG_RESULT([$enable_debug]) ;
+-    FFLAGS="-g3 -O0" ;
+-    CXXFLAGS="-g3 -O0"
++    FFLAGS="$FFLAGS -g3 -O0" ;
++    CXXFLAGS="$CXXFLAGS -g3 -O0"
+   ],
+   [
+     AC_MSG_RESULT([no]) ;
+-    FFLAGS="-O2" ;
+-    CXXFLAGS="-O2"
++    FFLAGS="$FFLAGS" ;
++    CXXFLAGS="$CXXFLAGS"
+   ]
+ )
+ 

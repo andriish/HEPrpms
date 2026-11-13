@@ -1,0 +1,12 @@
+diff -Naur ORIG/cmake/Modules/PTLPackageConfigHelpers.cmake PATCHED/cmake/Modules/PTLPackageConfigHelpers.cmake
+--- ORIG/cmake/Modules/PTLPackageConfigHelpers.cmake	2026-01-16 09:04:26.323055016 +0100
++++ PATCHED/cmake/Modules/PTLPackageConfigHelpers.cmake	2026-01-16 09:04:26.323181860 +0100
+@@ -63,7 +63,7 @@
+ 
+ if(PTL_USE_TBB)
+     # Left as exact until we know version/soversions for TBB better
+-    set(PTL_PC_TBB_REQUIREMENT "tbb = ${TBB_VERSION}")
++    set(PTL_PC_TBB_REQUIREMENT "tbb")
+ endif()
+ 
+ configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/ptl.pc.in

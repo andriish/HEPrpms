@@ -1,0 +1,113 @@
+diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
+--- ORIG/CMakeLists.txt	2023-12-09 09:30:34.000000000 +0100
++++ PATCHED/CMakeLists.txt	2026-04-14 19:43:09.584510598 +0200
+@@ -1,10 +1,12 @@
+ # BASIC DEFINITIONS ====================================================
+ 
+ # define minimum version of cmake
+-cmake_minimum_required (VERSION 3.15)
++cmake_minimum_required(VERSION 3.15...4.0)
+ 
+ cmake_policy(SET CMP0086 OLD)
+ cmake_policy(SET CMP0078 OLD)
++cmake_policy(SET CMP0169 OLD)
++
+ 
+ # define project name, version and its languages
+ project(apfel LANGUAGES C CXX Fortran)
+@@ -85,23 +87,29 @@
+   endif()
+ endif()
+ if (LHAPDF_CONFIG AND APFEL_ENABLE_LHAPDF)
+-  exec_program(${LHAPDF_CONFIG}
+-    ARGS --cxxflags
++  execute_process(
++    COMMAND ${LHAPDF_CONFIG} --cxxflags
+     OUTPUT_VARIABLE LHAPDF_CXX_FLAGS
++    OUTPUT_STRIP_TRAILING_WHITESPACE
+   )
+-  set(LHAPDF_CXX_FLAGS ${LHAPDF_CXX_FLAGS} CACHE STRING INTERNAL)
+-  exec_program(${LHAPDF_CONFIG}
+-    ARGS --libdir
++  set(LHAPDF_CXX_FLAGS "${LHAPDF_CXX_FLAGS}" CACHE STRING INTERNAL)
++
++  execute_process(
++    COMMAND ${LHAPDF_CONFIG} --libdir
+     OUTPUT_VARIABLE LHAPDF_LIBDIR
++    OUTPUT_STRIP_TRAILING_WHITESPACE
+   )
++
+   find_library(LHAPDF_LIBRARY NAMES LHAPDF PATHS ${LHAPDF_LIBDIR})
+-  set(LHAPDF_LIBRARIES ${LHAPDF_LIBRARY} CACHE STRING INTERNAL)
++  set(LHAPDF_LIBRARIES "${LHAPDF_LIBRARY}" CACHE STRING INTERNAL)
+ 
+-  exec_program(${LHAPDF_CONFIG}
+-    ARGS --incdir
++  execute_process(
++    COMMAND ${LHAPDF_CONFIG} --incdir
+     OUTPUT_VARIABLE LHAPDF_INCLUDE_DIRS
++    OUTPUT_STRIP_TRAILING_WHITESPACE
+   )
+-  set(LHAPDF_INCLUDE_DIRS ${LHAPDF_INCLUDE_DIRS} CACHE STRING INTERNAL)
++  set(LHAPDF_INCLUDE_DIRS "${LHAPDF_INCLUDE_DIRS}" CACHE STRING INTERNAL)
++
+   message(STATUS "APFEL: LHAPDF_INCLUDE_DIRS=${LHAPDF_INCLUDE_DIRS} LHAPDF_LIBRARIES=${LHAPDF_LIBRARIES}")
+ else()
+   add_compile_definitions(NOLHAPDF)
+@@ -199,9 +207,9 @@
+ 
+ ## Include directories #################################################
+ 
+-include_directories(${PROJECT_SOURCE_DIR}/include)
+-include_directories(${PROJECT_BINARY_DIR}/include)
+-include_directories(${PROJECT_SOURCE_DIR}/src)
++#include_directories(${PROJECT_SOURCE_DIR}/include)
++#include_directories(${PROJECT_BINARY_DIR}/include)
++#include_directories(${PROJECT_SOURCE_DIR}/src)
+ 
+ 
+ 
+@@ -213,7 +221,9 @@
+ 
+ # Shared libraries  ####################################################
+ add_library(APFEL SHARED ${libAPFELCCWrapObs_la_SOURCES} ${libAPFELCCWrapEvol_la_SOURCES} ${libAPFELCore_la_SOURCES})
+-target_include_directories(APFEL PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>  ${LHAPDF_INCLUDE_DIRS})
++target_include_directories(APFEL PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src> 
++                                        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include> 
++                                        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>  ${LHAPDF_INCLUDE_DIRS})
+ target_link_libraries(APFEL ${LHAPDF_LIBRARIES})
+ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+   target_link_options(APFEL PRIVATE "LINKER:-z,defs")
+@@ -230,7 +240,9 @@
+ add_library(APFEL::APFEL ALIAS APFEL)
+ 
+ add_library(APFELevol SHARED ${libAPFELCCWrapEvol_la_SOURCES} ${libAPFELevol_la_SOURCES})
+-target_include_directories(APFELevol PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>  ${LHAPDF_INCLUDE_DIRS})
++target_include_directories(APFELevol PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src> 
++                                        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include> 
++                                        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>  ${LHAPDF_INCLUDE_DIRS})
+ target_link_libraries(APFELevol ${LHAPDF_LIBRARIES} APFEL)
+ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+   target_link_options(APFELevol PRIVATE "LINKER:-z,defs")
+@@ -248,7 +260,9 @@
+ 
+ # Static libraries  ####################################################
+ add_library(APFEL_static STATIC ${libAPFELCCWrapObs_la_SOURCES} ${libAPFELCCWrapEvol_la_SOURCES} ${libAPFELCore_la_SOURCES})
+-target_include_directories(APFEL_static PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>  ${LHAPDF_INCLUDE_DIRS})
++target_include_directories(APFEL_static PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src> 
++                                        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include> 
++                                        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>  ${LHAPDF_INCLUDE_DIRS})
+ target_link_libraries(APFEL_static ${LHAPDF_LIBRARIES})
+ target_compile_features(APFEL_static PRIVATE cxx_std_11)
+ set_target_properties(APFEL_static PROPERTIES 
+@@ -260,7 +274,9 @@
+     )
+ 
+ add_library(APFELevol_static STATIC ${libAPFELCCWrapEvol_la_SOURCES} ${libAPFELevol_la_SOURCES})
+-target_include_directories(APFELevol_static PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>  ${LHAPDF_INCLUDE_DIRS})
++target_include_directories(APFELevol_static PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src> 
++                                        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include> 
++                                        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>  ${LHAPDF_INCLUDE_DIRS})
+ target_link_libraries(APFELevol_static ${LHAPDF_LIBRARIES})
+ target_compile_features(APFELevol_static PRIVATE cxx_std_11)
+ set_target_properties(APFELevol_static PROPERTIES 

@@ -1,0 +1,63 @@
+--- ORIG/src/tree2.cc	2026-01-16 09:04:26.354041416 +0100
++++ PATCHED/src/tree2.cc	2026-01-16 09:04:26.355482040 +0100
+@@ -371,7 +371,6 @@
+ C KnownGluonMPPM(momentum_configuration<R>& k,int ref0,
+                  int i1, int i2, int i3, int i4);
+ 
+-template <class T> momentum<complex<T> > GenerateMomentum(const T& dummy);
+ 
+ vector<int> Join(const vector<int>& v1, const vector<int>& v2,
+                  const vector<int>& v3, const vector<int>& v4);
+@@ -743,6 +742,10 @@
+    current; only include direct coupling of the vectors to the specified
+    quark flavors.  For the moment, support only a single vector
+ */
++template <> BH::momentum<std::complex<double> > BH::Tree::GenerateMomentum<double>(  double const &  dummy) { return GenerateMomentum<double>(dummy); }
++template <> BH::momentum<std::complex<dd_real> > BH::Tree::GenerateMomentum<dd_real>( dd_real const &  dummy) { return GenerateMomentum<dd_real>(dummy); }
++
++
+ template<class T> complex<T>
+   Aosrr(momentum_configuration<T>& k,
+         const vector<int>& arg /* indices of arguments */,
+--- ORIG/src/tree3.cc	2026-01-16 09:04:26.354041416 +0100
++++ PATCHED/src/tree3.cc	2026-01-16 09:04:26.355482040 +0100
+@@ -27,15 +27,19 @@
+ #include <math.h>
+ 
+ 
++
++
+ #define BaseIndex 0 // [0] index not used in arg, helicity, or id.
+ 
+ #define isnt !=
+ #define is ==
+ 
++
+ namespace BH {
+ #undef MomentumConfiguration
+ #define MomentumConfiguration momentum_configuration<R>
+ 
++
+ #if 0
+ template<class T> inline T Max(T x,T y) {return (x > y ? x : y);}
+ inline bool IsOdd(int i) {return(i&1);}
+@@ -133,6 +137,7 @@
+ namespace Tree {
+ #include "zero.h"
+ 
++
+   int S1 = 1, S2 = 1, S3 = 1, S4 = 1, S5 = 1, S6 = 1, Sv = 1, Sv2 = 1, Sp = 1;
+   void SetCSigns(int s1, int s2, int s3, int s4, int s5, int s6, int sv,
+                  int sv2,
+@@ -861,6 +866,11 @@
+    but only of the extra L or R helicities.
+ 
+ */
++
++//template <> BH::momentum<std::complex<double> > BH::Tree::GenerateMomentum<double>(  double const &  dummy) { return GenerateMomentum<double>(dummy); }
++//template <> BH::momentum<std::complex<dd_real> > BH::Tree::GenerateMomentum<dd_real>( dd_real const &  dummy) { return GenerateMomentum<dd_real>(dummy); }
++
++
+ #define DebugSigns 0
+ template<class T> complex<T>
+  Jc(momentum_configuration<T>& k,

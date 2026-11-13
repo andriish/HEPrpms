@@ -1,0 +1,126 @@
+diff -Naur ORIG/misc/exit.c PATCHED/misc/exit.c
+--- ORIG/misc/exit.c	2026-01-16 09:04:26.441957643 +0100
++++ PATCHED/misc/exit.c	2026-01-16 09:04:26.442488280 +0100
+@@ -1,7 +1,7 @@
+-#include <f2c.h>
+ 
+-int exit_(status)
+-integer *status;
++#include <stdlib.h>
++#include <f2c.h>
++int exit_(integer *status)
+ {
+   exit(*status);
+ }
+diff -Naur ORIG/misc/fdate.c PATCHED/misc/fdate.c
+--- ORIG/misc/fdate.c	2026-01-16 09:04:26.442019075 +0100
++++ PATCHED/misc/fdate.c	2026-01-16 09:04:26.442542239 +0100
+@@ -1,5 +1,6 @@
+ #include <time.h>
+ #include <f2c.h>
++int s_copy(char *a, const char *b, ftnlen la, ftnlen lb);
+ 
+ VOID fdate_(ret_val, ret_val_len)
+ char *ret_val;
+diff -Naur ORIG/misc/time.c PATCHED/misc/time.c
+--- ORIG/misc/time.c	2026-01-16 09:04:26.442019075 +0100
++++ PATCHED/misc/time.c	2026-01-16 09:04:26.442542239 +0100
+@@ -13,7 +13,7 @@
+ integer *stime;
+ {
+     int s_copy();
+-    s_copy(ret_val, ctime(stime), 24L, 24L);
++    s_copy(ret_val, ctime((const time_t *)stime), 24L, 24L);
+     return ;
+ }
+ 
+@@ -22,7 +22,7 @@
+ integer *tarray;
+ {
+   struct tm *tp;
+-  tp = localtime(stime);
++  tp = localtime((const time_t *)stime);
+   tarray[0] = tp -> tm_sec;
+   tarray[1] = tp -> tm_min;
+   tarray[2] = tp -> tm_hour;
+@@ -39,7 +39,7 @@
+ integer *tarray;
+ {
+   struct tm *tp;
+-  tp = localtime(stime);
++  tp = localtime((const time_t *)stime);
+   tarray[0] = tp -> tm_sec;
+   tarray[1] = tp -> tm_min;
+   tarray[2] = tp -> tm_hour;
+diff -Naur ORIG/src/help_.c PATCHED/src/help_.c
+--- ORIG/src/help_.c	2026-01-16 09:04:26.442019075 +0100
++++ PATCHED/src/help_.c	2026-01-16 09:04:26.442542239 +0100
+@@ -55,7 +55,9 @@
+  */
+ 
+ #include <stdio.h>
+-
++#include <stdlib.h>
++#include <string.h>
++/*
+ extern int strcmp();
+ extern int      strlen();
+ extern char *strcpy();
+@@ -65,6 +67,7 @@
+ extern char *getenv();
+ extern FILE *fopen();
+ extern char *malloc();
++*/
+ 
+ #include <errno.h>
+ extern int errno;
+@@ -214,7 +217,7 @@
+  * print a help message 
+  * also print available subtopics, if subtopics is TRUE
+  */
+-help0(keyword, path, subtopics)
++int help0(keyword, path, subtopics)
+ 	char *keyword;		/* on this topic */
+ 	char *path;			/* from this file */
+ 	boolean *subtopics;	/* (in) - subtopics only? */
+diff -Naur ORIG/src/readpr_.c PATCHED/src/readpr_.c
+--- ORIG/src/readpr_.c	2026-01-16 09:04:26.442247134 +0100
++++ PATCHED/src/readpr_.c	2026-01-16 09:04:26.442794113 +0100
+@@ -81,6 +81,7 @@
+ #include <stdio.h>
+ #include <ctype.h>
+ #include <signal.h>
++#include <stdlib.h>
+ 
+ #if !defined(MSDOS) && !defined(ATARI) && !defined(_Windows) && !defined(DOS386)
+ 
+@@ -258,9 +259,9 @@
+ /* This function provides a centralized non-destructive backspace capability */
+ /* M. Castro */
+ 
+-backspace()
++int backspace()
+ {
+-	user_putc(BACKSPACE);
++	return user_putc(BACKSPACE);
+ }
+ 	
+ char *
+@@ -1061,7 +1062,7 @@
+       }
+     } else {
+       /* normal line input */
+-      register        i = start;
++      register  int      i = start;
+       while ((input_line[i] = input_line[i + 2]) != (char) NULL)
+ 	i++;	/* yuck!  move everything down two characters */
+ 
+diff -Naur ORIG/src/readx_.c PATCHED/src/readx_.c
+--- ORIG/src/readx_.c	2026-01-16 09:04:26.442247134 +0100
++++ PATCHED/src/readx_.c	2026-01-16 09:04:26.442794113 +0100
+@@ -1,4 +1,5 @@
+ #include <stdio.h>
++#include <string.h>
+ 
+ #define gets(s) (fgets(s,sizeof(s),stdin)?s[strlen(s)-1]=0,s:NULL)
+ int readx_ ( char *s , int l )

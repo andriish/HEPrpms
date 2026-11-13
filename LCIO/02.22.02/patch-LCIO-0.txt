@@ -1,0 +1,11 @@
+diff -Naur ORIG/src/cpp/include/UTIL/CheckCollections.h PATCHED/src/cpp/include/UTIL/CheckCollections.h
+--- ORIG/src/cpp/include/UTIL/CheckCollections.h	2026-01-16 09:04:26.307705770 +0100
++++ PATCHED/src/cpp/include/UTIL/CheckCollections.h	2026-01-16 09:04:26.307851664 +0100
+@@ -6,6 +6,7 @@
+ #include <string>
+ #include <unordered_map>
+ #include <set>
++#include <cstdint>
+ 
+ namespace UTIL {
+ 

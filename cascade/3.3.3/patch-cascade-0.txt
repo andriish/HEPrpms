@@ -1,0 +1,125 @@
+diff -Naur ORIG/cmake/Modules/FindRivet.cmake PATCHED/cmake/Modules/FindRivet.cmake
+--- ORIG/cmake/Modules/FindRivet.cmake	2026-01-16 09:04:26.363859533 +0100
++++ PATCHED/cmake/Modules/FindRivet.cmake	2026-01-16 09:04:26.364065898 +0100
+@@ -24,11 +24,11 @@
+   endif()
+ endif()
+ if (RIVET_SEARCH_DIRS)
+-  find_path(RIVET_DATA_PATH ATLAS_2012_I1094061.yoda PATH_SUFFIXES share/Rivet/)
++  find_path(RIVET_DATA_PATH NAMES ATLAS_2012_I1094061.yoda ATLAS_2012_I1094061.yoda.gz PATH_SUFFIXES share/Rivet/)
+   find_path(RIVET_INCLUDE_DIR Rivet/Rivet.hh PATHS ${RIVET_SEARCH_DIRS} PATH_SUFFIXES include NO_DEFAULT_PATH)
+   find_library(RIVET_LIBRARY NAMES Rivet PATHS ${RIVET_SEARCH_DIRS}  PATH_SUFFIXES lib lib64 NO_DEFAULT_PATH)
+ else()
+-  find_path(RIVET_DATA_PATH ATLAS_2012_I1094061.yoda PATH_SUFFIXES share/Rivet/)
++  find_path(RIVET_DATA_PATH NAMES ATLAS_2012_I1094061.yoda ATLAS_2012_I1094061.yoda.gz PATH_SUFFIXES share/Rivet/)
+   find_path(RIVET_INCLUDE_DIR Rivet/Rivet.hh PATH_SUFFIXES include)
+   find_library(RIVET_LIBRARY NAMES Rivet PATHS_SUFFIXES lib lib64)
+ endif()
+@@ -40,7 +40,7 @@
+       string(REGEX MATCH "[1234567890\.]+[a-zA-Z]*" RIVET_VERSION ${RIVET_VERSION_STRING_CONTENT})
+     endif()
+     file(STRINGS ${RIVET_INCLUDE_DIR}/Rivet/Config/RivetConfig.hh RIVET_HEPMC_VERSION_STRING REGEX "^#define[ ]+RIVET_ENABLE_HEPMC_3[ ]+" )
+-    if (RIVET_HEPMC_VERSION_STRING)
++    if (RIVET_HEPMC_VERSION_STRING OR "${RIVET_VERSION}" VERSION_GREATER_EQUAL "4")
+       set(Rivet_HEPMC2_FOUND FALSE)
+       set(Rivet_HEPMC3_FOUND TRUE)
+     else()  
+diff -Naur ORIG/cmake/Modules/FindTMDLIB.cmake PATCHED/cmake/Modules/FindTMDLIB.cmake
+--- ORIG/cmake/Modules/FindTMDLIB.cmake	2026-04-11 01:07:58.692548928 +0200
++++ PATCHED/cmake/Modules/FindTMDLIB.cmake	2026-04-11 01:07:47.861382284 +0200
+@@ -23,11 +23,11 @@
+ endif()
+ 
+ if (TMDLIB_SEARCH_DIRS)
+-  find_path(TMDLIB_INCLUDE_DIR tmdlib/TMDlib.h PATHS ${TMDLIB_SEARCH_DIRS} PATH_SUFFIXES include NO_DEFAULT_PATH)
++  find_path(TMDLIB_INCLUDE_DIR tmdlib/TMDlib.h PATHS ${TMDLIB_SEARCH_DIRS} PATH_SUFFIXES include include/tmdlib NO_DEFAULT_PATH)
+   find_library(TMDLIB_TMDlib_LIBRARY NAMES TMDlib PATHS ${TMDLIB_SEARCH_DIRS}  PATH_SUFFIXES lib lib64 NO_DEFAULT_PATH)
+   find_library(TMDLIB_apfelxx_LIBRARY NAMES apfelxx PATHS ${TMDLIB_SEARCH_DIRS}  PATH_SUFFIXES lib lib64 NO_DEFAULT_PATH)
+ else()
+-  find_path(TMDLIB_INCLUDE_DIR tmdlib/TMDlib.h PATH_SUFFIXES include)
++  find_path(TMDLIB_INCLUDE_DIR tmdlib/TMDlib.h PATH_SUFFIXES include include/tmdlib)
+   find_library(TMDLIB_TMDlib_LIBRARY NAMES TMDlib PATHS_SUFFIXES lib lib64)
+   find_library(TMDLIB_apfelxx_LIBRARY NAMES apfelxx PATHS_SUFFIXES lib lib64)
+ endif()
+@@ -37,6 +37,11 @@
+   if (EXISTS ${TMDLIB_INCLUDE_DIR}/../bin/TMDlib-config)
+     file(STRINGS ${TMDLIB_INCLUDE_DIR}/../bin/TMDlib-config TMDLIB_VERSION_STRING_CONTENT REGEX "^test.*OUT [1234567890\.]*\"")
+     string(REGEX MATCH "[1234567890\.]+[a-zA-Z]*" TMDLIB_VERSION ${TMDLIB_VERSION_STRING_CONTENT})
++  else()
++  if (EXISTS ${TMDLIB_INCLUDE_DIR}/../../bin/TMDlib-config)
++    file(STRINGS ${TMDLIB_INCLUDE_DIR}/../../bin/TMDlib-config TMDLIB_VERSION_STRING_CONTENT REGEX "^test.*OUT [1234567890\.]*\"")
++    string(REGEX MATCH "[1234567890\.]+[a-zA-Z]*" TMDLIB_VERSION ${TMDLIB_VERSION_STRING_CONTENT})
++  endif()
+   endif()
+ endif()
+ 
+diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
+--- ORIG/CMakeLists.txt	2026-01-16 09:04:26.363731224 +0100
++++ PATCHED/CMakeLists.txt	2026-04-01 10:00:50.528467038 +0200
+@@ -1,11 +1,11 @@
+-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10...4.0)
+ ###########################Package@#####################################
+ project(cascade LANGUAGES C CXX Fortran )
+-set(PROJECT_VERSION 3.2.05)
+-SET(CASCADE_VERSION 3.2.05)
++set(PROJECT_VERSION 3.3.03)
++SET(CASCADE_VERSION 3.3.03)
+ SET(CASCADE_VERSION_MAJOR  3)
+-SET(CASCADE_VERSION_MINOR  2)
+-SET(CASCADE_VERSION_PATCH  5)
++SET(CASCADE_VERSION_MINOR  3)
++SET(CASCADE_VERSION_PATCH  3)
+ 
+ set(CMAKE_VERBOSE_MAKEFILE ON)
+ 
+@@ -68,7 +68,7 @@
+ message(STATUS "CASCADE: CXX_COMPILER_NAME=${CXX_COMPILER_NAME}  CMAKE_CXX_COMPILER_ID=${CMAKE_CXX_COMPILER_ID}")
+ get_filename_component (C_COMPILER_NAME ${CMAKE_C_COMPILER} NAME)
+ message(STATUS "CASCADE: C_COMPILER_NAME=${C_COMPILER_NAME}  CMAKE_C_COMPILER_ID=${CMAKE_C_COMPILER_ID}")
+-set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++1y")
++set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++1z")
+ if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+   set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} -fno-automatic -fno-backslash -ffixed-line-length-132 -std=legacy")
+ elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
+@@ -135,6 +135,10 @@
+     find_package(Rivet COMPONENTS HEPMC2 )
+   endif()
+   message(STATUS "CASCADE: RIVET_FOUND=${RIVET_FOUND} RIVET_VERSION=${RIVET_VERSION} RIVET_LIBRARIES=${RIVET_LIBRARIES} RIVET_INCLUDE_DIRS=${RIVET_INCLUDE_DIRS} RIVET_DATA_PATH=${RIVET_DATA_PATH} RIVET_ANALYSIS_PATH=${RIVET_ANALYSIS_PATH} Rivet_HEPMC2_FOUND=${Rivet_HEPMC2_FOUND}  Rivet_HEPMC3_FOUND=${Rivet_HEPMC3_FOUND}")
++  if ("${RIVET_VERSION}" VERSION_GREATER_EQUAL "4")
++    add_definitions(-DRIVET4)
++    add_definitions(-DRIVET_ENABLE_HEPMC_3)
++  endif()
+ endif()
+ 
+ if (NOT CASCADE_RIVET OR NOT RIVET_FOUND) 
+@@ -319,7 +323,7 @@
+ if (CASCADE_RIVET AND RIVET_FOUND)
+   target_include_directories(cascade PRIVATE  ${RIVET_INCLUDE_DIR}) 
+   target_link_libraries(cascade PRIVATE ${RIVET_LIBRARIES})
+-  target_compile_features(cascade PUBLIC cxx_std_14)
++  target_compile_features(cascade PUBLIC cxx_std_17)
+ endif()
+ 
+ if (CASCADE_PYTHIA8 AND Pythia8_FOUND)
+diff -Naur ORIG/src/RivetInterface.cc PATCHED/src/RivetInterface.cc
+--- ORIG/src/RivetInterface.cc	2026-01-16 09:04:26.363859533 +0100
++++ PATCHED/src/RivetInterface.cc	2026-01-16 09:04:26.364065898 +0100
+@@ -69,8 +69,16 @@
+     int rivet_init_(char* rname1) {
+         if ( rivet ) return 0;
+         rname=std::string(rname1);
++#if defined(RIVET_VERSION_CODE) && (RIVET_VERSION_CODE>=40100)        
++        rivet = new Rivet::AnalysisHandler();
++#else
+         rivet = new Rivet::AnalysisHandler(rname);
+-        rivet->setIgnoreBeams(igBeam);
++#endif        
++#ifdef RIVET4
++        rivet->setCheckBeams(!igBeam);
++#else
++         rivet->setIgnoreBeams(igBeam);
++#endif
+         Rivet::addAnalysisLibPath(".");
+         for (std::set<std::string>::iterator it = analyses.begin();
+                 it != analyses.end(); ++it) {

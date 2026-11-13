@@ -1,0 +1,31 @@
+diff -Naur ORIG/configure.ac PATCHED/configure.ac
+--- ORIG/configure.ac	2026-03-30 10:29:18.939418830 +0200
++++ PATCHED/configure.ac	2026-03-30 10:29:46.797124556 +0200
+@@ -38,7 +38,6 @@
+ AC_PROG_CPP
+ AC_PROG_F77([gfortran g77])
+ AC_PROG_FC([gfortran g77])
+-AC_CONFIG_MACRO_DIR([m4])
+ #case $FC in
+ #  gfortran) AC_SUBST([HAVE_GFORTRAN], [yes])
+ #  g77) AC_SUBST([HAVE_G77], [yes])
+diff -Naur ORIG/src/Makefile.am PATCHED/src/Makefile.am
+--- ORIG/src/Makefile.am	2021-05-10 18:27:38.000000000 +0200
++++ PATCHED/src/Makefile.am	2026-03-30 10:13:50.852907183 +0200
+@@ -111,11 +111,11 @@
+ fnlo_tk_yodaout_LDFLAGS = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(YODALDFLAGS)
+ fnlo_tk_statunc_LDFLAGS = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(YODALDFLAGS)
+ fnlo_tk_rootout_LDFLAGS = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
+-fnlo_tk_merge_LDFLAGS   = $(my_lib_dirs) $(AM_LDFLAGS)
+-fnlo_tk_merge2_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS)
+-fnlo_tk_append_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS)
+-fnlo_tk_modify_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS)
+-fnlo_tk_cat_LDFLAGS     = $(my_lib_dirs) $(AM_LDFLAGS)
++fnlo_tk_merge_LDFLAGS   = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
++fnlo_tk_merge2_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
++fnlo_tk_append_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
++fnlo_tk_modify_LDFLAGS  = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
++fnlo_tk_cat_LDFLAGS     = $(my_lib_dirs) $(AM_LDFLAGS) $(LHAPDFLDFLAGS) $(ROOTLDFLAGS)
+ 
+ # Files that are required to build the project but that can be
+ # recreated IF the necessary autotools etc. are available by:

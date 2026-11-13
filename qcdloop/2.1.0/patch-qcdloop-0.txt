@@ -1,0 +1,54 @@
+diff -Naur ORIG/CMakeLists.txt PATCHED/CMakeLists.txt
+--- ORIG/CMakeLists.txt	2026-01-16 09:04:26.427717779 +0100
++++ PATCHED/CMakeLists.txt	2026-01-16 09:04:26.427860385 +0100
+@@ -67,7 +67,7 @@
+   "${PROJECT_SOURCE_DIR}/src/qcdloop.pc"
+   )
+ IF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+-set(QUADMATH_NAMES ${QUADMATH_NAMES} libquadmath.so quadmath)
++set(QUADMATH_NAMES ${QUADMATH_NAMES} libquadmath.so libquadmath.so.0 quadmath)
+ find_library(QUADMATH_LIBRARY
+   NAMES ${QUADMATH_NAMES}
+   PATHS /usr/lib64/atlas /usr/lib/atlas
+diff -Naur ORIG/src/qcdloop-config.in PATCHED/src/qcdloop-config.in
+--- ORIG/src/qcdloop-config.in	2026-01-16 09:04:26.427802772 +0100
++++ PATCHED/src/qcdloop-config.in	2026-01-16 09:04:26.428018254 +0100
+@@ -4,7 +4,7 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+ 
+-if [[ $# -eq 0 || -n $( echo $* | grep -E -- "--help|-h" ) ]]; then
++if [[ $# -eq 0 || -n $( echo $* | egrep -- "--help|-h" ) ]]; then
+     echo
+     echo "qcdloop-config: configuration tool for qcdloop"
+     echo
+@@ -21,23 +21,23 @@
+ 
+ OUT=""
+ 
+-tmp=$( echo "$*" | grep -E -- '--\<prefix\>')
++tmp=$( echo "$*" | egrep -- '--\<prefix\>')
+ test -n "$tmp" && OUT="$OUT @prefix@"
+ 
+-tmp=$( echo "$*" | grep -E -- '--\<incdir\>')
++tmp=$( echo "$*" | egrep -- '--\<incdir\>')
+ test -n "$tmp" && OUT="$OUT @includedir@"
+ 
+-tmp=$( echo "$*" | grep -E -- '--\<cppflags\>')
++tmp=$( echo "$*" | egrep -- '--\<cppflags\>')
+ test -n "$tmp" && OUT="$OUT -I@includedir@ -std=c++11"
+ 
+-tmp=$( echo "$*" | grep -E -- '--\<libdir\>')
++tmp=$( echo "$*" | egrep -- '--\<libdir\>')
+ test -n "$tmp" && OUT="$OUT @libdir@"
+ 
+-tmp=$( echo "$*" | grep -E -- '--\<ldflags\>')
++tmp=$( echo "$*" | egrep -- '--\<ldflags\>')
+ test -n "$tmp" && OUT="$OUT -L@libdir@ -lqcdloop -lquadmath"
+ 
+ ## Version
+-tmp=$( echo "$*" | grep -E -- '--\<version\>')
++tmp=$( echo "$*" | egrep -- '--\<version\>')
+ test -n "$tmp" && OUT="$OUT @VERSION@"
+ 
+ echo $OUT

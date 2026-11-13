@@ -1,0 +1,113 @@
+diff -Naur ORIG/configure.in PATCHED/configure.in
+--- ORIG/configure.in	2026-01-16 09:04:26.342239888 +0100
++++ PATCHED/configure.in	2026-01-16 09:04:26.342420390 +0100
+@@ -72,13 +72,13 @@
+   [AS_HELP_STRING([--enable-debug],[Enable debug flags])],
+   [
+     AC_MSG_RESULT([$enable_debug]) ;
+-    FFLAGS="-g3 -O0" ;
+-    CXXFLAGS="-g3 -O0"
++    FFLAGS="$FFLAGS -g3 -O0" ;
++    CXXFLAGS="$CXXFLAGS -g3 -O0"
+   ],
+   [
+     AC_MSG_RESULT([no]) ;
+-    FFLAGS="-O2" ;
+-    CXXFLAGS="-O2"
++    FFLAGS="$FFLAGS" ;
++    CXXFLAGS="$CXXFLAGS"
+   ]
+ )
+ 
+diff -Naur ORIG/src/eventRecordInterfaces/TauolaHepMC3Event.cxx PATCHED/src/eventRecordInterfaces/TauolaHepMC3Event.cxx
+--- ORIG/src/eventRecordInterfaces/TauolaHepMC3Event.cxx	2026-01-16 09:04:26.342322019 +0100
++++ PATCHED/src/eventRecordInterfaces/TauolaHepMC3Event.cxx	2026-01-16 09:04:26.342574127 +0100
+@@ -8,7 +8,6 @@
+ using namespace std;
+ TauolaHepMC3Event::TauolaHepMC3Event(GenEvent * event){
+   m_event=event;
+-/* NO UNITS YET
+   // Default units
+   m_momentum_unit = "GEV";
+   m_length_unit   = "MM";
+@@ -20,9 +19,8 @@
+   if( m_event->momentum_unit() != Units::GEV ||
+       m_event->length_unit()   != Units::MM     )
+   {
+-    m_event->use_units(Units::GEV,Units::MM);
++    m_event->set_units(Units::GEV,Units::MM);
+   }
+-*/
+ }
+ 
+ TauolaHepMC3Event::~TauolaHepMC3Event(){
+@@ -90,7 +88,6 @@
+ }
+ 
+ void TauolaHepMC3Event::eventEndgame(){
+-/* NO UNITS YET
+   //Set output units for the event
+   string momentum("GEV"),length("MM");
+ 
+@@ -118,8 +115,7 @@
+       length = m_length_unit;
+   }
+ 
+-  m_event->use_units(momentum,length);
+-*/
++  m_event->set_units(Units::momentum_unit(momentum),Units::length_unit(length));
+ }
+ 
+ } // namespace Tauolapp
+diff -Naur ORIG/src/eventRecordInterfaces/TauolaHepMC3Particle.cxx PATCHED/src/eventRecordInterfaces/TauolaHepMC3Particle.cxx
+--- ORIG/src/eventRecordInterfaces/TauolaHepMC3Particle.cxx	2026-01-16 09:04:26.342420390 +0100
++++ PATCHED/src/eventRecordInterfaces/TauolaHepMC3Particle.cxx	2026-01-16 09:04:26.342645516 +0100
+@@ -52,7 +52,7 @@
+ }
+ 
+ void TauolaHepMC3Particle::undecay(){
+-/* NO DELETING YET
++
+   std::vector<TauolaParticle*> daughters = getDaughters();
+   std::vector<TauolaParticle*>::iterator dIter = daughters.begin();
+ 
+@@ -63,10 +63,8 @@
+   {
+   while(m_particle->end_vertex()->particles_out().size())
+   {
+-    GenParticlePtr p = m_particle->end_vertex()->remove_particle(*(m_particle->end_vertex()->particles_out_const_begin()));
+-    delete p;
++    m_particle->end_vertex()->remove_particle_out(m_particle->end_vertex()->particles_out().front());
+   }
+-  delete m_particle->end_vertex();
+   }
+ 
+   m_daughters.clear();
+@@ -74,7 +72,6 @@
+ 
+   for(unsigned int i=0;i<daughters.size();i++)
+     delete daughters[i];
+-*/
+ }
+ 
+ void TauolaHepMC3Particle::setMothers(vector<TauolaParticle*> mothers){
+@@ -116,8 +113,7 @@
+ 
+       //update status info
+       if(moth->status()==TauolaParticle::STABLE)
+-     //   moth->set_status(TauolaParticle::DECAYED);
+-        moth->set_status(2);
++        moth->set_status(TauolaParticle::DECAYED);
+     }
+     production_vertex->add_particle_out(m_particle);
+   }
+@@ -272,8 +268,7 @@
+     if( !pp->end_vertex() ) continue;
+ 
+     // Set position
+-    /// @bug Position cannot be set (for now)
+-    //pp->end_vertex()->set_position(pos);
++    pp->end_vertex()->set_position(pos);
+     recursiveSetPosition(pp,pos);
+   }
+ }

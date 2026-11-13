@@ -1,0 +1,32 @@
+diff -Naur ORIG/PKG-INFO PATCHED/PKG-INFO
+--- ORIG/PKG-INFO	2026-01-16 09:04:26.411964578 +0100
++++ PATCHED/PKG-INFO	2026-01-16 09:04:26.412400423 +0100
+@@ -1,6 +1,6 @@
+ Metadata-Version: 2.1
+ Name: gosam
+-Version: 2.1.2+c307997
++Version: 2.1.2
+ Summary: GoSam, An Automated One-Loop Matrix Element Generator
+ Home-page: http://projects.hepforge.org/gosam/
+ Download-URL: http://projects.hepforge.org/gosam/downloads/gosam-2.1.2+c307997.tar.gz
+diff -Naur ORIG/setup.py PATCHED/setup.py
+--- ORIG/setup.py	2026-01-16 09:04:26.412035788 +0100
++++ PATCHED/setup.py	2026-01-16 09:04:26.412633724 +0100
+@@ -61,8 +61,6 @@
+ 		try:
+ 			with open("PKG-INFO", "r") as f:
+ 				for line in f:
+-					if line.startswith("Version: "):
+-						return re.search(r'([0-9.]*)\+([a-z,0-9]*)',line).group(2)
+ 					if line.startswith("Download-URL: "):
+ 						return re.search(r'gosam-([0-9.]*)\+([a-z,0-9]*)',line).group(2)
+ 			raise Exception("The git repository is missing and PKG-INFO has no version")
+@@ -76,7 +74,7 @@
+ 
+ INFO = {
+ 		'name': 'gosam',
+-		'version': TAR_VERSION,
++		'version': VERSION,
+ 		'author': 'The GoSam (Golem and Samurai) Collaboration',
+ 		'author_email': 'gosam@hepforge.org',
+ 		'maintainer': 'The GoSam Collaboration',

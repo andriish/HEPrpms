@@ -1,0 +1,12 @@
+diff -Naur ORIG/Makefile.am PATCHED/Makefile.am
+--- ORIG/Makefile.am	2026-01-16 09:04:26.351340425 +0100
++++ PATCHED/Makefile.am	2026-01-16 09:04:26.351340425 +0100
+@@ -10,7 +10,7 @@
+ 
+ if USE_ROOT
+ install-data-am:
+-	cp src/*.pcm ${libdir}
++	cp src/*.pcm $(DESTDIR)${libdir}
+ endif
+ 
+ clean-local:

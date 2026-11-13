@@ -1,0 +1,119 @@
+diff -Naur ORIG/lib_src/collier/src/DD_4pt.F PATCHED/lib_src/collier/src/DD_4pt.F
+--- ORIG/lib_src/collier/src/DD_4pt.F	2026-04-11 01:39:24.232907702 +0200
++++ PATCHED/lib_src/collier/src/DD_4pt.F	2026-04-11 01:39:24.233110057 +0200
+@@ -4396,6 +4396,7 @@
+ **********************************************************************
+         use DD_global
+         use DD_4pt
++        use, intrinsic :: ieee_arithmetic
+         implicit real*8 (a-z)
+ 
+ 
+@@ -4887,20 +4888,27 @@
+               argle(9) = arge(4)
+             endif
+           endif
+-
+-          if (abs(dimag(argl(j)))/abs(argl(j)).lt.crit) then
++!          if ( ieee_is_nan(dreal(argl(j)))
++!     &    .or. ieee_is_nan(dimag(argl(j))) ) then
++!          write(*,*)argl
++!          endif
++          if (argl(j).ne.(0d0,0d0) .and. abs(argl(j)) .ge. crit)  then
++          if (abs(dimag(argl(j))).lt.abs(argl(j))*crit) then
+             l(j) = l(j) + log(
+      &         dcmplx( dreal(argl(j)),
+      &                 (abs(dimag(argl(j)))+abs(argl(j))*eps2)
+      &                 *sign(1d0,dimag(argle(j))) ))
+           else
++!            write(*,*)l(j),argl(j),j
+             l(j) = l(j) + log(argl(j))
+           endif
++          endif
+ 
+         do i=1,2
+           sgn = (-1)**(i+1)
+           xx(j,i) = x(j,i)
+-          if (abs(dimag(xx(j,i)))/abs(xx(j,i)).lt.crit) xx(j,i) = 
++          if (xx(j,i) .ne. (0d0,0d0) .and. abs(xx(j,i)) .ge. crit) then
++          if (abs(dimag(xx(j,i))).lt.abs(xx(j,i))*crit) xx(j,i) = 
+      &       dcmplx( dreal(xx(j,i)),
+      &               (abs(dimag(xx(j,i)))+abs(xx(j,i))*eps2)
+      &               *sign(1d0,dimag(xe(j,i))) )
+@@ -4918,13 +4926,17 @@
+             D0massive_dd = D0massive_dd + sgn*pre*(
+      &        - l(j)*log(-xx(j,i)) + cspen_dd(rx(j,i)) + etal )
+           else
+-            D0massive_dd = D0massive_dd + sgn*pre*(
++            D0massive_dd = D0massive_dd 
++     &      + sgn*pre*(
+      &        - l(j)*log(-xx(j,i)) - log(-xx(j,i))**2/2d0 )
+           endif
++          endif
+ 
+         do k=1,2
+           sx(j,k,i) = 1d0-s(j,k)*x(j,i)
+-          if (abs(dimag(sx(j,k,i)))/abs(sx(j,k,i)).lt.crit) sx(j,k,i) = 
++          if (sx(j,k,i) .ne. (0d0,0d0) .and. 
++     &    abs(sx(j,k,i)) .ge. crit) then
++          if (abs(dimag(sx(j,k,i))).lt. abs(sx(j,k,i))*crit) sx(j,k,i) = 
+      &       dcmplx( dreal(sx(j,k,i)),
+      &               (abs(dimag(sx(j,k,i)))+abs(sx(j,k,i))*eps2)
+      &               *sign(1d0,dimag(-se(j,k)*xe(j,i))) )
+@@ -4932,7 +4944,7 @@
+           if (etal.ne.(0d0,0d0)) etal = etal*log(sx(j,k,i))
+           D0massive_dd = D0massive_dd - sgn*pre*(
+      &      + cspen_dd(sx(j,k,i)) + etal )
+-
++        endif
+         end do
+         end do
+ 
+diff -Naur ORIG/openloops PATCHED/openloops
+--- ORIG/openloops	2026-04-11 01:39:24.232955323 +0200
++++ PATCHED/openloops	2026-04-11 01:39:24.233155324 +0200
+@@ -175,6 +175,14 @@
+         processes="$processes $arg"
+       fi
+     done
++    NORMPWD=$(pwd -P)
++    NORMSCONSTRUCTDIR=$(cd $LIBDIR/../ && pwd -P) 
++    echo $NORMPWD $NORMSCONSTRUCTDIR 
++    if [[ "$NORMPWD" != "$NORMSCONSTRUCTDIR" ]]; then
++      if [ ! -e ./SConstruct ]; then
++         ln -s $NORMSCONSTRUCTDIR/SConstruct ./SConstruct        
++      fi
++    fi 
+     $SCONS auto="$processes" $options
+     ;;
+ 
+diff -Naur ORIG/pyol/tools/OLBaseConfig.py PATCHED/pyol/tools/OLBaseConfig.py
+--- ORIG/pyol/tools/OLBaseConfig.py	2026-04-11 01:39:24.233031618 +0200
++++ PATCHED/pyol/tools/OLBaseConfig.py	2026-04-11 01:39:24.233211190 +0200
+@@ -109,7 +109,11 @@
+         else:
+             config.read_file(fh)
+     # override with user configuration
+-    config.read([os.path.join(prefix, user_config_file)])
++    if (os.path.exists(os.path.join(os.getcwd(), user_config_file))):
++      print("Using "+str(os.path.join(os.getcwd(), user_config_file)))
++      config.read([os.path.join(os.getcwd(), user_config_file)])
++    else:
++      config.read([os.path.join(prefix, user_config_file)])
+     config = dict(config.items('OpenLoops'))
+     # override with command line options
+     for key, val in dict(args).items():
+diff -Naur ORIG/pyol/tools/OLLibrary.py PATCHED/pyol/tools/OLLibrary.py
+--- ORIG/pyol/tools/OLLibrary.py	2026-04-11 01:39:24.233031618 +0200
++++ PATCHED/pyol/tools/OLLibrary.py	2026-04-11 01:39:24.233211190 +0200
+@@ -32,8 +32,8 @@
+ 
+ class CPPContainer:
+     """Container for source files scheduled for preprocessing."""
+-
+-    cpp_script = os.path.join('pyol', 'build', 'cpp.scons')
++    pyolprefix = os.path.dirname(os.path.dirname(globals().get('__file__', '')))
++    cpp_script = os.path.join(pyolprefix, 'build', 'cpp.scons')
+ 
+     def __init__(self, mp_src = [], dp_src = [], version_src = [], mp = ['dp'],
+                  version = 'none', process_api = -1, revision = 'none',

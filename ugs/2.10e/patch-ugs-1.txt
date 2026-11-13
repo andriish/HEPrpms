@@ -1,0 +1,64 @@
+diff -Naur ORIG/src.2.10e/aux.c PATCHED/src.2.10e/aux.c
+--- ORIG/src.2.10e/aux.c	2026-01-16 09:04:26.443305756 +0100
++++ PATCHED/src.2.10e/aux.c	2026-01-16 09:04:26.445066691 +0100
+@@ -1,4 +1,6 @@
+ #include <stdlib.h>
++#include <string.h>
++
+ 
+ #if ( defined(__LINUX_AOUT) || defined(__LINUX_ELF) || defined(__Darwin) )
+ void free_   ( idum )   void *idum ;  { free (idum) ; }
+diff -Naur ORIG/src.2.10e/drivers/rotated.c PATCHED/src.2.10e/drivers/rotated.c
+--- ORIG/src.2.10e/drivers/rotated.c	2026-01-16 09:04:26.443485493 +0100
++++ PATCHED/src.2.10e/drivers/rotated.c	2026-01-16 09:04:26.445180043 +0100
+@@ -29,6 +29,8 @@
+ #include <stdio.h>
+ #include <math.h>
+ #include "rotated.h"
++#include <stdlib.h>
++#include <string.h>
+ 
+ #define  round(a)  (int)(((a)<0.0)?(a)-.5:(a)+.5)
+ 
+diff -Naur ORIG/src.2.10e/ugclos.f PATCHED/src.2.10e/ugclos.f
+--- ORIG/src.2.10e/ugclos.f	2026-01-16 09:04:26.444043400 +0100
++++ PATCHED/src.2.10e/ugclos.f	2026-01-16 09:04:26.445180043 +0100
+@@ -88,7 +88,7 @@
+       ELSE
+         DO 203 INT1=1,MCAZ1
+           IF (MCAOI(INT1).NE.0) THEN
+-            CALL UGB001(DDARY,1,%VAL(MCAOP(INT1)),1,DDALG)
++            CALL UGB001(DDARY(1),1,%VAL(MCAOP(INT1)),1,DDALG)
+             CALL UGB001(%VAL(DDACX),1,%VAL(DDAPX),1,DDALX)
+             GO TO 101
+           END IF
+diff -Naur ORIG/src.2.10e/ugopen.F PATCHED/src.2.10e/ugopen.F
+--- ORIG/src.2.10e/ugopen.F	2026-01-16 09:04:26.444043400 +0100
++++ PATCHED/src.2.10e/ugopen.F	2026-01-16 09:04:26.445180043 +0100
+@@ -166,7 +166,7 @@
+           CALL UGZ003(0,DDALG,DDAPA)
+           MCAOP(DDAAI)=DDAPA
+         END IF
+-        CALL UGB001(%VAL(DDAPA),1,DDARY,1,DDALG)
++        CALL UGB001(%VAL(DDAPA),1,DDARY(1),1,DDALG)
+         DDAAI=0
+       END IF
+ C
+diff -Naur ORIG/src.2.10e/ugslct.f PATCHED/src.2.10e/ugslct.f
+--- ORIG/src.2.10e/ugslct.f	2026-01-16 09:04:26.444043400 +0100
++++ PATCHED/src.2.10e/ugslct.f	2026-01-16 09:04:26.445180043 +0100
+@@ -52,12 +52,12 @@
+           CALL UGZ003(0,DDALG,DDAPA)
+           MCAOP(DDAAI)=DDAPA
+         END IF
+-        CALL UGB001(%VAL(DDAPA),1,DDARY,1,DDALG)
++        CALL UGB001(%VAL(DDAPA),1,DDARY(1),1,DDALG)
+         DDAAI=0
+       END IF
+ C
+ C  MAKE THE SELECTED DEVICE ACTIVE.
+-      CALL UGB001(DDARY,1,%VAL(MCAOP(INDX)),1,DDALG)
++      CALL UGB001(DDARY(1),1,%VAL(MCAOP(INDX)),1,DDALG)
+       CALL UGB001(%VAL(DDACX),1,%VAL(DDAPX),1,DDALX)
+ C
+ C  RESET ERROR INDICATORS AND RETURN TO CALLER.

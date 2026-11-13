@@ -1,0 +1,122 @@
+diff -Naur ORIG/areeme.f PATCHED/areeme.f
+--- ORIG/areeme.f	2026-01-16 09:04:26.351649036 +0100
++++ PATCHED/areeme.f	2026-01-16 09:04:26.351909612 +0100
+@@ -32,7 +32,7 @@
+ 
+       PH161=DBLE(PHAR(161))
+       IF ( PHAR(161).LE.0.0 ) THEN
+-        PHAR(161)=MAX(ARX2DB(SQRT(PARJ(125))*ECM),ARX2DB(PARJ(126)))
++      PHAR(161)=MAX(sngl(ARX2DB(SQRT(PARJ(125)))*ECM),ARX2DB(PARJ(126)))
+       ENDIF
+       CUT=(DBLE(PHAR(161))/ECM)**2
+ 
+diff -Naur ORIG/arpyth.f PATCHED/arpyth.f
+--- ORIG/arpyth.f	2026-01-16 09:04:26.351649036 +0100
++++ PATCHED/arpyth.f	2026-01-16 09:04:26.351909612 +0100
+@@ -343,7 +343,11 @@
+         PN2=ARX2DB(P(N,2))
+         PN3=ARX2DB(P(N,3))
+         PN4=ARX2DB(P(N,4))
+-        P(N,5)=ARX2DB(SQRT(MAX(PN4**2-PN3**2-PN2**2-PN1**2,0.0D0)))
++#ifndef PYTHIA6
++        P(N,5)=SQRT(MAX(PN4**2-PN3**2-PN2**2-PN1**2,0.0D0))
++#else
++        P(N,5)=SQRT(MAX(PN4**2-PN3**2-PN2**2-PN1**2,0.0D0))
++#endif
+         K(I1,1)=K(I1,1)+100
+         K(I2,1)=K(I2,1)+100
+         IDY=N
+diff -Naur ORIG/Makefile PATCHED/Makefile
+--- ORIG/Makefile	2026-01-16 09:04:26.351550176 +0100
++++ PATCHED/Makefile	2026-01-16 09:04:26.351649036 +0100
+@@ -1,13 +1,29 @@
++#SRCS := $(wildcard py*.f) $(wildcard struct*.f) $(wildcard up*.f) ssmssm.f sugra.f visaje.f $(wildcard fh*.f) 
++#pdfset.f
+ # This is the Makefile for the Ariadne program. You should edit it to 
+ # suite the way your system is set up. The macros you should customize
+ # are: FC FFLAGS PYTHIA LEPTO and INSTALLDIR. A few examples are
+ # given for each macro.
+ 
++
++
++
++# archive executable
++AR = ar
++# FC = g77
++FC = gfortran
++# Fortran compiler
++#FFLAGS = -g2 -O2 -ffortran-bounds-check
++#FFLAGS = -g -O2 -fbounds-check
++#FFLAGS = -fPIC -g -fbounds-check
++
++
++
+ # set FC to the FORTRAN 77 compiler you want to use.
+-FC = f77
++#FC = f77
+ 
+ # set FFLAGS to the compiler options you want to use:
+-FFLAGS = -O
++#FFLAGS = -O
+ 
+ #set CPP to the C preprocessor you want to use
+ CPP = gcc -E -P
+@@ -17,17 +33,17 @@
+ 
+ # PYTHIA sould be set to the name of the object/library file for PYTHIA v.5 +
+ # JETSET v.7
+-PYTHIA = -L/cern/pro/lib -ljetset74 -lpacklib -lkernlib -lmathlib
++PYTHIA = -L/usr/lib64 -ljetset74 -lpacklib -lkernlib -lmathlib
+ 
+ # PYTHIA6 sould be set to the name of the object/library file for PYTHIA v.56
+-PYTHIA6 = -L/cern/pro/lib -lpythia6136 -lpacklib -lkernlib -lmathlib
++PYTHIA6 = -L/cern/pro/lib -lpythia6 -lpacklib -lkernlib -lmathlib
+ 
+ # LEPTO sould be set to the name of the object/library file for LEPTO v.6
+ LEPTO = -L/cern/pro/lib -llepto -lkernlib 
+ 
+ # INSTALLDIR should be set to the name of the directory where the compiled 
+ # Ariadne library should be placed.
+-INSTALLDIR = /usr/local/lib
++
+ 
+ #
+ # YOU SHOULD NOT CHANGE ANYTHING BELOW THIS LINE
+@@ -85,12 +101,27 @@
+ 	cp libartest.a libar4.a
+ 	ranlib libar4.a
+ 
++libar4.so: libar4.a
++	gcc -shared -o libar4.so P6/*.o
++
+ libar4p5.a: libartestp5.a
+-	cp libartest.a libar4.a
+-	ranlib libar4.a
++	cp libartestp5.a libar4p5.a
++	ranlib libar4p5.a
++
++libar4p5.so: libartestp5.a
++	gcc -shared -o libar4p5.so *.o
++
++install: libar4.so
++	mkdir -p $(INSTALLDIR)/lib64
++	cp libar4.so $(INSTALLDIR)/lib64
++	cp libar4p5.so $(INSTALLDIR)/lib64
++	mkdir -p $(INSTALLDIR)/include/ariadne
++	cp $(INCLUDEFILES) $(INSTALLDIR)/include/ariadne
++	cp P6/py*.f $(INSTALLDIR)/include/ariadne
++	cp py*.f $(INSTALLDIR)/include/ariadne
++	cp P6/py*.F $(INSTALLDIR)/include/ariadne
++	cp py*.F $(INSTALLDIR)/include/ariadne
+ 
+-install: libar4.a libar4p5.a
+-	cp libar4.a libar4p5.a $(INSTALLDIR)
+ 
+ clean:
+ 	@cd P6; make clean
+@@ -102,3 +133,5 @@
+ 
+ .F.f:
+ 	$(CPP) $*.F > $*.f
++
++
