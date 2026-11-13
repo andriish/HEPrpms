@@ -65,7 +65,7 @@ sed -i 's|--incdir|--includedir|g' CMakeLists.txt
 pathfix.py -pn -i %{__python3}  bin/apfel.in
 %endif
 
-%cmake -DAPFEL_DOWNLOAD_PDFS=BOOL:OFF
+%cmake -DAPFEL_DOWNLOAD_PDFS:BOOL=OFF
 %cmake_build 
 
 %install
