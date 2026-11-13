@@ -383,3 +383,6 @@ fc04718a19b9e5938ff6e315e8106bb2  cernlib/2026.11.01.1/rpmbuild/SOURCES/cernlib-
 064c780d960d7c840576a18a63e91cd9  python-uproot4/4.3.7/rpmbuild/SOURCES/v4.3.7.tar.gz
 313e61b2378a609a2d35ecdac5af70a6  form/5.0.2/rpmbuild/SOURCES/form-5.0.2.tar.gz
 a370a04cc92daa6e5949bd87aab261b6  SHERPA-MC/3.0.5/rpmbuild/SOURCES/sherpa-v3.0.5.tar.gz
+0a42d5c8e7ba7886aa6c97e7615b1261  geant4/11.4.3/rpmbuild/SOURCES/geant4-v11.4.3.tar.gz
+a8f4d5391df833aaad65a2d69db9dcd9  LCIO/02.23.04/rpmbuild/SOURCES/v02-23-04.tar.gz
+c62c3cb32251c2647ac35a0d99374361  whizard/3.2.0/rpmbuild/SOURCES/whizard-3.2.0.tar.gz

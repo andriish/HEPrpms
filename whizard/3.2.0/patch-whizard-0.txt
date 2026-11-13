@@ -1,0 +1,30 @@
+diff -Naur ORIG/omega/scripts/ufo-sanitizer.in PATCHED/omega/scripts/ufo-sanitizer.in
+--- ORIG/omega/scripts/ufo-sanitizer.in	2026-11-13 11:34:24.946500659 +0100
++++ PATCHED/omega/scripts/ufo-sanitizer.in	2026-11-13 11:34:39.212235091 +0100
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python
++#! /usr/bin/python3
+ # ufo-sanitizer.py -- read UFO files and write them back out
+ ########################################################################
+ #
+diff -Naur ORIG/src/rng/dispatch_rng_sub.f90 PATCHED/src/rng/dispatch_rng_sub.f90
+--- ORIG/src/rng/dispatch_rng_sub.f90	2026-11-13 11:34:24.949002798 +0100
++++ PATCHED/src/rng/dispatch_rng_sub.f90	2026-11-13 11:34:39.213405142 +0100
+@@ -38,7 +38,7 @@
+ 
+ contains
+ 
+-  module subroutine dispatch_rng_factory &
++  subroutine dispatch_rng_factory &
+        (rng_factory, var_list, next_rng_seed)
+     class(rng_factory_t), allocatable, intent(inout) :: rng_factory
+     type(var_list_t), intent(in) :: var_list
+@@ -76,7 +76,7 @@
+     call rng_factory%init (s)
+   end subroutine dispatch_rng_factory
+ 
+-  module subroutine update_rng_seed_in_var_list (var_list, next_rng_seed)
++  subroutine update_rng_seed_in_var_list (var_list, next_rng_seed)
+     type(var_list_t), intent(inout), optional :: var_list
+     integer, intent(in) :: next_rng_seed
+     if (present (var_list)) then 
