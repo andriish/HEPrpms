@@ -1,8 +1,9 @@
 #!/bin/bash
 # Create an openSUSE Build Service (OBS) project and fill it with the packages of a COPR project.
 #
-# By default the OBS project home:averbyts:HEPrpmsSUSE mirrors averbyts/HEPrpmsSUSE on COPR: the same packages, in
-# the versions that COPR builds, for openSUSE Tumbleweed (x86_64). The list is read from the COPR custom-source
+# By default the OBS project home:averbyts:HEPrpmsSUSE has the same packages as averbyts/HEPrpmsSUSE on COPR, for
+# openSUSE Tumbleweed (x86_64), in the versions that the COPR project averbyts/HEPrpms builds (--versions-from; a
+# package that is not built there keeps its version from the --copr project). The lists are read from the COPR custom-source
 # scripts, as scripts/git-rm-unused.sh does. Every package is set up with scripts/obs-add-package.sh, which only
 # creates a _service file in OBS (git clone of this repository + download of the sources); nothing is built or
 # uploaded from this machine, the packages have to be committed and pushed to GitHub first.
@@ -10,7 +11,9 @@
 # Usage: scripts/obs-sync.sh [options] [<package> ...]
 #   <package> ...        only these packages (default: all packages of the COPR project)
 #   --project NAME       OBS project (default: home:averbyts:HEPrpmsSUSE)
-#   --copr OWNER/PROJ    COPR project to mirror (default: averbyts/HEPrpmsSUSE)
+#   --copr OWNER/PROJ    COPR project that gives the package list (default: averbyts/HEPrpmsSUSE)
+#   --versions-from OWNER/PROJ  COPR project that gives the versions (default: averbyts/HEPrpms; use the --copr
+#                        project to get the versions of that project)
 #   --jobs N             set up N packages in parallel (default: 4)
 #   --skip-existing      do not touch packages that already exist in the OBS project
 #   --dry-run            only print what would be done
@@ -25,6 +28,7 @@ set -uo pipefail
 
 PROJECT=home:averbyts:HEPrpmsSUSE
 COPR=averbyts/HEPrpmsSUSE
+VERSIONS=averbyts/HEPrpms
 JOBS=4
 SKIP=0
 DRYRUN=0
@@ -37,6 +41,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --project)       [ $# -ge 2 ] || die "--project needs a value"; PROJECT=$2; shift 2 ;;
     --copr)          [ $# -ge 2 ] || die "--copr needs a value"; COPR=$2; shift 2 ;;
+    --versions-from) [ $# -ge 2 ] || die "--versions-from needs a value"; VERSIONS=$2; shift 2 ;;
     --jobs)          [ $# -ge 2 ] || die "--jobs needs a value"; JOBS=$2; shift 2 ;;
     --skip-existing) SKIP=1; shift ;;
     --dry-run)       DRYRUN=1; shift ;;
@@ -53,6 +58,20 @@ TOPDIR=$(dirname "$HERE")
 command -v osc >/dev/null || die "osc is not installed"
 
 copr_used_versions "${COPR%%/*}" "${COPR#*/}" || exit 1
+# The package list is taken from $COPR; the versions from $VERSIONS where it has the package.
+declare -A BASE_VER=()
+for pkg in "${!NEWEST[@]}"; do BASE_VER[$pkg]=${NEWEST[$pkg]}; done
+if [ "$VERSIONS" != "$COPR" ]; then
+  USED=(); NEWEST=()
+  copr_used_versions "${VERSIONS%%/*}" "${VERSIONS#*/}" || exit 1
+fi
+declare -A USED_NEW=()
+for pkg in "${!BASE_VER[@]}"; do
+  ver=${NEWEST[$pkg]:-${BASE_VER[$pkg]}}
+  [ -n "${NEWEST[$pkg]:-}" ] || echo "NOTE: $pkg is not built in $VERSIONS, keeping ${BASE_VER[$pkg]}" >&2
+  USED_NEW["$pkg/$ver"]=1
+done
+USED=(); for key in "${!USED_NEW[@]}"; do USED[$key]=1; done
 
 # Project with the Tumbleweed repository.
 if ! osc meta prj "$PROJECT" >/dev/null 2>&1; then
