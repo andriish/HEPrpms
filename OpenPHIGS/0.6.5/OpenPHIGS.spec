@@ -1,6 +1,6 @@
 %undefine _debugsource_packages
 %global upstream_ver 0.6-5
-Summary: PHIGS (Programmer's Hierarchical Interactive Graphics System) library with an OpenGL backend
+Summary: PHIGS graphics library with an OpenGL backend
 Name: OpenPHIGS
 Version: 0.6.5
 Release: 1%{?dist}

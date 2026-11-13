@@ -6,7 +6,7 @@
 Name:           %{srcname}
 Version:        2.21.1
 Release:        4%{?dist}
-Summary:        A Jupyter-friendly Python interface for the Minuit2 C++ library maintained by CERN’s ROOT team
+Summary:        Jupyter-friendly Python interface for the Minuit2 C++ library
 
 License:        MIT, LGPL
 URL:            https://pypi.python.org/pypi/%{srcname}
@@ -29,7 +29,7 @@ Prefix: %{_prefix}
 
 %description
 iminuit is a Jupyter-friendly Python interface for the Minuit2 C++ library maintained by CERN's ROOT team
-Summary:   A Jupyter-friendly Python interface for the Minuit2 C++ library maintained by CERN’s ROOT team
+Summary:   Jupyter-friendly Python interface for the Minuit2 C++ library
 
 
 

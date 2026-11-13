@@ -2,7 +2,7 @@
 %global _lto_cflags %nil
 #Scripts fail to find debug infos because the library is static
 
-Summary: A package for evaluation of scalar and tensor one-loop integrals based on the FF package by G.J. van Oldenborgh
+Summary: Evaluation of scalar and tensor one-loop integrals based on the FF package
 Name: LoopTools
 Version: 2.16
 Release: 12%{?dist}

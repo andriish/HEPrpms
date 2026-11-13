@@ -4,7 +4,7 @@ Release:        3%{?dist}
 License:        GPL
 Url:            http://HJets.hepforge.org/
 Source0:        https://hjets.hepforge.org/downloads/?f=HJets-%{version}.tar.gz
-Summary:        HJets is a tool for calculating electroweak cross sections for Higgs plus up to three jets at NLO in QCD
+Summary:        Electroweak cross sections for Higgs plus up to three jets at NLO in QCD
 BuildRequires:   gcc-c++ Herwig Herwig-devel ThePEG ThePEG-devel gsl gsl-devel  boost-devel zlib zlib-devel
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran  boost

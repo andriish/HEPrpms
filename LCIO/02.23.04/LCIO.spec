@@ -1,7 +1,7 @@
 Name:           LCIO
 Version:        2.23.04
 Release:        1%{?dist}
-Summary:        LCIO (Linear Collider I/O) is a persistency framework and event data model for linear collider detector studies
+Summary:        Persistency framework and event data model for linear collider detectors
 
 Group:          Development/Tools
 License:        BSD 3-Clause

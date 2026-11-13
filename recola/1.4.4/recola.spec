@@ -1,7 +1,7 @@
 %undefine _debugsource_packages
 #Manually set flags in CMake
 
-Summary:  A Fortran95 computer program for the automated generation and numerical computation of EW and QCD amplitudes
+Summary:  Automated generation and computation of EW and QCD amplitudes in Fortran95
 Name: recola
 Version: 1.4.4
 Release: 2%{?dist}

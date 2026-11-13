@@ -2,7 +2,7 @@
 Name:       Delphes
 Version:    3.5.1
 Release:    2%{?dist}
-Summary:    Delphes is a C++ framework, performing a fast multipurpose detector response simulation
+Summary:    C++ framework for fast multipurpose detector response simulation
 
 License:    GPLv3
 URL:        https://cp3.irmp.ucl.ac.be/projects/delphes

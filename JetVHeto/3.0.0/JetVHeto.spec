@@ -1,4 +1,4 @@
-Summary:  A program to perform NNLL resummation for jet-veto efficiencies and cross sections in Higgs and Z-boson production
+Summary:  NNLL resummation for jet-veto efficiencies in Higgs and Z-boson production
 Name: JetVHeto
 Version: 3.0.0
 Release: 4%{?dist}

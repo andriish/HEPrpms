@@ -1,4 +1,4 @@
-Summary: A  keyword-driven  interface  designed  to  produce physics  graphs  with  minimal specifications
+Summary: Keyword-driven interface to produce physics graphs
 Name: topdrawer
 Version: 1.4e
 Release: 7%{?dist}

@@ -1,5 +1,5 @@
 %undefine _debugsource_packages
-Summary:  A Fortran95 computer program for the automated generation and numerical computation of EW and QCD amplitudes
+Summary:  Automated generation and computation of EW and QCD amplitudes in Fortran95
 Name: recola2
 Version: 2.3.0
 Release: 2%{?dist}

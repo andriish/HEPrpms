@@ -3,7 +3,7 @@ Version:        1.6.36
 Release:        3%{?dist}
 License:        GPL
 Prefix:         %{_prefix}
-Summary:        A fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution 
+Summary:        Fast reproduction of full NLO calculations with any input PDF
 Source:         https://applgrid.hepforge.org/downloader?f=applgrid-%{version}.tgz
 Patch0:         patch-applgrid-0.txt
 URL:            https://applgrid.hepforge.org/
