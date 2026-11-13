@@ -77,7 +77,7 @@ find $RPM_BUILD_ROOT -type f -name '._Flavor_Map.h' -exec rm -f {} \;
 %files
 %defattr(-,root,root)
 %{_bindir}/*
-%{_includedir}/MCFM/*
+%{_includedir}/MCFM
 %{_libdir}/lib*
 
 %post 
