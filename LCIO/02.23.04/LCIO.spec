@@ -66,6 +66,8 @@ This package provides the Python 3 bindings for %{name}
 
 %prep
 %setup -q -n LCIO-02-23-04
+# upstream adds the Catch2 unit tests unconditionally; they are run at build time and cannot find their libraries
+sed -i "s/^add_subdirectory(unittests)/#add_subdirectory(unittests)/" tests/CMakeLists.txt
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
 %endif
