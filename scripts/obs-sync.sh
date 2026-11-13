@@ -16,6 +16,7 @@
 #                        project to get the versions of that project)
 #   --jobs N             set up N packages in parallel (default: 4)
 #   --skip-existing      do not touch packages that already exist in the OBS project
+#   --force              also update packages whose last OBS build succeeded (they are left alone by default)
 #   --dry-run            only print what would be done
 #   -h, --help           show this help
 #
@@ -31,6 +32,7 @@ COPR=averbyts/HEPrpmsSUSE
 VERSIONS=averbyts/HEPrpms
 JOBS=4
 SKIP=0
+FORCE=()
 DRYRUN=0
 ONLY=()
 
@@ -44,6 +46,7 @@ while [ $# -gt 0 ]; do
     --versions-from) [ $# -ge 2 ] || die "--versions-from needs a value"; VERSIONS=$2; shift 2 ;;
     --jobs)          [ $# -ge 2 ] || die "--jobs needs a value"; JOBS=$2; shift 2 ;;
     --skip-existing) SKIP=1; shift ;;
+    --force)         FORCE=(--force); shift ;;
     --dry-run)       DRYRUN=1; shift ;;
     -h|--help)       usage; exit 0 ;;
     -*)              die "unknown option $1" ;;
@@ -105,7 +108,7 @@ done
 IFS=$'\n' LIST=($(sort <<< "${LIST[*]}")); unset IFS
 echo "${#LIST[@]} packages to import into $PROJECT"
 
-OPTS=(--project "$PROJECT")
+OPTS=(--project "$PROJECT" "${FORCE[@]}")
 [ "$DRYRUN" = 1 ] && OPTS+=(--dry-run)
 mkdir -p "$TOPDIR/logs"
 STATUS=$(mktemp)

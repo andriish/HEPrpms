@@ -13,6 +13,8 @@
 #   <version>            version directory to import; the newest directory under <package>/ is used by default
 #   --project NAME       OBS project (default: home:averbyts:HEPrpmsSUSE)
 #   --revision REV       git branch, tag or commit OBS clones (default: master)
+#   --force              also touch a package whose last OBS build succeeded and whose version is unchanged
+#                        (by default such packages are left alone, so that they are not rebuilt)
 #   --dry-run            only print the generated _service file
 #   -h, --help           show this help
 #
@@ -36,6 +38,7 @@ RPMLINT_FILTERS=(
   arch-dependent-file-in-usr-share  # binaries in the documentation directories
 )
 DRYRUN=0
+FORCE=0
 PACKAGE=
 VERSION=
 
@@ -46,6 +49,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --project)  [ $# -ge 2 ] || die "--project needs a value"; PROJECT=$2; shift 2 ;;
     --revision) [ $# -ge 2 ] || die "--revision needs a value"; REVISION=$2; shift 2 ;;
+    --force)    FORCE=1; shift ;;
     --dry-run)  DRYRUN=1; shift ;;
     -h|--help)  usage; exit 0 ;;
     -*)         die "unknown option $1" ;;
@@ -117,6 +121,12 @@ cd "$PROJECT/$PACKAGE"
 echo "$SERVICE" > _service.new
 echo "$RPMLINTRC" > "$PACKAGE-rpmlintrc.new"
 changed=0
+# A package that was built successfully is not resubmitted: only a changed version (_service) updates it.
+if [ "$FORCE" = 0 ] && [ -f _service ] && cmp -s _service _service.new &&
+   osc results "$PROJECT" "$PACKAGE" 2>/dev/null | grep -qE 'openSUSE_Tumbleweed +x86_64 .* succeeded'; then
+  echo "== $PROJECT: $PACKAGE $VERSION was built successfully, left alone"
+  exit 0
+fi
 if [ ! -f _service ] || ! cmp -s _service _service.new; then mv _service.new _service; changed=1; else rm _service.new; fi
 if [ ! -f "$PACKAGE-rpmlintrc" ] || ! cmp -s "$PACKAGE-rpmlintrc" "$PACKAGE-rpmlintrc.new"; then
   mv "$PACKAGE-rpmlintrc.new" "$PACKAGE-rpmlintrc"; changed=1
