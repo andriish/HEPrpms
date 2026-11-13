@@ -426,6 +426,11 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %endif
 
 %files
+%if 0%{?suse_version}
+%dir %{_datadir}/doc/cernlib
+%dir %{_datadir}/doc/cernlib/vim
+%dir %{_datadir}/cernlib/%{verdatadir}
+%endif
 %defattr(-,root,root,-)
 %{_datadir}/doc/cernlib/cernlib.copyright
 %{_datadir}/doc/cernlib/geant321.README
@@ -445,6 +450,11 @@ touch --no-create %{_datadir}/icons/hicolor || :
 # the utils and devel are separated to have the possibility to install
 # parallel versions of the library
 %files devel
+%if 0%{?suse_version}
+%dir %{_datadir}/doc/cernlib-devel
+%dir %{_datadir}/doc/cernlib-devel/cfortran
+%dir %{_datadir}/doc/cernlib-devel/cfortran/Examples
+%endif
 %defattr(-,root,root,-)
 %{_datadir}/doc/cernlib-devel/cfortran/Examples/*
 %{_datadir}/doc/cernlib-devel/comis-64bit-example.F
@@ -457,6 +467,9 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_libdir}/cernlib/%{verdir}/lib/*.a
 
 %files utils
+%if 0%{?suse_version}
+%dir %{_datadir}/doc/cernlib-utils
+%endif
 %defattr(-,root,root,-)
 %{_datadir}/doc/cernlib-utils/cernlib-%{verdatadir}.csh 
 %{_datadir}/doc/cernlib-utils/cernlib-%{verdatadir}.sh
@@ -465,6 +478,9 @@ touch --no-create %{_datadir}/icons/hicolor || :
 
 
 %files -n geant321%{?compiler}
+%if 0%{?suse_version}
+%dir %{_datadir}/X11/app-defaults
+%endif
 %defattr(-,root,root,-)
 %{_bindir}/gxint
 #{?compiler}
@@ -478,6 +494,9 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_mandir}/man1/kuipc.1*
 
 %files -n paw%{?compiler_string}
+%if 0%{?suse_version}
+%dir %{_datadir}/X11/app-defaults
+%endif
 %defattr(-,root,root,-)
 %{_bindir}/paw++%{?compiler_string}
 %{_bindir}/paw%{?compiler_string}
@@ -495,6 +514,10 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_datadir}/pixmaps/paw*.xpm
 
 %files -n cernlib-packlib%{?compiler_string}
+%if 0%{?suse_version}
+%dir %{_datadir}/doc/cernlib-packlib%{?compiler_string}
+%dir %{_datadir}/X11/app-defaults
+%endif
 %defattr(-,root,root,-)
 %{_datadir}/doc/cernlib-packlib%{?compiler_string}/zftp.README
 %{_bindir}/cdbackup%{?compiler_string}
