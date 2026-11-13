@@ -1,0 +1,36 @@
+diff -Naur ORIG/configure.ac PATCHED/configure.ac
+--- ORIG/configure.ac	2026-01-26 10:02:56.935588735 +0100
++++ PATCHED/configure.ac	2026-01-26 10:02:56.936443198 +0100
+@@ -205,7 +205,7 @@
+     AC_MSG_ERROR([FastJet version 3.2.0 or later is required])
+   fi
+   # Only keep -l flags (library names)
+-  FASTJETLIBADD=`echo "$($FJCONFIG --libs --plugins --rpath=no)" | tr ' ' '\n' | grep '^-l' | tr '\n' ' '`
++  FASTJETLIBADD=`echo "$($FJCONFIG --libs --plugins )" | tr ' ' '\n' | grep '^-l' | tr '\n' ' '`
+ else
+   FASTJETLIBADD="-l$FASTJETLIBNAME -lfastjetplugins"
+ fi
+diff -Naur ORIG/src/Core/AnalysisHandler.cc PATCHED/src/Core/AnalysisHandler.cc
+--- ORIG/src/Core/AnalysisHandler.cc	2026-01-26 10:02:56.936443198 +0100
++++ PATCHED/src/Core/AnalysisHandler.cc	2026-01-26 10:02:56.937687005 +0100
+@@ -1504,7 +1504,8 @@
+     output.reserve(raos.size() * numWeights() * (includeraw ? 2 : 1) + 1); // plus one for beaminfo
+ 
+     // Identify an index ordering so that default weight is written out first
+-    vector<size_t> order{ (size_t)_customDefaultWeightIdx };
++    vector<size_t> order;
++    if (_customDefaultWeightIdx>=0) order.push_back((size_t)_customDefaultWeightIdx );
+     for (int i = 0, N = (int)numWeights(); i < N; ++i) {
+       if (i != _customDefaultWeightIdx) order.push_back(i);
+     }
+diff -Naur ORIG/src/Core/yamlcpp/emitterutils.cpp PATCHED/src/Core/yamlcpp/emitterutils.cpp
+--- ORIG/src/Core/yamlcpp/emitterutils.cpp	2026-01-26 10:02:56.936443198 +0100
++++ PATCHED/src/Core/yamlcpp/emitterutils.cpp	2026-01-26 10:02:56.937880752 +0100
+@@ -11,6 +11,7 @@
+ #include "stringsource.h"
+ #include "yaml-cpp/binary.h"  // IWYU pragma: keep
+ #include "yaml-cpp/null.h"
++#include <cstdint>
+ #include "yaml-cpp/ostream_wrapper.h"
+ 
+ namespace RIVET_YAML {

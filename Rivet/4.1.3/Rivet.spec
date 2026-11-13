@@ -139,12 +139,12 @@ sed -i 's/-spec[^[:blank:]]*//g' %{buildroot}/%{_bindir}/rivet-build
 %_libdir/pkgconfig/*
 %_libdir/*.*so*
 %_libdir/python*/site-packages/*
-%_libdir/Rivet/*
+%_libdir/Rivet
 %{_sysconfdir}/bash_completion.d/*
-/usr/share/Rivet/*
+/usr/share/Rivet
 
 %files -n %{libnamedev}
-%{_includedir}/Rivet/*
+%{_includedir}/Rivet
 
 
 %changelog
