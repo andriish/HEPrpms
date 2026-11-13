@@ -101,8 +101,8 @@ echo %{_libdir}/%{name} >  %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_ar
 %files 
 %doc AUTHORS README COPYING
 %_bindir/*
-%_datadir/ThePEG/*
-%_libdir/ThePEG/*
+%_datadir/ThePEG
+%_libdir/ThePEG
 %if %{?fedora}%{!?fedora:0}
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 %endif
