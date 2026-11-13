@@ -43,6 +43,8 @@ RPMLINT_FILTERS=(
   binary-or-shlib-defines-rpath     # RUNPATH to the private library directory (e.g. cernlib)
   files-duplicated-waste            # duplicated files that are not links
   devel-dependency                  # a non-devel package that requires a devel package (e.g. cernlib-utils)
+  hidden-file-or-dir                # hidden files (.cvsignore) in the upstream sources
+  filelist-forbidden                # forbidden files such as *.orig left in the upstream sources
 )
 DRYRUN=0
 FORCE=0
