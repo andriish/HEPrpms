@@ -87,29 +87,14 @@ export QA_RPATHS=3
 %{_bindir}/%{name}-config
 %{_bindir}/dataInstall
 %{_bindir}/LH_reader
-%{_libdir}/blackhat/lib*
+%{_libdir}/blackhat
 
 %files -n %{libnamedev}
-%{_includedir}/blackhat/*.h
+%{_includedir}/blackhat
 
 
 %files -n %{libnamedata}
-%{_datadir}/blackhat/assembly/*
-%{_datadir}/blackhat/datafiles/cut/4/*
-%{_datadir}/blackhat/datafiles/cut/5/*
-%{_datadir}/blackhat/datafiles/cut/6/*
-%{_datadir}/blackhat/datafiles/cut/7/*
-%{_datadir}/blackhat/datafiles/rat/4/*
-%{_datadir}/blackhat/datafiles/rat/5/*
-%{_datadir}/blackhat/datafiles/rat/6/*
-%{_datadir}/blackhat/datafiles/rat/7/*
-%{_datadir}/blackhat/datafiles/trees/4/*
-%{_datadir}/blackhat/datafiles/trees/5/*
-%{_datadir}/blackhat/datafiles/trees/6/*
-%{_datadir}/blackhat/datafiles/trees/7/*
-%{_datadir}/blackhat/examples/*
-%{_datadir}/blackhat/parents/*
-%{_datadir}/blackhat/svn*
+%{_datadir}/blackhat
 
 
 %changelog
