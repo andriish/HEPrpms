@@ -59,7 +59,7 @@ cd ..
 %{_includedir}/clhep.modulemap
 %{_includedir}/CLHEP
 %{_libdir}/libCLHEP*.a
-%{_libdir}/CLHEP-%{version}/*
+%{_libdir}/CLHEP-%{version}
 
 %changelog
 * Thu Nov 2 2023 Andrii Verbytskyi 2.4.7.1
