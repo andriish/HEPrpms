@@ -4,7 +4,7 @@ Release:        3%{?dist}
 License:        Standard CPC licence
 Url:            http://chaplin.hepforge.org/
 Source0:        https://chaplin.hepforge.org/code/%{name}-%{version}.tar
-Summary:        Complex Harmonic Polylogarithms in FORTRAN.
+Summary:        Complex Harmonic Polylogarithms in FORTRAN
 %if 0%{?rhel} || 0%{?fedora}
 BuildRequires:  gcc-gfortran gcc-c++ hoppet 
 %endif

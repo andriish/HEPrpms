@@ -1,7 +1,7 @@
 Name:       lhapdf-sets-whizard
 Version:    2.8.3
 Release:    2%{?dist}
-Summary:    Set of PDFs needed to build whizard.
+Summary:    Set of PDFs needed to build whizard
 License:    GPLv2+
 URL:        http://lhapdf.hepforge.org/
 Source0:    README.txt

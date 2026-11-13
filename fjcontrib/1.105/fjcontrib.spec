@@ -8,7 +8,7 @@ Url:            http://www.fjcontrib.fr
 Source0:        https://fastjet.fr/contrib/downloads/%{name}-%{version}.tar.gz
 Patch0:         patch-fjcontrib-0.txt
 Prefix:         %{_prefix}
-Summary:        The fastjet-contrib space is intended to provide a common location for access to 3rd party extensions of FastJet. 
+Summary:        The fastjet-contrib space is intended to provide a common location for access to 3rd party extensions of FastJet
 BuildRequires:  gcc-c++ fastjet-devel fastjet
 Requires:       fastjet
 %if 0%{?rhel} || 0%{?fedora}

@@ -5,7 +5,7 @@
 Name:           cuba
 Version:        4.2.2
 Release:        4%{?dist}
-Summary:        A library for multidimensional numerical integration.
+Summary:        A library for multidimensional numerical integration
 License:        LGPLv3
 Prefix:         %{_prefix}
 URL:            http://www.feynarts.de/cuba

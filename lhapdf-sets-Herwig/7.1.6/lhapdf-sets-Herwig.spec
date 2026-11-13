@@ -1,7 +1,7 @@
 Name:       lhapdf-sets-Herwig
 Version:    7.1.6
 Release:    1%{?dist}
-Summary:    Set of PDFs needed to build Herwig.
+Summary:    Set of PDFs needed to build Herwig
 License:    GPLv2+
 URL:        http://lhapdf.hepforge.org/
 Source0:    README.txt

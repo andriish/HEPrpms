@@ -10,7 +10,7 @@ Url:            http://professor.hepforge.org/
 Source0:        https://gitlab.com/hepcedar/professor/-/archive/professor-%{version}/professor-professor-%{version}.tar.gz
 Patch0:         patch-Professor-0.txt
 Prefix:         %{_prefix}
-Summary:        A tuning tool for Monte Carlo event generators.
+Summary:        A tuning tool for Monte Carlo event generators
 Requires:       YODA 
 BuildRequires:  YODA-devel eigen3-devel gcc-c++ 
 
