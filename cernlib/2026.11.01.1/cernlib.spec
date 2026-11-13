@@ -1,3 +1,8 @@
+# openSUSE adds -Werror=return-type to the default flags, the old C code of cernlib does not build with it
+%if 0%{?suse_version}
+%global optflags %(echo '%{optflags}' | sed 's/-Werror=return-type//g')
+%endif
+
 # Please note that this .spec file was designed to work in the CI  with 
 # specific versions of RHEL/Fedora and, probably,  will need some 
 # adjustements to work properly with all distributions
