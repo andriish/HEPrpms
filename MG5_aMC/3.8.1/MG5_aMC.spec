@@ -106,6 +106,15 @@ cp bin/* $RPM_BUILD_ROOT/%_bindir
 cp -r HEPTools  aloha vendor madgraph input Template MadSpin  mg5decay  models $RPM_BUILD_ROOT/%{python_sitearch}
 rm -rf $RPM_BUILD_ROOT/%{python_sitearch}/madgraph/VERSION
 cp VERSION $RPM_BUILD_ROOT/%{python_sitearch}/madgraph
+# relative symlinks of the source tree (../LICENSE, ../../Template/...) point outside of the installed tree, which
+# fails the openSUSE symlink check: replace them by copies of their targets
+srcdir=$PWD
+pushd $RPM_BUILD_ROOT/%{python_sitearch}
+find . -xtype l | while read -r l; do
+  if [ -e "$srcdir/$l" ]; then rm -f "$l"; cp -rL "$srcdir/$l" "$l"; fi
+done
+find . -xtype l -print -delete
+popd
 %endif 
 
 %files -n %{libname}
