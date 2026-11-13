@@ -7,6 +7,7 @@
 #      the patches; the files are taken from the git tree, so they have to be committed and pushed), and
 #   2. download the sources listed in the Source lines of the spec file (download_files, or download_url with an
 #      explicit file name for sources with a query string in the URL, e.g. HepForge downloader?f=...).
+# Sources that are files and not tracked by git (qgraf-3.6.7.tgz, made by do.sh) are uploaded to OBS as they are.
 # OBS then builds the package. The rpmlintrc file makes the OBS checks ignore the rpmlint errors listed in
 # RPMLINT_FILTERS below. The repository itself needs no OBS-specific files.
 #
@@ -152,6 +153,23 @@ if [ ! -f _service ] || ! cmp -s _service _service.new; then mv _service.new _se
 if [ ! -f "$PACKAGE-rpmlintrc" ] || ! cmp -s "$PACKAGE-rpmlintrc" "$PACKAGE-rpmlintrc.new"; then
   mv "$PACKAGE-rpmlintrc.new" "$PACKAGE-rpmlintrc"; changed=1
 else rm "$PACKAGE-rpmlintrc.new"; fi
+# Sources that are files, not URLs, and are not tracked by git (e.g. qgraf-3.6.7.tgz, which do.sh makes from the
+# committed .f08 file) are uploaded to the OBS package as they are; do.sh is run if the file does not exist yet.
+LOCAL_SRC=$(rpmspec -P "$TOPDIR/$SPEC" 2>/dev/null | awk '/^Source[0-9]*:/{print $2}' | grep -vE '^(https?|ftp)://' || true)
+for f in $LOCAL_SRC; do
+  f=${f##*/}
+  git -C "$TOPDIR" ls-files --error-unmatch "$PACKAGE/$VERSION/$f" >/dev/null 2>&1 && continue
+  if [ ! -f "$TOPDIR/$PACKAGE/$VERSION/$f" ] && [ -f "$TOPDIR/$PACKAGE/$VERSION/do.sh" ]; then
+    (cd "$TOPDIR/$PACKAGE/$VERSION" && sh do.sh >/dev/null 2>&1) || true
+  fi
+  [ -f "$TOPDIR/$PACKAGE/$VERSION/$f" ] || die "source $f is neither tracked by git nor made by do.sh"
+  if [ ! -f "$f" ] || ! cmp -s "$f" "$TOPDIR/$PACKAGE/$VERSION/$f"; then
+    isnew=0; [ -f "$f" ] || isnew=1
+    cp "$TOPDIR/$PACKAGE/$VERSION/$f" "$f"
+    [ "$isnew" = 1 ] && osc add "$f" >/dev/null 2>&1
+    changed=1
+  fi
+done
 if [ "$changed" = 0 ]; then
   echo "== $PROJECT: $PACKAGE $VERSION is up to date, refreshing the sources from git"
   osc service remoterun "$PROJECT" "$PACKAGE" >/dev/null
