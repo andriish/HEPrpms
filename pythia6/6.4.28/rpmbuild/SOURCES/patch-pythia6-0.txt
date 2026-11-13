@@ -1,0 +1,69 @@
+diff -Naur ORIG/Makefile PATCHED/Makefile
+--- ORIG/Makefile	2026-01-16 09:04:26.424870021 +0100
++++ PATCHED/Makefile	2026-01-16 09:04:26.424962464 +0100
+@@ -1,27 +1,40 @@
+-SRCS := $(wildcard py*.f) $(wildcard struct*.f) $(wildcard up*.f) ssmssm.f sugra.f visaje.f $(wildcard fh*.f) pdfset.f
++#SRCS := $(wildcard py*.f) $(wildcard struct*.f) $(wildcard up*.f) ssmssm.f sugra.f visaje.f $(wildcard fh*.f) 
++#pdfset.f
++SRCS := $(wildcard py*.f)   ssmssm.f sugra.f visaje.f $(wildcard fh*.f) 
+ OBJS = ${SRCS:.f=.o}
++
++SRCSD :=  $(wildcard up*.f) 
++OBJSD = ${SRCSD:.f=.o}
+ # archive executable
+ AR = ar
+ # FC = g77
+ FC = gfortran
+-# Fortran compiler
+-FFLAGS = -g2 -O2 -ffortran-bounds-check
+-FFLAGS = -g -O2 -fbounds-check
+-FFLAGS = -g -fbounds-check
+ 
+ message:
+ 	@echo 'You can make lib or clean'
+ 	@echo 'Please do not clash with the names in the library'
+ 
+ clean:
+-	rm -rf libpythia.a *.o
++	rm -rf libpythia6.a *.o
+ 
+-lib: libpythia.a
++lib: libpythia6.a libpythia6.so  libpythia6_dummy.a libpythia6_dummy.so
+ 
+ # Make lib
+-libpythia.a: ${OBJS}
++libpythia6.a: ${OBJS}
++	$(AR) rcv $@ $+
++
++
++libpythia6_dummy.a: ${OBJSD}
+ 	$(AR) rcv $@ $+
+ 
++
++libpythia6.so: ${OBJS}
++	$(LD) $(LDFLAGS) -shared  $+ -o libpythia6.so --no-as-needed  $(shell gfortran -print-file-name=libgfortran.so)
++
++libpythia6_dummy.so: ${OBJSD}
++	$(LD) $(LDFLAGS) -shared  $+ -o libpythia6_dummy.so --no-as-needed $(shell gfortran -print-file-name=libgfortran.so)
++
++
+ bigfile:
+ 	cat ${SRCS} >> .tmp_file;
+ 	mv .tmp_file pythia6.f
+diff -Naur ORIG/pyprep.f PATCHED/pyprep.f
+--- ORIG/pyprep.f	2026-01-16 09:04:26.424962464 +0100
++++ PATCHED/pyprep.f	2026-01-16 09:04:26.425247764 +0100
+@@ -1196,8 +1196,12 @@
+             IBEG=I0
+             IPCS=I1
+           ENDIF
+-        ELSEIF(K(I1,1).EQ.1.AND.KCHG(PYCOMP(K(I1,2)),2).NE.0) THEN
++        ELSEIF (K(I1,1).EQ.1) THEN
++          IF (PYCOMP(K(I1,2)).GE.1) THEN
++          IF (KCHG(PYCOMP(K(I1,2)),2).NE.0) THEN
+           I0=0
++          ENDIF
++          ENDIF
+         ENDIF
+   940 CONTINUE
+  

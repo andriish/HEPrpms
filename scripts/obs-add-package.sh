@@ -30,6 +30,8 @@ REVISION=master
 # rpmlint messages that OBS must ignore (they fail or spoil a build although the packages are fine for us).
 RPMLINT_FILTERS=(
   devel-file-in-non-devel-package   # static libraries and headers in the main package, as in the Fedora/EPEL layout
+  lto-no-text-in-archive            # static libraries built with LTO but without fat objects
+  static-library-without-debuginfo  # static libraries without debug info
 )
 DRYRUN=0
 PACKAGE=

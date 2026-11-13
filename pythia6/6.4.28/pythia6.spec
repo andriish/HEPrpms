@@ -36,9 +36,9 @@ make %{?_smp_mflags}  lib
 %install
 mkdir -p %{buildroot}%{_libdir}
 install -m 755 libpythia6.so %{buildroot}%{_libdir}
-install -m 755 libpythia6.a %{buildroot}%{_libdir}
+install -m %{?suse_version:644}%{!?suse_version:755} libpythia6.a %{buildroot}%{_libdir}
 install -m 755 libpythia6_dummy.so %{buildroot}%{_libdir}
-install -m 755 libpythia6_dummy.a %{buildroot}%{_libdir}
+install -m %{?suse_version:644}%{!?suse_version:755} libpythia6_dummy.a %{buildroot}%{_libdir}
 
 
 
