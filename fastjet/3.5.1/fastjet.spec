@@ -1,3 +1,4 @@
+%{!?python3_pkgversion:%global python3_pkgversion 3}
 Name:           fastjet
 Version:        3.5.1
 Release:        1002%{?dist}
@@ -77,6 +78,11 @@ This package contains python bindings for %{name}.
 
 %files -n fastjet-devel 
 %{_bindir}/%{name}-config
+%dir %{_includedir}/siscone
+%dir %{_includedir}/siscone/spherical
+%dir %{_includedir}/fastjet
+%dir %{_includedir}/fastjet/tools
+%dir %{_includedir}/fastjet/internal
 %{_includedir}/siscone/*.h
 %{_includedir}/siscone/spherical/*.h
 %{_includedir}/fastjet/*.h
@@ -88,6 +94,7 @@ This package contains python bindings for %{name}.
 
 
 %files -n python%{python3_pkgversion}-%{name}
+%dir %{python3_sitearch}/fastjet
 %{python3_sitearch}/fastjet/_%{name}*.so*
 %{python3_sitearch}/fastjet/*.p*
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0}
