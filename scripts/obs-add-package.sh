@@ -1,28 +1,31 @@
 #!/bin/bash
 # Add (or update) a package in an openSUSE Build Service (OBS) project.
 #
-# OBS cannot run a custom source script as COPR does, so the package is built locally into a source RPM with the
-# unchanged srpmsbuild.sh (it downloads the sources, checks their checksums, runs do.sh if present and produces the
-# SRPM) and the SRPM is imported with "osc importsrcpkg"; the spec file, patches and sources of the SRPM are
-# committed to the OBS package, which triggers the build.
+# Nothing is built or uploaded from this machine. The package gets a _service file, which exists only in OBS and is
+# generated here, that makes OBS
+#   1. clone https://github.com/andriish/HEPrpms.git and extract the files of <package>/<version>/ (the spec file and
+#      the patches; the files are taken from the git tree, so they have to be committed and pushed), and
+#   2. download the sources listed in the Source lines of the spec file (download_files).
+# OBS then builds the package. The repository itself needs no OBS-specific files.
 #
 # Usage: scripts/obs-add-package.sh [options] <package> [<version>]
 #   <version>            version directory to import; the newest directory under <package>/ is used by default
 #   --project NAME       OBS project (default: home:averbyts:HEPrpmsSUSE)
-#   --reuse-srpm         use the SRPM already present in <package>/<version>/rpmbuild/SRPMS instead of rebuilding it
-#   --dry-run            only print what would be done
+#   --revision REV       git branch, tag or commit OBS clones (default: master)
+#   --dry-run            only print the generated _service file
 #   -h, --help           show this help
 #
 # Examples:
 #   scripts/obs-add-package.sh OpenPHIGS
-#   scripts/obs-add-package.sh --reuse-srpm fastjet 3.5.3
+#   scripts/obs-add-package.sh --project home:averbyts:HEPrpmsSUSE fastjet 3.5.3
 #
 # Requires osc with valid credentials in ~/.config/osc/oscrc and the project to exist (see scripts/obs-sync.sh).
 
 set -euo pipefail
 
 PROJECT=home:averbyts:HEPrpmsSUSE
-REUSE=0
+GIT_URL=https://github.com/andriish/HEPrpms.git
+REVISION=master
 DRYRUN=0
 PACKAGE=
 VERSION=
@@ -32,15 +35,15 @@ die() { echo "ERROR: $*" >&2; exit 1; }
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --project)    [ $# -ge 2 ] || die "--project needs a value"; PROJECT=$2; shift 2 ;;
-    --reuse-srpm) REUSE=1; shift ;;
-    --dry-run)    DRYRUN=1; shift ;;
-    -h|--help)    usage; exit 0 ;;
-    -*)           die "unknown option $1" ;;
-    *)            if [ -z "$PACKAGE" ]; then PACKAGE=$1
-                  elif [ -z "$VERSION" ]; then VERSION=$1
-                  else die "too many arguments"; fi
-                  shift ;;
+    --project)  [ $# -ge 2 ] || die "--project needs a value"; PROJECT=$2; shift 2 ;;
+    --revision) [ $# -ge 2 ] || die "--revision needs a value"; REVISION=$2; shift 2 ;;
+    --dry-run)  DRYRUN=1; shift ;;
+    -h|--help)  usage; exit 0 ;;
+    -*)         die "unknown option $1" ;;
+    *)          if [ -z "$PACKAGE" ]; then PACKAGE=$1
+                elif [ -z "$VERSION" ]; then VERSION=$1
+                else die "too many arguments"; fi
+                shift ;;
   esac
 done
 [ -n "$PACKAGE" ] || { usage; exit 1; }
@@ -53,40 +56,54 @@ if [ -z "$VERSION" ]; then
   [ -n "$VERSION" ] || die "no version directory found in $PACKAGE"
   echo "Using the newest version directory: $VERSION"
 fi
-[ -f "$TOPDIR/$PACKAGE/$VERSION/$PACKAGE.spec" ] || die "missing $TOPDIR/$PACKAGE/$VERSION/$PACKAGE.spec"
+SPEC="$PACKAGE/$VERSION/$PACKAGE.spec"
+git -C "$TOPDIR" ls-files --error-unmatch "$SPEC" >/dev/null 2>&1 ||
+  die "$SPEC is not tracked by git; commit and push it, OBS clones $GIT_URL"
 
-run() {
-  if [ "$DRYRUN" = 1 ]; then printf '+'; printf ' %q' "$@"; echo; else "$@"; fi
-}
+# The files of the version directory itself (no ORIG/PATCHED trees, no helper scripts).
+FILES=$(git -C "$TOPDIR" ls-files "$PACKAGE/$VERSION" | sed "s|^$PACKAGE/$VERSION/||" |
+        grep -v '/' | grep -vE '^(do\.sh|_service)$' || true)
 
-SRPMDIR="$TOPDIR/$PACKAGE/$VERSION/rpmbuild/SRPMS"
-if [ "$REUSE" = 1 ] && ls "$SRPMDIR"/*.src.rpm >/dev/null 2>&1; then
-  echo "== $PACKAGE $VERSION: reusing the existing SRPM"
-else
-  echo "== $PACKAGE $VERSION: building the SRPM"
-  mkdir -p "$TOPDIR/logs"
-  (cd "$TOPDIR" && run sh srpmsbuild.sh "$PACKAGE" "$VERSION" > "$TOPDIR/logs/obs-$PACKAGE.log" 2>&1) ||
-    die "srpmsbuild.sh failed, see logs/obs-$PACKAGE.log"
-fi
-SRPM=$(ls -1 "$SRPMDIR"/*.src.rpm 2>/dev/null | head -1 || true)
-if [ -z "$SRPM" ]; then
-  [ "$DRYRUN" = 1 ] && SRPM="$SRPMDIR/$PACKAGE.src.rpm" || die "no SRPM in $SRPMDIR, see logs/obs-$PACKAGE.log"
-fi
+SERVICE=$(
+  echo '<services>'
+  echo '  <service name="obs_scm">'
+  echo '    <param name="scm">git</param>'
+  echo "    <param name=\"url\">$GIT_URL</param>"
+  echo "    <param name=\"revision\">$REVISION</param>"
+  echo "    <param name=\"subdir\">$PACKAGE/$VERSION</param>"
+  for f in $FILES; do echo "    <param name=\"extract\">$f</param>"; done
+  echo '  </service>'
+  echo '  <service name="download_files"/>'
+  echo '</services>'
+)
+
+if [ "$DRYRUN" = 1 ]; then echo "== $PROJECT/$PACKAGE ($VERSION)"; echo "$SERVICE"; exit 0; fi
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
-echo "== $PROJECT: importing $PACKAGE $VERSION"
-if [ "$DRYRUN" = 1 ]; then
-  echo "+ (in a temporary checkout of $PROJECT)"
-  echo "+ osc importsrcpkg -c --delete-old-files $SRPM"
-  exit 0
-fi
 cd "$WORK"
-# Check out the package if it exists, so that the import updates it (and removes obsolete files) instead of failing.
-if osc ls "$PROJECT" "$PACKAGE" >/dev/null 2>&1; then
-  osc co "$PROJECT" "$PACKAGE" >/dev/null
-else
-  osc co "$PROJECT" >/dev/null
+
+if ! osc ls "$PROJECT" "$PACKAGE" >/dev/null 2>&1; then
+  echo "== $PROJECT: creating $PACKAGE"
+  cat > meta.xml <<EOM
+<package name="$PACKAGE" project="$PROJECT">
+  <title>$PACKAGE</title>
+  <description>$(sed -n 's/^Summary: *//p' "$TOPDIR/$SPEC" | head -1 | sed 's/&/\&amp;/g; s/</\&lt;/g') (packaging from https://github.com/andriish/HEPrpms)</description>
+</package>
+EOM
+  osc meta pkg "$PROJECT" "$PACKAGE" -F meta.xml >/dev/null
 fi
-cd "$PROJECT"
-osc importsrcpkg -c --delete-old-files "$SRPM"
+
+osc co "$PROJECT" "$PACKAGE" >/dev/null
+cd "$PROJECT/$PACKAGE"
+echo "$SERVICE" > _service.new
+if [ -f _service ] && cmp -s _service _service.new; then
+  rm _service.new
+  echo "== $PROJECT: $PACKAGE $VERSION is up to date, refreshing the sources from git"
+  osc service remoterun "$PROJECT" "$PACKAGE" >/dev/null
+else
+  mv _service.new _service
+  osc add _service >/dev/null 2>&1 || true
+  echo "== $PROJECT: updating $PACKAGE to $VERSION"
+  osc commit -m "$PACKAGE $VERSION from $GIT_URL" >/dev/null
+fi

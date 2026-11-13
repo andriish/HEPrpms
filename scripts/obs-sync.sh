@@ -3,20 +3,21 @@
 #
 # By default the OBS project home:averbyts:HEPrpmsSUSE mirrors averbyts/HEPrpmsSUSE on COPR: the same packages, in
 # the versions that COPR builds, for openSUSE Tumbleweed (x86_64). The list is read from the COPR custom-source
-# scripts, as scripts/git-rm-unused.sh does. Every package is imported with scripts/obs-add-package.sh.
+# scripts, as scripts/git-rm-unused.sh does. Every package is set up with scripts/obs-add-package.sh, which only
+# creates a _service file in OBS (git clone of this repository + download of the sources); nothing is built or
+# uploaded from this machine, the packages have to be committed and pushed to GitHub first.
 #
 # Usage: scripts/obs-sync.sh [options] [<package> ...]
 #   <package> ...        only these packages (default: all packages of the COPR project)
 #   --project NAME       OBS project (default: home:averbyts:HEPrpmsSUSE)
 #   --copr OWNER/PROJ    COPR project to mirror (default: averbyts/HEPrpmsSUSE)
-#   --jobs N             build N SRPMs in parallel (default: 4)
+#   --jobs N             set up N packages in parallel (default: 4)
 #   --skip-existing      do not touch packages that already exist in the OBS project
-#   --reuse-srpm         use the SRPMs that are already built locally
 #   --dry-run            only print what would be done
 #   -h, --help           show this help
 #
 # The project is created if it does not exist; its repository is openSUSE_Tumbleweed (x86_64), based on
-# openSUSE:Factory/snapshot. Failed packages are listed at the end and do not stop the run.
+# the science project and openSUSE:Factory/snapshot. Failed packages are listed at the end and do not stop the run.
 #
 # Requires osc, copr-cli and jq.
 
@@ -26,7 +27,6 @@ PROJECT=home:averbyts:HEPrpmsSUSE
 COPR=averbyts/HEPrpmsSUSE
 JOBS=4
 SKIP=0
-REUSE=()
 DRYRUN=0
 ONLY=()
 
@@ -39,7 +39,6 @@ while [ $# -gt 0 ]; do
     --copr)          [ $# -ge 2 ] || die "--copr needs a value"; COPR=$2; shift 2 ;;
     --jobs)          [ $# -ge 2 ] || die "--jobs needs a value"; JOBS=$2; shift 2 ;;
     --skip-existing) SKIP=1; shift ;;
-    --reuse-srpm)    REUSE=(--reuse-srpm); shift ;;
     --dry-run)       DRYRUN=1; shift ;;
     -h|--help)       usage; exit 0 ;;
     -*)              die "unknown option $1" ;;
@@ -64,6 +63,7 @@ if ! osc meta prj "$PROJECT" >/dev/null 2>&1; then
   <description>Clone of https://copr.fedorainfracloud.org/coprs/$COPR/ for Tumbleweed. HEP software packaged from https://github.com/andriish/HEPrpms</description>
   <person userid="${PROJECT#home:}" role="maintainer"/>
   <repository name="openSUSE_Tumbleweed">
+    <path project="science" repository="openSUSE_Tumbleweed"/>
     <path project="openSUSE:Factory" repository="snapshot"/>
     <arch>x86_64</arch>
   </repository>
@@ -86,8 +86,7 @@ done
 IFS=$'\n' LIST=($(sort <<< "${LIST[*]}")); unset IFS
 echo "${#LIST[@]} packages to import into $PROJECT"
 
-# Every job builds the SRPM locally and uploads it, so the builds run in parallel.
-OPTS=(--project "$PROJECT" "${REUSE[@]}")
+OPTS=(--project "$PROJECT")
 [ "$DRYRUN" = 1 ] && OPTS+=(--dry-run)
 mkdir -p "$TOPDIR/logs"
 STATUS=$(mktemp)
