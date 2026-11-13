@@ -50,6 +50,10 @@ make fragile-shared
 %install
 make install  DESTDIR=%{buildroot}
 make  fragile-shared-install  DESTDIR=%{buildroot}
+%if 0%{?suse_version}
+# static libraries must not be executable (rpmlint spurious-executable-perm)
+chmod 644 %{buildroot}%{_libdir}/*.a
+%endif
 
 %post 
 ldconfig 
