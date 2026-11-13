@@ -53,6 +53,8 @@ make  fragile-shared-install  DESTDIR=%{buildroot}
 %if 0%{?suse_version}
 # static libraries must not be executable (rpmlint spurious-executable-perm)
 chmod 644 %{buildroot}%{_libdir}/*.a
+# the headers must not be executable either (rpmlint script-without-shebang)
+find %{buildroot}%{_includedir}/fastjet/contrib -type f -exec chmod 644 {} +
 %endif
 
 %post 
