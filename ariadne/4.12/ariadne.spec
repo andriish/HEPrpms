@@ -41,7 +41,7 @@ make install INSTALLDIR=%{buildroot}%_prefix
 
 %files
 %_libdir/*
-%_includedir/ariadne/*
+%_includedir/ariadne
 
 %changelog
 * Tue Apr 20 2021 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
