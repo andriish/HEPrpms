@@ -1,3 +1,8 @@
+# OBS/openSUSE: the static libraries must not be LTO-only (rpmlint lto-no-text-in-archive fails the build)
+%if 0%{?suse_version}
+%global _lto_cflags %{nil}
+%endif
+
 Summary:       Class library for High Energy Physics
 Name:          clhep
 Version:       2.4.7.1
@@ -49,13 +54,18 @@ make
 %files
 %{_libdir}/libCLHEP*.so
 
+%if 0%{?suse_version}
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+%endif
+
 %files devel
 %{_libdir}/pkgconfig/*
 %{_bindir}/*
 %{_includedir}/clhep.modulemap
 %{_includedir}/CLHEP
 %{_libdir}/libCLHEP*.a
-%{_libdir}/CLHEP-%{version}/*
+%{_libdir}/CLHEP-%{version}
 
 %changelog
 * Thu Nov 2 2023 Andrii Verbytskyi 2.4.7.1
