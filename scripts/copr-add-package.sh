@@ -13,6 +13,9 @@
 #   --dry-run            only print the copr-cli commands
 #   -h, --help           show this help
 #
+# i686 (the *-i386 chroots) is enabled in HEPrpms only for the packages in I686_PACKAGES; for every other package
+# the i386 chroots are put on the package's chroot denylist.
+#
 # Examples:
 #   scripts/copr-add-package.sh OpenPHIGS
 #   scripts/copr-add-package.sh --projects HEPrpms --build ginac 1.8.10
@@ -24,6 +27,7 @@ set -euo pipefail
 OWNER=averbyts
 PROJECTS=HEPrpms
 GIT_URL=https://github.com/andriish/HEPrpms.git
+I686_PACKAGES="OpenPHIGS cernlib"
 BUILD=0
 DRYRUN=0
 PACKAGE=
@@ -83,6 +87,13 @@ for proj in "${PROJ[@]}"; do
     HEPrpmsSUSE) BUILDDEPS="git rpmdevtools wget"; CHROOT=fedora-latest-x86_64 ;;
     *)           BUILDDEPS="git spectool wget";    CHROOT=epel-8-x86_64 ;;
   esac
+  DENY=()
+  if [ "$proj" = HEPrpms ]; then
+    case " $I686_PACKAGES " in
+      *" $PACKAGE "*) DENY=(--chroot-denylist "") ;;
+      *)              DENY=(--chroot-denylist '*-i386') ;;
+    esac
+  fi
   if copr-cli get-package --name "$PACKAGE" "$OWNER/$proj" >/dev/null 2>&1; then
     action=edit-package-custom
     echo "== $OWNER/$proj: $PACKAGE exists, updating it to $VERSION"
@@ -96,6 +107,7 @@ for proj in "${PROJ[@]}"; do
       --script-chroot "$CHROOT" \
       --script-builddeps "$BUILDDEPS" \
       --script-resultdir "HEPrpms/$PACKAGE/$VERSION/rpmbuild/SOURCES/" \
+      "${DENY[@]}" \
       "$OWNER/$proj"
   if [ "$BUILD" = 1 ]; then
     run copr-cli build-package --name "$PACKAGE" --nowait "$OWNER/$proj"
