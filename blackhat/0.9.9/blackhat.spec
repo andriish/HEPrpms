@@ -1,3 +1,8 @@
+# openSUSE adds -Werror=return-type to the default flags, the code of blackhat does not build with it
+%if 0%{?suse_version}
+%global optflags %(echo '%{optflags}' | sed 's/-Werror=return-type//g')
+%endif
+
 %define libname     blackhat
 %define libnamedev  blackhat-devel
 %define libnamedata  blackhat-data

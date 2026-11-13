@@ -1,0 +1,11 @@
+--- ORIG/blackhat-config.in	2026-01-16 09:04:26.353695703 +0100
++++ PATCHED/blackhat-config.in	2026-01-16 09:04:26.355261758 +0100
+@@ -9,7 +9,7 @@
+   --prefix)
+     echo @prefix@;;
+   --libs)
+-    echo -L@prefix@/lib/blackhat $LIBS -L@AM_QD_PATH@/lib -lqd ;;
++    echo -L@libdir@/blackhat $LIBS -L@AM_QD_PATH@/lib -lqd ;;
+   --include)
+     echo @prefix@/include;;
+   *)
