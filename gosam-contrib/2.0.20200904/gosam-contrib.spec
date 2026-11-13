@@ -41,6 +41,8 @@ rm -f %{buildroot}/%_libdir/gosam-contrib/*.la
 %{_datadir}/%{name}/
 %_includedir/%{name}/
 %_includedir/ninja/
+%dir %_libdir/gosam-contrib
+%dir %_libdir/gosam-contrib/pkgconfig
 %_libdir/gosam-contrib/pkgconfig/samurai.pc
 %_libdir/gosam-contrib/libavh_olo.a
 %_libdir/gosam-contrib/libavh_olo.so

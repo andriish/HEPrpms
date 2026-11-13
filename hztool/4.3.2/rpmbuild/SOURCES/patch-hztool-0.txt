@@ -1,0 +1,51 @@
+diff -Naur ORIG/configure.ac PATCHED/configure.ac
+--- ORIG/configure.ac	2026-01-16 09:04:26.414571191 +0100
++++ PATCHED/configure.ac	2026-01-16 09:04:26.414787520 +0100
+@@ -47,6 +47,7 @@
+ AC_PROG_INSTALL
+ AC_PROG_LN_S
+ 
++if test "x$MYFFLAGS" = "x"; then
+ if test "x$F77" = "xg77"; then
+   AC_SUBST([MYFFLAGS], ["-fno-automatic -finit-local-zero -fno-backslash -fno-globals -ff90 -fpic -ffixed-line-length-132"])
+   AC_MSG_RESULT([Using g77 with FLAGS = $MYFFLAGS ])
+@@ -56,6 +57,9 @@
+   AC_SUBST([MYFFLAGS], ["-O0 -fno-automatic -fno-backslash -fbounds-check -fpic -ffixed-line-length-132 -Wl,-flat_namespace "]) 
+   AC_MSG_RESULT([Using gfortran with FLAGS = $MYFFLAGS ])
+ fi
++else
++AC_SUBST([MYFFLAGS], [$MYFFLAGS]) 
++fi
+ 
+ 
+ 
+diff -Naur ORIG/src/hera/hzh0006017.F PATCHED/src/hera/hzh0006017.F
+--- ORIG/src/hera/hzh0006017.F	2026-01-16 09:04:26.414787520 +0100
++++ PATCHED/src/hera/hzh0006017.F	2026-01-16 09:04:26.415068590 +0100
+@@ -144,13 +144,14 @@
+ *
+       real cs1(ptbn,ybn),cs1ste(ptbn,ybn)
+       real cs1sye(ptbn,ybn),cs1te(ptbn,ybn),yav(ybn),ptav(ptbn)
+-      real arh1(ybn+1),arh1e(ybn+1),arh1s(ybn+1)
++      real arh1(ybn+1)
+       real arh2(ptbn),arh2e(ptbn),arh2s(ptbn)
+ * 
+ * for cs as function of xf (fig6)
+ *
+       real xfav(xbn),cs2(xbn),cs2ste(xbn),cs2sye(xbn),cs2te(xbn)
+-      real zero2(ptbn), zero3(xbn)
++      double precision  zero3(xbn),arh1e(ybn+1),arh1s(ybn+1)
++      double precision  zero2(ptbn)
+ *
+ * data for figures 2 and 3 [d^2s/dpt^2dy]
+ *
+diff -Naur ORIG/src/Makefile.am PATCHED/src/Makefile.am
+--- ORIG/src/Makefile.am	2026-01-16 09:04:26.414666112 +0100
++++ PATCHED/src/Makefile.am	2026-01-16 09:04:26.415007535 +0100
+@@ -109,5 +109,5 @@
+ 
+ lib_LTLIBRARIES = libhztool.la
+ AM_LDFLAGS = $(VERSIONFLAGS)
+-AM_FFLAGS = -I$(top_srcdir)/inc $(MYFFLAGS)
++AM_FFLAGS = -I$(top_srcdir)/inc $(MYFFLAGS) $(FFLAGS)
+ libhztool_la_SOURCES = $(TOOLSSOURCES) $(PAPERSSOURCES)

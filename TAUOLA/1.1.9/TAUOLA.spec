@@ -99,10 +99,10 @@ install -m 644 documentation/doxy_documentation/html/*   %{buildroot}/%{_docdir}
 
 
 %files -n %{libnamedev}
-%{_includedir}/Tauola/*
+%{_includedir}/Tauola
 
 %files -n %{name}-doc
-%{_docdir}/%{name}/*
+%{_docdir}/%{name}
 
 
 %changelog

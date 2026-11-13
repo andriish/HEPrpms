@@ -51,6 +51,7 @@ rm -f %{buildroot}/%_libdir/*.la
 %defattr(-,root,root)
 %_bindir/*
 %_libdir/*
+%dir /usr/share/doc/qcdnum
 /usr/share/doc/qcdnum/README
 
 %files devel

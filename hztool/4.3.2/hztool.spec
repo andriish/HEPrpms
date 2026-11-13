@@ -81,7 +81,7 @@ find $RPM_BUILD_ROOT -type f -name '*.la' -exec rm -f {} \;
 
 %files -n %{libname}
 
-%{_includedir}/%{name}/*
+%{_includedir}/%{name}
 %{_libdir}/*
 /usr/share/*
 
