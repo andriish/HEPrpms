@@ -32,6 +32,10 @@ export FFLAGS="%{optflags} -std=legacy"
 export CFLAGS="%{optflags} -std=c++17"
 export CXXFLAGS="%{optflags} -std=c++17"
 %endif
+%if 0%{?suse_version}
+# GCC 16 defaults to C++20, which removed std::allocator::construct/destroy
+export CXXFLAGS="%{optflags} -std=gnu++17"
+%endif
 %configure --with-qd=/usr 
 make  
 %install
