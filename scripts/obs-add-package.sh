@@ -5,7 +5,8 @@
 # which exist only in OBS and are generated here. The _service file makes OBS
 #   1. clone https://github.com/andriish/HEPrpms.git and extract the files of <package>/<version>/ (the spec file and
 #      the patches; the files are taken from the git tree, so they have to be committed and pushed), and
-#   2. download the sources listed in the Source lines of the spec file (download_files).
+#   2. download the sources listed in the Source lines of the spec file (download_files, or download_url with an
+#      explicit file name for sources with a query string in the URL, e.g. HepForge downloader?f=...).
 # OBS then builds the package. The rpmlintrc file makes the OBS checks ignore the rpmlint errors listed in
 # RPMLINT_FILTERS below. The repository itself needs no OBS-specific files.
 #
@@ -77,6 +78,26 @@ git -C "$TOPDIR" ls-files --error-unmatch "$SPEC" >/dev/null 2>&1 ||
 FILES=$(git -C "$TOPDIR" ls-files "$PACKAGE/$VERSION" | sed "s|^$PACKAGE/$VERSION/||" |
         grep -v '/' | grep -vE '^(do\.sh|_service)$' || true)
 
+# Sources whose URL has a query string (e.g. https://yoda.hepforge.org/downloader?f=YODA-2.1.4.tar.gz) would be saved
+# by download_files under a name like "downloader?f=YODA-2.1.4.tar.gz", which the spec file does not expect. If the
+# spec has such a source, every URL source is fetched by download_url with an explicit file name instead (the URLs
+# are taken from the spec file with rpmspec, which only parses it).
+SRC_URLS=$(rpmspec -P "$TOPDIR/$SPEC" 2>/dev/null | awk '/^Source[0-9]*:/{print $2}' | grep -E '^(https?|ftp)://' || true)
+download_services() {
+  if ! grep -q '?' <<< "$SRC_URLS"; then echo '  <service name="download_files"/>'; return; fi
+  local u proto rest host path name
+  for u in $SRC_URLS; do
+    case "$u" in *'#/'*) name=${u##*'#/'}; u=${u%%'#/'*} ;; *'?'*) name=${u##*[=/]} ;; *) name=${u##*/} ;; esac
+    proto=${u%%://*}; rest=${u#*://}; host=${rest%%/*}; path=/${rest#*/}
+    echo '  <service name="download_url">'
+    echo "    <param name=\"protocol\">$proto</param>"
+    echo "    <param name=\"host\">$host</param>"
+    echo "    <param name=\"path\">$path</param>"
+    echo "    <param name=\"filename\">$name</param>"
+    echo '  </service>'
+  done
+}
+
 SERVICE=$(
   echo '<services>'
   echo '  <service name="obs_scm">'
@@ -86,7 +107,7 @@ SERVICE=$(
   echo "    <param name=\"subdir\">$PACKAGE/$VERSION</param>"
   for f in $FILES; do echo "    <param name=\"extract\">$f</param>"; done
   echo '  </service>'
-  echo '  <service name="download_files"/>'
+  download_services
   echo '</services>'
 )
 
