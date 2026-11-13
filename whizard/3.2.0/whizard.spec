@@ -169,7 +169,7 @@ export LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"
 %endif
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --enable-recola     --with-recola=/usr/%_lib \
-    --enable-gosam      --with-gosam=/usr  --with-golem=/usr  --with-ninja=/usr --with-samurai=/usr \
+    --enable-gosam      --with-gosam=/usr/bin  --with-golem=/usr  --with-ninja=/usr --with-samurai=/usr \
     --enable-fastjet    --with-fastjet=/usr \
     --enable-hoppet     --with-hoppet=/usr  \
     --enable-lhapdf     --with-lhapdf=/usr \
@@ -185,7 +185,7 @@ export LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --disable-ocaml  \
     --enable-recola     --with-recola=/usr/%_lib \
-    --enable-gosam      --with-gosam=/usr  --with-golem=/usr  --with-ninja=/usr --with-samurai=/usr \
+    --enable-gosam      --with-gosam=/usr/bin  --with-golem=/usr  --with-ninja=/usr --with-samurai=/usr \
     --enable-fastjet    --with-fastjet=/usr \
     --enable-hoppet     --with-hoppet=/usr  \
     --enable-lhapdf     --with-lhapdf=/usr \
@@ -213,7 +213,7 @@ export FCFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
 
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --enable-recola     --with-recola=/usr/%_lib \
-    --enable-gosam      --with-gosam=/usr  --with-golem=/usr  --with-ninja=/usr --with-samurai=/usr \
+    --enable-gosam      --with-gosam=/usr/bin  --with-golem=/usr  --with-ninja=/usr --with-samurai=/usr \
     --enable-fastjet    --with-fastjet=/usr \
     --enable-hoppet     --with-hoppet=/usr  \
     --enable-lhapdf     --with-lhapdf=/usr \
