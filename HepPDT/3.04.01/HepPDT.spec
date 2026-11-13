@@ -52,7 +52,12 @@ mv %{buildroot}/usr/data %{buildroot}%{_datadir}/%{name}/
 %ldconfig_scriptlets
 
 %files
+%if 0%{?suse_version}
+# the .so symlinks belong to the devel package (OBS fails on files packaged twice)
+%{_libdir}/lib*.so.*
+%else
 %{_libdir}/lib*.so*
+%endif
 
 
 %files devel
