@@ -38,6 +38,8 @@ RPMLINT_FILTERS=(
   static-library-without-debuginfo  # static libraries without debug info
   explicit-lib-dependency           # explicit library Requires: kept as in the Fedora/EPEL spec files
   arch-dependent-file-in-usr-share  # binaries in the documentation directories
+  backup-file-in-package            # upstream sources contain *.orig files
+  env-script-interpreter            # upstream scripts use #!/usr/bin/env
 )
 DRYRUN=0
 FORCE=0
