@@ -35,7 +35,7 @@ Requires:       python3-numpy
 %description -n python3-%{srcname} %_description
 
 %prep
-%autosetup -n uproot5-%{version}
+%autosetup -n uproot-%{version}
 
 %build
 %if 0%{?rhel} || 0%{?fedora}

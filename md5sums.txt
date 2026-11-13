@@ -380,7 +380,7 @@ ba89ba3f34bd93aea8ba39651b0cbeb3  fastjet/3.5.3/rpmbuild/SOURCES/fastjet-3.5.3.t
 55fea9b2d907c8c411e9059c771abca3  cascade/3.4.0/rpmbuild/SOURCES/cascade-3.4.0.tar.gz
 fc04718a19b9e5938ff6e315e8106bb2  cernlib/2026.11.01.1/rpmbuild/SOURCES/cernlib-cernlib-2026.11.01.1-free.tar.gz
 836e317e03dbf60e35f609778febe0c6  fastnlo/2.5.1.3034/rpmbuild/SOURCES/fastnlo_toolkit-2.5.1-3034.tar.gz
-064c780d960d7c840576a18a63e91cd9  python-uproot4/4.3.7/rpmbuild/SOURCES/v4.3.7.tar.gz
+b0c820ce1c3d3b6e9ad6f31e1b3480f3  python-uproot4/4.3.7/rpmbuild/SOURCES/v4.3.7.tar.gz
 313e61b2378a609a2d35ecdac5af70a6  form/5.0.2/rpmbuild/SOURCES/form-5.0.2.tar.gz
 a370a04cc92daa6e5949bd87aab261b6  SHERPA-MC/3.0.5/rpmbuild/SOURCES/sherpa-v3.0.5.tar.gz
 0a42d5c8e7ba7886aa6c97e7615b1261  geant4/11.4.3/rpmbuild/SOURCES/geant4-v11.4.3.tar.gz
