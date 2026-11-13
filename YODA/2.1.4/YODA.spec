@@ -153,6 +153,8 @@ rm -fr %{buildroot}/%_libdir/python*/site-packages/site.py
 /usr/%_lib/lib*
 /usr/%_lib/pkgconfig/*.pc
 %_bindir/*
+%dir /usr/share/YODA
+%dir /usr/share/YODA/plotting
 /usr/share/YODA/plotting/default.mplstyle
 /usr/share/YODA/texmf
 /usr/share/YODA/yoda-completion
@@ -160,6 +162,9 @@ rm -fr %{buildroot}/%_libdir/python*/site-packages/site.py
 
 
 %files -n %{libnamedev}
+%dir %_includedir/YODA
+%dir %_includedir/YODA/Utils
+%dir %_includedir/YODA/Config
 %_includedir/YODA/*.h
 %_includedir/YODA/*.icc
 %_includedir/YODA/Utils/*.h
