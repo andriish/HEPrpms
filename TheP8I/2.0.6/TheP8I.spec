@@ -38,6 +38,7 @@ export LDFLAGS=" "
 
 %files
 %{_libdir}/ThePEG/libTheP8I*
+%dir %_datadir/TheP8I
 %_datadir/TheP8I/*in
 
 %changelog
