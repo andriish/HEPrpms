@@ -82,15 +82,15 @@ install -m 644 documentation/doxygen/html/*   %{buildroot}/%{_docdir}/%{name}/ht
 %{_libdir}/*
 
 %files -n %{libnamedev}
-%{_includedir}/Photos/*
+%{_includedir}/Photos
 
 %files -n %{name}-doc
-%{_docdir}/%{name}/*
+%{_docdir}/%{name}
 
 
 
 %changelog
-* Wed Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 3.64
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 3.64
 - Update to 3.64
 * Mon Jan 27 2020 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 3.62
 - Add HepMC3 support
