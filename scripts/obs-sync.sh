@@ -17,7 +17,7 @@
 #   -h, --help           show this help
 #
 # The project is created if it does not exist; its repository is openSUSE_Tumbleweed (x86_64), based on
-# the science project and openSUSE:Factory/snapshot. Failed packages are listed at the end and do not stop the run.
+# the science project and openSUSE:Tumbleweed/standard. Failed packages are listed at the end and do not stop the run.
 #
 # Requires osc, copr-cli and jq.
 
@@ -64,7 +64,7 @@ if ! osc meta prj "$PROJECT" >/dev/null 2>&1; then
   <person userid="${PROJECT#home:}" role="maintainer"/>
   <repository name="openSUSE_Tumbleweed">
     <path project="science" repository="openSUSE_Tumbleweed"/>
-    <path project="openSUSE:Factory" repository="snapshot"/>
+    <path project="openSUSE:Tumbleweed" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
 </project>
