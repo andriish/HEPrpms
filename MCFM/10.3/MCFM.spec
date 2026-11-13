@@ -1,5 +1,10 @@
 %global _cmake_generator "Unix Makefiles"
 
+# openSUSE: the link with LTO fails (TLS/non-TLS mismatch of the Fortran common blocks, e.g. sprods_)
+%if 0%{?suse_version}
+%global _lto_cflags %{nil}
+%endif
+
 Summary:  A parton-level Monte Carlo event generator
 Name: MCFM
 Version: 10.3
@@ -79,7 +84,7 @@ find $RPM_BUILD_ROOT -type f -name '._Flavor_Map.h' -exec rm -f {} \;
 ldconfig 
 
 %changelog
-* Wed Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 10.3
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 10.3
 - Update to 10.3
 * Fri Aug 12 2022 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 10.2.1
 - Bump to 10.2.1
