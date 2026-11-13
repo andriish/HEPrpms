@@ -29,9 +29,6 @@ Set of PDFs needed to build whizard.
 lhapdf  --pdfdir=%{buildroot}/usr/share/LHAPDF/ install --upgrade  cteq6l1 CT10
 
 
-%clean
-rm -rf %{buildroot}
-
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig

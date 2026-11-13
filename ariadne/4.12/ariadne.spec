@@ -32,8 +32,6 @@ make %{?_smp_mflags}  libar4p5.so "FFLAGS=%{optflags} -fPIC" "LDFLAGS=%{build_ld
 make install INSTALLDIR=%{buildroot}%_prefix
 
 
-%clean
-
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig

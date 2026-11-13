@@ -29,9 +29,6 @@ Set of PDFs needed to build Herwig.
 lhapdf  --pdfdir=%{buildroot}/usr/share/LHAPDF/ install  --upgrade MMHT2014lo68cl MMHT2014nlo68cl CT14lo CT14nlo  
 
 
-%clean
-rm -rf %{buildroot}
-
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig

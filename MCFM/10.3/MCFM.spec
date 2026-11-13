@@ -75,9 +75,6 @@ find $RPM_BUILD_ROOT -type f -name '._Flavor_Map.h' -exec rm -f {} \;
 %{_includedir}/MCFM/*
 %{_libdir}/lib*
 
-%clean
-rm -rf %{buildroot}
-
 %post 
 ldconfig 
 

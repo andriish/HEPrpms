@@ -72,9 +72,6 @@ chrpath --delete $RPM_BUILD_ROOT/usr/lib/python3.*/site-packages/pyrecola.so
 %{_prefix}/share/cmake/*
 %{python3_sitelib}/pyrecola*
 
-%clean
-rm -rf %{buildroot}
-
 %post 
 ldconfig 
 

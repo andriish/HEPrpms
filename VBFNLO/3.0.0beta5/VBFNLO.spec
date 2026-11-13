@@ -80,9 +80,6 @@ make DESTDIR=%{buildroot} install
 /usr/%_lib/VBFNLO/*
 /usr/share/VBFNLO/*
 
-%clean
-rm -rf %{buildroot}
-
 %post 
 ldconfig 
 

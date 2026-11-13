@@ -40,6 +40,9 @@ RPMLINT_FILTERS=(
   arch-dependent-file-in-usr-share  # binaries in the documentation directories
   backup-file-in-package            # upstream sources contain *.orig files
   env-script-interpreter            # upstream scripts use #!/usr/bin/env
+  binary-or-shlib-defines-rpath     # RUNPATH to the private library directory (e.g. cernlib)
+  files-duplicated-waste            # duplicated files that are not links
+  devel-dependency                  # a non-devel package that requires a devel package (e.g. cernlib-utils)
 )
 DRYRUN=0
 FORCE=0

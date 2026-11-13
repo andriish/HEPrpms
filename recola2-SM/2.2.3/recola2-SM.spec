@@ -77,9 +77,6 @@ cd build
 %{_libdir}/*
 %{_prefix}/share/cmake/*
 
-%clean
-rm -rf %{buildroot}
-
 %post 
 ldconfig 
 

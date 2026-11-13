@@ -53,9 +53,6 @@ mv %{buildroot}/%{_prefix}/lib  %{buildroot}/%_libdir
 %_libdir/*
 %_includedir/*
 
-%clean
-rm -rf %{buildroot}
-
 %post 
 ldconfig 
 

@@ -143,9 +143,6 @@ cd %{name}-%{version}
 mkdir -p %{buildroot}/%_docdir/%{name}
 install README.txt  %{buildroot}/%_docdir/%{name}/
 
-%clean
-rm -rf %{buildroot}
-
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig

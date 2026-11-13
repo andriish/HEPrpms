@@ -38,9 +38,6 @@ next-to-leading order.
 %{_includedir}/*
 %{_prefix}/%_lib/*
 %{_prefix}/share/cmake/*
-%clean
-rm -rf %{buildroot}
-
 %post 
 ldconfig 
 

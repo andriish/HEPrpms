@@ -257,9 +257,6 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 #endif
 
 
-%clean
-rm -rf %{buildroot}
-
 %post 
 ldconfig 
 

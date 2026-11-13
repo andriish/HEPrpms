@@ -47,9 +47,6 @@ PTL Lightweight C++11 multithreading tasking system featuring thread-pool, task-
 %{_libdir}/pkgconfig/*
 
 
-%clean
-rm -rf %{buildroot}
-
 %post 
 ldconfig 
 

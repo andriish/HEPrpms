@@ -112,9 +112,6 @@ strip $RPM_BUILD_ROOT%{_bindir}/* >/dev/null 2>&1 || true
 %doc %{_mandir}/man1/*
 %doc %{_mandir}/man7/*
 
-%clean
-    rm -rf $RPM_BUILD_ROOT
-
 %changelog
 * Mon Nov 6 2023 Andrii Verbytskyi
  - 2.13

@@ -400,9 +400,6 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/cernlib/%{verdir}/lib/lib*so.*20*
 ctest  --output-on-failure --force-new-ctest-process -E 'testcojetst|testzebfz2|testkernnumtest|testgent|testerexam1|testerexam2'
 %endif
 
-%clean
-rm -rf %{buildroot}
-
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
