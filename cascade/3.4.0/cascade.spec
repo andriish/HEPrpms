@@ -1,6 +1,6 @@
 Name:       cascade
 Version:    3.4.0
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Multipurpose Monte Carlo Event Generator for High Energy physics
 
 License:    GPLv2
@@ -81,10 +81,13 @@ now accessed via TMDlib.
 %files
 %{_bindir}/*
 %{_libdir}/*.so*
-%{_includedir}/cascade/*
+%{_includedir}/cascade
 %{_datadir}/*
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Own the include directory (OBS)
+
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Update to 3.4.0; port patch to the new sources
 * Thu Dec 21 2023 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
