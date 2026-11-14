@@ -2,7 +2,7 @@
 Summary:  A parton level Monte Carlo for processes with electroweak bosons
 Name: VBFNLO
 Version: 3.0.0beta5
-Release: 15%{?dist}
+Release: 16%{?dist}
 License: GPLv2
 Source: https://github.com/vbfnlo/vbfnlo/archive/v%{version}.tar.gz
 URL:    https://www.itp.kit.edu/vbfnlo/wiki/doku.php
@@ -76,14 +76,17 @@ make DESTDIR=%{buildroot} install
 %files
 %defattr(-,root,root)
 /usr/bin/*
-/usr/include/VBFNLO/*
-/usr/%_lib/VBFNLO/*
-/usr/share/VBFNLO/*
+/usr/include/VBFNLO
+/usr/%_lib/VBFNLO
+/usr/share/VBFNLO
 
 %post 
 ldconfig 
 
-%changelog             
+%changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Own the include, lib and share directories (OBS)
+
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 - Update to 3.0.0beta5
 * Thu Nov 23 2017 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
