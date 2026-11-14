@@ -3,7 +3,7 @@
 
 Name:       tmdlib
 Version:    2.2.15
-Release:    3%{?dist}
+Release:    4%{?dist}
 Summary:    Library and plotting tools for TMD parton distributions
 Prefix:     %{_prefix}
 License:    GPLv3
@@ -79,12 +79,15 @@ rm -f %{buildroot}/usr/%_lib/*.la || true
 /usr/bin/*
 /usr/%_lib/*
 /usr/share/man/TMDlib*.pdf
-/usr/share/tmdlib/*
+/usr/share/tmdlib
 
 %files devel
-/usr/include/tmdlib/*
+/usr/include/tmdlib
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 2.2.15-4
+- Own the share and include directories (OBS)
+
 * Mon Mar 30 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 2.2.15-2
 - Switch build system to CMake
 - Updated build dependencies
