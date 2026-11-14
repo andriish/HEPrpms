@@ -1,6 +1,6 @@
 Name: fastnlo
 Version: 2.5.1.3034
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPL
 Prefix: %{_prefix}
 Summary: Fast pQCD calculations for PDF fits
@@ -81,8 +81,8 @@ sed -i 's|LHAPDFBIN --incdir|LHAPDFBIN --includedir|g' configure
 %configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum --enable-pyext
 %else
 %if 0%{?suse_version}
-# libfastnlotoolkit is not linked against hoppet by the build system and the openSUSE linker does not resolve it indirectly
-%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum LIBS="$(hoppet-config --libs)"
+# -lhoppet_v1 is put into the libtool LDFLAGS before the objects and is dropped by the default --as-needed of openSUSE
+%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum LDFLAGS="%{?build_ldflags} -Wl,--no-as-needed"
 %else
 %configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum
 %endif
@@ -122,6 +122,9 @@ done
 ldconfig 
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: link with --no-as-needed so that libhoppet_v1 is kept
+
 * Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - openSUSE: link against hoppet explicitly (undefined hoppet* symbols)
 
