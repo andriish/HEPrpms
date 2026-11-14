@@ -6,7 +6,7 @@
 
 Name:           EvtGen
 Version:        2.2.3
-Release:        8%{?dist}
+Release:        9%{?dist}
 License:        GPLv3
 Url:            http://evtgen.warwick.ac.uk
 Source0:        https://evtgen.hepforge.org/downloads/EvtGen-02.02.03.tar.gz
@@ -37,7 +37,7 @@ BuildRequires:  root-tree
 %if 0%{?suse_version}
 BuildRequires:  pythia-devel HepMC2-devel HepMC3-devel pythia-doc
 Requires:       libpythia8  libHepMC4 libHepMC3-4  root6-libs  root6-utils pythia-doc
-BuildRequires:  root6 root6-libs root6-devel root6-config  root6-utils
+BuildRequires:  root6 root6-libs root6-devel root6-config  root6-utils python3-root6
 %endif
 
 
@@ -161,6 +161,9 @@ mv %{buildroot}%{_datadir}/EvtGen/*.*  %{buildroot}%{_datadir}/
 %endif
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: BuildRequires python3-root6 (files referenced by ROOTConfig-targets.cmake)
+
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 + 2.2.3
 * Tue Jul 12 2022 Andrii Verbytskyi 2.2.0
