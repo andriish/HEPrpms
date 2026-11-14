@@ -1,9 +1,14 @@
 %undefine _debugsource_packages
 #Scripts fail to find debug infos as the library is static
 
+%if 0%{?suse_version}
+# static library: LTO slim objects contain no code and cannot be linked by the dependents (undefined hoppet* symbols)
+%global _lto_cflags %{nil}
+%endif
+
 Name:          hoppet
 Version:       1.2.0
-Release:       11%{?dist}
+Release:       12%{?dist}
 License:       GPL
 Prefix:        %{_prefix}
 Summary:       Higher Order Perturbative Parton Evolution Toolkit
@@ -57,6 +62,9 @@ mv %{buildroot}/%{_prefix}/lib  %{buildroot}/%_libdir
 ldconfig 
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: build without LTO, the static library had only LTO slim objects
+
 * Sun Feb 21 2021 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
  - Cleanup            
 * Thu Nov 23 2017 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
