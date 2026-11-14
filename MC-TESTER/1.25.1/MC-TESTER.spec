@@ -59,6 +59,7 @@ make -C doc
 %if 0%{?suse_version}
 mkdir -p $RPM_BUILD_ROOT/usr/share/doc/packages
 mv $RPM_BUILD_ROOT/usr/share/doc/MC-TESTER $RPM_BUILD_ROOT/usr/share/doc/packages
+find $RPM_BUILD_ROOT%{_includedir}/MC-TESTER $RPM_BUILD_ROOT/usr/share/doc/packages/MC-TESTER -type f -exec chmod a-x {} +
 %endif
 
 %files
@@ -69,6 +70,9 @@ mv $RPM_BUILD_ROOT/usr/share/doc/MC-TESTER $RPM_BUILD_ROOT/usr/share/doc/package
 %_docdir/MC-TESTER
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: remove executable bits from headers and docs (rpmlint)
+
 * Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Own the doc directory (OBS)
 
