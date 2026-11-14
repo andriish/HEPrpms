@@ -1,6 +1,6 @@
 Name: fastnlo
 Version: 2.5.1.3034
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Prefix: %{_prefix}
 Summary: Fast pQCD calculations for PDF fits
@@ -80,7 +80,12 @@ sed -i 's|LHAPDFBIN --incdir|LHAPDFBIN --includedir|g' configure
 %if %{?rhel}%{!?rhel:0} == 8 || %{?rhel}%{!?rhel:0} == 9
 %configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum --enable-pyext
 %else
+%if 0%{?suse_version}
+# libfastnlotoolkit is not linked against hoppet by the build system and the openSUSE linker does not resolve it indirectly
+%configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum LIBS="$(hoppet-config --libs)"
+%else
 %configure --disable-doxygen-doc  --with-lhapdf=/usr --with-hoppet --with-root  --with-fastjet --with-qcdnum
+%endif
 %endif
 
 
@@ -117,6 +122,9 @@ done
 ldconfig 
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: link against hoppet explicitly (undefined hoppet* symbols)
+
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Update to 2.5.1.3034
 - Package the new fnlo-py-print.py script
