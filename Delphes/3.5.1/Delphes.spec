@@ -96,17 +96,23 @@ mv %{buildroot}/%{_prefix}/include/TrackCovariance  %{buildroot}/%{_includedir}/
 %files
 %{_bindir}/*
 %{_libdir}/*
-%{_includedir}/%{name}/*
+%{_includedir}/%{name}
 
 
 
 %files doc
+%if 0%{?suse_version}
+%dir %{_pkgdocdir}
+%endif
 %{_pkgdocdir}/cards
 %{_pkgdocdir}/examples
 %license COPYING
 
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: own the include and doc directories
+
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 + 3.5.1
 * Mon Dec 30 2024 Andrii Verbytskyi 3.5.1pre11
