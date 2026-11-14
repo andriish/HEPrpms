@@ -4,7 +4,7 @@
 
 Name:           Professor
 Version:        2.5.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        Unknown
 Url:            http://professor.hepforge.org/
 Source0:        https://gitlab.com/hepcedar/professor/-/archive/professor-%{version}/professor-professor-%{version}.tar.gz
@@ -84,13 +84,16 @@ rm -rf $RPM_BUILD_ROOT/%{python3_sitearch}/site.py
 %{_bindir}/*
 %{_libdir}/libProfessor2.so
 %{python3_sitearch}/professor2*
-%{_prefix}/contrib/*
-%{_prefix}/include/Professor/*
+%{_prefix}/contrib
+%{_prefix}/include/Professor
 
 
 
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Own the contrib and include directories (OBS)
+
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Update to 2.5.9
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 2.5.1
