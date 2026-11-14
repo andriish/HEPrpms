@@ -1,12 +1,14 @@
 Name:           LCIO
 Version:        2.23.04
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Persistency framework and event data model for linear collider detectors
 
 Group:          Development/Tools
 License:        BSD 3-Clause
 URL:            http://lcio.desy.de/
 Source0:       https://github.com/iLCSoft/LCIO/archive/refs/tags/v02-23-04.tar.gz
+# SIO is fetched by the LCIO CMake (FetchContent) when it is not installed; OBS builds have no network
+Source1:       https://github.com/iLCSoft/SIO/archive/refs/tags/v00-02.tar.gz
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
 Requires: root 
@@ -66,6 +68,10 @@ This package provides the Python 3 bindings for %{name}
 
 %prep
 %setup -q -n LCIO-02-23-04
+%if 0%{?suse_version}
+# unpack SIO into the LCIO source directory for FETCHCONTENT_SOURCE_DIR_SIO_EXTERN
+tar xf %{SOURCE1}
+%endif
 # upstream adds the Catch2 unit tests unconditionally; they are run at build time and cannot find their libraries
 sed -i "s/^add_subdirectory(unittests)/#add_subdirectory(unittests)/" tests/CMakeLists.txt
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 8
@@ -87,7 +93,7 @@ sed  -i 's/python -c/python3 -c/g' tests/CMakeLists.txt
 %cmake_build
 %endif
 %if  0%{?suse_version}
-%cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON -DCMAKE_SKIP_RPATH=ON -DCMAKE_CXX_STANDARD=17
+%cmake  -DBUILD_TESTING:BOOL=OFF -DBUILD_ROOTDICT:BOOL=ON -DCMAKE_SKIP_RPATH=ON -DCMAKE_CXX_STANDARD=17 -DFETCHCONTENT_SOURCE_DIR_SIO_EXTERN=$PWD/SIO-00-02 -DFETCHCONTENT_FULLY_DISCONNECTED=ON
 %cmake_build
 %endif
 
@@ -133,6 +139,9 @@ cp $RPM_BUILD_ROOT/%{_libdir}/cmake/SIO/*cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 %endif
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: provide SIO v00-02 as Source1 (no network in OBS builds)
+
 * Fri Nov 13 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 2.23.04-1
 - Update to 2.23.04
 * Tue Sep 01 2026 Andrii Verbytskyi <andrii.verbytskyi@cern.ch> - 2.22.02-7
