@@ -1,6 +1,6 @@
 Name:           MC-TESTER
 Version:        1.25.1
-Release:        17%{?dist}
+Release:        18%{?dist}
 License:        MIT
 Url:            http://mc-tester.web.cern.ch/MC-TESTER/
 Source0:        https://gitlab.cern.ch/cvsmctst/mc-tester/-/archive/v1.25.1/mc-tester-v%{version}.tar.gz
@@ -66,9 +66,12 @@ mv $RPM_BUILD_ROOT/usr/share/doc/MC-TESTER $RPM_BUILD_ROOT/usr/share/doc/package
 
 %files devel
 %_includedir/*
-%_docdir/MC-TESTER/*
+%_docdir/MC-TESTER
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Own the doc directory (OBS)
+
 * Tue Jun 22 2021 Andrii Verbytskyi
 + Added dependency on gcc
 * Thu May 06 2021 Andrii Verbytskyi
