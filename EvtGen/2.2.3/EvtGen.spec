@@ -145,9 +145,18 @@ mv %{buildroot}%{_datadir}/EvtGen/*.*  %{buildroot}%{_datadir}/
 %files -n %{libnamedev}
 %{_includedir}/*
 %{_datadir}/*.*
+%if 0%{?suse_version}
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/cmake
+%endif
 %{_datadir}/%{name}/cmake/*
 
 %files -n  %{libnamedoc}
+%if 0%{?suse_version}
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/validation
+%dir %{_prefix}/share/doc/packages/EvtGen
+%endif
 %{_datadir}/%{name}/AUTHORS
 %{_datadir}/%{name}/COPYING
 %{_datadir}/%{name}/validation/*
@@ -161,6 +170,9 @@ mv %{buildroot}%{_datadir}/EvtGen/*.*  %{buildroot}%{_datadir}/
 %endif
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: own the share/EvtGen, cmake, validation and doc directories
+
 * Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - openSUSE: BuildRequires python3-root6 (files referenced by ROOTConfig-targets.cmake)
 
