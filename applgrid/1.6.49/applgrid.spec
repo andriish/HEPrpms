@@ -1,6 +1,6 @@
 Name:           applgrid
 Version:        1.6.49
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL
 Prefix:         %{_prefix}
 Summary:        Fast reproduction of full NLO calculations with any input PDF
@@ -35,7 +35,12 @@ sed -i 's|$(CINT) -f $@ -c $< -I..|$(CINT) --cxxmodule -f $@ -c $< -I..|' src/Ma
 autoreconf --force --install --verbose .
 
 
+%if 0%{?suse_version}
+# hoppet is added to the libtool link flags before the objects and is dropped by the default --as-needed of openSUSE
+%configure LDFLAGS="%{?build_ldflags} -Wl,--no-as-needed"
+%else
 %configure
+%endif
 %make_build
 
 %install 
@@ -52,6 +57,9 @@ autoreconf --force --install --verbose .
 ldconfig 
 
 %changelog
+* Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: link with --no-as-needed so that libhoppet_v1 is kept
+
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Update to 1.6.49
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
