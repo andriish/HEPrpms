@@ -8,7 +8,7 @@
 
 Name:           Herwig
 Version:        7.3.0
-Release:        1005%{?dist}
+Release:        1006%{?dist}
 
 Summary:        Herwig is a multi-purpose particle physics event generator
 License:        GPLv3
@@ -147,6 +147,10 @@ export QA_RPATHS=3
 
 %files -n %{libname}
 %_bindir/*
+%if 0%{?suse_version}
+# herwig-config is in the devel package
+%exclude %_bindir/herwig-config
+%endif
 %_datadir/Herwig
 %_libdir/Herwig
 
@@ -155,6 +159,9 @@ export QA_RPATHS=3
 %_includedir/Herwig
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: do not package herwig-config in both the main and the devel package (OBS packaged-twice check)
+
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 7.3.0
 - Update to 7.3.0
 * Tue Jul 12 2022 Andrii Verbytskyi andrii.verbytskyi@mpp.mpg.de
