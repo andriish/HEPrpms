@@ -1,6 +1,6 @@
 Name:           HJets
 Version:        1.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        GPL
 Url:            http://HJets.hepforge.org/
 Source0:        https://hjets.hepforge.org/downloads/?f=HJets-%{version}.tar.gz
@@ -33,13 +33,20 @@ make %{?_smp_mflags}
 
 %files
 %{_libdir}/*
+%if 0%{?suse_version}
+%dir %{_datadir}/HJets
+%dir %{_includedir}/HJets
+%endif
 %{_datadir}/HJets/*
 %{_includedir}/HJets/*
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 1.3-4
+- openSUSE: own the include and share directories
+- Fix the weekday of the 1.3 changelog entry
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 1.3-3
 - New download URL (downloads/?f=); upstream re-rolled the 1.3 tarball
-* Wed Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 1.3
+* Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> + 1.3
 - Update to 1.3
 * Mon Feb  3 2014 Andrii Verbytskyi 1.0.4
 + Initial spec file
