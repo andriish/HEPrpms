@@ -6,7 +6,7 @@
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.2.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://whizard.hepforge.org/downloader?f=whizard-%{version}.tar.gz
@@ -206,10 +206,12 @@ export LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"
 
 %if 0%{?suse_version}
 autoreconf --force --install --verbose .
-export CXXFLAGS="%{optflags} -Wno-error -std=c++1y -Wno-error=format-security "
-export CFLAGS="%{optflags} -Wno-error -Wno-error=format-security "
-export FFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
-export FCFLAGS="%{optflags} -Wno-error -fallow-argument-mismatch"
+# -Werror=return-type of the openSUSE optflags breaks the dummy HepMC2 wrapper (function results not set)
+SUSE_OPTFLAGS=`echo "%{optflags}" | sed -e 's@-Werror=return-type@@g'`
+export CXXFLAGS="$SUSE_OPTFLAGS -Wno-error -std=c++1y -Wno-error=format-security "
+export CFLAGS="$SUSE_OPTFLAGS -Wno-error -Wno-error=format-security "
+export FFLAGS="$SUSE_OPTFLAGS -Wno-error -fallow-argument-mismatch"
+export FCFLAGS="$SUSE_OPTFLAGS -Wno-error -fallow-argument-mismatch"
 
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --enable-recola     --with-recola=/usr/%_lib \
@@ -261,6 +263,9 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 ldconfig 
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: remove -Werror=return-type from the optflags
+
 * Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - openSUSE: BuildRequires pythia-doc (pythia8-config reads /usr/share/doc/packages/pythia/examples/Makefile.inc from it)
 
