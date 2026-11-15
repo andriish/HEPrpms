@@ -6,12 +6,16 @@
 %define develnamestatic  SHERPA-MC-static-devel
 %define _unpackaged_files_terminate_build 0
 %global _missing_build_ids_terminate_build 0
+%if 0%{?suse_version}
+# AddOns/NNLO/polylog.c has functions that do not return a value on all paths: -Werror=return-type of the openSUSE flags is fatal
+%global optflags %(echo '%{optflags}' | sed -e 's/-Werror=return-type//')
+%endif
 
 
 
 Name:             SHERPA-MC
 Version:          3.0.5
-Release:          4%{?dist}
+Release:          5%{?dist}
 License:          GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://gitlab.com/sherpa-team/sherpa/-/archive/v%{version}/sherpa-v%{version}.tar.gz
@@ -313,6 +317,9 @@ export QA_RPATHS=3
 %endif
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: remove -Werror=return-type from the optflags (AddOns/NNLO/polylog.c)
+
 * Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - FindOpenLoops.cmake: also accept pyol/config/default.cfg as marker of the OpenLoops prefix (proclib/channels_public.rinfo exists only when a process library is installed, which is not the case on openSUSE)
 
