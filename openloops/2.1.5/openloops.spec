@@ -6,7 +6,7 @@
 
 Name:           openloops
 Version:        2.1.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
 Source0:        https://gitlab.com/openloops/OpenLoops/-/archive/OpenLoops-%{version}/OpenLoops-OpenLoops-%{version}.tar.gz
@@ -73,11 +73,14 @@ scons debug=1
 %endif 
 
 %install
+# openSUSE (OBS): no network, the process libraries cannot be downloaded (libinstall is skipped for now)
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/%_lib/openloops
 sed -i  's@.*process_lib_dir.*@process_lib_dir = '$RPM_BUILD_ROOT'/usr/'%_lib'/openloops/proclib@g'  pyol/config/default.cfg
 sed -i  's@.*process_repositories.*@process_repositories = matrix,public,powheg,ATLAS@g'  pyol/config/default.cfg
+%if !0%{?suse_version}
 ./openloops libinstall  eett eettj heftpphj pph2 pphj2 pphjj2 pphll2 pphllj_ew ppjj ppjjj ppll pplla pplla_ew ppllaj ppllaj_ew ppllj pplljj pplljjj ppllll ppllll2 ppllll2_interf ppllll2_interf_notb ppllll2_nf4 ppllll2_nf5_massless ppllll2_nf5_notri ppllll2_noh ppllll2_onlyh ppllllbb ppllllbbbb_fac ppllllbb_split ppllllj ppllllj2 ppllllj2_interf ppllllj2_interf_notb ppllllj2_nf4 ppllllj2_nf5_notri ppllllj2_noh ppllllj2_onlyh ppllllj_ew ppln pplnj pptln pptt pptt2 ppttbb pptt_im ppttj ppttj_dec pptttt pptw pptwj ppwwbb_semileptonic tbw   compile_extra=1 debug=0;
+%endif
 
 #tbln
 #tbln_ew
@@ -282,7 +285,9 @@ sed -i  's@.*process_lib_dir.*@process_lib_dir = /usr/'%_lib'/openloops/proclib@
 mkdir -p $RPM_BUILD_ROOT/%{_bindir}
 mkdir -p $RPM_BUILD_ROOT/%{_libdir}/openloops
 sed -i  's@.*process_lib_dir.*@process_lib_dir = '$RPM_BUILD_ROOT%{_libdir}'/openloops/proclib@g'  pyol/config/default.cfg
+%if !0%{?suse_version}
 ./openloops libinstall pptt  compile_extra=1  debug=0;
+%endif
 sed -i  's@.*process_lib_dir.*@process_lib_dir = '%{_libdir}'/openloops/proclib@g'  pyol/config/default.cfg
 sed -i  's@^LIBDIR=.*@LIBDIR=\"../lib64/openloops/lib\"@' openloops
 sed -i  's@^PROCLIBDIR=.*@PROCLIBDIR=\"../'%_lib'/openloops/proclib\"@' openloops
@@ -321,6 +326,9 @@ cp -r  lib_src/trred/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/trred
 %_includedir/openloops.h
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: skip the download of the process libraries (no network in OBS)
+
 * Fri May 10 2024 Andrii Verbytskyi 2.1.3
 - add modules
 * Fri Jan 19 2024 Andrii Verbytskyi 2.1.3
