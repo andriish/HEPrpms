@@ -1,6 +1,6 @@
 Name: fastnlo
 Version: 2.5.1.3034
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPL
 Prefix: %{_prefix}
 Summary: Fast pQCD calculations for PDF fits
@@ -107,6 +107,10 @@ done
 /usr/bin/fnlo-tk*
 /usr/bin/fnlo-py-*
 /usr/%_lib/libfastnlotoolkit*
+%if 0%{?suse_version}
+%dir /usr/share/fastnlo_toolkit
+%dir /usr/share/fastnlo_toolkit/modify
+%endif
 /usr/share/fastnlo_toolkit/modify/SteerModify.str
 
 %files devel
@@ -122,6 +126,9 @@ done
 ldconfig 
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: own the share/fastnlo_toolkit directories
+
 * Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - openSUSE: link with --no-as-needed so that libhoppet_v1 is kept
 
