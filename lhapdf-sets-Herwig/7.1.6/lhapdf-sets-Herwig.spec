@@ -1,10 +1,17 @@
 Name:       lhapdf-sets-Herwig
 Version:    7.1.6
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Set of PDFs needed to build Herwig
 License:    GPLv2+
 URL:        http://lhapdf.hepforge.org/
 Source0:    README.txt
+%if 0%{?suse_version}
+# OBS builds have no network: the PDF sets are sources, not downloaded by lhapdf install
+Source1:    http://lhapdfsets.web.cern.ch/lhapdfsets/current/MMHT2014lo68cl.tar.gz
+Source2:    http://lhapdfsets.web.cern.ch/lhapdfsets/current/MMHT2014nlo68cl.tar.gz
+Source3:    http://lhapdfsets.web.cern.ch/lhapdfsets/current/CT14lo.tar.gz
+Source4:    http://lhapdfsets.web.cern.ch/lhapdfsets/current/CT14nlo.tar.gz
+%endif
 Prefix:    %{_prefix}
 
 %if 0%{?rhel} || 0%{?fedora}
@@ -26,7 +33,15 @@ Set of PDFs needed to build Herwig.
 %build
 
 %install
+%if 0%{?suse_version}
+mkdir -p %{buildroot}/usr/share/LHAPDF
+tar -xzf %{SOURCE1} -C %{buildroot}/usr/share/LHAPDF
+tar -xzf %{SOURCE2} -C %{buildroot}/usr/share/LHAPDF
+tar -xzf %{SOURCE3} -C %{buildroot}/usr/share/LHAPDF
+tar -xzf %{SOURCE4} -C %{buildroot}/usr/share/LHAPDF
+%else
 lhapdf  --pdfdir=%{buildroot}/usr/share/LHAPDF/ install  --upgrade MMHT2014lo68cl MMHT2014nlo68cl CT14lo CT14nlo  
+%endif
 
 
 %post -p /sbin/ldconfig
@@ -38,5 +53,8 @@ lhapdf  --pdfdir=%{buildroot}/usr/share/LHAPDF/ install  --upgrade MMHT2014lo68c
 /usr/share/LHAPDF/*
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: provide the PDF sets as sources (no network in OBS builds)
+
 * Thu May 26 2016 Andrii Verbytskyi 7.1.5
 - This is just a technical package

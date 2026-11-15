@@ -3,12 +3,28 @@
 
 Name:        geant4
 Version:    11.4.3
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    A toolkit for the simulation of the passage of particles through matter
 
 License:    Geant
 URL:        https://geant4.web.cern.ch
 Source0:    https://geant4-data.web.cern.ch/releases/geant4-v%{version}.tar.gz
+
+%if 0%{?suse_version}
+# the datasets are downloaded by the Geant4 CMake, which is not possible in OBS builds (no network): provide them as sources
+Source1:    https://cern.ch/geant4-data/datasets/G4NDL.4.7.1.tar.gz
+Source2:    https://cern.ch/geant4-data/datasets/G4EMLOW.8.8.tar.gz
+Source3:    https://cern.ch/geant4-data/datasets/G4PhotonEvaporation.6.1.2.tar.gz
+Source4:    https://cern.ch/geant4-data/datasets/G4RadioactiveDecay.6.1.2.tar.gz
+Source5:    https://cern.ch/geant4-data/datasets/G4PARTICLEXS.4.2.tar.gz
+Source6:    https://cern.ch/geant4-data/datasets/G4PII.1.3.tar.gz
+Source7:    https://cern.ch/geant4-data/datasets/G4RealSurface.2.2.tar.gz
+Source8:    https://cern.ch/geant4-data/datasets/G4SAIDDATA.2.0.tar.gz
+Source9:    https://cern.ch/geant4-data/datasets/G4ABLA.3.3.tar.gz
+Source10:    https://cern.ch/geant4-data/datasets/G4INCL.1.3.tar.gz
+Source11:    https://cern.ch/geant4-data/datasets/G4ENSDFSTATE.3.0.tar.gz
+Source12:    https://cern.ch/geant4-data/datasets/G4CHANNELING.2.0.tar.gz
+%endif
 
 BuildRequires:    cmake >= 3.9
 BuildRequires:    gcc-c++
@@ -57,6 +73,11 @@ This package provides Geant4 manuals and examples.
 
 %prep
 %setup -q -n geant4-v%{version}
+%if 0%{?suse_version}
+# ExternalProject accepts file:// URLs and checks the MD5 of the dataset files, named <NAME>.<version>.tar.gz as in the remote repository
+sed -i 's|^set(GEANT4_DATASETS_URL .*|set(GEANT4_DATASETS_URL "file://%{_sourcedir}")|' cmake/Modules/G4InstallData.cmake
+grep -q 'file://%{_sourcedir}' cmake/Modules/G4InstallData.cmake
+%endif
 
 
 %build
@@ -101,6 +122,8 @@ This package provides Geant4 manuals and examples.
 %{_datadir}/Geant4/data
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 11.4.3-2
+- openSUSE: provide the datasets as sources (no network in OBS builds)
 * Fri Nov 13 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 11.4.3-1
 - Update to 11.4.3
 * Mon Dec 30 2024 Andrii Verbytskyi 11.3.0
