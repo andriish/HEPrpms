@@ -6,7 +6,7 @@
 
 Name:           openloops
 Version:        2.1.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
 Source0:        https://gitlab.com/openloops/OpenLoops/-/archive/OpenLoops-%{version}/OpenLoops-OpenLoops-%{version}.tar.gz
@@ -322,10 +322,16 @@ cp -r  lib_src/trred/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/trred
 %doc README COPYING
 %{_bindir}/%{name}
 %{_libdir}/*
+%if 0%{?suse_version}
+%dir %_includedir/openloops
+%endif
 %_includedir/openloops/*
 %_includedir/openloops.h
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: own the include directory
+
 * Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - openSUSE: skip the download of the process libraries (no network in OBS)
 
