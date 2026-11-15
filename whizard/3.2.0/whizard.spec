@@ -8,7 +8,7 @@
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.2.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://whizard.hepforge.org/downloader?f=whizard-%{version}.tar.gz
@@ -246,6 +246,9 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 %{_bindir}/*
 /usr/%_lib/*
 /usr/share/*
+%if 0%{?suse_version}
+%dir /usr/lib/mod
+%endif
 /usr/lib/mod/*
 /usr/include/*
 
@@ -265,6 +268,9 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 ldconfig 
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: own the /usr/lib/mod directory
+
 * Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - openSUSE: build without LTO (internal compiler error of gfortran 16 in write_symbol)
 
