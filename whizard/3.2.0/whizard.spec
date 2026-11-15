@@ -8,7 +8,7 @@
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.2.0
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://whizard.hepforge.org/downloader?f=whizard-%{version}.tar.gz
@@ -214,6 +214,10 @@ export CXXFLAGS="$SUSE_OPTFLAGS -Wno-error -std=c++1y -Wno-error=format-security
 export CFLAGS="$SUSE_OPTFLAGS -Wno-error -Wno-error=format-security "
 export FFLAGS="$SUSE_OPTFLAGS -Wno-error -fallow-argument-mismatch"
 export FCFLAGS="$SUSE_OPTFLAGS -Wno-error -fallow-argument-mismatch"
+# libwhizard.so declared an executable stack (rpmlint executable-stack, badness 10000)
+export FFLAGS="$FFLAGS -Wa,--noexecstack"
+export FCFLAGS="$FCFLAGS -Wa,--noexecstack"
+export LDFLAGS="%{?build_ldflags} -Wl,-z,noexecstack"
 
 %configure --disable-dependency-tracking  --enable-fc-openmp  --enable-fc-quadruple     \
     --enable-recola     --with-recola=/usr/%_lib \
@@ -236,6 +240,10 @@ export FCFLAGS="$SUSE_OPTFLAGS -Wno-error -fallow-argument-mismatch"
 %install 
 %make_install
 rm -f $RPM_BUILD_ROOT%{_libdir}/whizard/install_files.txt
+%if 0%{?suse_version}
+# scripts without the executable bit (rpmlint non-executable-script)
+chmod a+x $RPM_BUILD_ROOT/usr/share/whizard/SM_tt_threshold_data/download_data.sh $RPM_BUILD_ROOT/usr/share/whizard/examples/{circe2_compare,fill_circe2_template,prepare_ilc}
+%endif
 %if %{?fedora}%{!?fedora:0} >=34
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/whizard
 chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
@@ -266,8 +274,15 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 
 %post 
 ldconfig 
+%if 0%{?suse_version}
+%postun
+ldconfig
+%endif
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: no executable stack, ldconfig in %%postun, executable example scripts (rpmlint)
+
 * Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - openSUSE: own the /usr/lib/mod directory
 
