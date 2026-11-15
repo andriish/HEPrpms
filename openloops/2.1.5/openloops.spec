@@ -6,11 +6,24 @@
 
 Name:           openloops
 Version:        2.1.5
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        GPL
 Url:            http://www.openloops.hepforge.org
 Source0:        https://gitlab.com/openloops/OpenLoops/-/archive/OpenLoops-%{version}/OpenLoops-OpenLoops-%{version}.tar.gz
 Patch0:         patch-openloops-0.txt
+%if 0%{?suse_version}
+# openSUSE (OBS): no network in the build, so the process libraries cannot be downloaded by "openloops libinstall".
+# Instead the files of the OpenLoops process repository (the databases and the process archives) are sources,
+# and libinstall reads them as a local repository (remote_process_url=<directory>).
+%global olrepo https://www.physik.uzh.ch/data/openloops/repositories/public/processes
+Source10:       %{olrepo}/latest_version
+Source11:       %{olrepo}/2/versions.db
+Source12:       %{olrepo}/2/channels.db
+Source13:       %{olrepo}/2/librarymappings.db
+# process archives (the processes that are installed on Fedora/EPEL are added one by one)
+Source20:       %{olrepo}/2/eett.tar.gz
+%global olprocs eett
+%endif
 Prefix:         %{_prefix}
 Summary:        Automated calculation of one-loop amplitudes 
 BuildRequires:  autoconf
@@ -73,12 +86,20 @@ scons debug=1
 %endif 
 
 %install
-# openSUSE (OBS): no network, the process libraries cannot be downloaded (libinstall is skipped for now)
+# openSUSE (OBS): no network, the process libraries come from the local repository made of the sources (see above)
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/%_lib/openloops
 sed -i  's@.*process_lib_dir.*@process_lib_dir = '$RPM_BUILD_ROOT'/usr/'%_lib'/openloops/proclib@g'  pyol/config/default.cfg
 sed -i  's@.*process_repositories.*@process_repositories = matrix,public,powheg,ATLAS@g'  pyol/config/default.cfg
-%if !0%{?suse_version}
+%if 0%{?suse_version}
+# local process repository <dir>/<repository>/processes/<api>/...
+OLMIRROR=$PWD/olmirror
+mkdir -p $OLMIRROR/public/processes/2
+cp %{SOURCE10} $OLMIRROR/public/processes/latest_version
+cp %{SOURCE11} %{SOURCE12} %{SOURCE13} $OLMIRROR/public/processes/2/
+cp %{SOURCE20} $OLMIRROR/public/processes/2/
+./openloops libinstall %{olprocs} compile_extra=1 debug=0 remote_process_url=$OLMIRROR
+%else
 ./openloops libinstall  eett eettj heftpphj pph2 pphj2 pphjj2 pphll2 pphllj_ew ppjj ppjjj ppll pplla pplla_ew ppllaj ppllaj_ew ppllj pplljj pplljjj ppllll ppllll2 ppllll2_interf ppllll2_interf_notb ppllll2_nf4 ppllll2_nf5_massless ppllll2_nf5_notri ppllll2_noh ppllll2_onlyh ppllllbb ppllllbbbb_fac ppllllbb_split ppllllj ppllllj2 ppllllj2_interf ppllllj2_interf_notb ppllllj2_nf4 ppllllj2_nf5_notri ppllllj2_noh ppllllj2_onlyh ppllllj_ew ppln pplnj pptln pptt pptt2 ppttbb pptt_im ppttj ppttj_dec pptttt pptw pptwj ppwwbb_semileptonic tbw   compile_extra=1 debug=0;
 %endif
 
@@ -329,6 +350,9 @@ cp -r  lib_src/trred/mod  $RPM_BUILD_ROOT/%_includedir/openloops/lib_src/trred
 %_includedir/openloops.h
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 2.1.5-4
+- openSUSE: install the process library eett from a local copy of the process repository (sources)
+
 * Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - openSUSE: own the include directory
 
