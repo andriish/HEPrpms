@@ -6,7 +6,7 @@
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.2.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://whizard.hepforge.org/downloader?f=whizard-%{version}.tar.gz
@@ -75,7 +75,7 @@ BuildRequires:   autoconf binutils automake libtool
 Requires: fastjet hoppet libHepMC3-4  gosam openloops ocaml  gosam  libpythia8 LCIO  libLHAPDF TAUOLA hdf5
 BuildRequires: fastjet hoppet libHepMC3-4 gosam openloops ocaml  libLHAPDF LHAPDF-devel
 BuildRequires: fastjet-devel HepMC3-devel  LHAPDF-devel  autoconf automake libtool
-BuildRequires: libpythia8 pythia-devel   lhapdf-sets-whizard
+BuildRequires: libpythia8 pythia-devel pythia-doc   lhapdf-sets-whizard
 BuildRequires: root6 root6-libs root6-devel   python3-devel  openmpi openmpi-devel noweb LCIO LCIO-devel TAUOLA TAUOLA-devel hdf5 hdf5-devel
 Requires: LoopTools 
 BuildRequires:  LoopTools  hevea
@@ -261,6 +261,9 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 ldconfig 
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: BuildRequires pythia-doc (pythia8-config reads /usr/share/doc/packages/pythia/examples/Makefile.inc from it)
+
 * Fri Nov 13 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 3.2.0-1
 - Update to 3.2.0
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
