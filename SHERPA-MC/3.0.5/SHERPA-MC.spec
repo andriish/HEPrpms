@@ -11,7 +11,7 @@
 
 Name:             SHERPA-MC
 Version:          3.0.5
-Release:          1%{?dist}
+Release:          2%{?dist}
 License:          GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://gitlab.com/sherpa-team/sherpa/-/archive/v%{version}/sherpa-v%{version}.tar.gz
@@ -33,15 +33,15 @@ BuildRequires:    texinfo git
 %if 0%{?suse_version}
 BuildRequires:    gcc-fortran gcc-c++ pythia-devel libpythia8   Rivet Rivet-devel cmake
 BuildRequires:    root6-libs root6-devel root6-config root6 HepMC3-devel  libHepMC4  
-BuildRequires:    autoconf automake libtool sqlite-devel sqlite subversion  libzip-devel openmpi4-devel
-BuildRequires:    openmpi environment-modules LHAPDF-devel fastjet fastjet-devel  YODA-devel Rivet-devel zlib zlib-devel  openloops
-Requires:         libHepMC4 libLHAPDF libHepMC4  sqlite root6 root6-libs openloops Rivet YODA libpythia8 openmpi4 fastjet  zlib
+BuildRequires:    autoconf automake libtool sqlite-devel sqlite subversion  libzip-devel openmpi5-devel
+BuildRequires:    LHAPDF-devel fastjet fastjet-devel  YODA-devel Rivet-devel zlib zlib-devel  openloops
+Requires:         libHepMC4 libLHAPDF libHepMC4  sqlite root6 root6-libs openloops Rivet YODA libpythia8 openmpi5 fastjet  zlib
 Requires:         hztool gcc-fortran  recola libqd0 openssl
 BuildRequires:    swig  recola libqd0 qd-devel openssl-devel openssl
 Requires:         blackhat blackhat-data libgfortran5
 BuildRequires:    blackhat-devel blackhat  MG5_aMC
 BuildRequires:    texinfo git  MG5_aMC
-BuildRequires:  openmpi-macros-devel
+BuildRequires:  openmpi5-macros-devel
 %endif
 
 
@@ -313,6 +313,9 @@ export QA_RPATHS=3
 %endif
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: build against openmpi5 (the spec installs into mpi/gcc/openmpi5), drop environment-modules (ambiguous: Modules or lua-lmod; %%setup_openmpi is used instead)
+
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Update to 3.0.5; port patch (only the Threads link fix is still needed)
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
