@@ -15,7 +15,7 @@
 
 Name:             SHERPA-MC
 Version:          3.0.5
-Release:          5%{?dist}
+Release:          6%{?dist}
 License:          GPLv2
 Url:              https://sherpa.hepforge.org
 Source0:          https://gitlab.com/sherpa-team/sherpa/-/archive/v%{version}/sherpa-v%{version}.tar.gz
@@ -276,6 +276,9 @@ export QA_RPATHS=3
 %postun -p /sbin/ldconfig
 
 %files -n %{libname}
+%if 0%{?suse_version}
+%dir %{_libdir}/SHERPA-MC
+%endif
 %{_libdir}/SHERPA-MC/*.so*
 #{_libdir}/SHERPA-MC/*a
 %{_bindir}/*
@@ -291,9 +294,15 @@ export QA_RPATHS=3
 %endif
 
 %files -n %{sharename}
+%if 0%{?suse_version}
+%dir /usr/share/SHERPA-MC
+%endif
 /usr/share/SHERPA-MC/*
 
 %files -n %{libnamedev}
+%if 0%{?suse_version}
+%dir %{_includedir}/SHERPA-MC
+%endif
 %{_includedir}/SHERPA-MC/*
 
 
@@ -309,14 +318,19 @@ export QA_RPATHS=3
 
 %if 0%{?suse_version}
 %files  -n %{openmpiname} 
+%dir /usr/%_lib/mpi/gcc/openmpi5/%_lib/SHERPA-MC
 /usr/%_lib/mpi/gcc/openmpi5/%_lib/SHERPA-MC/*
 /usr/%_lib/mpi/gcc/openmpi5/bin/*
 
 %files -n %{openmpiname}-devel
+%dir /usr/%_lib/mpi/gcc/openmpi5/include/SHERPA-MC
 /usr/%_lib/mpi/gcc/openmpi5/include/SHERPA-MC/*
 %endif
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: own the lib, include and share directories
+
 * Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - openSUSE: remove -Werror=return-type from the optflags (AddOns/NNLO/polylog.c)
 
