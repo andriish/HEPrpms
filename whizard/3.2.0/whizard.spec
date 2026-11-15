@@ -1,12 +1,14 @@
 %global __brp_check_rpaths %{nil}
 %if 0%{?suse_version}
 %{!?python3_pkgversion:%global python3_pkgversion 3}
+# gfortran 16 crashes with LTO (internal compiler error in write_symbol, lto-streamer-out.cc)
+%global _lto_cflags %{nil}
 %endif
 %undefine _debugsource_packages
 Summary:  Multipurpose Monte Carlo Event Generator for High Energy Physics
 Name: whizard
 Version: 3.2.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2
 Group: System Environment/Libraries
 Source: https://whizard.hepforge.org/downloader?f=whizard-%{version}.tar.gz
@@ -263,6 +265,9 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libwhizard.so*
 ldconfig 
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- openSUSE: build without LTO (internal compiler error of gfortran 16 in write_symbol)
+
 * Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - openSUSE: remove -Werror=return-type from the optflags
 
