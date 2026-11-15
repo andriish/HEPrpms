@@ -56,7 +56,7 @@ Known flaws:
 
 Name:           highfive
 Version:        2.9.0
-Release:        1000
+Release:        1001
 Summary:        Header-only C++ HDF5 interface
 
 # SPDX
@@ -114,5 +114,7 @@ mv -v '%{buildroot}/%{_datadir}/%{pretty_name}/CMake' \
 %{_libdir}/cmake/%{pretty_name}
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 2.9.0-1001
+- Release number 1001: OBS builds the 2.9.0 recipe
 * Thu Dec 21 2023 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
 + 2.9.0
