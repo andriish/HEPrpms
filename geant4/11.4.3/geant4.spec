@@ -3,7 +3,7 @@
 
 Name:        geant4
 Version:    11.4.3
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    A toolkit for the simulation of the passage of particles through matter
 
 License:    Geant
@@ -101,6 +101,9 @@ grep -q 'file://%{_sourcedir}' cmake/Modules/G4InstallData.cmake
 
 
 %files
+%if 0%{?suse_version}
+%dir %{_datadir}/Geant4
+%endif
 %{_bindir}/geant4*
 %{_libdir}/lib*.so*
 %{_datadir}/Geant4/geant4make
@@ -114,14 +117,22 @@ grep -q 'file://%{_sourcedir}' cmake/Modules/G4InstallData.cmake
 
 
 %files doc
+%if 0%{?suse_version}
+%dir %{_datadir}/Geant4
+%endif
 %{_datadir}/Geant4/examples
 %{_datadir}/Geant4/fonts
 %license %{_datadir}/Geant4/tools.license
 
 %files data
+%if 0%{?suse_version}
+%dir %{_datadir}/Geant4
+%endif
 %{_datadir}/Geant4/data
 
 %changelog
+* Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 11.4.3-3
+- openSUSE: own the share/Geant4 directory
 * Sun Nov 15 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 11.4.3-2
 - openSUSE: provide the datasets as sources (no network in OBS builds)
 * Fri Nov 13 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 11.4.3-1
