@@ -1,7 +1,7 @@
 %{!?python3_pkgversion:%global python3_pkgversion 3}
 Name:           fastjet
 Version:        3.5.3
-Release:        1001%{?dist}
+Release:        1002%{?dist}
 License:        GPLv2+
 URL:            http://www.fastjet.fr
 Source0:        https://www.fastjet.fr/repo/%{name}-%{version}.tar.gz
@@ -41,6 +41,7 @@ to a range of cone jet finders and tools for advanced jet manipulation.
 %package  devel
 Summary:        Libraries and headers for %{name}
 Provides:       %{name}-devel = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 %{libnamedev} contains the libraries and header files needed to
@@ -103,6 +104,9 @@ This package contains python bindings for %{name}.
 
 
 %changelog
+* Mon Nov 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 3.5.3-1002
+- fastjet-devel requires the fastjet package of the same version (the libraries are upgraded together)
+
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Update to 3.5.3
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
