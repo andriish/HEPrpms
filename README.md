@@ -181,6 +181,18 @@ Use either the COPR repository above or the OBS repository, not both.
    ```
    zypper install Herwig
    ```
+If the `HEPrpmsSUSE` COPR repository was added before, disable or remove it (as root) so that the packages come only from OBS.
+The repository alias is the name in the first line of the repository file, e.g. `copr:copr.fedorainfracloud.org:averbyts:HEPrpmsSUSE`:
+```
+zypper lr -u | grep -i HEPrpmsSUSE
+zypper modifyrepo --disable <alias>     # keep the repository but do not use it
+zypper removerepo <alias>               # or remove it completely
+```
+Installed packages stay as they are; to switch them to the OBS builds run `zypper dup --from home:averbyts:HEPrpmsSUSE`
+(add `--allow-vendor-change` if zypper refuses because the vendor changes) after disabling the COPR repository.
+The package locks added for the COPR repository can stay.
+To enable the COPR repository again use `zypper modifyrepo --enable <alias>`.
+
 The package locks described for the `HEPrpmsSUSE` COPR repository above apply to the OBS repository as well.
 Not every package builds in OBS yet; see the build state at the project page above or with
 `osc results home:averbyts:HEPrpmsSUSE`.
