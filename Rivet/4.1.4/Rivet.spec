@@ -9,7 +9,7 @@ Release:        1001%{?dist}
 License:        GPLv3
 Url:            http://rivet.hepforge.org/
 # the hepforge download page does not list 4.1.4; the release tarball is at the CEDAR tools site (GitLab release link)
-Source0:        http://cedar-tools.web.cern.ch/downloads/%{name}-%{version}.tar.gz
+Source0:        https://cedar-tools.web.cern.ch/downloads/%{name}-%{version}.tar.gz
 Patch0:         patch-Rivet-0.txt
 
 Prefix: %{_prefix}
