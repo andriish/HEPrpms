@@ -1,6 +1,6 @@
 Name:           LCIO
 Version:        2.23.04
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Persistency framework and event data model for linear collider detectors
 
 Group:          Development/Tools
@@ -114,6 +114,9 @@ cp $RPM_BUILD_ROOT/%{_libdir}/cmake/SIO/*cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 mkdir -p $RPM_BUILD_ROOT/%{python_sitearch}
 mv $RPM_BUILD_ROOT/usr/python/* $RPM_BUILD_ROOT/%{python_sitearch}
 cp $RPM_BUILD_ROOT/%{_libdir}/cmake/SIO/*cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/LCIO/
+# /usr/bin/examples (a directory) conflicts with a file of the same name in other openSUSE packages (ghc-yaml)
+mkdir -p $RPM_BUILD_ROOT%{_libexecdir}/LCIO
+mv $RPM_BUILD_ROOT%{_bindir}/examples $RPM_BUILD_ROOT%{_libexecdir}/LCIO/examples
 %endif
 
 %post -p /sbin/ldconfig
@@ -122,6 +125,9 @@ cp $RPM_BUILD_ROOT/%{_libdir}/cmake/SIO/*cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 
 %files
 %{_bindir}/*
+%if 0%{?suse_version}
+%{_libexecdir}/LCIO
+%endif
 %{_libdir}/lib*
 %{_libdir}/*_rdict.pcm
 
@@ -141,6 +147,9 @@ cp $RPM_BUILD_ROOT/%{_libdir}/cmake/SIO/*cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/
 %endif
 
 %changelog
+* Mon Nov 16 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de> - 2.23.04-3
+- openSUSE: move the example programs from /usr/bin/examples to %%{_libexecdir}/LCIO/examples (file conflict with ghc-yaml)
+
 * Sat Nov 14 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - openSUSE: provide SIO v00-02 as Source1 (no network in OBS builds)
 
