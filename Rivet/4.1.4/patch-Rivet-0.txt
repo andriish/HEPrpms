@@ -1,0 +1,38 @@
+diff -Naur ORIG/configure.ac PATCHED/configure.ac
+--- ORIG/configure.ac	2026-11-16 12:16:40.966152783 +0100
++++ PATCHED/configure.ac	2026-11-16 12:16:44.243589562 +0100
+@@ -205,8 +205,8 @@
+     AC_MSG_ERROR([FastJet version 3.2.0 or later is required])
+   fi
+   # Only keep -l flags (library names)
+-  FASTJETLIBADD=`echo "$($FJCONFIG --libs --plugins --rpath=no)" | tr ' ' '\n' | grep '^-l' | tr '\n' ' '`
+-  FASTJETLDFLAGS=`echo "$($FJCONFIG --libs --plugins --rpath=no)" | tr ' ' '\n' | grep '^-L' | tr '\n' ' '`
++  FASTJETLIBADD=`echo "$($FJCONFIG --libs --plugins )" | tr ' ' '\n' | grep '^-l' | tr '\n' ' '`
++  FASTJETLDFLAGS=`echo "$($FJCONFIG --libs --plugins )" | tr ' ' '\n' | grep '^-L' | tr '\n' ' '`
+ else
+   FASTJETLIBADD="-l$FASTJETLIBNAME -lfastjetplugins"
+   FASTJETLDFLAGS="-L$FASTJETLIBPATH"
+diff -Naur ORIG/src/Core/AnalysisHandler.cc PATCHED/src/Core/AnalysisHandler.cc
+--- ORIG/src/Core/AnalysisHandler.cc	2026-11-16 12:16:40.969267452 +0100
++++ PATCHED/src/Core/AnalysisHandler.cc	2026-11-16 12:16:49.581034360 +0100
+@@ -1542,7 +1542,8 @@
+     output.reserve(raos.size() * numWeights() * (includeraw ? 2 : 1) + 1); // plus one for beaminfo
+ 
+     // Identify an index ordering so that default weight is written out first
+-    vector<size_t> order{(size_t)_customDefaultWeightIdx};
++    vector<size_t> order;
++    if (_customDefaultWeightIdx>=0) order.push_back((size_t)_customDefaultWeightIdx );
+     for (int i = 0, N = (int)numWeights(); i < N; ++i) {
+       if (i != _customDefaultWeightIdx) order.push_back(i);
+     }
+diff -Naur ORIG/src/Core/yamlcpp/emitterutils.cpp PATCHED/src/Core/yamlcpp/emitterutils.cpp
+--- ORIG/src/Core/yamlcpp/emitterutils.cpp	2026-11-16 12:16:40.972475506 +0100
++++ PATCHED/src/Core/yamlcpp/emitterutils.cpp	2026-11-16 12:16:44.244296365 +0100
+@@ -11,6 +11,7 @@
+ #include "stringsource.h"
+ #include "yaml-cpp/binary.h"  // IWYU pragma: keep
+ #include "yaml-cpp/null.h"
++#include <cstdint>
+ #include "yaml-cpp/ostream_wrapper.h"
+ 
+ namespace RIVET_YAML {

@@ -405,3 +405,5 @@ d80ba9bdefcf9e23487a26adfa273304  geant4/11.4.3/rpmbuild/SOURCES/G4PhotonEvapora
 20d494f73d4bddabd7fab5c06a58895c  geant4/11.4.3/rpmbuild/SOURCES/G4RadioactiveDecay.6.1.2.tar.gz
 ea8f1cfa8d8aafd64b71fb30b3e8a6d9  geant4/11.4.3/rpmbuild/SOURCES/G4RealSurface.2.2.tar.gz
 d5d4e9541120c274aeed038c621d39da  geant4/11.4.3/rpmbuild/SOURCES/G4SAIDDATA.2.0.tar.gz
+56cd528f14a9491b4589c4731e32d58b  iminuit/2.33.0/rpmbuild/SOURCES/iminuit-2.33.0.tar.gz
+b375a3079b2dd106f9067e2aa03014e7  Rivet/4.1.4/rpmbuild/SOURCES/Rivet-4.1.4.tar.gz
