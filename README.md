@@ -9,7 +9,8 @@ and
 
 HEPrpmsSUSE https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/
 
-repositories. Most of the packages in these repositories are related to the High Energy Physics 
+repositories. The `HEPrpmsSUSE` packages are also built in the openSUSE Build Service project
+https://build.opensuse.org/project/show/home:averbyts:HEPrpmsSUSE (see below). Most of the packages in these repositories are related to the High Energy Physics 
 experiment/theory/phenomenology.
 
 As of July 2025, the packages are built for Fedora 41, Fedora 42, Fedora rawhide, CentOS(EPEL)8, CentOS(EPEL)9, CentOS(EPEL)10 and OpenSUSE Tumbleweed.
@@ -161,6 +162,32 @@ zypper al -r science  PTL*
 zypper al -r science  form*
 zypper al -r oss  *ginac*
 ```
+
+### SUSE Tumbleweed, from the openSUSE Build Service (OBS):
+The packages of `HEPrpmsSUSE` are also built in the OBS project `home:averbyts:HEPrpmsSUSE`
+(https://build.opensuse.org/project/show/home:averbyts:HEPrpmsSUSE) for openSUSE Tumbleweed (x86_64).
+The OBS packages are built from the same spec files in this repository, in the versions of the `HEPrpms` COPR project.
+Use either the COPR repository above or the OBS repository, not both.
+ - Add the `science` repository (as root), the OBS project builds against it and needs some of its packages (e.g. `root6`)
+   ```
+   zypper addrepo --refresh https://download.opensuse.org/repositories/science/openSUSE_Tumbleweed/science.repo
+   ```
+ - Add the OBS repository and import its signing key (as root)
+   ```
+   zypper addrepo --refresh https://download.opensuse.org/repositories/home:/averbyts:/HEPrpmsSUSE/openSUSE_Tumbleweed/home:averbyts:HEPrpmsSUSE.repo
+   zypper --gpg-auto-import-keys refresh
+   ```
+ - Install the needed software with (as root)
+   ```
+   zypper install Herwig
+   ```
+The package locks described for the `HEPrpmsSUSE` COPR repository above apply to the OBS repository as well.
+Not every package builds in OBS yet; see the build state at the project page above or with
+`osc results home:averbyts:HEPrpmsSUSE`.
+Builds in OBS have no network access, therefore some data that Fedora/EPEL builds download at build time is provided differently:
+the OpenLoops process libraries are not downloaded (only the `eett` process library is installed, so anything that needs other
+OpenLoops processes, e.g. Sherpa or Herwig with OpenLoops, does not work), while the Geant4 datasets and the LHAPDF sets of
+`lhapdf-sets-Herwig` and `lhapdf-sets-whizard` are included in the packages.
 
 ## Using the software repositories w/o root privileges
 
