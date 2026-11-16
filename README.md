@@ -188,8 +188,18 @@ zypper lr -u | grep -i HEPrpmsSUSE
 zypper modifyrepo --disable <alias>     # keep the repository but do not use it
 zypper removerepo <alias>               # or remove it completely
 ```
-Installed packages stay as they are; to switch them to the OBS builds run `zypper dup --from home:averbyts:HEPrpmsSUSE`
-(add `--allow-vendor-change` if zypper refuses because the vendor changes) after disabling the COPR repository.
+Installed packages stay as they are; to switch them to the OBS builds run (after disabling the COPR repository)
+```
+zypper lr                                              # find the alias or number of the OBS repository, e.g. HEPrpmsSUSE
+zypper dup --from <alias-or-number> --allow-vendor-change
+```
+`--from` takes the alias, name or number shown by `zypper lr`, not the OBS project name. `--allow-vendor-change` is needed because
+the packages change the vendor from `Fedora Copr - user averbyts` to `obs://build.opensuse.org/home:averbyts`. To make zypper
+accept this change without the option, create `/etc/zypp/vendors.d/heprpms.conf` (as root) with
+```
+[main]
+vendors = obs://build.opensuse.org/home:averbyts,Fedora Copr - user averbyts
+```
 The package locks added for the COPR repository can stay.
 To enable the COPR repository again use `zypper modifyrepo --enable <alias>`.
 
