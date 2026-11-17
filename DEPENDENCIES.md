@@ -230,7 +230,7 @@ Not packaged here; they come from Fedora/EPEL/openSUSE.
 | `yaml-cpp` | fastnlo, JetVHeto, YODA |
 | `openmpi` | SHERPA-MC, whizard |
 | `ocaml` | hevea, whizard |
-| `clang`, `llvm`, `pybind11` | binder, iminuit |
+| `clang`, `llvm`, `pybind11` | binder, iminuit (2.33: `pybind11` >= 3, `scikit-build-core` >= 0.11, `numpy`) |
 | `eigen3` | Professor |
 | TeX Live / `ghostscript` / `doxygen` | documentation builds of most packages |
 | Python (`python3-devel`, `Cython`, `numpy`, `setuptools`, `matplotlib`) | Python bindings of apfel, fastjet, fastnlo, LCIO, Professor, Rivet, whizard, YODA, MG5_aMC, openloops, njet |
