@@ -140,46 +140,11 @@ for details.
 There are no known conflicts between the Fedora and HEPrpms repositories. However `dnf` supports the same functionality as `yum` 
 and black/whitelisting is possible, see https://docs.fedoraproject.org/en-US/quick-docs/dnf/ for details.
 
-### SUSE Tumbleweed:
- - Add `science` repository (as root)
-   ```
-   zypper addrepo https://download.opensuse.org/repositories/science/openSUSE_Tumbleweed/science.repo
-   ```
- - Download the repository file of `HEPrpmsSUSE`
-   ```
-   wget https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/repo/opensuse-tumbleweed/averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo
-   ```
- - Replace the `$basearch` in the repository with `x86_64`
- - Install the repository file (as root)
-   ```
-   zypper addrepo averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo 
-   ```
- - Install the needed software with (as root)
-   ```
-   zypper install Herwig
-   ```
-`zypper` uses another mechanism than `yum` or `dnf` to blacklist/whitelist packages. To exclude some conflicting packages one has to use zypper locks.
-Because the `science` repository has some packages with the same names as in `HEPrpmsSUSE`, 
-it is recommended to add the following locks when using the  `HEPrpmsSUSE` repository:
-```
-zypper al -r science  *YODA*
-zypper al -r science  *Rivet*
-zypper al -r science  *Herwig*
-zypper al -r science  *ThePEG*
-zypper al -r science  *fastjet*
-zypper al -r science  *fjcontrib*
-zypper al -r science  *SHERPA*
-zypper al -r science  *geant4*
-zypper al -r science  PTL*
-zypper al -r science  form*
-zypper al -r oss  *ginac*
-```
-
 ### SUSE Tumbleweed, from the openSUSE Build Service (OBS):
 The packages of `HEPrpmsSUSE` are also built in the OBS project `home:averbyts:HEPrpmsSUSE`
 (https://build.opensuse.org/project/show/home:averbyts:HEPrpmsSUSE) for openSUSE Tumbleweed (x86_64).
 The OBS packages are built from the same spec files in this repository, in the versions of the `HEPrpms` COPR project.
-Use either the COPR repository above or the OBS repository, not both.
+Use either the COPR repository below or the OBS repository, not both.
  - Add the `science` repository (as root), the OBS project builds against it and needs some of its packages (e.g. `root6`)
    ```
    zypper addrepo --refresh https://download.opensuse.org/repositories/science/openSUSE_Tumbleweed/science.repo
@@ -215,13 +180,50 @@ vendors = obs://build.opensuse.org/home:averbyts,Fedora Copr - user averbyts
 The package locks added for the COPR repository can stay.
 To enable the COPR repository again use `zypper modifyrepo --enable <alias>`.
 
-The package locks described for the `HEPrpmsSUSE` COPR repository above apply to the OBS repository as well.
+The package locks described for the `HEPrpmsSUSE` COPR repository below apply to the OBS repository as well.
 Not every package builds in OBS yet; see the build state at the project page above or with
 `osc results home:averbyts:HEPrpmsSUSE`.
 Builds in OBS have no network access, therefore some data that Fedora/EPEL builds download at build time is provided differently:
 the OpenLoops process libraries are not downloaded (only the `eett` process library is installed, so anything that needs other
 OpenLoops processes, e.g. Sherpa or Herwig with OpenLoops, does not work), while the Geant4 datasets and the LHAPDF sets of
 `lhapdf-sets-Herwig` and `lhapdf-sets-whizard` are included in the packages.
+
+### SUSE Tumbleweed, from COPR (duplicate of the OBS packages above, alternative):
+The `HEPrpmsSUSE` COPR repository contains the same packages as the OBS repository described above. Use either one, not both; the OBS repository is the preferred one.
+
+ - Add `science` repository (as root)
+   ```
+   zypper addrepo https://download.opensuse.org/repositories/science/openSUSE_Tumbleweed/science.repo
+   ```
+ - Download the repository file of `HEPrpmsSUSE`
+   ```
+   wget https://copr.fedorainfracloud.org/coprs/averbyts/HEPrpmsSUSE/repo/opensuse-tumbleweed/averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo
+   ```
+ - Replace the `$basearch` in the repository with `x86_64`
+ - Install the repository file (as root)
+   ```
+   zypper addrepo averbyts-HEPrpmsSUSE-opensuse-tumbleweed.repo 
+   ```
+ - Install the needed software with (as root)
+   ```
+   zypper install Herwig
+   ```
+`zypper` uses another mechanism than `yum` or `dnf` to blacklist/whitelist packages. To exclude some conflicting packages one has to use zypper locks.
+Because the `science` repository has some packages with the same names as in `HEPrpmsSUSE`, 
+it is recommended to add the following locks when using the  `HEPrpmsSUSE` repository:
+```
+zypper al -r science  *YODA*
+zypper al -r science  *Rivet*
+zypper al -r science  *Herwig*
+zypper al -r science  *ThePEG*
+zypper al -r science  *fastjet*
+zypper al -r science  *fjcontrib*
+zypper al -r science  *SHERPA*
+zypper al -r science  *geant4*
+zypper al -r science  PTL*
+zypper al -r science  form*
+zypper al -r oss  *ginac*
+```
 
 ## Using HEPrpms in container images
 
