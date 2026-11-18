@@ -49,7 +49,7 @@
 
 Name:          cernlib
 Version:       2026.11.01.1
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       General purpose CERN library
 Group:         Development/Libraries
 License:       GPL+ and LGPLv2+
@@ -306,6 +306,8 @@ Utilities for extracting sources from patchy cards and cradles.
 %prep
 %setup -q -c 
 %patch -P 0 -p1
+# arch-specific CMake config dir, so that i686 and x86_64 can be installed together
+sed -i 's@^set(CONFIG_INSTALL_DIR .*@set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/%{_lib}/cmake/CERNLIB)@' cernlib-cernlib-%{version}-free/CMakeLists.txt
 
 %build
 find cernlib-cernlib-%{version}-free -type f -name '.*' -exec rm -rf  {} \;
@@ -440,9 +442,9 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_libdir}/cernlib/%{verdir}/lib/*.so.*
 %{_datadir}/cernlib/%{verdatadir}/*dat
 %dir %{_datadir}/cernlib
-%dir %{_datadir}/cernlib/cmake
-%{_datadir}/cernlib/cmake/CERNLIBConfig.cmake
-%{_datadir}/cernlib/cmake/CERNLIBConfig-version.cmake
+%dir %{_prefix}/%{_lib}/cmake/CERNLIB
+%{_prefix}/%{_lib}/cmake/CERNLIB/CERNLIBConfig.cmake
+%{_prefix}/%{_lib}/cmake/CERNLIB/CERNLIBConfig-version.cmake
 
 # the utils and devel are separated to have the possibility to install
 # parallel versions of the library
@@ -659,6 +661,8 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %endif
 
 %changelog
+* Wed Nov 18 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Install CERNLIBConfig*.cmake into libdir/cmake/CERNLIB so that i686 and x86_64 packages do not conflict
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Update to 2026.11.01.1; port patch (upstream fixed divon recpar.F and split.F), data dir 2026.11
 * Thu Apr 16 2026 Andrii Verbytskyi <andrii.verbtskyi@mpp.mpg.de>
