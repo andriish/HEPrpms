@@ -14,7 +14,7 @@ https://build.opensuse.org/project/show/home:averbyts:HEPrpmsSUSE (see below). M
 experiment/theory/phenomenology.
 
 As of November 2026, the packages are built for Fedora 43, Fedora 44, Fedora 45, Fedora rawhide, CentOS/RHEL-compatible (EPEL) 9 and 10,
-and openSUSE Tumbleweed (x86_64). A few packages (`OpenPHIGS`, `cernlib`) are also built for Fedora i686 (`i386` chroots).
+and openSUSE Tumbleweed (x86_64). A few packages (`OpenPHIGS`, `cernlib`) are also built for Fedora i686 (`i386` chroots), and `cernlib` also for Fedora aarch64.
 EPEL 8 is no longer built. The packages are built on the COPR https://copr.fedorainfracloud.org/ service
 (and, for openSUSE, in OBS), however, other build platforms can be used as well.
 
@@ -294,7 +294,7 @@ Without any privileges, the RPMs can be unpacked into a directory as described i
 
 ### Notes
 
- - The packages are built for x86_64 (only `OpenPHIGS` and `cernlib` also for i686); other architectures are not available.
+ - The packages are built for x86_64 (only `OpenPHIGS` and `cernlib` also for i686, and `cernlib` also for aarch64); other architectures are not available.
  - On openSUSE the OpenLoops process libraries are not included (see above).
  - The `HEPrpms` meta package installs the full collection; it is large, so install only what is needed in images.
  - Packages install into the standard system prefix, so normally no `PATH`/`LD_LIBRARY_PATH` setup is needed.

@@ -14,7 +14,8 @@
 #   -h, --help           show this help
 #
 # i686 (the *-i386 chroots) is enabled in HEPrpms only for the packages in I686_PACKAGES; for every other package
-# the i386 chroots are put on the package's chroot denylist.
+# the i386 chroots are put on the package's chroot denylist. The same holds for the *-aarch64 chroots and
+# AARCH64_PACKAGES.
 #
 # Examples:
 #   scripts/copr-add-package.sh OpenPHIGS
@@ -28,6 +29,7 @@ OWNER=averbyts
 PROJECTS=HEPrpms
 GIT_URL=https://github.com/andriish/HEPrpms.git
 I686_PACKAGES="OpenPHIGS cernlib"
+AARCH64_PACKAGES="cernlib"
 BUILD=0
 DRYRUN=0
 PACKAGE=
@@ -89,10 +91,11 @@ for proj in "${PROJ[@]}"; do
   esac
   DENY=()
   if [ "$proj" = HEPrpms ]; then
-    case " $I686_PACKAGES " in
-      *" $PACKAGE "*) DENY=(--chroot-denylist "") ;;
-      *)              DENY=(--chroot-denylist '*-i386') ;;
-    esac
+    PAT=
+    case " $I686_PACKAGES " in *" $PACKAGE "*) ;; *) PAT="*-i386" ;; esac
+    # aarch64 is enabled only for the packages in AARCH64_PACKAGES.
+    case " $AARCH64_PACKAGES " in *" $PACKAGE "*) ;; *) PAT="${PAT:+$PAT,}*-aarch64" ;; esac
+    DENY=(--chroot-denylist "$PAT")
   fi
   if copr-cli get-package --name "$PACKAGE" "$OWNER/$proj" >/dev/null 2>&1; then
     action=edit-package-custom
