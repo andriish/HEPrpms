@@ -49,7 +49,7 @@
 
 Name:          cernlib
 Version:       2026.11.01.1
-Release:       3%{?dist}
+Release:       4%{?dist}
 Summary:       General purpose CERN library
 Group:         Development/Libraries
 License:       GPL+ and LGPLv2+
@@ -665,6 +665,8 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %endif
 
 %changelog
+* Wed Nov 25 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Update s390x big-endian patch (hbook hntup hgnt2.F/hgntf.F 64-bit address word order)
 * Tue Nov 24 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Add s390x big-endian patch (define CERNLIB_PPC on big-endian Linux, fix aarch64 elseif), applied on s390x only
 * Wed Nov 18 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>

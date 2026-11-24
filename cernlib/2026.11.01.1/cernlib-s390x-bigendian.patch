@@ -25,3 +25,49 @@ index fe32e263..412776aa 100644
    if (NOT CERNLIB_USE_INTERNAL_XBAE)
      SET(CERNLIB_NOLIBXBAE 1)
    endif()
+diff --git a/packlib/hbook/hntup/hgnt2.F b/packlib/hbook/hntup/hgnt2.F
+index 34c32322..68b04020 100644
+--- a/packlib/hbook/hntup/hgnt2.F
++++ b/packlib/hbook/hntup/hgnt2.F
+@@ -465,7 +465,11 @@
+             IQ(LTMP1+JTMP+2) = IOFFSTT
+ #if defined(CERNLIB_QMLXIA64)
+ *           store upper part of 64 bit address
++#if defined(CERNLIB_PPC)
++            IQ(LTMP1+JTMP+3) = IOFFSTV(1)
++#else
+             IQ(LTMP1+JTMP+3) = IOFFSTV(2)
++#endif
+ #endif
+          ELSE
+             IQ(LTMP1+JTMP+2)   = 0
+diff --git a/packlib/hbook/hntup/hgntf.F b/packlib/hbook/hntup/hgntf.F
+index 60c9d513..bf94900d 100644
+--- a/packlib/hbook/hntup/hgntf.F
++++ b/packlib/hbook/hntup/hgntf.F
+@@ -85,8 +85,13 @@
+          IOFFST = IQ(LTMP1+JTMP+2)
+ #if defined(CERNLIB_QMLXIA64)
+ *        fetch full 64 bit address
++#if defined(CERNLIB_PPC)
++         IOFFSTV(2) = IQ(LTMP1+JTMP+2)
++         IOFFSTV(1) = IQ(LTMP1+JTMP+3)
++#else
+          IOFFSTV(1) = IQ(LTMP1+JTMP+2)
+          IOFFSTV(2) = IQ(LTMP1+JTMP+3)
++#endif
+          IOFFST     = IOFFSTT
+ #endif
+          IF (IOFFST .EQ. 0) THEN
+@@ -462,7 +467,11 @@
+             IQ(LTMP1+JTMP+2) = IOFFSTT
+ #if defined(CERNLIB_QMLXIA64)
+ *           store upper part of 64 bit address
++#if defined(CERNLIB_PPC)
++            IQ(LTMP1+JTMP+3) = IOFFSTV(1)
++#else
+             IQ(LTMP1+JTMP+3) = IOFFSTV(2)
++#endif
+ #endif
+          ELSE
+             IQ(LTMP1+JTMP+2) = 0
