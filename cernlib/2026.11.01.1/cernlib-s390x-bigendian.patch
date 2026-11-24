@@ -1,0 +1,27 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fe32e263..412776aa 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -337,7 +337,7 @@ if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+   else()
+     add_definitions(-D__X86_64__)
+   endif()
+-else(${CMAKE_SYSTEM_PROCESSOR} MATCHES "aarch64" OR ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm64")
++elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "aarch64" OR ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm64")
+   add_definitions(-D__aarch64__)
+ endif()
+ ########################################################################
+@@ -669,6 +669,13 @@ if(LINUX OR SunOS)
+      SET(CERNLIB_QMLXIA64 1)
+      add_definitions(-DCERNLIB_QMLXIA64)
+    endif()
++  # Big-endian Linux (e.g. s390x): the little-endian code paths are selected by
++  # CERNLIB_QMLNX && !CERNLIB_PPC, so CERNLIB_PPC must be set to get the big-endian ones.
++  if (CMAKE_C_BYTE_ORDER STREQUAL "BIG_ENDIAN" OR CMAKE_CXX_BYTE_ORDER STREQUAL "BIG_ENDIAN" OR CMAKE_Fortran_BYTE_ORDER STREQUAL "BIG_ENDIAN")
++    message (STATUS "Big-endian Linux detected, defining CERNLIB_PPC")
++    SET(CERNLIB_PPC 1)
++    add_definitions(-DCERNLIB_PPC)
++  endif()
+   if (NOT CERNLIB_USE_INTERNAL_XBAE)
+     SET(CERNLIB_NOLIBXBAE 1)
+   endif()

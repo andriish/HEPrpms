@@ -49,12 +49,13 @@
 
 Name:          cernlib
 Version:       2026.11.01.1
-Release:       2%{?dist}
+Release:       3%{?dist}
 Summary:       General purpose CERN library
 Group:         Development/Libraries
 License:       GPL+ and LGPLv2+
 URL:           http://cernlib.web.cern.ch/cernlib/
 Patch0:         patch-cernlib-0.txt
+Patch1:         cernlib-s390x-bigendian.patch
 
 %if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 7
 BuildRequires: openssl-libs openssl-devel  lapack-devel blas-devel lapack blas
@@ -306,6 +307,9 @@ Utilities for extracting sources from patchy cards and cradles.
 %prep
 %setup -q -c 
 %patch -P 0 -p1
+%ifarch s390x
+%patch -P 1 -p1 -d cernlib-cernlib-%{version}-free
+%endif
 # arch-specific CMake config dir, so that i686 and x86_64 can be installed together
 sed -i 's@^set(CONFIG_INSTALL_DIR .*@set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/%{_lib}/cmake/CERNLIB)@' cernlib-cernlib-%{version}-free/CMakeLists.txt
 
@@ -661,6 +665,8 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %endif
 
 %changelog
+* Tue Nov 24 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
+- Add s390x big-endian patch (define CERNLIB_PPC on big-endian Linux, fix aarch64 elseif), applied on s390x only
 * Wed Nov 18 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>
 - Install CERNLIBConfig*.cmake into libdir/cmake/CERNLIB so that i686 and x86_64 packages do not conflict
 * Thu Nov 12 2026 Andrii Verbytskyi <andrii.verbytskyi@mpp.mpg.de>

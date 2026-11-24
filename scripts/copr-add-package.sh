@@ -28,6 +28,7 @@ set -euo pipefail
 OWNER=averbyts
 PROJECTS=HEPrpms
 GIT_URL=https://github.com/andriish/HEPrpms.git
+GIT_BRANCH=JADE
 I686_PACKAGES="OpenPHIGS cernlib"
 AARCH64_PACKAGES="cernlib"
 BUILD=0
@@ -77,7 +78,7 @@ SCRIPT=$(mktemp)
 trap 'rm -f "$SCRIPT"' EXIT
 cat > "$SCRIPT" <<EOS
 #!/bin/bash
-git clone --depth 1 $GIT_URL
+git clone --depth 1 -b $GIT_BRANCH $GIT_URL
 cd HEPrpms
 sh srpmsbuild.sh  $PACKAGE $VERSION
 EOS
