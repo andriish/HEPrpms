@@ -407,3 +407,4 @@ ea8f1cfa8d8aafd64b71fb30b3e8a6d9  geant4/11.4.3/rpmbuild/SOURCES/G4RealSurface.2
 d5d4e9541120c274aeed038c621d39da  geant4/11.4.3/rpmbuild/SOURCES/G4SAIDDATA.2.0.tar.gz
 56cd528f14a9491b4589c4731e32d58b  iminuit/2.33.0/rpmbuild/SOURCES/iminuit-2.33.0.tar.gz
 b375a3079b2dd106f9067e2aa03014e7  Rivet/4.1.4/rpmbuild/SOURCES/Rivet-4.1.4.tar.gz
+19f3c1fef358ffc533a67115abd0fe08  JADE/2026.11.0/rpmbuild/SOURCES/JADE-54b9b5e2ca57c3eb465f0f0112fdc8fd590ac8d4.tar.gz

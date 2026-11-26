@@ -59,6 +59,7 @@ packages of this repository (see [Leaf packages](#leaf-packages-no-repository-de
 | gosam | form (R), qgraf (R) |
 | Herwig | ThePEG, MG5_aMC, EvtGen, fastjet, gosam, njet, openloops, VBFNLO, lhapdf-sets-Herwig; PHOTOS (B), TAUOLA (B) |
 | HJets | Herwig (B), ThePEG (B) |
+| JADE | cernlib |
 | JetVHeto | chaplin, hoppet |
 | LCIO | clhep (B) |
 | njet | qd (B) |
@@ -104,7 +105,7 @@ previous layers are built.
 |-------|----------|
 | 0 | apfel, ariadne, binder, clhep, cuba, f2c, f90cache, fastjet, FeynHiggs, form, ginac, golem95, gosam-contrib, HepPDT, hevea, highfive, hoppet, hztool, iminuit, lhapdf-sets-Herwig, lhapdf-sets-whizard, LoopTools, MC-TESTER, MCFM, MG5_aMC, nlojet++, noweb, openloops, OpenPHIGS, PTL, pythia6, python-mpmath, python-uproot4, qcdloop, qcdnum, qd, qgraf, sympy, TAUOLA, tmdlib, ugs, VBFNLO, xbae |
 | 1 | applgrid, blackhat, cernlib, chaplin, collier, Delphes, fastnlo, fjcontrib, geant4, ggvvamp, gosam, LCIO, njet, nlox, PHOTOS, qqvvamp, topdrawer, YODA |
-| 2 | COCOA, EvtGen, JetVHeto, Professor, recola, recola2-SM, Rivet |
+| 2 | COCOA, EvtGen, JADE, JetVHeto, Professor, recola, recola2-SM, Rivet |
 | 3 | cascade, rapgap, recola2, SHERPA-MC, ThePEG, whizard |
 | 4 | Herwig, TheP8I |
 | 5 | HJets |
@@ -117,6 +118,7 @@ Direct dependents only; follow the chain for transitive ones.
 |---------|---------|
 | ariadne | rapgap |
 | blackhat | SHERPA-MC |
+| cernlib | JADE |
 | chaplin | JetVHeto |
 | clhep | COCOA, geant4, LCIO |
 | collier | recola, recola2, recola2-SM |
@@ -199,6 +201,7 @@ graph LR
   nlox --> qcdloop
   ggvvamp --> ginac
   qqvvamp --> ginac
+  JADE --> cernlib
   cernlib --> xbae
   topdrawer --> ugs & f2c
 ```
@@ -217,10 +220,10 @@ Not packaged here; they come from Fedora/EPEL/openSUSE.
 
 | Distribution package | Used by |
 |----------------------|---------|
-| `root` (`root-core`, `root-tree-ntuple-utils`, ...) | applgrid, cascade, COCOA, Delphes, EvtGen, fastnlo, LCIO, MC-TESTER, Professor, SHERPA-MC, tmdlib, VBFNLO, whizard |
+| `root` (`root-core`, `root-tree-ntuple-utils`, ...) | applgrid, cascade, COCOA, Delphes, EvtGen, fastnlo, JADE, LCIO, MC-TESTER, Professor, SHERPA-MC, tmdlib, VBFNLO, whizard |
 | `lhapdf` | apfel, cascade, fastnlo, Herwig, JetVHeto, lhapdf-sets-\*, MCFM, TAUOLA, TheP8I, ThePEG, tmdlib, VBFNLO, whizard |
 | `HepMC` (HepMC2) | cascade, COCOA, Delphes, EvtGen, MC-TESTER, PHOTOS, rapgap, TAUOLA, VBFNLO |
-| `HepMC3` (`-search`, `-rootIO`) | cascade, EvtGen, MC-TESTER, PHOTOS, rapgap, Rivet, SHERPA-MC, TAUOLA, ThePEG, whizard |
+| `HepMC3` (`-search`, `-rootIO`) | cascade, EvtGen, JADE, MC-TESTER, PHOTOS, rapgap, Rivet, SHERPA-MC, TAUOLA, ThePEG, whizard |
 | `hdf5` | highfive, Rivet, whizard |
 | `boost` | Herwig, HJets, ThePEG, tmdlib, whizard |
 | `gsl` | cascade, HJets, Herwig, Rivet, TheP8I, ThePEG, tmdlib, VBFNLO |
@@ -234,10 +237,10 @@ Not packaged here; they come from Fedora/EPEL/openSUSE.
 | `eigen3` | Professor |
 | TeX Live / `ghostscript` / `doxygen` | documentation builds of most packages |
 | Python (`python3-devel`, `Cython`, `numpy`, `setuptools`, `matplotlib`) | Python bindings of apfel, fastjet, fastnlo, LCIO, Professor, Rivet, whizard, YODA, MG5_aMC, openloops, njet |
-| X11 / `libX*` | cernlib, OpenPHIGS, topdrawer, ugs, xbae |
+| X11 / `libX*` | cernlib, JADE, OpenPHIGS, topdrawer, ugs, xbae |
 | `pythia8` (`pythia8-devel`; `libpythia8`, `pythia-devel` on openSUSE) | cascade, COCOA, Delphes, EvtGen, Herwig, PHOTOS, rapgap, SHERPA-MC, TAUOLA, TheP8I, whizard |
 | `CGAL` (`CGAL-devel`) | fastjet |
-| `motif` (`motif-devel`; `openmotif-devel` on EPEL 8/9) | cernlib, OpenPHIGS, xbae |
+| `motif` (`motif-devel`; `openmotif-devel` on EPEL 8/9) | cernlib, JADE, OpenPHIGS, xbae |
 | `imake` | topdrawer, ugs |
 | `transfig` | ginac |
 | `glew`, `gl2ps`, `mesa-libGLU` (`Mesa-libGLU` on openSUSE), `libpng` | OpenPHIGS |
